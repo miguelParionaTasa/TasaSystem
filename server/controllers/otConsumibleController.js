@@ -183,9 +183,38 @@ const deleteOTConsumible = async (req, res) => {
     res.status(500).json({ message: "Error al eliminar OTConsumible" });
   }
 };
+const getConsumiblesByOTMaximo = async (req, res) => {
+  const { otmaximo } = req.params;
+
+  try {
+    // Busca la OT que tenga ese OTmaximo
+    const otBasica = await prisma.oTbasico.findUnique({
+      where: { OTmaximo: otmaximo },
+    });
+
+    if (!otBasica) {
+      return res.status(404).json({ message: 'OT no encontrada' });
+    }
+
+    // Busca los consumibles asociados a esa OT
+    const consumibles = await prisma.oTConsumible.findMany({
+      where: { ot: { OTbasico: { OTmaximo: otmaximo } } },
+      include: {
+        consumible: true,
+        user: true,
+      },
+    });
+
+    res.json(consumibles);
+  } catch (error) {
+    console.error('Error al obtener consumibles por OT:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
 
 // Exportar las funciones
 module.exports = {
+  getConsumiblesByOTMaximo,
   createOTConsumible,
   getAllOTConsumibles,
   getOTConsumibleById,

@@ -183,8 +183,12 @@ model OTbasico {
   zonaId      Int?
   ubicacionId Int?
   equipoId    Int?
+  tecnico1    String?    // ← nuevo campo
+  tecnico2    String?    // ← nuevo campo
+
   Equipo      Equipo?    @relation(fields: [equipoId], references: [id])
   Ubicacion   Ubicacion? @relation(fields: [ubicacionId], references: [id])
   Zona        Zona?      @relation(fields: [zonaId], references: [id])
   Ots         Ots[]
 }
+

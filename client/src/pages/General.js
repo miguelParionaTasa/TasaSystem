@@ -210,9 +210,9 @@ const DetallesConsumibles = ({ consumibles, userId }) => {
   };
 
   return (
-    <table className="min-w-full bg-white border border-gray-300">
+    <table className="min-w-full bg-green border border-gray-300">
       <thead>
-        <tr>
+        <tr className="bg-green-300">
         <th className="py-2 px-4 border-b">Código</th>
           <th className="py-2 px-4 border-b">Nombre Consumible</th>
           <th className="py-2 px-4 border-b">Unidad de Medida</th>
@@ -222,7 +222,7 @@ const DetallesConsumibles = ({ consumibles, userId }) => {
           <th className="py-2 px-4 border-b">Acción</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody className="bg-green-100">
         {consumibles.map((consumible) => (
           <tr key={consumible.id}>
           <td>{consumible.consumible?.codMaximo || 'N/A'}</td>
@@ -399,29 +399,35 @@ const DetallesConsumibles = ({ consumibles, userId }) => {
           <h2 className="text-xl font-bold mb-4">Órdenes de Trabajo Encontradas</h2>
           <table className="min-w-full bg-white border border-gray-300">
             <thead>
-              <tr>
+              <tr className="bg-gray-300">
                 <th className="py-2 px-4 border-b">OT</th>
                 <th className="py-2 px-4 border-b">Descripción</th>
                 <th className="py-2 px-4 border-b">Zona</th>
                 <th className="py-2 px-4 border-b">Ubicación</th>
-                <th className="py-2 px-4 border-b">Acción</th>
+                <th className="py-2 px-4 border-b">Comentarios OT</th>
+                 <th className="py-2 px-4 border-b">Acción</th> {/* NUEVA COLUMNA */}
               </tr>
             </thead>
-            <tbody>
-            {ots.map((ot) => (
+            <tbody className="bg-gray-100">
+            {ots
+  .slice()
+  .sort((a, b) => b.id - a.id) // Orden de mayor a menor ID (más reciente primero)
+  .map((ot) => (
   <React.Fragment key={ot.id}>
     <tr className="mb-10"> {/* Agregar margen inferior a la fila */}
       <td className="py-2 px-4 border-b text-center">{ot.ottId || 'N/A'}</td>
       <td className="py-2 px-4 border-b text-center">{ot.OTbasico?.name || 'Sin descripción'}</td>
       <td className="py-2 px-4 border-b text-center">{ot.zona.name}</td>
       <td className="py-2 px-4 border-b text-center">{ot.ubicacion ? ot.ubicacion.name : 'N/A'}</td>
+      <td className="py-2 px-4 border-b text-center">{ot.descripcionEquipo || 'Sin comentarios'}</td> {/* NUEVA CELDA */}
+      
       <td className="py-2 px-4 border-b text-center">
         <button onClick={() => handleViewDetails(ot.id)} className="text-blue-600 hover:underline">Ver detalles</button>
       </td>
     </tr>
     {selectedOtId === ot.id && (
       <tr>
-        <td colSpan="5" className="text-center">
+        <td colSpan="6" className="text-center">
         <DetallesConsumibles 
   consumibles={ots.find(ot => ot.id === selectedOtId)?.otConsumibles} 
   userId={localStorage.getItem("userId")} 

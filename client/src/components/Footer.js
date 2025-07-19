@@ -7,7 +7,7 @@ const Footer = () => {
       <div className="max-w-screen-xl mx-auto flex flex-col md:flex-row justify-center items-center md:justify-between space-y-2 md:space-y-0">
         {/* Texto de copyright */}
         <span className="text-center md:text-left">
-          © Created by Miguel Pariona - 2024
+          © Created by Miguel Pariona - 2025
         </span>
 
         {/* Icono de GitHub */}

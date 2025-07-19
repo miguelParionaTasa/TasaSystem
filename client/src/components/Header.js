@@ -57,21 +57,21 @@ const Header = ({ setAuthenticated, setUserName, userName }) => {
             to="/movimientos"
             className="text-lg font-semibold transition-colors duration-300 hover:text-orange-500"
           >
-            Registro
+            Pedidos
           </Link>
 
           <Link
             to="/general"
             className="text-lg font-semibold transition-colors duration-300 hover:text-orange-500"
           >
-            General
+            Reportes
           </Link>
           
           <Link
             to="/reporte"
             className="text-lg font-semibold transition-colors duration-300 hover:text-orange-500"
           >
-            Atributos
+            Todas OT
           </Link>
         </div>
 
@@ -110,21 +110,21 @@ const Header = ({ setAuthenticated, setUserName, userName }) => {
             className="text-lg font-semibold py-2 text-gray-700 hover:text-orange-500"
             onClick={() => setMenuOpen(false)}
           >
-            Registro
+            Pedidos
           </Link>
           <Link
             to="/general"
             className="text-lg font-semibold py-2 text-gray-700 hover:text-orange-500"
             onClick={() => setMenuOpen(false)}
           >
-            General
+            Reportes
           </Link>
           <Link
             to="/reporte"
             className="text-lg font-semibold py-2 text-gray-700 hover:text-orange-500"
             onClick={() => setMenuOpen(false)}
           >
-            Atributos
+             Todas OT
           </Link>
         </div>
       )}

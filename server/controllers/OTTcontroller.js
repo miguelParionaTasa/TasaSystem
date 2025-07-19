@@ -134,6 +134,21 @@ const deleteOTT = async (req, res) => {
       .json({ message: "Error al eliminar OT", error: error.message });
   }
 };
+const updateTecnicosOT = async (req, res) => {
+  const { id } = req.params;
+  const { tecnico1, tecnico2 } = req.body;
+
+  try {
+    const updated = await prisma.oTbasico.update({
+      where: { id: parseInt(id) },
+      data: { tecnico1, tecnico2 },
+    });
+    res.json(updated);
+  } catch (error) {
+    console.error("Error al actualizar técnicos:", error);
+    res.status(500).json({ error: "No se pudo actualizar los técnicos." });
+  }
+};
 
 module.exports = {
   createOTT,
@@ -141,4 +156,5 @@ module.exports = {
   getOTTById,
   updateOTT,
   deleteOTT,
+  updateTecnicosOT, 
 };

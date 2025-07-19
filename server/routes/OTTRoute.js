@@ -5,12 +5,15 @@ const {
   getOTTById,
   updateOTT,
   deleteOTT,
+  updateTecnicosOT,
 } = require("../controllers/OTTcontroller"); // Ajusta la ruta según tu estructura de archivos
 
 const router = express.Router();
 
 // Ruta para crear una nueva OT
 router.post("/ots", createOTT);
+
+router.put("/editar-tecnicos/:id", updateTecnicosOT);
 
 // Ruta para obtener todas las OTs
 router.get("/ots", getAllOTTs);

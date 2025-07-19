@@ -8,12 +8,18 @@ import { FaTrash,FaPlus,FaUndo   } from "react-icons/fa";
 
 const Movimientos = () => {
   // Estados para las zonas
+const [mostrarTabla, setMostrarTabla] = useState(true);
 
+const [consumiblesOT, setConsumiblesOT] = useState([]);
   const [zonas, setZonas] = useState([]);
+  const [selectedOt, setSelectedOt] = useState(null);
+
   const [zonaId, setZonaId] = useState("");
   const [searchTerm, setSearchTerm] = useState(""); // Estado para almacenar el término de búsqueda
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Estado para controlar la visibilidad del desplegable
   const [openDropdownIndex, setOpenDropdownIndex] = useState(null);
+const [isOtValid, setIsOtValid] = useState(false);
+
 
   // Cargar zonas desde la API
   useEffect(() => {
@@ -33,6 +39,8 @@ const Movimientos = () => {
     fetchZonas();
   }, []);
 
+
+
   // Filtrar las zonas basadas en el término de búsqueda
   const filteredZonas = zonas.filter((zona) =>
     zona.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -48,7 +56,8 @@ const Movimientos = () => {
   const handleOtChange = (e) => {
     setSearchOt(e.target.value);
     setOpenOtDropdown(true); // Abrir el desplegable al escribir
-  };
+  setIsOtValid(false); // ❌ Aún no ha seleccionado una OT válida
+};
 
   // Filtrar OTs en función del término de búsqueda
   useEffect(() => {
@@ -59,12 +68,31 @@ const Movimientos = () => {
   }, [searchOt, ots]);
 
   // Función para seleccionar una OT
-  const selectOt = (ot) => {
+  const selectOt = async (ot) => {
+  try {
     setOtName(ot.name); // Establecer el nombre de la OT seleccionada
     setSearchOt(ot.name); // Establecer el valor del campo de búsqueda
+    setSelectedOt(ot);
     setOpenOtDropdown(false); // Cerrar el desplegable
     setOtId(ot.OTmaximo); // Almacenar el ID de la OT seleccionada
-  };
+    setIsOtValid(true); 
+
+    console.log("🔍 OT seleccionada:", ot);
+
+    // Consultar los consumibles de la OT seleccionada
+    const response = await axios.get(`${process.env.REACT_APP_API_URL}otc/by-otmaximo/${ot.OTmaximo}`);
+
+    
+    console.log("📦 Consumibles recibidos para OT", ot.id, ":", response.data);
+    
+    setConsumiblesOT(response.data);
+  } catch (error) {
+    console.error("❌ Error al obtener consumibles:", error);
+    Swal.fire("Error", "No se pudieron cargar los consumibles", "error");
+  }
+};
+
+  
   const handleKeyDown = (e) => {
     if (e.key === "Escape") {
       setOpenOtDropdown(false); // Cerrar el desplegable
@@ -167,7 +195,7 @@ const Movimientos = () => {
       console.log("ubicacionId:", ubicacionId);
 
       // Construir los parámetros de consulta
-      const params = new URLSearchParams({ temp: "CHIV1" }); // Siempre incluir temp
+      const params = new URLSearchParams({ temp: "CHIV2-25" }); // Siempre incluir temp
 
       // Agregar zonaId si está definido
       if (zonaId) {
@@ -268,112 +296,182 @@ const availableConsumibles = filteredConsumibles.filter(
 
   const [isSubmittingOT, setIsSubmittingOT] = useState(false);
   const [isSubmittingConsumible, setIsSubmittingConsumible] = useState(false);
-
+useEffect(() => {
+  if (otName.trim() !== "") {
+    setMostrarTabla(true);
+  }
+}, [otName]);
   // Función para manejar el envío de la OT
-  const handleSubmitOT = async (e) => {
-    e.preventDefault();
-    if (isSubmittingOT) return;
-  
-    setIsSubmittingOT(true);
-  
-    const errorMessages = [];
-  
-    // Validaciones
-    if (!zonaId) errorMessages.push("Zona");
-    if (!ubicacionId && !ubicacionSinId) errorMessages.push("Ubicación o Ubicación Sin");
-    if (!otValue && !otId) errorMessages.push("al menos un nombre OT o una OT no asignada");
-    if (!equipoId && !descripcionEquipo) errorMessages.push("ID del Equipo o Descripción del Equipo");
-    if (selectedConsumibles.length === 0 || selectedConsumibles.every(c => !c.name)) {
-      errorMessages.push("Debes seleccionar al menos un consumible con un nombre válido.");
-    }
-  
-    if (errorMessages.length > 0) {
+const handleSubmitOT = async (e) => {
+  e.preventDefault();
+  if (isSubmittingOT) return;
+  setIsSubmittingOT(true);
+
+  // Validación: solo una opción entre OT seleccionada y OT manual
+  if (!isOtValid && !(otName.trim() === "" && otValue.trim() !== "")) {
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: "Debes seleccionar una OT válida de la lista o ingresar un valor manual en el campo 'Valor OT'.",
+    });
+    setIsSubmittingOT(false);
+    return;
+  }
+
+  if (isOtValid && otValue.trim() !== "") {
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: "Por favor, usa solo una opción: selecciona una OT de la lista o ingresa un valor manual, no ambos.",
+    });
+    setIsSubmittingOT(false);
+    return;
+  }
+
+  // Validación de consumibles
+  const consumiblesValidos = selectedConsumibles.filter((c, index) => {
+  if (c.isEditing) {
+    // Validación de campos manuales
+    if (!c.name || !c.unidadMedida) {
       Swal.fire({
         icon: "error",
-        title: "Error",
-        text: `Por favor, complete el campo: ${errorMessages.join(", ")}.`,
+        title: `Fila ${index + 1} incompleta`,
+        text: "Debes escribir un nombre y una unidad de medida para el consumible.",
       });
-      setIsSubmittingOT(false);
-      return;
+      return false;
     }
-  
-    try {
-      const otData = {
-        ottId: otId,
-        OT: String(otValue),
-        equipoId: parseInt(equipoId, 10),
-        descripcionEquipo,
-        zonaId: parseInt(zonaId, 10),
-        ubicacionId: parseInt(ubicacionId, 10),
-        ubicacionSinId,
+    return true;
+  } else {
+    // Validación para selección desde la base de datos
+    
+  if (!c.id) {
+  Swal.fire({
+    icon: "error",
+    title: `Consumible no seleccionado correctamente en fila ${index + 1}`,
+    text: `Debes seleccionar un consumible válido desde la lista desplegable.`,
+  });
+  return false;
+}
+
+    if (!c.cantidad || c.cantidad <= 0) {
+      Swal.fire({
+        icon: "error",
+        title: `Cantidad inválida en fila ${index + 1}`,
+        text: "Debes ingresar una cantidad mayor a 0.",
+      });
+      return false;
+    }
+    return true;
+  }
+});
+
+if (consumiblesValidos.length !== selectedConsumibles.length) {
+  setIsSubmittingOT(false);
+  return;
+}
+
+
+  // Validaciones adicionales
+  const errorMessages = [];
+  if (!zonaId) errorMessages.push("Zona");
+  if (!otValue && !otId) errorMessages.push("Nombre de OT o ID de OT");
+
+  if (errorMessages.length > 0) {
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: `Por favor, complete el campo: ${errorMessages.join(", ")}.`,
+    });
+    setIsSubmittingOT(false);
+    return;
+  }
+
+ try {
+  // 👇 Detecta ubicación desde la OT si no se eligió manualmente
+let finalUbicacionId = ubicacionId
+  ? ubicacionId
+  : selectedOt?.ubicacionId;
+
+if (!finalUbicacionId && otId) {
+  const otSeleccionada = ots.find((ot) => ot.id === parseInt(otId, 10));
+  console.log("OT seleccionada:", otSeleccionada);
+  console.log("otId recibido en handleSubmit:", otId);
+console.log("ots disponibles:", ots);
+
+console.log("DEBUG OT seleccionada:", JSON.stringify(otSeleccionada, null, 2));
+
+  if (otSeleccionada?.OTbasico?.ubicacionId) {
+    finalUbicacionId = otSeleccionada.OTbasico.ubicacionId;
+    console.log("Usando ubicacionId desde OTbasico:", finalUbicacionId);
+  } else {
+    console.warn("⚠️ No se encontró ubicacionId en OTbasico");
+  }
+}
+
+const ubicacionIdNumerica = finalUbicacionId ? parseInt(finalUbicacionId, 10) : null;
+
+// ✅ Usa el valor corregido en otData
+const otData = {
+  ottId: otId,
+  OT: String(otValue),
+  equipoId: equipoId ? parseInt(equipoId, 10) : null,
+  descripcionEquipo,
+  zonaId: parseInt(zonaId, 10),
+  ubicacionId: ubicacionIdNumerica,
+  ubicacionSinId,
+  userId: localStorage.getItem("userId"),
+};
+console.log("Cuerpo de la solicitud de OT:", otData);
+
+    const token = localStorage.getItem("token");
+    const createdOT = await createOT(otData, token);
+    console.log("OT creada:", createdOT);
+
+    for (const consumible of consumiblesValidos) {
+      const otConsumibleData = {
+        consumibleId: consumible.id,
+        nombreConsumible: consumible.name,
+        unidadMedida: consumible.unidadMedida,
+        cantidad: consumible.cantidad,
+        otId: createdOT.id,
         userId: localStorage.getItem("userId"),
       };
-  
-      console.log("Cuerpo de la solicitud de OT:", otData);
-  
-      const token = localStorage.getItem("token");
-      const createdOT = await createOT(otData, token);
-      console.log("OT creada:", createdOT);
-  
-      for (const consumible of selectedConsumibles) {
-        const otConsumibleData = {
-          consumibleId: consumible.id,
-          nombreConsumible: consumible.name,
-          unidadMedida: consumible.unidadMedida,
-          cantidad: consumible.cantidad,
-          otId: createdOT.id,
-          userId: localStorage.getItem("userId"),
-        };
-  
-        console.log("Cuerpo de la solicitud de OTConsumible:", otConsumibleData);
-  
-        await createOTConsumible(otConsumibleData, token);
-      }
-  
-      // 🔹 Generar mensaje de WhatsApp
-      const numeroWhatsApp = "+51987778455"; // Reemplázalo por el número del destinatario
-      const mensaje = encodeURIComponent(
-        `Hola, para la OT número: ${otId}, se requieren estos consumibles:\n\n` +
-        selectedConsumibles.map((c, index) =>
-          `(${index + 1}) ${c.codMaximo} - ${c.name} (${c.cantidad} ${c.unidadMedida})`
-        ).join("\n")
-      );
-  
-      const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensaje}`;
-  
-      // 🔹 Abrir WhatsApp con el mensaje prellenado
-      window.open(urlWhatsApp, "_blank");
-  
-      Swal.fire({
-        icon: "success",
-        title: "Éxito",
-        text: "OT y consumibles registrados con éxito.",
-      });
-  
-      // 🔹 Limpiar los campos
-      setOtName("");
-      setOtValue("");
-      setEquipoId("");
-      setDescripcionEquipo("");
-      setZonaId("");
-      setUbicacionId("");
-      setUbicacionSinId("");
-      setSelectedConsumibles([]);
-      // Limpiar el valor del campo de búsqueda de OT
-setSearchOt(""); // Limpiar el término de búsqueda
-    } catch (err) {
-      console.error("Error al registrar OT o consumibles:", err);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Error al registrar la OT o los consumibles.",
-      });
-    } finally {
-      setIsSubmittingOT(false);
 
+      await createOTConsumible(otConsumibleData, token);
     }
-  };
-  
+
+    Swal.fire({
+      icon: "success",
+      title: "Éxito",
+      html: `OT y consumibles registrados correctamente.`  });
+
+    // Limpiar campos
+    setOtName("");
+    setOtValue("");
+    setEquipoId("");
+    setDescripcionEquipo("");
+    setZonaId("");
+    setUbicacionId("");
+    setUbicacionSinId("");
+    setSelectedConsumibles([]);
+    setSearchOt("");
+    setIsOtValid(false);
+    // Mostrar tabla de consumibles
+setMostrarTabla(false);
+
+  } catch (err) {
+    console.error("Error al registrar OT o consumibles:", err);
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: "Error al registrar la OT o los consumibles.",
+    });
+  } finally {
+    setIsSubmittingOT(false);
+  }
+};
+
+
 
 
   const [newConsumible, setNewConsumible] = useState({
@@ -414,7 +512,7 @@ setSearchOt(""); // Limpiar el término de búsqueda
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg mt-10 mb-10">
       <h2 className="text-2xl font-semibold text-center text-gray-700 mb-8">
-        Registrar Orden de Trabajo (OT)
+        Registrar nuevo pedido
       </h2>
       <form onSubmit={handleSubmitOT} className="space-y-6">
         <div className="grid grid-cols-3 gap-4">
@@ -568,7 +666,7 @@ setSearchOt(""); // Limpiar el término de búsqueda
             htmlFor="descripcionEquipo"
             className="block text-lg font-medium text-gray-700"
           >
-            Descripción del Equipo sin ID
+            Comentarios adicionales
           </label>
           <textarea
             id="descripcionEquipo"
@@ -587,6 +685,49 @@ setSearchOt(""); // Limpiar el término de búsqueda
           Añadir OT
         </button>
       </form>
+{mostrarTabla && consumiblesOT.length > 0 && (
+
+  <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+    <div style={{
+      border: '1px solid #ccc',
+      padding: '20px',
+      borderRadius: '10px',
+      width: '90%',
+      maxWidth: '800px',
+      backgroundColor: '#f9f9f9'
+    }}>
+      <h4 style={{ textAlign: 'center', marginBottom: '20px' }}>
+        Consumibles solicitados para esta OT
+      </h4>
+      <table style={{
+        width: '100%',
+        borderCollapse: 'collapse',
+        textAlign: 'center'
+      }}>
+        <thead>
+          <tr style={{ backgroundColor: '#e0e0e0' }}>
+            <th style={{ border: '1px solid #ccc', padding: '8px' }}>Item</th>
+            <th style={{ border: '1px solid #ccc', padding: '8px' }}>Nombre</th>
+            <th style={{ border: '1px solid #ccc', padding: '8px' }}>U.M</th>
+            <th style={{ border: '1px solid #ccc', padding: '8px' }}>Cantidad</th>
+          </tr>
+        </thead>
+        <tbody>
+          {consumiblesOT.map((item, index) => (
+            <tr key={item.id}>
+              <td style={{ border: '1px solid #ccc', padding: '8px' }}>{index + 1}</td>
+              <td style={{ border: '1px solid #ccc', padding: '8px' }}>{item.consumible?.name || "Sin nombre"}</td>
+              <td style={{ border: '1px solid #ccc', padding: '8px' }}>{item.consumible?.unidadMedida || "Sin U.M"}</td>
+              <td style={{ border: '1px solid #ccc', padding: '8px' }}>{item.cantidad}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+)}
+
+
 
       <h2 className="text-3xl font-semibold text-center text-gray-700 mb-8 mt-10">
         Adicionar Consumibles
@@ -626,6 +767,7 @@ setSearchOt(""); // Limpiar el término de búsqueda
                 value={consumible.name}
                 onChange={(e) => {
                   const newConsumibles = [...selectedConsumibles];
+                  newConsumibles[index].id = undefined; // Invalida selección si escribe manualmente
                   newConsumibles[index].name = e.target.value;
                   setSelectedConsumibles(newConsumibles);
                   setOpenDropdownIndex(index);
