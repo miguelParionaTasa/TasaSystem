@@ -8,7 +8,7 @@ const General = () => {
     scope: "misMovimientos",
     zona: "",
     ubicacion: "",
-    equipo: "",
+    ottId: "", 
   });
 
   const [zonas, setZonas] = useState([]);
@@ -18,6 +18,40 @@ const General = () => {
   const [loading, setLoading] = useState(false); // Estado para manejar la carga
   const [selectedOtId, setSelectedOtId] = useState(null);
   const [consumibles, setConsumibles] = useState([]);
+const [otsDisponibles, setOtsDisponibles] = useState([]);
+
+useEffect(() => {
+  const fetchOts = async () => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}ots`);
+
+      // Filtrar OTs con OTbasico y OTmaximo definido
+      const rawOts = response.data
+        .filter((ot) => ot.OTbasico && ot.OTbasico.OTmaximo)
+        .map((ot) => ({
+          id: ot.id,
+          ottId: ot.OTbasico.OTmaximo,
+          descripcion: ot.OTbasico.name,
+        }));
+
+      // Eliminar duplicados por ottId usando Map
+      const uniqueOtsMap = new Map();
+      rawOts.forEach((ot) => {
+        if (!uniqueOtsMap.has(ot.ottId)) {
+          uniqueOtsMap.set(ot.ottId, ot);
+        }
+      });
+
+      const uniqueOts = Array.from(uniqueOtsMap.values());
+      setOtsDisponibles(uniqueOts);
+    } catch (error) {
+      console.error("Error al obtener las OTs disponibles:", error);
+    }
+  };
+
+  fetchOts();
+}, []);
+
 
   // Obtener las zonas
   useEffect(() => {
@@ -152,7 +186,7 @@ const handleSubmit = async (e) => {
         endDate: filter.endDate,
         zona: filter.zona,
         ubicacion: filter.ubicacion,
-        equipo: filter.equipo,
+        ottId: filter.ottId, 
         scope: filter.scope,
         userId: userId, // Incluir el userId en los parámetros
       },
@@ -164,7 +198,6 @@ const handleSubmit = async (e) => {
     setLoading(false); // Finalizar carga
   }
 };
-// Agregar un componente para mostrar los detalles
 const DetallesConsumibles = ({ consumibles, userId }) => {
   const [editingConsumible, setEditingConsumible] = useState(null);
   const [updatedData, setUpdatedData] = useState({});
@@ -187,24 +220,21 @@ const DetallesConsumibles = ({ consumibles, userId }) => {
 
   const handleSave = async () => {
     try {
-      const url = `${process.env.REACT_APP_API_URL}otc/${editingConsumible.id}`; // Construir la URL
+      const url = `${process.env.REACT_APP_API_URL}otc/${editingConsumible.id}`;
       const body = {
         reservaSap: updatedData.reservaSap,
-        comentarios: updatedData.comentarios, 
+        comentarios: updatedData.comentarios,
       };
 
-      // Mostrar la URL y el cuerpo en la consola
       console.log("URL de la solicitud PUT:", url);
       console.log("Cuerpo de la solicitud:", body);
 
-      const response = await axios.put(url, body);
-      // Aquí puedes actualizar el estado de consumibles si es necesario
+      await axios.put(url, body);
       setEditingConsumible(null);
-      // Llama a handleSubmit para refrescar los datos
-      await handleSubmit(); // Asegúrate de que handleSubmit esté disponible
+      await handleSubmit();
     } catch (error) {
       console.error("Error al actualizar el consumible:", error);
-      const simulatedEvent = { preventDefault: () => {} }; // Simular el evento
+      const simulatedEvent = { preventDefault: () => {} };
       await handleSubmit(simulatedEvent);
     }
   };
@@ -213,65 +243,77 @@ const DetallesConsumibles = ({ consumibles, userId }) => {
     <table className="min-w-full bg-green border border-gray-300">
       <thead>
         <tr className="bg-green-300">
-        <th className="py-2 px-4 border-b">Código</th>
+          <th className="py-2 px-4 border-b">Código</th>
           <th className="py-2 px-4 border-b">Nombre Consumible</th>
           <th className="py-2 px-4 border-b">Unidad de Medida</th>
           <th className="py-2 px-4 border-b">Cantidad</th>
           <th className="py-2 px-4 border-b">Reserva SAP</th>
           <th className="py-2 px-4 border-b">Coment.</th>
+          <th className="py-2 px-4 border-b">FechaPedido</th> {/* NUEVO */}
           <th className="py-2 px-4 border-b">Acción</th>
         </tr>
       </thead>
       <tbody className="bg-green-100">
         {consumibles.map((consumible) => (
           <tr key={consumible.id}>
-          <td>{consumible.consumible?.codMaximo || 'N/A'}</td>
-          <td>{consumible.consumible?.name || 'N/A'}</td>
-          <td>{consumible.consumible?.unidadMedida || 'N/A'}</td>
-          <td>{consumible.cantidad || 0}</td>
-          <td>
-            {editingConsumible?.id === consumible.id && ["1", "2", "3"].includes(userId) ? (
-              <input
-                type="text"
-                name="reservaSap"
-                value={updatedData.reservaSap}
-                onChange={handleInputChange}
-                className="border border-gray-300 p-1"
-              />
-            ) : (
-              consumible.reservaSap || ''
-            )}
-          </td>
-          <td>
-            {editingConsumible?.id === consumible.id ? (
-              <input
-                type="text"
-                name="comentarios" // Asegúrate de que el nombre coincida
-                value={updatedData.comentarios || ''} // Maneja el valor
-                onChange={handleInputChange}
-                className="border border-gray-300 p-1"
-              />
-            ) : (
-              consumible.comentarios || 'N/A' // Mostrar 'N/A' si no hay comentarios
-            )}
-          </td>
-          <td>
-            {editingConsumible?.id === consumible.id ? (
-              <button onClick={handleSave} className="text-green-600 hover:underline">
-                Guardar
-              </button>
-            ) : (
-              <button onClick={() => handleEditClick(consumible)} className="text-blue-600 hover:underline">
-                Editar
-              </button>
-            )}
-          </td>
-        </tr>
+            <td>{consumible.consumible?.codMaximo || 'N/A'}</td>
+            <td>{consumible.consumible?.name || 'N/A'}</td>
+            <td>{consumible.consumible?.unidadMedida || 'N/A'}</td>
+            <td>{consumible.cantidad || 0}</td>
+            <td>
+              {editingConsumible?.id === consumible.id && ["1", "2", "3"].includes(userId) ? (
+                <input
+                  type="text"
+                  name="reservaSap"
+                  value={updatedData.reservaSap}
+                  onChange={handleInputChange}
+                  className="border border-gray-300 p-1"
+                />
+              ) : (
+                consumible.reservaSap || ''
+              )}
+            </td>
+            <td>
+              {editingConsumible?.id === consumible.id ? (
+                <input
+                  type="text"
+                  name="comentarios"
+                  value={updatedData.comentarios || ''}
+                  onChange={handleInputChange}
+                  className="border border-gray-300 p-1"
+                />
+              ) : (
+                consumible.comentarios || 'N/A'
+              )}
+            </td>
+            <td>
+              {consumible.fechaCreacion
+                ?new Date(consumible.fechaCreacion).toLocaleDateString("es-PE", {
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric",
+})
+
+                : 'N/A'}
+            </td>
+            <td>
+              {editingConsumible?.id === consumible.id ? (
+                <button onClick={handleSave} className="text-green-600 hover:underline">
+                  Guardar
+                </button>
+              ) : (
+                <button onClick={() => handleEditClick(consumible)} className="text-blue-600 hover:underline">
+                  Editar
+                </button>
+              )}
+            </td>
+          </tr>
         ))}
       </tbody>
     </table>
   );
 };
+
   return (
     <div className="p-4 max-w-screen-xl mx-auto">
       <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">
@@ -360,26 +402,25 @@ const DetallesConsumibles = ({ consumibles, userId }) => {
           </select>
         </div>
 
-        {/* Filtro Equipo */}
-        <div>
-          <label className="block font-semibold text-gray-700 mb-2">Equipo</label>
-          <select
-            name="equipo"
-            value={filter.equipo}
-            onChange={handleFilterChange}
-            className="w-full p-2 border border-gray-300 rounded-md"
-            disabled={!filter.zona || !filter.ubicacion}
-          >
-            <option value="">Selecciona un equipo</option>
-            {equipos
-              .sort((a, b) => a.name.localeCompare(b.name))
-              .map((equipo) => (
-                <option key={equipo.id} value={equipo.id}>
-                  {equipo.name}
-                </option>
-              ))}
-          </select>
-        </div>
+<div>
+  <label className="block font-semibold text-gray-700 mb-2">N° OT</label>
+  <select
+    name="ottId"
+    value={filter.ottId}
+    onChange={handleFilterChange}
+    className="w-full p-2 border border-gray-300 rounded-md"
+  >
+    <option value="">Selecciona una OT</option>
+    {otsDisponibles
+.sort((a, b) => Number(a.ottId) - Number(b.ottId))
+  .map((ot) => (
+    <option key={ot.id} value={ot.ottId}>
+      {ot.ottId} - {ot.descripcion}
+    </option>
+  ))}
+  </select>
+</div>
+
 
         {/* Botón de Buscar */}
         <div className="col-span-3 flex justify-end items-center mt-4">

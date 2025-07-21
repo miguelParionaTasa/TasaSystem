@@ -169,7 +169,7 @@ const getAllOTs = async (req, res) => {
   }
 };
 const searchOts = async (req, res) => {
-  const { startDate, endDate, zona, ubicacion, equipo, scope, userId } = req.query; // Obtener userId de los parámetros de consulta
+  const { startDate, endDate, zona, ubicacion, ottId, scope, userId } = req.query;
 
   // Validar parámetros de entrada
   if (!userId || isNaN(Number(userId))) {
@@ -191,8 +191,8 @@ const searchOts = async (req, res) => {
   if (ubicacion && isNaN(Number(ubicacion))) {
     return res.status(400).json({ error: "El ID de ubicación no es válido." });
   }
-  if (equipo && isNaN(Number(equipo))) {
-    return res.status(400).json({ error: "El ID de equipo no es válido." });
+  if (ottId && typeof ottId !== 'string') {
+    return res.status(400).json({ error: "El ottId debe ser un texto válido." });
   }
 
   // Construir condiciones de búsqueda
@@ -220,18 +220,21 @@ const searchOts = async (req, res) => {
   if (ubicacion) {
     conditions.ubicacionId = Number(ubicacion);
   }
-  if (equipo) {
-    conditions.equipoId = Number(equipo);
+  if (ottId) {
+    conditions.OTbasico = {
+      is: {
+        OTmaximo: ottId,
+      },
+    };
   }
 
   try {
     let ots;
 
     if (scope === "misMovimientos") {
-      // Filtrar solo por el userId
       ots = await prisma.ots.findMany({
         where: {
-          userId: Number(userId), // Asegúrate de convertir a número
+          userId: Number(userId),
           ...conditions,
         },
         include: {
@@ -248,9 +251,8 @@ const searchOts = async (req, res) => {
         },
       });
     } else if (scope === "miGrupo") {
-      // Obtener el areaId del usuario
       const user = await prisma.user.findUnique({
-        where: { id: Number(userId) }, // Asegúrate de convertir a número
+        where: { id: Number(userId) },
         select: { areaId: true },
       });
 
@@ -258,15 +260,16 @@ const searchOts = async (req, res) => {
         return res.status(404).json({ error: "Usuario no encontrado." });
       }
 
-      // Filtrar por el areaId
+      const groupUserIds = await prisma.user.findMany({
+        where: { areaId: user.areaId },
+        select: { id: true },
+      });
+
+      const ids = groupUserIds.map(u => u.id);
+
       ots = await prisma.ots.findMany({
         where: {
-          userId: {
-            in: await prisma.user.findMany({
-              where: { areaId: user.areaId },
-              select: { id: true },
-            }).then(users => users.map(u => u.id)),
-          },
+          userId: { in: ids },
           ...conditions,
         },
         include: {

@@ -686,7 +686,6 @@ setMostrarTabla(false);
         </button>
       </form>
 {mostrarTabla && consumiblesOT.length > 0 && (
-
   <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
     <div style={{
       border: '1px solid #ccc',
@@ -694,35 +693,42 @@ setMostrarTabla(false);
       borderRadius: '10px',
       width: '90%',
       maxWidth: '800px',
-      backgroundColor: '#f9f9f9'
+      backgroundColor: '#f9f9f9',
+      overflowX: 'auto'
     }}>
       <h4 style={{ textAlign: 'center', marginBottom: '20px' }}>
         Consumibles solicitados para esta OT
       </h4>
-      <table style={{
-        width: '100%',
-        borderCollapse: 'collapse',
-        textAlign: 'center'
-      }}>
-        <thead>
-          <tr style={{ backgroundColor: '#e0e0e0' }}>
-            <th style={{ border: '1px solid #ccc', padding: '8px' }}>Item</th>
-            <th style={{ border: '1px solid #ccc', padding: '8px' }}>Nombre</th>
-            <th style={{ border: '1px solid #ccc', padding: '8px' }}>U.M</th>
-            <th style={{ border: '1px solid #ccc', padding: '8px' }}>Cantidad</th>
-          </tr>
-        </thead>
-        <tbody>
-          {consumiblesOT.map((item, index) => (
-            <tr key={item.id}>
-              <td style={{ border: '1px solid #ccc', padding: '8px' }}>{index + 1}</td>
-              <td style={{ border: '1px solid #ccc', padding: '8px' }}>{item.consumible?.name || "Sin nombre"}</td>
-              <td style={{ border: '1px solid #ccc', padding: '8px' }}>{item.consumible?.unidadMedida || "Sin U.M"}</td>
-              <td style={{ border: '1px solid #ccc', padding: '8px' }}>{item.cantidad}</td>
+
+      <div style={{ overflowX: 'auto' }}>
+        <table style={{
+          width: '100%',
+          borderCollapse: 'collapse',
+          textAlign: 'center',
+          minWidth: '600px' // aumentamos mínimo por la nueva columna
+        }}>
+          <thead>
+            <tr style={{ backgroundColor: '#e0e0e0' }}>
+              <th style={{ border: '1px solid #ccc', padding: '8px' }}>Item</th>
+              <th style={{ border: '1px solid #ccc', padding: '8px' }}>Nombre</th>
+              <th style={{ border: '1px solid #ccc', padding: '8px' }}>U.M</th>
+              <th style={{ border: '1px solid #ccc', padding: '8px' }}>Cantidad</th>
+              <th style={{ border: '1px solid #ccc', padding: '8px' }}>ReservaSap</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {consumiblesOT.map((item, index) => (
+              <tr key={item.id}>
+                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{index + 1}</td>
+                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{item.consumible?.name || "Sin nombre"}</td>
+                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{item.consumible?.unidadMedida || "Sin U.M"}</td>
+                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{item.cantidad}</td>
+                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{item.reservaSap || "—"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 )}
@@ -761,19 +767,23 @@ setMostrarTabla(false);
                 className="w-full p-2 border border-gray-300 rounded"
               />
             ) : (
-              <input
-                type="text"
-                placeholder="Buscar consumible"
-                value={consumible.name}
-                onChange={(e) => {
-                  const newConsumibles = [...selectedConsumibles];
-                  newConsumibles[index].id = undefined; // Invalida selección si escribe manualmente
-                  newConsumibles[index].name = e.target.value;
-                  setSelectedConsumibles(newConsumibles);
-                  setOpenDropdownIndex(index);
-                }}
-                className="w-full p-2 border border-gray-300 rounded"
-              />
+             <input
+  type="text"
+  placeholder="🔍 Buscar consumible..."
+  value={consumible.name}
+  onChange={(e) => {
+    const updated = [...selectedConsumibles];
+    updated[index] = {
+      ...updated[index],
+      id: undefined, // Invalida selección si escribe manualmente
+      name: e.target.value,
+    };
+    setSelectedConsumibles(updated);
+    setOpenDropdownIndex(index);
+  }}
+  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150"
+/>
+
             )}
             {consumible.isEditing ? (
               <></>
