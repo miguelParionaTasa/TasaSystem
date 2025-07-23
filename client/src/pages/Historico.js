@@ -8,6 +8,7 @@ const Historico = () => {
   const [ubicaciones, setUbicaciones] = useState([]);
   const [ubicacionId, setUbicacionId] = useState("");
   const [datosFiltrados, setDatosFiltrados] = useState([]);
+  const [cargando, setCargando] = useState(false);
 
   useEffect(() => {
     const obtenerZonas = async () => {
@@ -30,7 +31,9 @@ const Historico = () => {
       }
 
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}varios/ubicaciones/por-zona?zonaId=${zonaId}`);
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}varios/ubicaciones/por-zona?zonaId=${zonaId}`
+        );
         setUbicaciones(response.data);
       } catch (error) {
         toast.error("Error al cargar las ubicaciones.");
@@ -48,15 +51,27 @@ const Historico = () => {
     }
 
     try {
+      setCargando(true);
       const query = new URLSearchParams();
       query.append("zonaId", zonaId);
       if (ubicacionId) query.append("ubicacionId", ubicacionId);
 
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}historico/filtrar?${query.toString()}`);
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}historico/filtrar?${query.toString()}`
+      );
       setDatosFiltrados(response.data);
+
+      // Scroll suave a la tabla
+      setTimeout(() => {
+        document.getElementById("tabla-historico")?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
     } catch (error) {
-      toast.error("Error al filtrar históricos.");
+      toast.error(
+        error?.response?.data?.message || "Error al filtrar históricos."
+      );
       console.error("Error al filtrar:", error);
+    } finally {
+      setCargando(false);
     }
   };
 
@@ -67,7 +82,9 @@ const Historico = () => {
 
   return (
     <div className="p-4 sm:p-6">
-      <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-gray-800">Histórico por Zona</h2>
+      <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-gray-800">
+        Histórico por Zona
+      </h2>
 
       {/* Filtros */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
@@ -110,8 +127,12 @@ const Historico = () => {
         </button>
       </div>
 
-      {/* Tabla responsive */}
-      <div className="overflow-x-auto">
+      {cargando && (
+        <p className="text-blue-600 font-semibold mb-4">Cargando resultados...</p>
+      )}
+
+      {/* Tabla */}
+      <div className="overflow-x-auto" id="tabla-historico">
         {datosFiltrados.length > 0 ? (
           <table className="min-w-[900px] w-full border text-sm text-left">
             <thead>
@@ -130,12 +151,18 @@ const Historico = () => {
               {datosFiltrados.map((h) => (
                 <tr key={h.id} className="hover:bg-gray-50">
                   <td className="border px-2 py-1">{h.zona}</td>
-                  <td className="border px-2 py-1">{h.ubicacion?.slice(0, 35)}</td>
-                  <td className="border px-2 py-1">{formatearFecha(h.fecha)}</td>
+                  <td className="border px-2 py-1">
+                    {h.ubicacion?.slice(0, 35)}
+                  </td>
+                  <td className="border px-2 py-1">
+                    {formatearFecha(h.fecha)}
+                  </td>
                   <td className="border px-2 py-1">{h.trabajo}</td>
                   <td className="border px-2 py-1">{h.ot}</td>
                   <td className="border px-2 py-1">
-                    {(h.consumible?.length > 34 ? h.consumible.slice(0, 34) + "…" : h.consumible)}
+                    {h.consumible?.length > 34
+                      ? h.consumible.slice(0, 34) + "…"
+                      : h.consumible}
                   </td>
                   <td className="border px-2 py-1">{h.unidadMedida}</td>
                   <td className="border px-2 py-1">{h.cantidad}</td>
@@ -144,7 +171,10 @@ const Historico = () => {
             </tbody>
           </table>
         ) : (
-          zonaId && <p className="text-gray-600">No hay datos para mostrar.</p>
+          zonaId &&
+          !cargando && (
+            <p className="text-gray-600">No hay datos para mostrar.</p>
+          )
         )}
       </div>
     </div>
