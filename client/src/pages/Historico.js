@@ -104,7 +104,7 @@ const Historico = () => {
 
         <button
           onClick={manejarFiltro}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full sm:w-auto"
+          className="bg-blue-100 text-black px-4 py-2 rounded hover:bg-blue-700 hover:text-white w-full sm:w-auto"
         >
           FILTRAR
         </button>
