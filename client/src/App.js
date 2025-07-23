@@ -7,6 +7,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Reportes from "./components/Reportes";
 import General from "./pages/General";
+import Historico from "./pages/Historico";
 import useAuth from "./hooks/useAuth"; // Importa el hook useAuth
 
 // Componente para proteger rutas
@@ -83,7 +84,18 @@ const App = () => {
             <PrivateRoute element={<General />} authenticated={authenticated} />
           }
         />
+        <Route
+  path="/historico"
+  element={
+    <PrivateRoute
+      element={<Historico />}
+      authenticated={authenticated}
+    />
+  }
+/>
+
       </Routes>
+      
       <Footer />
     </div>
   );

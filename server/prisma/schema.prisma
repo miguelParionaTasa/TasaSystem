@@ -74,7 +74,10 @@ model Consumible {
   unidadMedida  String
   codMaximo     String
   nombreMaximo  String
+  precio        Float?         
   otConsumibles OTConsumible[]
+  historico Historico[]
+
 }
 
 model Zona {
@@ -85,6 +88,8 @@ model Zona {
   OTbasico     OTbasico[]
   ots          Ots[]
   ubicaciones  Ubicacion[]
+  historico Historico[]
+
 }
 
 model Ubicacion {
@@ -96,6 +101,8 @@ model Ubicacion {
   OTbasico     OTbasico[]
   ots          Ots[]
   zona         Zona       @relation(fields: [zonaId], references: [id])
+  historico Historico[]
+
 }
 
 model Componente {
@@ -192,3 +199,17 @@ model OTbasico {
   Ots         Ots[]
 }
 
+model Historico {
+  id           Int         @id @default(autoincrement())
+  zonaId       Int
+  ubicacionId  Int
+  consumibleId Int
+  trabajo      String
+  fecha        DateTime
+  ot           String       // Puede ser Int si siempre es número
+  cantidad     Float
+
+  zona         Zona         @relation(fields: [zonaId], references: [id])
+  ubicacion    Ubicacion    @relation(fields: [ubicacionId], references: [id])
+  consumible   Consumible   @relation(fields: [consumibleId], references: [id])
+}
