@@ -1,6 +1,6 @@
-// routes/consumibleRoutes.js
 const express = require('express');
 const {
+  searchConsumibles,
   createConsumible,
   getAllConsumibles,
   getConsumibleById,
@@ -8,15 +8,20 @@ const {
   deleteConsumible,
 } = require('../controllers/consumibleController');
 
-const authMiddleware = require('../middlewares/auth'); 
+const authMiddleware = require('../middlewares/auth');
 
 const router = express.Router();
 
-// Rutas para el CRUD de consumibles
-router.post('/', createConsumible); // Crear consumible
-router.get('/', getAllConsumibles); // Obtener todos los consumibles
-router.get('/:id', getConsumibleById); // Obtener consumible por ID
-router.put('/:id', updateConsumible); // Actualizar consumible
-router.delete('/:id', authMiddleware, deleteConsumible); 
+// IMPORTANTES PRIMERO (más específicas)
+router.get('/search', searchConsumibles);
+
+// CRUD
+router.post('/', createConsumible);
+router.get('/', getAllConsumibles);
+
+// Restringimos :id a dígitos para que no choque con /search
+router.get('/:id(\\d+)', getConsumibleById);
+router.put('/:id(\\d+)', updateConsumible);
+router.delete('/:id(\\d+)', authMiddleware, deleteConsumible);
 
 module.exports = router;

@@ -23,6 +23,8 @@ model User {
   area              Area                @relation(fields: [areaId], references: [id])
   Atributo          Atributo[]
   AtributoHistorial AtributoHistorial[]
+  // Relación inversa (opcional si quieres ver quiénes han sido responsables)
+  inventarioItems   InventarioItem[]   @relation("ResponsableInventario")
 }
 
 model Area {
@@ -179,6 +181,7 @@ model Image {
   equiposs     Equipo[]       @relation("EquipoImage")
   repuestoss   Repuesto[]     @relation("RepuestoImage")
   atributos    Atributo[]     @relation("AtributoImage") // Nueva relación con Atributo
+    inventarioItems InventarioItem[] // <- agrega esto
 }
 
 model OTbasico {
@@ -212,4 +215,39 @@ model Historico {
   zona         Zona         @relation(fields: [zonaId], references: [id])
   ubicacion    Ubicacion    @relation(fields: [ubicacionId], references: [id])
   consumible   Consumible   @relation(fields: [consumibleId], references: [id])
+}
+model InventarioItem {
+  id             Int       @id @default(autoincrement())
+  descripcion    String
+  cantidad       Int
+  estado         String
+  ubicacion      String
+  nivel          String
+  fechaIngreso   DateTime
+  fechaSalida    DateTime?
+  destino        String?
+
+  responsableId  Int
+  responsable    User      @relation("ResponsableInventario", fields: [responsableId], references: [id])
+
+  historial      HistorialItem[]
+
+  imageId        Int?
+  image          Image?    @relation(fields: [imageId], references: [id])
+
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+
+
+model HistorialItem {
+  id             Int      @id @default(autoincrement())
+  inventarioId   Int
+  fechaUso       DateTime
+  cantidadUsada  Int
+  descripcionUso String
+  destino        String
+  responsable    String
+  inventario     InventarioItem @relation(fields: [inventarioId], references: [id])
 }

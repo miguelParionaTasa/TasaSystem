@@ -92,9 +92,59 @@ const deleteConsumible = async (req, res) => {
     console.error("Error al eliminar consumible:", error);
     res.status(500).json({ message: "Error al eliminar consumible" });
   }
+};const searchConsumibles = async (req, res) => {
+  try {
+    const q = (req.query.q || "").trim();
+    const page = Math.max(parseInt(req.query.page ?? "1", 10), 1);
+    const take = Math.min(Math.max(parseInt(req.query.take ?? "50", 10), 1), 100);
+    const skip = (page - 1) * take;
+
+    if (!q) {
+      return res.json({ data: [], total: 0, page, pages: 0 });
+    }
+
+    // Soportar búsquedas con varias palabras: "perno inox 3/8"
+    const terms = q.split(/\s+/).filter(Boolean);
+
+    const where = {
+      AND: terms.map((t) => ({
+        name: { contains: t, mode: "insensitive" },
+      })),
+    };
+
+    const [data, total] = await prisma.$transaction([
+      prisma.consumible.findMany({
+        where,
+        skip,
+        take,
+        orderBy: { name: "asc" },
+        select: {
+          id: true,
+          name: true,
+          unidadMedida: true,
+          codMaximo: true,
+          nombreMaximo: true,
+        },
+      }),
+      prisma.consumible.count({ where }),
+    ]);
+
+    return res.json({
+      data,
+      total,
+      page,
+      pages: Math.ceil(total / take),
+    });
+  } catch (error) {
+    console.error("Error en búsqueda de consumibles:", error);
+    res.status(500).json({ message: "Error en búsqueda de consumibles" });
+  }
 };
 
+
+
 module.exports = {
+  searchConsumibles,
   createConsumible,
   getAllConsumibles,
   getConsumibleById,

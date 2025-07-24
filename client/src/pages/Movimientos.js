@@ -13,7 +13,8 @@ const [mostrarTabla, setMostrarTabla] = useState(true);
 const [consumiblesOT, setConsumiblesOT] = useState([]);
   const [zonas, setZonas] = useState([]);
   const [selectedOt, setSelectedOt] = useState(null);
-
+const [searchResults, setSearchResults] = useState([]);
+const [isSearching, setIsSearching] = useState(false);
   const [zonaId, setZonaId] = useState("");
   const [searchTerm, setSearchTerm] = useState(""); // Estado para almacenar el término de búsqueda
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Estado para controlar la visibilidad del desplegable
@@ -167,23 +168,26 @@ const [isOtValid, setIsOtValid] = useState(false);
     setSelectedConsumibles(newConsumibles);
   };
 
-  // Cargar consumibles desde la API
-  useEffect(() => {
-    const fetchConsumibles = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}consumibles`
-        );
-        setConsumibles(response.data); // Guardamos todos los consumibles en el estado
-        setFilteredConsumibles(response.data); // Inicialmente, mostramos todos los consumibles
-      } catch (error) {
-        toast.error("Error al cargar los consumibles.");
-        console.error("Error al cargar consumibles:", error);
-      }
-    };
+const handleSearch = async () => {
+  if (!searchTerm.trim()) {
+    toast.info("Escribe algo para buscar.");
+    return;
+  }
 
-    fetchConsumibles();
-  }, []);
+  try {
+    setIsSearching(true);
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}consumibles/search?q=${encodeURIComponent(searchTerm)}`
+    );
+    setSearchResults(response.data.data); // Recuerda que tu endpoint devuelve { data, total, ... }
+  } catch (error) {
+    toast.error("Error al buscar consumibles.");
+    console.error("Error en búsqueda:", error);
+  } finally {
+    setIsSearching(false);
+  }
+};
+
 
   // Cargar OTs desde la API
   useEffect(() => {
@@ -767,22 +771,51 @@ setMostrarTabla(false);
                 className="w-full p-2 border border-gray-300 rounded"
               />
             ) : (
-             <input
-  type="text"
-  placeholder="🔍 Buscar consumible..."
-  value={consumible.name}
-  onChange={(e) => {
-    const updated = [...selectedConsumibles];
-    updated[index] = {
-      ...updated[index],
-      id: undefined, // Invalida selección si escribe manualmente
-      name: e.target.value,
-    };
-    setSelectedConsumibles(updated);
-    setOpenDropdownIndex(index);
-  }}
-  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150"
-/>
+             <td className="border border-gray-300 p-2 relative">
+  {/* Input con botón */}
+  <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2">
+    <input
+      type="text"
+      placeholder="🔍 Buscar consumible..."
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      onKeyDown={(e) => e.key === "Enter" && handleSearch()} // Enter para buscar
+      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150"
+    />
+    <button
+      type="button"
+      onClick={handleSearch}
+      className="mt-2 sm:mt-0 p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+      disabled={isSearching}
+    >
+      {isSearching ? "..." : "🔍"}
+    </button>
+  </div>
+
+  {/* Lista de resultados */}
+  {searchResults.length > 0 && (
+    <ul className="absolute left-0 w-full bg-white border border-gray-300 rounded-lg z-10 mt-1 max-h-40 overflow-y-auto">
+      {searchResults.map((item) => (
+        <li
+          key={item.id}
+          onClick={() => {
+            const newConsumibles = [...selectedConsumibles];
+            newConsumibles[index] = {
+              ...item,
+              cantidad: 1,
+            };
+            setSelectedConsumibles(newConsumibles);
+            setSearchResults([]);
+            setSearchTerm(item.name);
+          }}
+          className="cursor-pointer hover:bg-gray-100 p-2 text-sm sm:text-base"
+        >
+          {item.name} ({item.unidadMedida})
+        </li>
+      ))}
+    </ul>
+  )}
+</td>
 
             )}
             {consumible.isEditing ? (
