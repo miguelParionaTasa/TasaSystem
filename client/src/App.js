@@ -5,6 +5,7 @@ import MovimientosPage from "./pages/Movimientos";
 import Login from "./pages/Login";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import Inventario from "./pages/Inventario";
 import Reportes from "./components/Reportes";
 import General from "./pages/General";
 import Historico from "./pages/Historico";
@@ -91,8 +92,15 @@ const App = () => {
       element={<Historico />}
       authenticated={authenticated}
     />
+  }  
+/>
+<Route
+  path="/inventario"
+  element={
+    <PrivateRoute element={<Inventario />} authenticated={authenticated} />
   }
 />
+
 
       </Routes>
       

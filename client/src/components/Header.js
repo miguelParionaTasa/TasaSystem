@@ -104,6 +104,12 @@ const Header = ({ setAuthenticated, setUserName, userName }) => {
                 >
                   Histórico
                 </button>
+                  <button
+                  onClick={() => handleNavigate("/inventario")}
+                  className="block w-full text-left px-4 py-2 hover:bg-blue-300"
+                >
+                  Inventario
+                </button>
                 {puedeDescargarBD && (
                   <button
                     onClick={() => {
@@ -186,6 +192,13 @@ const Header = ({ setAuthenticated, setUserName, userName }) => {
               className="block w-full text-left text-lg hover:bg-blue-300 px-2 py-1 rounded"
             >
               Histórico
+            </button>
+
+              <button
+              onClick={() => handleNavigate("/inventario")}
+              className="block w-full text-left text-lg hover:bg-blue-300 px-2 py-1 rounded"
+            >
+              Inventario
             </button>
             {puedeDescargarBD && (
               <button

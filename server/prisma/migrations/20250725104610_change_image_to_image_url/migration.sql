@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "HistorialItem" ALTER COLUMN "cantidadUsada" SET DATA TYPE DOUBLE PRECISION;

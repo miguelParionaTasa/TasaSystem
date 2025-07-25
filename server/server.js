@@ -16,7 +16,8 @@ const otsRoutes = require("./routes/otsRoutes");
 const ottRoutes = require("./routes/OTTRoute");
 const historicoRoutes = require('./routes/historicoRoutes');
 const otConsumibleRoutes = require("./routes/otConsumibleRoutes");
-
+const inventarioRoutes = require("./routes/inventarioRoutes");
+const debugRoutes = require('./routes/debugRoutes');
 // Configuración de la aplicación
 const app = express();
 require('dotenv').config();
@@ -30,6 +31,7 @@ const corsOptions = {
 app.use(express.json());
 // Usa el middleware cors en todas las rutas
 app.use(cors(corsOptions));
+app.use('/debug', debugRoutes);
 app.use("/useres", userRoutes); // Rutas de usuario
 app.use("/consumibles", consumibleRoutes);
 app.use("/varios", variosRoutes);
@@ -38,6 +40,7 @@ app.use("/componentes", componenteRoutes);
 app.use("/atributos", atributoRoutes);
 app.use("/ots", otsRoutes);
 app.use("/ott", ottRoutes);
+app.use("/inventario", inventarioRoutes);
 app.use("/otc", otConsumibleRoutes);
 app.use("/historico", historicoRoutes);
 app.use('/export', exportRoutes);

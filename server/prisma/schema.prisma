@@ -181,8 +181,7 @@ model Image {
   equiposs     Equipo[]       @relation("EquipoImage")
   repuestoss   Repuesto[]     @relation("RepuestoImage")
   atributos    Atributo[]     @relation("AtributoImage") // Nueva relación con Atributo
-    inventarioItems InventarioItem[] // <- agrega esto
-}
+ }
 
 model OTbasico {
   id          Int        @id @default(autoincrement())
@@ -216,6 +215,7 @@ model Historico {
   ubicacion    Ubicacion    @relation(fields: [ubicacionId], references: [id])
   consumible   Consumible   @relation(fields: [consumibleId], references: [id])
 }
+
 model InventarioItem {
   id             Int       @id @default(autoincrement())
   descripcion    String
@@ -232,20 +232,18 @@ model InventarioItem {
 
   historial      HistorialItem[]
 
-  imageId        Int?
-  image          Image?    @relation(fields: [imageId], references: [id])
+  imageUrl       String?   // ← Cambiamos imageId/image por imageUrl
 
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 }
 
 
-
 model HistorialItem {
   id             Int      @id @default(autoincrement())
   inventarioId   Int
   fechaUso       DateTime
-  cantidadUsada  Int
+  cantidadUsada  Float
   descripcionUso String
   destino        String
   responsable    String
