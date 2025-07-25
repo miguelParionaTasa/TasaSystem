@@ -474,6 +474,10 @@ const handleEditItem = async () => {
                 }
                 className="border rounded px-3 py-2"
               />
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+    Cantidad
+  </label>
+
               <input
                 type="number"
                 step="0.01"
@@ -618,7 +622,9 @@ const handleEditItem = async () => {
                     </option>
                   ))}
               </select>
-
+ <label className="block text-sm font-medium text-gray-700 mb-1">
+    Cantidad
+  </label>
               <input
                 type="number"
                 step="0.01"
@@ -754,67 +760,107 @@ const handleEditItem = async () => {
     <div className="bg-white p-6 rounded-lg w-full max-w-lg">
       <h2 className="text-xl font-bold mb-4">Editar Item</h2>
       <div className="grid grid-cols-1 gap-3">
-        <input
-          type="text"
-          placeholder="Descripción"
-          value={editItem.descripcion}
-          onChange={(e) =>
-            setEditItem({ ...editItem, descripcion: e.target.value })
-          }
-          className="border rounded px-3 py-2"
-        />
-        <input
-          type="number"
-          step="0.01"
-          placeholder="Cantidad"
-          value={editItem.cantidad}
-          onChange={(e) =>
-            setEditItem({ ...editItem, cantidad: e.target.value })
-          }
-          className="border rounded px-3 py-2"
-        />
-        <input
-          type="text"
-          placeholder="Estado"
-          value={editItem.estado}
-          onChange={(e) =>
-            setEditItem({ ...editItem, estado: e.target.value })
-          }
-          className="border rounded px-3 py-2"
-        />
-        <input
-          type="text"
-          placeholder="Lugar exacto (nivel)"
-          value={editItem.nivel}
-          onChange={(e) =>
-            setEditItem({ ...editItem, nivel: e.target.value })
-          }
-          className="border rounded px-3 py-2"
-        />
-        <select
-          value={editItem.ubicacion}
-          onChange={(e) =>
-            setEditItem({ ...editItem, ubicacion: e.target.value })
-          }
-          className="border rounded px-3 py-2"
-        >
-          <option>Electricista</option>
-          <option>Mecánico</option>
-          <option>Torno</option>
-          <option>Boris</option>
-        </select>
-        <label className="block text-sm text-gray-600 mt-2">
-          Fecha ingreso:
-        </label>
-        <input
-          type="date"
-          value={editItem.fechaIngreso?.split("T")[0]}
-          onChange={(e) =>
-            setEditItem({ ...editItem, fechaIngreso: e.target.value })
-          }
-          className="border rounded px-3 py-2"
-        />
+        {/* Descripción */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Descripción
+          </label>
+          <input
+            type="text"
+            placeholder="Descripción"
+            value={editItem.descripcion}
+            onChange={(e) =>
+              setEditItem({ ...editItem, descripcion: e.target.value })
+            }
+            className="border rounded px-3 py-2 w-full"
+          />
+        </div>
+
+        {/* Cantidad */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Cantidad
+          </label>
+          <input
+            type="number"
+            step="0.01"
+            placeholder="Cantidad"
+            value={editItem.cantidad}
+            onChange={(e) =>
+              setEditItem({ ...editItem, cantidad: e.target.value })
+            }
+            className="border rounded px-3 py-2 w-full"
+          />
+        </div>
+
+        {/* Estado */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Estado
+          </label>
+          <input
+            type="text"
+            placeholder="Estado"
+            value={editItem.estado}
+            onChange={(e) =>
+              setEditItem({ ...editItem, estado: e.target.value })
+            }
+            className="border rounded px-3 py-2 w-full"
+          />
+        </div>
+
+        {/* Nivel */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Lugar exacto (Nivel)
+          </label>
+          <input
+            type="text"
+            placeholder="Lugar exacto (nivel)"
+            value={editItem.nivel}
+            onChange={(e) =>
+              setEditItem({ ...editItem, nivel: e.target.value })
+            }
+            className="border rounded px-3 py-2 w-full"
+          />
+        </div>
+
+        {/* Ubicación */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Ubicación
+          </label>
+          <select
+            value={editItem.ubicacion}
+            onChange={(e) =>
+              setEditItem({ ...editItem, ubicacion: e.target.value })
+            }
+            className="border rounded px-3 py-2 w-full"
+          >
+            <option>Electricista</option>
+            <option>Mecánico</option>
+            <option>Torno</option>
+            <option>Boris</option>
+          </select>
+        </div>
+
+        {/* Fecha ingreso */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Fecha ingreso
+          </label>
+          <input
+            type="date"
+            value={editItem.fechaIngreso?.split("T")[0]}
+            onChange={(e) =>
+              setEditItem({ ...editItem, fechaIngreso: e.target.value })
+            }
+            className="border rounded px-3 py-2 w-full"
+          />
+        </div>
       </div>
+
+      {/* Botones */}
       <div className="mt-4 flex justify-end gap-2">
         <button
           onClick={() => setShowEditModal(false)}
@@ -832,6 +878,7 @@ const handleEditItem = async () => {
     </div>
   </div>
 )}
+
 
     </div>
   );
