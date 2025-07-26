@@ -4,16 +4,18 @@ import axios from 'axios';
 import { FaEdit } from 'react-icons/fa'; // Asegúrate de tener react-icons instalado
 
 const Reportes = () => {
+  
   const [editBuffer, setEditBuffer] = useState({});
   const [componentes, setComponentes] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filters, setFilters] = useState({
-    zonaId: '',
-    ubicacionId: '',
-    equipoId: '',
-  });
+  zonaId: '',
+  ubicacionId: '',
+  hayPedidos: '', // "Si" o "No"
+});
+
   const [zonas, setZonas] = useState([]);
   const [ubicaciones, setUbicaciones] = useState([]);
   const [equipos, setEquipos] = useState([]);
@@ -102,13 +104,16 @@ useEffect(() => {
   };
 
   const applyFilters = () => {
-  const { zonaId, ubicacionId, equipoId } = filters;
+  const { zonaId, ubicacionId, hayPedidos } = filters;
   const filtered = componentes.filter((ot) => {
-    return (
-      (zonaId ? ot.zonaId === parseInt(zonaId) : true) &&
-      (ubicacionId ? ot.ubicacionId === parseInt(ubicacionId) : true) &&
-      (equipoId ? ot.equipoId === parseInt(equipoId) : true)
-    );
+    const matchZona = zonaId ? ot.zonaId === parseInt(zonaId) : true;
+    const matchUbicacion = ubicacionId ? ot.ubicacionId === parseInt(ubicacionId) : true;
+    const matchPedidos =
+      hayPedidos
+        ? (hayPedidos === 'Si' ? ot.Ots?.length > 0 : ot.Ots?.length === 0)
+        : true;
+
+    return matchZona && matchUbicacion && matchPedidos;
   });
   setFilteredData(filtered);
 };
@@ -216,18 +221,17 @@ return (
         ))}
       </select>
 
-      <select
-        name="equipoId"
-        value={filters.equipoId}
-        onChange={handleFilterChange}
-        className="border p-2 rounded w-full sm:w-1/4"
-        disabled={!filters.ubicacionId}
-      >
-        <option value="">Sin seleccionar</option>
-        {equipos.map((equipo) => (
-          <option key={equipo.id} value={equipo.id}>{equipo.name}</option>
-        ))}
-      </select>
+     <select
+  name="hayPedidos"
+  value={filters.hayPedidos}
+  onChange={handleFilterChange}
+  className="border p-2 rounded w-full sm:w-1/4"
+>
+  <option value="">Todos</option>
+  <option value="Si">Si</option>
+  <option value="No">No</option>
+</select>
+
 
       <button
         onClick={applyFilters}
@@ -240,55 +244,60 @@ return (
     <h2 className="text-2xl font-semibold mb-4 text-gray-800">Resultados</h2>
 
     <div className="overflow-x-auto">
-      <table className="min-w-full border border-gray-300 text-sm text-center bg-white">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="border px-2 py-2 w-1/24">N°</th>
-            <th className="border px-2 py-2 w-5/12">Descripción de la tarea</th>
-            <th className="border px-2 py-2 w-2/12">Zona</th>
-            <th className="border px-2 py-2 w-1/12">Número OT</th>
-            <th className="border px-2 py-2 w-2/12">Técnico 1</th>
-            <th className="border px-2 py-2 w-2/12">Técnico 2</th>
-            <th className="border px-2 py-2 w-2/12">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {[...filteredData]
-            .sort((a, b) => a.id - b.id)
-            .map((ot, index) => (
-              <tr key={ot.id} className="hover:bg-gray-50">
-                <td className="border px-2 py-1">{index + 1}</td>
-                <td className="border px-2 py-1">{ot.name}</td>
-                <td className="border px-2 py-1">{ot.Zona?.name || '—'}</td>
-                <td className="border px-2 py-1">{ot.OTmaximo}</td>
-                <td className="border px-2 py-1">
-                  <input
-                    type="text"
-                    value={editBuffer[ot.id]?.tecnico1 ?? ot.tecnico1 ?? ''}
-                    onChange={(e) => handleInputChange(ot.id, 'tecnico1', e.target.value)}
-                    className="w-full border rounded px-2 py-1"
-                  />
-                </td>
-                <td className="border px-2 py-1">
-                  <input
-                    type="text"
-                    value={editBuffer[ot.id]?.tecnico2 ?? ot.tecnico2 ?? ''}
-                    onChange={(e) => handleInputChange(ot.id, 'tecnico2', e.target.value)}
-                    className="w-full border rounded px-2 py-1"
-                  />
-                </td>
-                <td className="border px-2 py-1">
-                  <button
-                    onClick={() => handleGuardarTecnicos(ot.id, ot.tecnico1, ot.tecnico2)}
-                    className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
-                  >
-                    Guardar
-                  </button>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
+     <table className="min-w-full border border-gray-300 text-sm text-center bg-white">
+  <thead className="bg-gray-100">
+    <tr>
+      <th className="border px-2 py-2 w-1/24">N°</th>
+      <th className="border px-2 py-2 w-5/12">Descripción de la tarea</th>
+      <th className="border px-2 py-2 w-2/12">Zona</th>
+      <th className="border px-2 py-2 w-1/12">Número OT</th>
+      <th className="border px-2 py-2 w-1/12">Hay pedidos?</th> {/* Nueva columna */}
+      <th className="border px-2 py-2 w-2/12">Técnico 1</th>
+      <th className="border px-2 py-2 w-2/12">Técnico 2</th>
+      <th className="border px-2 py-2 w-2/12">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {[...filteredData]
+      .sort((a, b) => a.id - b.id)
+      .map((ot, index) => (
+        <tr key={ot.id} className="hover:bg-gray-50">
+          <td className="border px-2 py-1">{index + 1}</td>
+          <td className="border px-2 py-1">{ot.name}</td>
+          <td className="border px-2 py-1">{ot.Zona?.name || '—'}</td>
+          <td className="border px-2 py-1">{ot.OTmaximo}</td>
+          <td className="border px-2 py-1">
+            {ot.Ots && ot.Ots.length > 0 ? 'SI' : 'NO'}
+          </td>
+          <td className="border px-2 py-1">
+            <input
+              type="text"
+              value={editBuffer[ot.id]?.tecnico1 ?? ot.tecnico1 ?? ''}
+              onChange={(e) => handleInputChange(ot.id, 'tecnico1', e.target.value)}
+              className="w-full border rounded px-2 py-1"
+            />
+          </td>
+          <td className="border px-2 py-1">
+            <input
+              type="text"
+              value={editBuffer[ot.id]?.tecnico2 ?? ot.tecnico2 ?? ''}
+              onChange={(e) => handleInputChange(ot.id, 'tecnico2', e.target.value)}
+              className="w-full border rounded px-2 py-1"
+            />
+          </td>
+          <td className="border px-2 py-1">
+            <button
+              onClick={() => handleGuardarTecnicos(ot.id, ot.tecnico1, ot.tecnico2)}
+              className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
+            >
+              Guardar
+            </button>
+          </td>
+        </tr>
+      ))}
+  </tbody>
+</table>
+
     </div>
   </div>
 );
