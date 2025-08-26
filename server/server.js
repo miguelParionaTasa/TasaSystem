@@ -13,6 +13,7 @@ const equipoRoutes = require("./routes/equipoRoutes");
 const componenteRoutes = require("./routes/componenteRoutes");
 const atributoRoutes = require("./routes/atributoRoutes");
 const otsRoutes = require("./routes/otsRoutes");
+const lubricacionRoutes = require("./routes/lubricacionRoutes");
 const ottRoutes = require("./routes/OTTRoute");
 const historicoRoutes = require('./routes/historicoRoutes');
 const otConsumibleRoutes = require("./routes/otConsumibleRoutes");
@@ -42,6 +43,7 @@ app.use("/ots", otsRoutes);
 app.use("/ott", ottRoutes);
 app.use("/inventario", inventarioRoutes);
 app.use("/otc", otConsumibleRoutes);
+app.use("/lubricacion", lubricacionRoutes);
 app.use("/historico", historicoRoutes);
 app.use('/export', exportRoutes);
 

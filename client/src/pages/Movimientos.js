@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { FaTrash,FaPlus,FaUndo   } from "react-icons/fa";
+import BuscadorConsumible from "../components/BuscadorConsumible";
 
 const Movimientos = () => {
   // Estados para las zonas
@@ -715,19 +716,25 @@ setMostrarTabla(false);
             <tr style={{ backgroundColor: '#e0e0e0' }}>
               <th style={{ border: '1px solid #ccc', padding: '8px' }}>Item</th>
               <th style={{ border: '1px solid #ccc', padding: '8px' }}>Nombre</th>
+              
+              <th style={{ border: '1px solid #ccc', padding: '8px' }}>Status</th>
               <th style={{ border: '1px solid #ccc', padding: '8px' }}>U.M</th>
               <th style={{ border: '1px solid #ccc', padding: '8px' }}>Cantidad</th>
               <th style={{ border: '1px solid #ccc', padding: '8px' }}>ReservaSap</th>
+              
             </tr>
           </thead>
           <tbody>
             {consumiblesOT.map((item, index) => (
               <tr key={item.id}>
                 <td style={{ border: '1px solid #ccc', padding: '8px' }}>{index + 1}</td>
-                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{item.consumible?.name || "Sin nombre"}</td>
-                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{item.consumible?.unidadMedida || "Sin U.M"}</td>
+                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{item.consumible?.name || item.nombreConsumible}</td>
+                
+                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{item.comentarios || "—"}</td>
+                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{item.consumible?.unidadMedida || item.unidadMedida}</td>
                 <td style={{ border: '1px solid #ccc', padding: '8px' }}>{item.cantidad}</td>
                 <td style={{ border: '1px solid #ccc', padding: '8px' }}>{item.reservaSap || "—"}</td>
+                
               </tr>
             ))}
           </tbody>
@@ -758,101 +765,42 @@ setMostrarTabla(false);
         <tr key={index}>
           <td className="border border-gray-300 p-2">{index + 1}</td>
           <td className="border border-gray-300 p-2">
-            {consumible.isEditing ? (
-              <input
-                type="text"
-                placeholder="Coloca tu consumible"
-                value={consumible.name}
-                onChange={(e) => {
-                  const newConsumibles = [...selectedConsumibles];
-                  newConsumibles[index].name = e.target.value;
-                  setSelectedConsumibles(newConsumibles);
-                }}
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            ) : (
-             <td className="border border-gray-300 p-2 relative">
-  {/* Input con botón */}
-  <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2">
+  {consumible.isEditing ? (
+    // Modo manual: dejas tu input manual como ya lo tenías
     <input
       type="text"
-      placeholder="🔍 Buscar consumible..."
-      value={searchTerm}
-      onChange={(e) => setSearchTerm(e.target.value)}
-      onKeyDown={(e) => e.key === "Enter" && handleSearch()} // Enter para buscar
-      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150"
+      placeholder="Coloca tu consumible"
+      value={consumible.name}
+      onChange={(e) => {
+        const newConsumibles = [...selectedConsumibles];
+        newConsumibles[index].name = e.target.value;
+        setSelectedConsumibles(newConsumibles);
+      }}
+      className="w-full p-2 border border-gray-300 rounded"
     />
-    <button
-      type="button"
-      onClick={handleSearch}
-      className="mt-2 sm:mt-0 p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-      disabled={isSearching}
-    >
-      {isSearching ? "..." : "🔍"}
-    </button>
-  </div>
-
-  {/* Lista de resultados */}
-  {searchResults.length > 0 && (
-    <ul className="absolute left-0 w-full bg-white border border-gray-300 rounded-lg z-10 mt-1 max-h-40 overflow-y-auto">
-      {searchResults.map((item) => (
-        <li
-          key={item.id}
-          onClick={() => {
-            const newConsumibles = [...selectedConsumibles];
-            newConsumibles[index] = {
-              ...item,
-              cantidad: 1,
-            };
-            setSelectedConsumibles(newConsumibles);
-            setSearchResults([]);
-            setSearchTerm(item.name);
-          }}
-          className="cursor-pointer hover:bg-gray-100 p-2 text-sm sm:text-base"
-        >
-          {item.name} ({item.unidadMedida})
-        </li>
-      ))}
-    </ul>
+  ) : (
+    // Modo buscador: instancia independiente por fila
+    <BuscadorConsumible
+      initialText={consumible.name || ""}
+      excludeIds={selectedConsumibles
+        .filter((_, i) => i !== index)
+        .map((c) => c.id)
+        .filter(Boolean)}
+      onSelect={(item) => {
+        const newConsumibles = [...selectedConsumibles];
+        newConsumibles[index] = {
+          ...newConsumibles[index],
+          id: item.id,
+          name: item.name,
+          unidadMedida: item.unidadMedida,
+          // mantiene cantidad y flags
+        };
+        setSelectedConsumibles(newConsumibles);
+      }}
+    />
   )}
 </td>
 
-            )}
-            {consumible.isEditing ? (
-              <></>
-            ) : (
-              <ul
-  className={`absolute left-0 w-full bg-white border border-gray-300 rounded-lg z-10 ${
-    openDropdownIndex === index ? "" : "hidden"
-  }`}
->
-  {availableConsumibles
-    .filter((c) => {
-      return (
-        consumible.name &&
-        c.name &&
-        c.name.toLowerCase().includes(consumible.name.toLowerCase())
-      );
-    })
-    .map((filteredConsumible) => (
-      <li
-        key={filteredConsumible.id}
-        onClick={() => {
-          const newConsumibles = [...selectedConsumibles];
-          newConsumibles[index] = {
-            ...filteredConsumible,
-            cantidad: 1,
-          };
-          setSelectedConsumibles(newConsumibles);
-          setOpenDropdownIndex(null);
-        }}
-        className="cursor-pointer hover:bg-gray-100 p-2"
-      >
-        {filteredConsumible.name}
-      </li>
-    ))}
-</ul>)}
-          </td>
           <td className="border border-gray-300 p-2">
             {consumible.isEditing ? (
               <input

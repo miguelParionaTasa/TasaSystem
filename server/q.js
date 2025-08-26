@@ -3,130 +3,43 @@ require('dotenv').config(); // Cargar variables de entorno desde .env
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-async function insertOTConsumibles() {
-  const otConsumiblesData = [
-    { consumibleId: 6554, nombreConsumible: 'TUBO AC.SCH40 3plg', unidadMedida: 'M', cantidad: 24, otId: 60, userId: 1, comentarios: 'Pedido sap', reservaSap: '36696923', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 955, nombreConsumible: 'BOCINA BCE.2 1/2plgX4 1/2plgX12plg', unidadMedida: 'UN', cantidad: 1, otId: 61, userId: 1, comentarios: 'Pedido sap', reservaSap: '36696924', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 3538, nombreConsumible: 'MALLA INOX.0.6X835X960MM  Ø 1.2MM', unidadMedida: 'UN', cantidad: 4, otId: 62, userId: 1, comentarios: 'Pedido sap', reservaSap: '36697014', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 3595, nombreConsumible: 'MALLA INOX.0.8X830X835MM  Ø 1.5MM', unidadMedida: 'UN', cantidad: 4, otId: 62, userId: 1, comentarios: 'Pedido sap', reservaSap: '36697014', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 3597, nombreConsumible: 'MALLA INOX.0.8X835X920MM  Ø 1.5MM', unidadMedida: 'UN', cantidad: 4, otId: 62, userId: 1, comentarios: 'Pedido sap', reservaSap: '36697014', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 3576, nombreConsumible: 'MALLA INOX.0.8X670X835MM  Ø 2MM', unidadMedida: 'UN', cantidad: 2, otId: 62, userId: 1, comentarios: 'Pedido sap', reservaSap: '36697014', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 3590, nombreConsumible: 'MALLA INOX.0.8X800X935MM  Ø 3MM', unidadMedida: 'UN', cantidad: 2, otId: 62, userId: 1, comentarios: 'Pedido sap', reservaSap: '36697014', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 3560, nombreConsumible: 'MALLA INOX.0.8X380X935MM  Ø 2.5MM', unidadMedida: 'UN', cantidad: 2, otId: 62, userId: 1, comentarios: 'Pedido sap', reservaSap: '36697014', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 5412, nombreConsumible: 'PLANCHA PERF.INOX 3X930X883MM H/5MM', unidadMedida: 'UN', cantidad: 1, otId: 62, userId: 1, comentarios: 'Pedido sap', reservaSap: '36697014', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 4434, nombreConsumible: 'PERNO HEX.INOX.1/2plgX1 1/2plg', unidadMedida: 'UN', cantidad: 6, otId: 63, userId: 1, comentarios: 'Pedido sap', reservaSap: '36696789', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 4445, nombreConsumible: 'PERNO HEX.INOX.1/2plgX2plg', unidadMedida: 'UN', cantidad: 14, otId: 63, userId: 1, comentarios: 'Pedido sap', reservaSap: '36696789', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 6776, nombreConsumible: 'TUERCA INOX.1/2plg', unidadMedida: 'UN', cantidad: 20, otId: 63, userId: 1, comentarios: 'Pedido sap', reservaSap: '36696789', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 6772, nombreConsumible: 'TUERCA INOX.3/4plg', unidadMedida: 'UN', cantidad: 8, otId: 63, userId: 1, comentarios: 'Pedido sap', reservaSap: '36696789', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 665, nombreConsumible: 'ANILLO PLANO INOX.1/2plg', unidadMedida: 'UN', cantidad: 20, otId: 63, userId: 1, comentarios: 'Pedido sap', reservaSap: '36696789', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 668, nombreConsumible: 'ANILLO PLANO INOX.3/4plg', unidadMedida: 'UN', cantidad: 8, otId: 63, userId: 1, comentarios: 'Pedido sap', reservaSap: '36696789', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 21467, nombreConsumible: 'RODAMIENTO 22220 EK', unidadMedida: 'UN', cantidad: 2, otId: 64, userId: 1, comentarios: 'Pedido sap', reservaSap: '36449572', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 19732, nombreConsumible: 'OBTURADOR TSN 520 L', unidadMedida: 'UN', cantidad: 2, otId: 64, userId: 1, comentarios: 'Pedido sap', reservaSap: '36449572', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 21467, nombreConsumible: 'RODAMIENTO 22220 EK', unidadMedida: 'UN', cantidad: 4, otId: 65, userId: 1, comentarios: 'Pedido sap', reservaSap: '36449573', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 19732, nombreConsumible: 'OBTURADOR TSN 520 L', unidadMedida: 'UN', cantidad: 4, otId: 65, userId: 1, comentarios: 'Pedido sap', reservaSap: '36449573', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 21467, nombreConsumible: 'RODAMIENTO 22220 EK', unidadMedida: 'UN', cantidad: 2, otId: 66, userId: 1, comentarios: 'Pedido sap', reservaSap: '36449679', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 19732, nombreConsumible: 'OBTURADOR TSN 520 L', unidadMedida: 'UN', cantidad: 2, otId: 66, userId: 1, comentarios: 'Pedido sap', reservaSap: '36449679', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 6554, nombreConsumible: 'TUBO AC.SCH40 3plg', unidadMedida: 'M', cantidad: 18, otId: 67, userId: 1, comentarios: 'Pedido sap', reservaSap: '36472838', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 1717, nombreConsumible: 'CODO 90° SCH40 SOLD.3plg', unidadMedida: 'UN', cantidad: 3, otId: 67, userId: 1, comentarios: 'Pedido sap', reservaSap: '36472838', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 6554, nombreConsumible: 'TUBO AC.SCH40 3plg', unidadMedida: 'M', cantidad: 18, otId: 68, userId: 1, comentarios: 'Pedido sap', reservaSap: '36472839', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 1717, nombreConsumible: 'CODO 90° SCH40 SOLD.3plg', unidadMedida: 'UN', cantidad: 4, otId: 68, userId: 1, comentarios: 'Pedido sap', reservaSap: '36472839', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 1717, nombreConsumible: 'CODO 90° SCH40 SOLD.3plg', unidadMedida: 'UN', cantidad: 24, otId: 60, userId: 1, comentarios: 'Pedido sap', reservaSap: '36472840', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 1717, nombreConsumible: 'CODO 90° SCH40 SOLD.3plg', unidadMedida: 'UN', cantidad: 5, otId: 60, userId: 1, comentarios: 'Pedido sap', reservaSap: '36472840', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 1142, nombreConsumible: 'BRIDA SLIP ON AC.CARB.ANSI150 3plg', unidadMedida: 'UN', cantidad: 2, otId: 60, userId: 1, comentarios: 'Pedido sap', reservaSap: '36472840', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 6560, nombreConsumible: 'TUBO INOX.316 SCH10 3plg', unidadMedida: 'M', cantidad: 36, otId: 69, userId: 1, comentarios: 'Pedido sap', reservaSap: '36472842', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 1610, nombreConsumible: 'CODO 90° INOX.316 SCH10 SOLD.3plg', unidadMedida: 'UN', cantidad: 9, otId: 69, userId: 1, comentarios: 'Pedido sap', reservaSap: '36472842', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 6597, nombreConsumible: 'TUBO SCH40 4plg', unidadMedida: 'M', cantidad: 24, otId: 70, userId: 1, comentarios: 'Pedido sap', reservaSap: '36472975', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 1719, nombreConsumible: 'CODO 90° SCH40 SOLD.4plg', unidadMedida: 'UN', cantidad: 8, otId: 70, userId: 1, comentarios: 'Pedido sap', reservaSap: '36472975', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 1144, nombreConsumible: 'BRIDA SLIP ON AC.CARB.ANSI150 4plg', unidadMedida: 'UN', cantidad: 6, otId: 70, userId: 1, comentarios: 'Pedido sap', reservaSap: '36472975', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 6543, nombreConsumible: 'TUBO FEN.SCH40 SOLD.2plgX6MT', unidadMedida: 'M', cantidad: 12, otId: 70, userId: 1, comentarios: 'Pedido sap', reservaSap: '36472975', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 1715, nombreConsumible: 'CODO 90° SCH40 SOLD.2plg', unidadMedida: 'UN', cantidad: 4, otId: 70, userId: 1, comentarios: 'Pedido sap', reservaSap: '36472975', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 1139, nombreConsumible: 'BRIDA SLIP ON AC.CARB.ANSI150 2plg', unidadMedida: 'UN', cantidad: 4, otId: 70, userId: 1, comentarios: 'Pedido sap', reservaSap: '36472975', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 5386, nombreConsumible: 'PLANCHA AC.ESTRUCT.9.00X1200X2400MM', unidadMedida: 'UN', cantidad: 1, otId: 71, userId: 1, comentarios: 'Pedido sap', reservaSap: '36473039', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 6595, nombreConsumible: 'TUBO INOX.304 SCH80 S/C.4plg', unidadMedida: 'M', cantidad: 1, otId: 72, userId: 1, comentarios: 'Pedido sap', reservaSap: '36539020', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 5373, nombreConsumible: 'PLANCHA INOX.304 6.00X1200X2400MM', unidadMedida: 'UN', cantidad: 2, otId: 72, userId: 1, comentarios: 'Pedido sap', reservaSap: '36539020', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 955, nombreConsumible: 'BOCINA BCE.2 1/2plgX4 1/2plgX12plg', unidadMedida: 'UN', cantidad: 1, otId: 72, userId: 1, comentarios: 'Pedido sap', reservaSap: '36539020', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 7246, nombreConsumible: 'VIGA plgHplg A-36 WF 4plgX13 LB/PIE', unidadMedida: 'M', cantidad: 6, otId: 73, userId: 1, comentarios: 'Pedido sap', reservaSap: '36539021', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 6595, nombreConsumible: 'TUBO INOX.304 SCH80 S/C.4plg', unidadMedida: 'M', cantidad: 6, otId: 63, userId: 1, comentarios: 'Pedido sap', reservaSap: '36539069', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 5373, nombreConsumible: 'PLANCHA INOX.304 6.00X1200X2400MM', unidadMedida: 'UN', cantidad: 2, otId: 63, userId: 1, comentarios: 'Pedido sap', reservaSap: '36539069', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 955, nombreConsumible: 'BOCINA BCE.2 1/2plgX4 1/2plgX12plg', unidadMedida: 'UN', cantidad: 1, otId: 63, userId: 1, comentarios: 'Pedido sap', reservaSap: '36539069', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 978, nombreConsumible: 'BOCINA BCE.SAE64 3 1/2plgX6plgX22plg', unidadMedida: 'UN', cantidad: 1, otId: 74, userId: 1, comentarios: 'Pedido sap', reservaSap: '36546037', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 6554, nombreConsumible: 'TUBO AC.SCH40 3plg', unidadMedida: 'M', cantidad: 18, otId: 75, userId: 1, comentarios: 'Pedido sap', reservaSap: '36546125', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 1717, nombreConsumible: 'CODO 90° SCH40 SOLD.3plg', unidadMedida: 'UN', cantidad: 3, otId: 75, userId: 1, comentarios: 'Pedido sap', reservaSap: '36546125', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 15707, nombreConsumible: 'CADENA DOBLE ASA240-2 3plg', unidadMedida: 'M', cantidad: 7.5, otId: 76, userId: 1, comentarios: 'Pedido sap', reservaSap: '36546334', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 15854, nombreConsumible: 'CANDADO DOBLE ASA 240-2 3plg', unidadMedida: 'UN', cantidad: 2, otId: 76, userId: 1, comentarios: 'Pedido sap', reservaSap: '36546334', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 25841, nombreConsumible: 'PIÑON DOBLE SAE1020 ASA240-2 12T 3plg', unidadMedida: 'UN', cantidad: 1, otId: 76, userId: 1, comentarios: 'Pedido sap', reservaSap: '36546334', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 5382, nombreConsumible: 'PLANCHA AC.ESTRUCT.8.00X1200X2400MM', unidadMedida: 'UN', cantidad: 1, otId: 77, userId: 1, comentarios: 'Pedido sap', reservaSap: '36558035', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 6561, nombreConsumible: 'TUBO SCH80 3plg', unidadMedida: 'M', cantidad: 12, otId: 77, userId: 1, comentarios: 'Pedido sap', reservaSap: '36558035', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 6618, nombreConsumible: 'TUBO SCH40 6plg', unidadMedida: 'M', cantidad: 36, otId: 78, userId: 1, comentarios: 'Pedido sap', reservaSap: '36567960', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 1721, nombreConsumible: 'CODO 90° SCH40 SOLD.6plg', unidadMedida: 'UN', cantidad: 3, otId: 78, userId: 1, comentarios: 'Pedido sap', reservaSap: '36567960', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 6618, nombreConsumible: 'TUBO SCH40 6plg', unidadMedida: 'M', cantidad: 6, otId: 79, userId: 1, comentarios: 'Pedido sap', reservaSap: '36568030', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 1721, nombreConsumible: 'CODO 90° SCH40 SOLD.6plg', unidadMedida: 'UN', cantidad: 2, otId: 79, userId: 1, comentarios: 'Pedido sap', reservaSap: '36568030', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 1118, nombreConsumible: 'BRIDA SLIP ON  AC.CARB.ANSI150 6plg', unidadMedida: 'UN', cantidad: 2, otId: 79, userId: 1, comentarios: 'Pedido sap', reservaSap: '36568030', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 21486, nombreConsumible: 'RODAMIENTO 22317 E', unidadMedida: 'UN', cantidad: 8, otId: 80, userId: 1, comentarios: 'Pedido sap', reservaSap: '36568312', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 5342, nombreConsumible: 'PLANCHA AC.NAVAL 12.50X1.800X6000MM', unidadMedida: 'UN', cantidad: 1, otId: 81, userId: 1, comentarios: 'Pedido sap', reservaSap: '36568350', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 6622, nombreConsumible: 'TUBO SCH40 8plg', unidadMedida: 'M', cantidad: 24, otId: 82, userId: 1, comentarios: 'Pedido sap', reservaSap: '36568464', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 1645, nombreConsumible: 'CODO 90° SCH40 SOLD.8plg', unidadMedida: 'UN', cantidad: 3, otId: 82, userId: 1, comentarios: 'Pedido sap', reservaSap: '36568464', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 1119, nombreConsumible: 'BRIDA SLIP ON  AC.CARB.ANSI150 8plg', unidadMedida: 'UN', cantidad: 2, otId: 82, userId: 1, comentarios: 'Pedido sap', reservaSap: '36568464', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 32399, nombreConsumible: 'VALV.MARIP.WAFER AS.BUNA FE.FDO.8plg', unidadMedida: 'UN', cantidad: 1, otId: 82, userId: 1, comentarios: 'Pedido sap', reservaSap: '36568464', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 9373, nombreConsumible: 'ANGULO INOX.304 2plgX2plgX1/4plg', unidadMedida: 'M', cantidad: 18, otId: 83, userId: 1, comentarios: 'Pedido sap', reservaSap: '36568688', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 33166, nombreConsumible: 'MALLA ALAMB.INOX.1/2plgX1/2plg2.5MM 1940MM', unidadMedida: 'M', cantidad: 10, otId: 83, userId: 1, comentarios: 'Pedido sap', reservaSap: '36117801', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 5373, nombreConsumible: 'PLANCHA INOX.304 6.00X1200X2400MM', unidadMedida: 'UN', cantidad: 1, otId: 83, userId: 1, comentarios: 'Pedido sap', reservaSap: '36449682', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 21451, nombreConsumible: 'RODAMIENTO 22216 CK', unidadMedida: 'UN', cantidad: 2, otId: 84, userId: 1, comentarios: 'Pedido sap', reservaSap: '36576133', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 25488, nombreConsumible: 'MANGUITO FIJACION H 316', unidadMedida: 'UN', cantidad: 2, otId: 84, userId: 1, comentarios: 'Pedido sap', reservaSap: '36576133', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 16085, nombreConsumible: 'CHUMACERA PIE SNL 516-613', unidadMedida: 'UN', cantidad: 2, otId: 84, userId: 1, comentarios: 'Pedido sap', reservaSap: '36576133', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 8292, nombreConsumible: 'PLANCHA AC.ESTRUCT.8.00X1500X3000MM', unidadMedida: 'UN', cantidad: 1, otId: 84, userId: 1, comentarios: 'Pedido sap', reservaSap: '36576133', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 955, nombreConsumible: 'BOCINA BCE.2 1/2plgX4 1/2plgX12plg', unidadMedida: 'UN', cantidad: 1, otId: 85, userId: 1, comentarios: 'Pedido sap', reservaSap: '36576278', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 20241, nombreConsumible: 'PIÑON DOBLE SAE1045 ASA120-14T 1 1/2plg', unidadMedida: 'UN', cantidad: 1, otId: 86, userId: 1, comentarios: 'Pedido sap', reservaSap: '36576284', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 15702, nombreConsumible: 'CADENA DOBLE ASA120-2 1 1/2plg', unidadMedida: 'M', cantidad: 3.05, otId: 86, userId: 1, comentarios: 'Pedido sap', reservaSap: '36576284', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 8292, nombreConsumible: 'PLANCHA AC.ESTRUCT.8.00X1500X3000MM', unidadMedida: 'UN', cantidad: 1, otId: 87, userId: 1, comentarios: 'Pedido sap', reservaSap: '36576286', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 6507, nombreConsumible: 'TUBO SCH40 10plg', unidadMedida: 'M', cantidad: 60, otId: 88, userId: 1, comentarios: 'Pedido sap', reservaSap: '36576320', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 1640, nombreConsumible: 'CODO 90° SCH40 10plg', unidadMedida: 'UN', cantidad: 2, otId: 88, userId: 1, comentarios: 'Pedido sap', reservaSap: '36576320', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 6507, nombreConsumible: 'TUBO SCH40 10plg', unidadMedida: 'M', cantidad: 60, otId: 89, userId: 1, comentarios: 'Pedido sap', reservaSap: '36576321', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 1640, nombreConsumible: 'CODO 90° SCH40 10plg', unidadMedida: 'UN', cantidad: 2, otId: 89, userId: 1, comentarios: 'Pedido sap', reservaSap: '36576321', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 15702, nombreConsumible: 'CADENA DOBLE ASA120-2 1 1/2plg', unidadMedida: 'M', cantidad: 3.05, otId: 90, userId: 1, comentarios: 'Pedido sap', reservaSap: '36576324', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 20243, nombreConsumible: 'PIÑON DOBLE SAE1045 ASA120- 17T 1 1/2plg', unidadMedida: 'UN', cantidad: 1, otId: 90, userId: 1, comentarios: 'Pedido sap', reservaSap: '36576324', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 955, nombreConsumible: 'BOCINA BCE.2 1/2plgX4 1/2plgX12plg', unidadMedida: 'UN', cantidad: 1, otId: 91, userId: 1, comentarios: 'Pedido sap', reservaSap: '36576325', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 5378, nombreConsumible: 'PLANCHA AC. ESTRUCT. 6.40X1200X2400MM', unidadMedida: 'UN', cantidad: 25, otId: 92, userId: 1, comentarios: 'Pedido sap', reservaSap: '36576329', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 26599, nombreConsumible: 'PIÑON DOBLE SAE1045 ASA120-2 28T 1 1/2plg', unidadMedida: 'UN', cantidad: 1, otId: 86, userId: 1, comentarios: 'Pedido sap', reservaSap: '36576378', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 8577, nombreConsumible: 'PLANCHA AC.ESTRUCT.12.00X1500X3000MM', unidadMedida: 'PZA', cantidad: 1, otId: 87, userId: 1, comentarios: 'Pedido sap', reservaSap: '36576380', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 32922, nombreConsumible: 'CONTC.AUXILIAR GVAD1010', unidadMedida: 'UN', cantidad: 15, otId: 93, userId: 1, comentarios: 'Pedido sap', reservaSap: '36597930', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 32994, nombreConsumible: 'PILOTO LUMINOSO ROJO XB4BVM4', unidadMedida: 'UN', cantidad: 15, otId: 93, userId: 1, comentarios: 'Pedido sap', reservaSap: '36597930', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 32923, nombreConsumible: 'INTERR.TERMAG. IC60H 2X2A A9F84202', unidadMedida: 'UN', cantidad: 25, otId: 93, userId: 1, comentarios: 'Pedido sap', reservaSap: '36597930', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 32921, nombreConsumible: 'CONTC.1NA+1NC 32A B220V TESYS LC1D25M7', unidadMedida: 'UN', cantidad: 10, otId: 93, userId: 1, comentarios: 'Pedido sap', reservaSap: '36597930', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 30396, nombreConsumible: 'CONTC. 1NA+1NC 32A B220V TESYS LC1D32M7', unidadMedida: 'UN', cantidad: 6, otId: 93, userId: 1, comentarios: 'Pedido sap', reservaSap: '36597930', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 32995, nombreConsumible: 'PULSADOR EMERG.XB5AS8446', unidadMedida: 'UN', cantidad: 6, otId: 93, userId: 1, comentarios: 'Pedido sap', reservaSap: '36597930', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 32745, nombreConsumible: 'GUARDAMOTOR 6-10A GV2-P14', unidadMedida: 'UN', cantidad: 3, otId: 93, userId: 1, comentarios: 'Pedido sap', reservaSap: '36597930', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 32277, nombreConsumible: 'GUARDAMOTOR 9-14A GV2-P16', unidadMedida: 'UN', cantidad: 3, otId: 93, userId: 1, comentarios: 'Pedido sap', reservaSap: '36597930', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 25734, nombreConsumible: 'GUARDAMOTOR 37-50A GV3-P50', unidadMedida: 'UN', cantidad: 3, otId: 93, userId: 1, comentarios: 'Pedido sap', reservaSap: '36597930', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 32920, nombreConsumible: 'BORNERA TORN.P/CONTROL 16MM2 NSYTRV162', unidadMedida: 'UN', cantidad: 100, otId: 93, userId: 1, comentarios: 'Pedido sap', reservaSap: '36597930', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 32919, nombreConsumible: 'BORNERA TORN.P/CONTROL 10MM2 NSYTRV102', unidadMedida: 'UN', cantidad: 100, otId: 93, userId: 1, comentarios: 'Pedido sap', reservaSap: '36597930', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 15592, nombreConsumible: 'CABLE AUTOMOTRIZ GPT 16AWG', unidadMedida: 'M', cantidad: 200, otId: 93, userId: 1, comentarios: 'Pedido sap', reservaSap: '36597930', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 20267, nombreConsumible: 'PIÑON SIMPLE SAE1045 ASA120 16T 1 1/2plg', unidadMedida: 'UN', cantidad: 1, otId: 94, userId: 1, comentarios: 'Pedido sap', reservaSap: '36688935', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 20267, nombreConsumible: 'PIÑON SIMPLE SAE1045 ASA120 16T 1 1/2plg', unidadMedida: 'UN', cantidad: 1, otId: 71, userId: 1, comentarios: 'Pedido sap', reservaSap: '36688936', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 33270, nombreConsumible: 'KIT MANTTO.MC3PLSF07 I=31.5', unidadMedida: 'UN', cantidad: 1, otId: 95, userId: 1, comentarios: 'Pedido sap', reservaSap: '36696435', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 33273, nombreConsumible: 'KIT REPUESTOS REDUCT.7060P3', unidadMedida: 'UN', cantidad: 1, otId: 96, userId: 1, comentarios: 'Pedido sap', reservaSap: '36696436', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 15517, nombreConsumible: 'BUJE HE 320', unidadMedida: 'UN', cantidad: 2, otId: 64, userId: 1, comentarios: 'Pedido sap', reservaSap: '36696439', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 15517, nombreConsumible: 'BUJE HE 320', unidadMedida: 'UN', cantidad: 4, otId: 65, userId: 1, comentarios: 'Pedido sap', reservaSap: '36696440', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 15517, nombreConsumible: 'BUJE HE 320', unidadMedida: 'UN', cantidad: 2, otId: 66, userId: 1, comentarios: 'Pedido sap', reservaSap: '36696441', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 6998, nombreConsumible: 'VALV.CHECK.DISC.IN NPT 250PSI 2 1/2plg', unidadMedida: 'UN', cantidad: 1, otId: 97, userId: 1, comentarios: 'Pedido sap', reservaSap: '36696728', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 6595, nombreConsumible: 'TUBO INOX.304 SCH80 S/C.4plg', unidadMedida: 'M', cantidad: 6, otId: 63, userId: 1, comentarios: 'Pedido sap', reservaSap: '36696789', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 5373, nombreConsumible: 'PLANCHA INOX.304 6.00X1200X2400MM', unidadMedida: 'UN', cantidad: 2, otId: 63, userId: 1, comentarios: 'Pedido sap', reservaSap: '36696789', fechaCreacion: new Date('sábado-07-26') },
-{ consumibleId: 4553, nombreConsumible: 'PERNO HEX.INOX.3/4plgX3 1/2plg', unidadMedida: 'UN', cantidad: 8, otId: 63, userId: 1, comentarios: 'Pedido sap', reservaSap: '36696789', fechaCreacion: new Date('sábado-07-26') },
-
-  ];
-
+async function corregirFechas() {
   try {
-    const createdOTConsumibles = await prisma.oTConsumible.createMany({
-      data: otConsumiblesData,
-      skipDuplicates: true, // Opcional: omite duplicados si existen
+    // Traer registros entre id 266 y 372 con año 2001
+    const registros = await prisma.oTConsumible.findMany({
+      where: {
+        id: {
+          gte: 266,
+          lte: 372,
+        },
+        fechaCreacion: {
+          gte: new Date('2001-01-01'),
+          lt: new Date('2002-01-01'),
+        },
+      },
     });
 
-    console.log(`Se han insertado ${createdOTConsumibles.count} registros en OTConsumible.`);
+    console.log(`Registros encontrados: ${registros.length}`);
+
+    for (const registro of registros) {
+      const fechaOriginal = registro.fechaCreacion;
+      const nuevaFecha = new Date(fechaOriginal);
+      nuevaFecha.setFullYear(2025); // Solo cambiar el año
+
+      await prisma.oTConsumible.update({
+        where: { id: registro.id },
+        data: { fechaCreacion: nuevaFecha },
+      });
+
+      console.log(`Actualizado ID ${registro.id} → ${nuevaFecha.toISOString()}`);
+    }
+
+    console.log('✅ Fechas corregidas correctamente.');
   } catch (error) {
-    console.error('Error al insertar OTConsumibles:', error);
+    console.error('❌ Error al corregir fechas:', error);
   } finally {
     await prisma.$disconnect();
   }
 }
 
-insertOTConsumibles();
+corregirFechas();

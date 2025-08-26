@@ -257,8 +257,8 @@ const DetallesConsumibles = ({ consumibles, userId }) => {
         {consumibles.map((consumible) => (
           <tr key={consumible.id}>
             <td>{consumible.consumible?.codMaximo || 'N/A'}</td>
-            <td>{consumible.consumible?.name || 'N/A'}</td>
-            <td>{consumible.consumible?.unidadMedida || 'N/A'}</td>
+            <td>{consumible.consumible?.name || consumible.nombreConsumible}</td>
+            <td>{consumible.consumible?.unidadMedida || consumible.unidadMedida}</td>
             <td>{consumible.cantidad || 0}</td>
             <td>
               {editingConsumible?.id === consumible.id && ["1", "2", "3"].includes(userId) ? (

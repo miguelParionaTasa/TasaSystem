@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Inventario from "./pages/Inventario";
+import Lubricante from "./pages/LubricacionesPage";
 import Reportes from "./components/Reportes";
 import General from "./pages/General";
 import Historico from "./pages/Historico";
@@ -98,6 +99,12 @@ const App = () => {
   path="/inventario"
   element={
     <PrivateRoute element={<Inventario />} authenticated={authenticated} />
+  }
+/>
+<Route
+  path="/lubricante"
+  element={
+    <PrivateRoute element={<Lubricante />} authenticated={authenticated} />
   }
 />
 

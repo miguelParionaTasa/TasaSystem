@@ -11,6 +11,7 @@ const Header = ({ setAuthenticated, setUserName, userName }) => {
 
   const storedUserId = localStorage.getItem("userId");
   const puedeDescargarBD = ["1", "2", "3"].includes(storedUserId);
+const puedeVerLubricante = storedUserId === "1";
 
   useEffect(() => {
     const name = localStorage.getItem("userName");
@@ -110,6 +111,16 @@ const Header = ({ setAuthenticated, setUserName, userName }) => {
                 >
                   Inventario
                 </button>
+                {puedeVerLubricante && (
+  <button
+    onClick={() => handleNavigate("/lubricante")}
+    className="block w-full text-left px-4 py-2 hover:bg-blue-300"
+  >
+    Lubricante
+  </button>
+)}
+
+
                 {puedeDescargarBD && (
                   <button
                     onClick={() => {
@@ -200,6 +211,14 @@ const Header = ({ setAuthenticated, setUserName, userName }) => {
             >
               Inventario
             </button>
+            {puedeVerLubricante && (
+  <button
+    onClick={() => handleNavigate("/lubricante")}
+    className="block w-full text-left text-lg hover:bg-blue-300 px-2 py-1 rounded"
+  >
+    Lubricante
+  </button>
+)}
             {puedeDescargarBD && (
               <button
                 onClick={() => {

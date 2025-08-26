@@ -104,8 +104,35 @@ model Ubicacion {
   ots          Ots[]
   zona         Zona       @relation(fields: [zonaId], references: [id])
   historico Historico[]
-
+  lubricaciones Lubricacion[] // inversa aquí
 }
+
+model Lubricacion {
+  id             Int      @id @default(autoincrement())
+  zona           String   // "2", "3.1", etc.
+  equipo         String
+  item           Int
+  componente     String
+  puntosLubricar Int
+  cantidad       String
+  lubricante     String
+  frecuencia     String
+  actividad      String
+
+  // Campo editable libre en el front
+  ubicacionTexto String?  
+
+  // Relación opcional con Ubicacion existente
+  ubicacionId    Int?
+  ubicacion      Ubicacion? @relation(fields: [ubicacionId], references: [id])
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relación con imágenes
+  images         Image[] @relation("LubricacionImage")
+}
+
 
 model Componente {
   id          Int        @id @default(autoincrement())
@@ -181,6 +208,8 @@ model Image {
   equiposs     Equipo[]       @relation("EquipoImage")
   repuestoss   Repuesto[]     @relation("RepuestoImage")
   atributos    Atributo[]     @relation("AtributoImage") // Nueva relación con Atributo
+   lubricaciones   Lubricacion[]  @relation("LubricacionImage") // inversa aquí
+
  }
 
 model OTbasico {
