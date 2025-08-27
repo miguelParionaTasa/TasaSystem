@@ -66,6 +66,7 @@ const getHistoricosPorZona = async (req, res) => {
   ot: h.ot,
   zona: h.zona?.nombreMaximo,
   ubicacion: h.ubicacion?.name,
+  consumibleCodMax: h.consumible?.codMaximo || "N/A",   
  consumible:
   h.consumible?.nombreMaximo ||
   (h.consumible?.name ? h.consumible.name.slice(0, 34) : "Desconocido"),

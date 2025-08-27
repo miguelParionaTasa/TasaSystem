@@ -21,6 +21,7 @@ async function exportDatabase(req, res) {
       Equipos: await prisma.equipo.findMany(),
       Images: await prisma.image.findMany(),
       OTbasico: await prisma.oTbasico.findMany(),
+      Historico: await prisma.historico.findMany(), // 🔹 Nuevo modelo agregado
     };
 
     for (const [modelName, data] of Object.entries(models)) {
@@ -39,7 +40,10 @@ async function exportDatabase(req, res) {
     }
 
     // Enviar el archivo al frontend
-    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader(
+      'Content-Type',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    );
     res.setHeader('Content-Disposition', 'attachment; filename=base_datos.xlsx');
 
     await workbook.xlsx.write(res);

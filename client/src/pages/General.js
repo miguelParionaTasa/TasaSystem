@@ -256,7 +256,7 @@ const DetallesConsumibles = ({ consumibles, userId }) => {
       <tbody className="bg-green-100">
         {consumibles.map((consumible) => (
           <tr key={consumible.id}>
-            <td>{consumible.consumible?.codMaximo || 'N/A'}</td>
+            <td>{consumible.consumible?.codMaximo || consumible.consumibleSap}</td>
             <td>{consumible.consumible?.name || consumible.nombreConsumible}</td>
             <td>{consumible.consumible?.unidadMedida || consumible.unidadMedida}</td>
             <td>{consumible.cantidad || 0}</td>

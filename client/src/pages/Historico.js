@@ -13,7 +13,9 @@ const Historico = () => {
   useEffect(() => {
     const obtenerZonas = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}varios/zonas`);
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}varios/zonas`
+        );
         setZonas(response.data);
       } catch (error) {
         toast.error("Error al cargar las zonas.");
@@ -45,15 +47,11 @@ const Historico = () => {
   }, [zonaId]);
 
   const manejarFiltro = async () => {
-    if (!zonaId) {
-      toast.warning("Debes seleccionar una zona.");
-      return;
-    }
-
     try {
       setCargando(true);
       const query = new URLSearchParams();
-      query.append("zonaId", zonaId);
+
+      if (zonaId) query.append("zonaId", zonaId);
       if (ubicacionId) query.append("ubicacionId", ubicacionId);
 
       const response = await axios.get(
@@ -61,9 +59,10 @@ const Historico = () => {
       );
       setDatosFiltrados(response.data);
 
-      // Scroll suave a la tabla
       setTimeout(() => {
-        document.getElementById("tabla-historico")?.scrollIntoView({ behavior: "smooth" });
+        document
+          .getElementById("tabla-historico")
+          ?.scrollIntoView({ behavior: "smooth" });
       }, 100);
     } catch (error) {
       toast.error(
@@ -128,13 +127,15 @@ const Historico = () => {
       </div>
 
       {cargando && (
-        <p className="text-blue-600 font-semibold mb-4">Cargando resultados...</p>
+        <p className="text-blue-600 font-semibold mb-4">
+          Cargando resultados...
+        </p>
       )}
 
       {/* Tabla */}
       <div className="overflow-x-auto" id="tabla-historico">
         {datosFiltrados.length > 0 ? (
-          <table className="min-w-[900px] w-full border text-sm text-left">
+          <table className="min-w-[950px] w-full border text-sm text-left">
             <thead>
               <tr className="bg-gray-200">
                 <th className="border px-2 py-1">Zona</th>
@@ -142,6 +143,7 @@ const Historico = () => {
                 <th className="border px-2 py-1">Fecha</th>
                 <th className="border px-2 py-1">Trabajo</th>
                 <th className="border px-2 py-1">OT</th>
+                <th className="border px-2 py-1">Código SAP</th>
                 <th className="border px-2 py-1">Consumible</th>
                 <th className="border px-2 py-1">UM</th>
                 <th className="border px-2 py-1">Cantidad</th>
@@ -159,6 +161,9 @@ const Historico = () => {
                   </td>
                   <td className="border px-2 py-1">{h.trabajo}</td>
                   <td className="border px-2 py-1">{h.ot}</td>
+                  <td className="border px-2 py-1">
+                    {h.consumibleCodMax || "N/A"}
+                  </td>
                   <td className="border px-2 py-1">
                     {h.consumible?.length > 34
                       ? h.consumible.slice(0, 34) + "…"

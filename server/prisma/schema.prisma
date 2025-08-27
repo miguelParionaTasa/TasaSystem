@@ -63,12 +63,14 @@ model OTConsumible {
   comentarios      String?
   estado           String?
   reservaSap       String?
+  consumibleSap    String?     // ✅ nuevo campo
   fechaCreacion    DateTime    @default(now())
   consumible       Consumible? @relation(fields: [consumibleId], references: [id])
   ot               Ots         @relation(fields: [otId], references: [id])
   user             User        @relation(fields: [userId], references: [id])
   images           Image[]     @relation("ConsumibleImage")
 }
+
 
 model Consumible {
   id            Int            @id @default(autoincrement())
