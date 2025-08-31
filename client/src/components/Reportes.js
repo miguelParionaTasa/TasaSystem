@@ -113,67 +113,69 @@ const Reportes = () => {
   };
 
   const handleGuardarTecnicos = async (id) => {
-    const otActual = filteredData.find((ot) => ot.id === id);
+  const otActual = filteredData.find((ot) => ot.id === id);
 
-    const tecnico1 = editBuffer[id]?.tecnico1 ?? otActual.tecnico1 ?? '';
-    const tecnico2 = editBuffer[id]?.tecnico2 ?? otActual.tecnico2 ?? '';
+  const tecnico1 = editBuffer[id]?.tecnico1 ?? otActual.tecnico1 ?? '';
+  const tecnico2 = editBuffer[id]?.tecnico2 ?? otActual.tecnico2 ?? '';
 
-    let cambios = [];
+  let cambios = [];
 
-if (tecnico1 !== otActual.tecnico1) 
-  cambios.push(`Técnico: ${tecnico1}`);
+  if (tecnico1 !== otActual.tecnico1) 
+    cambios.push(`Técnico: ${tecnico1}`);
 
-if (tecnico2 !== otActual.tecnico2) 
-  cambios.push(`Avance: ${tecnico2}%`);
-    if (cambios.length === 0) {
-      Swal.fire("Sin cambios", "No se detectaron modificaciones.", "info");
-      return;
-    }
+  if (tecnico2 !== otActual.tecnico2) 
+    cambios.push(`Avance: ${tecnico2}%`);
 
-    // Confirmación SweetAlert
-    const confirm = await Swal.fire({
-      title: "¿Estás seguro?",
-      text: `Vas a modificar: ${cambios.join(" y ")}`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Sí, guardar",
-      cancelButtonText: "No, cancelar",
+  if (cambios.length === 0) {
+    Swal.fire("Sin cambios", "No se detectaron modificaciones.", "info");
+    return;
+  }
+
+  // ✅ Confirmación SweetAlert con nombre de la OT
+  const confirm = await Swal.fire({
+    title: `¿Estás seguro de cambiar en la OT: ${otActual.name}?`,
+    text: `Vas a modificar: ${cambios.join(" y ")}`,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Sí, guardar",
+    cancelButtonText: "No, cancelar",
+  });
+
+  if (!confirm.isConfirmed) return;
+
+  try {
+    await axios.put(`${process.env.REACT_APP_API_URL}ott/editar-tecnicos/${id}`, {
+      tecnico1,
+      tecnico2,
     });
 
-    if (!confirm.isConfirmed) return;
+    Swal.fire({
+      icon: 'success',
+      title: 'Guardado',
+      text: 'Técnicos actualizados correctamente.',
+      timer: 1500,
+      showConfirmButton: false,
+    });
 
-    try {
-      await axios.put(`${process.env.REACT_APP_API_URL}ott/editar-tecnicos/${id}`, {
-        tecnico1,
-        tecnico2,
-      });
+    setFilteredData((prev) =>
+      prev.map((ot) => (ot.id === id ? { ...ot, tecnico1, tecnico2 } : ot))
+    );
 
-      Swal.fire({
-        icon: 'success',
-        title: 'Guardado',
-        text: 'Técnicos actualizados correctamente.',
-        timer: 1500,
-        showConfirmButton: false,
-      });
+    setEditBuffer((prev) => {
+      const updated = { ...prev };
+      delete updated[id];
+      return updated;
+    });
+  } catch (error) {
+    console.error('Error al guardar técnicos:', error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Hubo un problema al guardar los técnicos. Inténtalo de nuevo.',
+    });
+  }
+};
 
-      setFilteredData((prev) =>
-        prev.map((ot) => (ot.id === id ? { ...ot, tecnico1, tecnico2 } : ot))
-      );
-
-      setEditBuffer((prev) => {
-        const updated = { ...prev };
-        delete updated[id];
-        return updated;
-      });
-    } catch (error) {
-      console.error('Error al guardar técnicos:', error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Hubo un problema al guardar los técnicos. Inténtalo de nuevo.',
-      });
-    }
-  };
 
   if (loading) {
     return <div className="p-4 max-w-screen-xl mx-auto text-center text-gray-700">Cargando...</div>;

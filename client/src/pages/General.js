@@ -5,7 +5,7 @@ const General = () => {
   const [filter, setFilter] = useState({
     startDate: "",
     endDate: "",
-    scope: "misMovimientos",
+    scope: "miGrupo",
     zona: "",
     ubicacion: "",
     ottId: "", 
@@ -357,9 +357,9 @@ const DetallesConsumibles = ({ consumibles, userId }) => {
             value={filter.scope}
             onChange={handleFilterChange}
             className="w-full p-2 border border-gray-300 rounded-md"
-          >
-            <option value="misMovimientos">Mis movimientos</option>
+          > 
             <option value="miGrupo">Mi grupo</option>
+            <option value="misMovimientos">Mis movimientos</option>
           </select>
         </div>
 

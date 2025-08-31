@@ -25,7 +25,7 @@ require('dotenv').config();
 // Configura CORS
 const corsOptions = {
   origin: "*", // Permite solicitudes desde cualquier origen mientras pruebas
-  methods: "GET,POST,PUT,DELETE", // Métodos HTTP permitidos
+  methods: "GET,POST,PUT,PATCH,DELETE", // Métodos HTTP permitidos
   allowedHeaders: "Content-Type,Authorization", // Encabezados permitidos
 };
 // Middleware para parsear JSON en las solicitudes
@@ -75,6 +75,42 @@ app.get("/user", async (req, res) => {
   } catch (error) {
     console.error("Error al obtener los usuarios:", error);
     res.status(500).json({ message: "Error al obtener los usuarios" });
+  }
+});
+
+// Obtener la configuración (solo habrá un registro con id=1)
+app.get("/configuracion", async (req, res) => {
+  try {
+    const config = await prisma.configuracion.findUnique({
+      where: { id: 1 },
+    });
+
+    if (!config) {
+      return res.status(404).json({ message: "Configuración no encontrada" });
+    }
+
+    res.json(config);
+  } catch (error) {
+    console.error("Error al obtener configuración:", error);
+    res.status(500).json({ message: "Error al obtener configuración" });
+  }
+});
+
+// Actualizar la fechaCorte
+app.patch("/configuracion", async (req, res) => {
+  try {
+    const { fechaCorte } = req.body;
+
+    const config = await prisma.configuracion.upsert({
+      where: { id: 1 },
+      update: { fechaCorte },
+      create: { id: 1, fechaCorte },
+    });
+
+    res.json(config);
+  } catch (error) {
+    console.error("Error al actualizar configuración:", error);
+    res.status(500).json({ message: "Error al actualizar configuración" });
   }
 });
 

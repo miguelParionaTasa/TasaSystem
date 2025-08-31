@@ -8,12 +8,45 @@ const Materiales = () => {
     ubicacion: "",
   });
 
+  const [fechaCorte, setFechaCorte] = useState("FECHA");
+  const [editando, setEditando] = useState(false);
+  const userId = localStorage.getItem("userId");
+
   const [zonas, setZonas] = useState([]);
   const [ubicaciones, setUbicaciones] = useState([]);
   const [materiales, setMateriales] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Obtener zonas
+  // === Obtener fechaCorte desde backend ===
+  useEffect(() => {
+    const fetchFecha = async () => {
+      try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}configuracion`);
+        if (res.data && res.data.fechaCorte) {
+          setFechaCorte(res.data.fechaCorte);
+        }
+      } catch (error) {
+        console.error("Error al obtener fechaCorte:", error);
+      }
+    };
+    fetchFecha();
+  }, []);
+
+  // === Guardar fechaCorte en backend ===
+ const guardarFecha = async () => {
+  try {
+    const res = await axios.patch(`${process.env.REACT_APP_API_URL}configuracion`, {
+      fechaCorte: fechaCorte,
+    });
+    setFechaCorte(res.data.fechaCorte); // actualiza con lo que responde el backend
+    setEditando(false);
+  } catch (error) {
+    console.error("Error al actualizar fechaCorte:", error);
+  }
+};
+
+
+  // === Obtener zonas ===
   useEffect(() => {
     const fetchZonas = async () => {
       try {
@@ -26,7 +59,7 @@ const Materiales = () => {
     fetchZonas();
   }, []);
 
-  // Obtener ubicaciones según zona
+  // === Obtener ubicaciones por zona ===
   useEffect(() => {
     const fetchUbicaciones = async () => {
       if (filter.zona) {
@@ -61,7 +94,7 @@ const Materiales = () => {
         params: {
           zona: filter.zona || undefined,
           ubicacion: filter.ubicacion || undefined,
-          scope: "misMovimientos",
+          scope: "miGrupo",
           userId: userId,
         },
       });
@@ -69,7 +102,6 @@ const Materiales = () => {
       let allConsumibles = [];
       response.data.forEach((ot) => {
         if (ot.otConsumibles) {
-          // buscar la zona correspondiente
           const zonaEncontrada =
             ot.zona?.nombreMaximo ||
             zonas.find((z) => z.id === ot.zonaId || z.id === ot.OTbasico?.zonaId)?.nombreMaximo;
@@ -87,7 +119,6 @@ const Materiales = () => {
         }
       });
 
-      // filtro por nombre de consumible
       if (filter.consumible.trim() !== "") {
         allConsumibles = allConsumibles.filter(
           (c) =>
@@ -106,9 +137,40 @@ const Materiales = () => {
 
   return (
     <div className="p-4 max-w-screen-xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">Consulta de Materiales</h1>
+      <h1 className="text-2xl font-bold text-gray-800">
+        Consulta de Materiales
+      </h1>
 
-      {/* Filtro */}
+      {/* FECHA DE CORTE */}
+      <div className="flex items-center gap-2">
+        {editando ? (
+          <input
+            type="text"
+            value={fechaCorte}
+            onChange={(e) => setFechaCorte(e.target.value)}
+            className="border p-1 rounded-md"
+          />
+        ) : (
+          <span className="text-lg text-gray-600">Al corte de: {fechaCorte}</span>
+        )}
+
+        {userId === "1" && (
+          <button
+            onClick={() => {
+              if (editando) {
+                guardarFecha();
+              } else {
+                setEditando(true);
+              }
+            }}
+            className="ml-2 bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition"
+          >
+            {editando ? "Guardar" : "Editar"}
+          </button>
+        )}
+      </div>
+
+      {/* FORM DE FILTRO */}
       <form
         onSubmit={handleSubmit}
         className="grid gap-4 grid-cols-3 bg-gray-50 p-4 rounded-md shadow-md mb-6"
@@ -170,7 +232,7 @@ const Materiales = () => {
         </div>
       </form>
 
-      {/* Tabla */}
+      {/* TABLA DE RESULTADOS */}
       {loading ? (
         <p className="text-center mt-4">Cargando...</p>
       ) : materiales.length > 0 ? (

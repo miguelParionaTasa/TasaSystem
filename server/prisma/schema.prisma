@@ -280,3 +280,8 @@ model HistorialItem {
   responsable    String
   inventario     InventarioItem @relation(fields: [inventarioId], references: [id])
 }
+
+model Configuracion {
+  id        Int      @id @default(1) // solo habrá un registro
+  fechaCorte String?
+}
