@@ -234,45 +234,53 @@ const Materiales = () => {
 
       {/* TABLA DE RESULTADOS */}
       {loading ? (
-        <p className="text-center mt-4">Cargando...</p>
-      ) : materiales.length > 0 ? (
-        <div className="overflow-x-auto flex justify-center">
-          <table className="min-w-full border border-gray-400 text-center">
-            <thead>
-              <tr className="bg-gray-300 border border-gray-400">
-                <th className="py-2 px-4 border border-gray-400">OT</th>
-                <th className="py-2 px-4 border border-gray-400">Nombre Consumible</th>
-                <th className="py-2 px-4 border border-gray-400">Unidad de Medida</th>
-                <th className="py-2 px-4 border border-gray-400">Cantidad</th>
-                <th className="py-2 px-4 border border-gray-400">Zona</th>
-                <th className="py-2 px-4 border border-gray-400">Ubicación Técnica</th>
-                <th className="py-2 px-4 border border-gray-400">Reserva SAP</th>
-                <th className="py-2 px-4 border border-gray-400">Coment.</th>
-              </tr>
-            </thead>
-            <tbody className="bg-gray-100">
-              {materiales.map((mat) => (
-                <tr key={mat.id} className="border border-gray-400">
-                  <td className="py-2 px-4 border border-gray-400">{mat.ot?.ottId || "N/A"}</td>
-                  <td className="py-2 px-4 border border-gray-400">
-                    {mat.consumible?.name || mat.nombreConsumible}
-                  </td>
-                  <td className="py-2 px-4 border border-gray-400">
-                    {mat.consumible?.unidadMedida || mat.unidadMedida}
-                  </td>
-                  <td className="py-2 px-4 border border-gray-400">{mat.cantidad || 0}</td>
-                  <td className="py-2 px-4 border border-gray-400">{mat.ot?.zonaName || "N/A"}</td>
-                  <td className="py-2 px-4 border border-gray-400">{mat.ot?.ubicacionName || "N/A"}</td>
-                  <td className="py-2 px-4 border border-gray-400">{mat.reservaSap || ""}</td>
-                  <td className="py-2 px-4 border border-gray-400">{mat.comentarios || ""}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        !loading && <p className="text-center mt-4">No se encontraron materiales.</p>
-      )}
+  <p className="text-center mt-4">Cargando...</p>
+) : materiales.length > 0 ? (
+  <div className="overflow-x-auto">
+    <table className="min-w-full border border-gray-400 text-center">
+     <thead>
+  <tr className="bg-gray-300 border border-gray-400">
+    <th className="py-2 px-4 border border-gray-400">OT</th>
+    <th className="py-2 px-4 border border-gray-400">Sap Consum</th>
+    <th className="py-2 px-4 border border-gray-400 max-w-[150px]">Nombre Consumible</th>
+    <th className="py-2 px-4 border border-gray-400 w-20">Unidad de Medida</th>
+    <th className="py-2 px-4 border border-gray-400">Cantidad</th>
+    <th className="py-2 px-4 border border-gray-400">Zona</th>
+    <th className="py-2 px-4 border border-gray-400 max-w-[150px]">Ubicación Técnica</th>
+    <th className="py-2 px-4 border border-gray-400">Reserva SAP</th>
+    <th className="py-2 px-4 border border-gray-400">Coment.</th>
+  </tr>
+</thead>
+<tbody className="bg-gray-100">
+  {materiales.map((mat) => (
+    <tr key={mat.id} className="border border-gray-400">
+      <td className="py-2 px-4 border border-gray-400">{mat.ot?.ottId || "N/A"}</td>
+      <td className="py-2 px-4 border border-gray-400">
+        {mat.consumible?.consumibleSap || mat.consumibleSap}
+      </td>
+      <td className="py-2 px-4 border border-gray-400 max-w-[150px] whitespace-normal break-words">
+        {mat.consumible?.name || mat.nombreConsumible}
+      </td>
+      <td className="py-2 px-4 border border-gray-400 w-20">
+        {mat.consumible?.unidadMedida || mat.unidadMedida}
+      </td>
+      <td className="py-2 px-4 border border-gray-400">{mat.cantidad || 0}</td>
+      <td className="py-2 px-4 border border-gray-400">{mat.ot?.zonaName || "N/A"}</td>
+      <td className="py-2 px-4 border border-gray-400 max-w-[150px] whitespace-normal break-words">
+        {mat.ot?.ubicacionName || "N/A"}
+      </td>
+      <td className="py-2 px-4 border border-gray-400">{mat.reservaSap || ""}</td>
+      <td className="py-2 px-4 border border-gray-400">{mat.comentarios || ""}</td>
+    </tr>
+  ))}
+</tbody>
+
+    </table>
+  </div>
+) : (
+  !loading && <p className="text-center mt-4">No se encontraron materiales.</p>
+)}
+
     </div>
   );
 };

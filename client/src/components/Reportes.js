@@ -13,6 +13,7 @@ const Reportes = () => {
     zonaId: '',
     ubicacionId: '',
     hayPedidos: '',
+    descripcion: '', // 🔹 nuevo filtro de texto
   });
 
   const [zonas, setZonas] = useState([]);
@@ -89,18 +90,29 @@ const Reportes = () => {
   }, [filters.zonaId, filters.ubicacionId]);
 
   const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters((prev) => ({ ...prev, [name]: value }));
-  };
+  const { name, value } = e.target;
+
+  setFilters((prev) => {
+    // si se cambia la zona y queda vacía, resetea también ubicación
+    if (name === "zonaId" && value === "") {
+      return { ...prev, zonaId: "", ubicacionId: "" };
+    }
+    return { ...prev, [name]: value };
+  });
+};
+
 
   const applyFilters = () => {
-    const { zonaId, ubicacionId, hayPedidos } = filters;
+    const { zonaId, ubicacionId, hayPedidos, descripcion } = filters;
     const filtered = componentes.filter((ot) => {
       const matchZona = zonaId ? ot.zonaId === parseInt(zonaId) : true;
       const matchUbicacion = ubicacionId ? ot.ubicacionId === parseInt(ubicacionId) : true;
       const matchPedidos =
         hayPedidos ? (hayPedidos === 'Si' ? ot.Ots?.length > 0 : ot.Ots?.length === 0) : true;
-      return matchZona && matchUbicacion && matchPedidos;
+      const matchDescripcion = descripcion
+        ? ot.name?.toLowerCase().includes(descripcion.toLowerCase())
+        : true;
+      return matchZona && matchUbicacion && matchPedidos && matchDescripcion;
     });
     setFilteredData(filtered);
   };
@@ -113,69 +125,67 @@ const Reportes = () => {
   };
 
   const handleGuardarTecnicos = async (id) => {
-  const otActual = filteredData.find((ot) => ot.id === id);
+    const otActual = filteredData.find((ot) => ot.id === id);
 
-  const tecnico1 = editBuffer[id]?.tecnico1 ?? otActual.tecnico1 ?? '';
-  const tecnico2 = editBuffer[id]?.tecnico2 ?? otActual.tecnico2 ?? '';
+    const tecnico1 = editBuffer[id]?.tecnico1 ?? otActual.tecnico1 ?? '';
+    const tecnico2 = editBuffer[id]?.tecnico2 ?? otActual.tecnico2 ?? '';
 
-  let cambios = [];
+    let cambios = [];
 
-  if (tecnico1 !== otActual.tecnico1) 
-    cambios.push(`Técnico: ${tecnico1}`);
+    if (tecnico1 !== otActual.tecnico1) 
+      cambios.push(`Técnico: ${tecnico1}`);
 
-  if (tecnico2 !== otActual.tecnico2) 
-    cambios.push(`Avance: ${tecnico2}%`);
+    if (tecnico2 !== otActual.tecnico2) 
+      cambios.push(`Avance: ${tecnico2}%`);
 
-  if (cambios.length === 0) {
-    Swal.fire("Sin cambios", "No se detectaron modificaciones.", "info");
-    return;
-  }
+    if (cambios.length === 0) {
+      Swal.fire("Sin cambios", "No se detectaron modificaciones.", "info");
+      return;
+    }
 
-  // ✅ Confirmación SweetAlert con nombre de la OT
-  const confirm = await Swal.fire({
-    title: `¿Estás seguro de cambiar en la OT: ${otActual.name}?`,
-    text: `Vas a modificar: ${cambios.join(" y ")}`,
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonText: "Sí, guardar",
-    cancelButtonText: "No, cancelar",
-  });
-
-  if (!confirm.isConfirmed) return;
-
-  try {
-    await axios.put(`${process.env.REACT_APP_API_URL}ott/editar-tecnicos/${id}`, {
-      tecnico1,
-      tecnico2,
+    const confirm = await Swal.fire({
+      title: `¿Estás seguro de cambiar en la OT: ${otActual.name}?`,
+      text: `Vas a modificar: ${cambios.join(" y ")}`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, guardar",
+      cancelButtonText: "No, cancelar",
     });
 
-    Swal.fire({
-      icon: 'success',
-      title: 'Guardado',
-      text: 'Técnicos actualizados correctamente.',
-      timer: 1500,
-      showConfirmButton: false,
-    });
+    if (!confirm.isConfirmed) return;
 
-    setFilteredData((prev) =>
-      prev.map((ot) => (ot.id === id ? { ...ot, tecnico1, tecnico2 } : ot))
-    );
+    try {
+      await axios.put(`${process.env.REACT_APP_API_URL}ott/editar-tecnicos/${id}`, {
+        tecnico1,
+        tecnico2,
+      });
 
-    setEditBuffer((prev) => {
-      const updated = { ...prev };
-      delete updated[id];
-      return updated;
-    });
-  } catch (error) {
-    console.error('Error al guardar técnicos:', error);
-    Swal.fire({
-      icon: 'error',
-      title: 'Error',
-      text: 'Hubo un problema al guardar los técnicos. Inténtalo de nuevo.',
-    });
-  }
-};
+      Swal.fire({
+        icon: 'success',
+        title: 'Guardado',
+        text: 'Técnicos actualizados correctamente.',
+        timer: 1500,
+        showConfirmButton: false,
+      });
 
+      setFilteredData((prev) =>
+        prev.map((ot) => (ot.id === id ? { ...ot, tecnico1, tecnico2 } : ot))
+      );
+
+      setEditBuffer((prev) => {
+        const updated = { ...prev };
+        delete updated[id];
+        return updated;
+      });
+    } catch (error) {
+      console.error('Error al guardar técnicos:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Hubo un problema al guardar los técnicos. Inténtalo de nuevo.',
+      });
+    }
+  };
 
   if (loading) {
     return <div className="p-4 max-w-screen-xl mx-auto text-center text-gray-700">Cargando...</div>;
@@ -188,14 +198,24 @@ const Reportes = () => {
       <h2 className="text-2xl font-semibold mb-4 text-gray-800 p-2">Filtrar Componentes</h2>
 
       {/* filtros */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6 flex-wrap overflow-x-auto">
+        
+        <input 
+          type="text"
+          name="descripcion"
+          value={filters.descripcion}
+          onChange={handleFilterChange}
+          placeholder="Buscar por descripción..."
+          className="border p-2 rounded w-full sm:w-1/5 "
+        />
+
         <select
           name="zonaId"
           value={filters.zonaId}
           onChange={handleFilterChange}
-          className="border p-2 rounded w-full sm:w-1/4"
+          className="border p-2 rounded w-full sm:w-1/6"
         >
-          <option value="" disabled>Seleccionar zona</option>
+          <option value="">Seleccionar zona</option>
           {zonas.map((zona) => (
             <option key={zona.id} value={zona.id}>{zona.name}</option>
           ))}
@@ -205,7 +225,7 @@ const Reportes = () => {
           name="ubicacionId"
           value={filters.ubicacionId}
           onChange={handleFilterChange}
-          className="border p-2 rounded w-full sm:w-1/4"
+          className="border p-2 rounded w-full sm:w-1/5 "
           disabled={!filters.zonaId}
         >
           <option value="">Sin seleccionar</option>
@@ -218,7 +238,7 @@ const Reportes = () => {
           name="hayPedidos"
           value={filters.hayPedidos}
           onChange={handleFilterChange}
-          className="border p-2 rounded w-full sm:w-1/4"
+          className="border p-2 rounded w-full sm:w-1/6 "
         >
           <option value="">Todos</option>
           <option value="Si">Si</option>
@@ -227,7 +247,7 @@ const Reportes = () => {
 
         <button
           onClick={applyFilters}
-          className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded w-full sm:w-1/4"
+          className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded w-full sm:w-1/5"
         >
           Filtrar
         </button>
