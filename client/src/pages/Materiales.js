@@ -6,6 +6,7 @@ const Materiales = () => {
     consumible: "",
     zona: "",
     ubicacion: "",
+    sap: "",   // ✅ nuevo filtro
   });
 
   const [fechaCorte, setFechaCorte] = useState("FECHA");
@@ -107,25 +108,37 @@ const Materiales = () => {
             zonas.find((z) => z.id === ot.zonaId || z.id === ot.OTbasico?.zonaId)?.nombreMaximo;
 
           ot.otConsumibles.forEach((consumible) => {
-            allConsumibles.push({
-              ...consumible,
-              ot: {
-                ottId: ot.OTbasico?.OTmaximo || ot.ottId,
-                zonaName: zonaEncontrada || "N/A",
-                ubicacionName: ot.ubicacion?.name || "N/A",
-              },
-            });
-          });
+  allConsumibles.push({
+    ...consumible,
+    ot: {
+      ottId: ot.OTbasico?.OTmaximo || ot.ottId,
+      zonaName: zonaEncontrada || "N/A",
+      ubicacionName: ot.ubicacion?.name || "N/A",
+      otName: ot.OTbasico?.name || "N/A",   // ✅ nombre de la OT
+    },
+  });
+});
+
         }
       });
 
-      if (filter.consumible.trim() !== "") {
-        allConsumibles = allConsumibles.filter(
-          (c) =>
-            c.consumible?.name?.toLowerCase().includes(filter.consumible.toLowerCase()) ||
-            c.nombreConsumible?.toLowerCase().includes(filter.consumible.toLowerCase())
-        );
-      }
+     if (filter.consumible.trim() !== "") {
+  allConsumibles = allConsumibles.filter(
+    (c) =>
+      c.consumible?.name?.toLowerCase().includes(filter.consumible.toLowerCase()) ||
+      c.nombreConsumible?.toLowerCase().includes(filter.consumible.toLowerCase())
+  );
+}
+
+// ✅ Nuevo filtro por Código SAP
+if (filter.sap.trim() !== "") {
+  allConsumibles = allConsumibles.filter(
+    (c) =>
+      c.consumible?.consumibleSap?.toString().includes(filter.sap) ||
+      c.consumibleSap?.toString().includes(filter.sap)
+  );
+}
+
 
       setMateriales(allConsumibles);
     } catch (error) {
@@ -171,10 +184,11 @@ const Materiales = () => {
       </div>
 
       {/* FORM DE FILTRO */}
-      <form
-        onSubmit={handleSubmit}
-        className="grid gap-4 grid-cols-3 bg-gray-50 p-4 rounded-md shadow-md mb-6"
-      >
+     <form
+  onSubmit={handleSubmit}
+  className="flex flex-wrap items-end gap-4 bg-gray-50 p-4 rounded-md shadow-md mb-6"
+>
+
         <div>
           <label className="block font-semibold text-gray-700 mb-2">Consumible</label>
           <input
@@ -186,6 +200,17 @@ const Materiales = () => {
             className="w-full p-2 border border-gray-300 rounded-md"
           />
         </div>
+<div>
+  <label className="block font-semibold text-gray-700 mb-2">Código SAP</label>
+  <input
+    type="text"
+    name="sap"
+    value={filter.sap}
+    onChange={handleFilterChange}
+    placeholder="Ej. 31015444"
+    className="w-full p-2 border border-gray-300 rounded-md"
+  />
+</div>
 
         <div>
           <label className="block font-semibold text-gray-700 mb-2">Zona</label>
@@ -247,10 +272,12 @@ const Materiales = () => {
     <th className="py-2 px-4 border border-gray-400">Cantidad</th>
     <th className="py-2 px-4 border border-gray-400">Zona</th>
     <th className="py-2 px-4 border border-gray-400 max-w-[150px]">Ubicación Técnica</th>
+    <th className="py-2 px-4 border border-gray-400 max-w-[200px]">Nombre OT</th> {/* ✅ nueva */}
     <th className="py-2 px-4 border border-gray-400">Reserva SAP</th>
     <th className="py-2 px-4 border border-gray-400">Coment.</th>
   </tr>
 </thead>
+
 <tbody className="bg-gray-100">
   {materiales.map((mat) => (
     <tr key={mat.id} className="border border-gray-400">
@@ -269,6 +296,9 @@ const Materiales = () => {
       <td className="py-2 px-4 border border-gray-400 max-w-[150px] whitespace-normal break-words">
         {mat.ot?.ubicacionName || "N/A"}
       </td>
+      <td className="py-2 px-4 border border-gray-400 max-w-[200px] whitespace-normal break-words">
+  {mat.ot?.otName || "N/A"}
+</td>
       <td className="py-2 px-4 border border-gray-400">{mat.reservaSap || ""}</td>
       <td className="py-2 px-4 border border-gray-400">{mat.comentarios || ""}</td>
     </tr>

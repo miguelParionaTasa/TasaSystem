@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import axios from 'axios';
-import { FaEdit } from 'react-icons/fa';
 
 const Reportes = () => {
   const [editBuffer, setEditBuffer] = useState({});
@@ -18,7 +17,7 @@ const Reportes = () => {
 
   const [zonas, setZonas] = useState([]);
   const [ubicaciones, setUbicaciones] = useState([]);
-  const [equipos, setEquipos] = useState([]);
+  const [ setEquipos] = useState([]);
 
   // Cargar OTs
   useEffect(() => {
@@ -102,20 +101,26 @@ const Reportes = () => {
 };
 
 
-  const applyFilters = () => {
-    const { zonaId, ubicacionId, hayPedidos, descripcion } = filters;
-    const filtered = componentes.filter((ot) => {
-      const matchZona = zonaId ? ot.zonaId === parseInt(zonaId) : true;
-      const matchUbicacion = ubicacionId ? ot.ubicacionId === parseInt(ubicacionId) : true;
-      const matchPedidos =
-        hayPedidos ? (hayPedidos === 'Si' ? ot.Ots?.length > 0 : ot.Ots?.length === 0) : true;
-      const matchDescripcion = descripcion
-        ? ot.name?.toLowerCase().includes(descripcion.toLowerCase())
+const applyFilters = () => {
+  const { zonaId, ubicacionId, hayPedidos, descripcion } = filters;
+  const filtered = componentes.filter((ot) => {
+    const matchZona = zonaId ? ot.zonaId === parseInt(zonaId) : true;
+    const matchUbicacion = ubicacionId ? ot.ubicacionId === parseInt(ubicacionId) : true;
+    const matchPedidos =
+      hayPedidos
+        ? (hayPedidos === 'Si'
+            ? (ot.tecnico2 && ot.tecnico2.trim() !== '')
+            : (!ot.tecnico2 || ot.tecnico2.trim() === ''))
         : true;
-      return matchZona && matchUbicacion && matchPedidos && matchDescripcion;
-    });
-    setFilteredData(filtered);
-  };
+    const matchDescripcion = descripcion
+      ? ot.name?.toLowerCase().includes(descripcion.toLowerCase())
+      : true;
+
+    return matchZona && matchUbicacion && matchPedidos && matchDescripcion;
+  });
+  setFilteredData(filtered);
+};
+
 
   const handleInputChange = (id, field, value) => {
     setEditBuffer((prev) => ({
@@ -235,15 +240,16 @@ const Reportes = () => {
         </select>
 
         <select
-          name="hayPedidos"
-          value={filters.hayPedidos}
-          onChange={handleFilterChange}
-          className="border p-2 rounded w-full sm:w-1/6 "
-        >
-          <option value="">Todos</option>
-          <option value="Si">Si</option>
-          <option value="No">No</option>
-        </select>
+  name="hayPedidos"
+  value={filters.hayPedidos}
+  onChange={handleFilterChange}
+  className="border p-2 rounded w-full sm:w-1/6 "
+>
+  <option value="">Todos</option>
+  <option value="Si">Sí</option>
+  <option value="No">No</option>
+</select>
+
 
         <button
           onClick={applyFilters}
