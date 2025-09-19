@@ -105,9 +105,10 @@ model Ubicacion {
   OTbasico     OTbasico[]
   ots          Ots[]
   zona         Zona       @relation(fields: [zonaId], references: [id])
-  historico Historico[]
-  lubricaciones Lubricacion[] // inversa aquí
+  historico    Historico[]
+  lubricaciones Lubricacion[]
 }
+
 
 model Lubricacion {
   id             Int      @id @default(autoincrement())
@@ -135,31 +136,31 @@ model Lubricacion {
   images         Image[] @relation("LubricacionImage")
 }
 
-
 model Componente {
-  id          Int        @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   equipoId    Int
   parteEquipo String
   imageUrl    String?
   userId      Int
-  atributos   Atributo[]
-  equipo      Equipo     @relation(fields: [equipoId], references: [id])
-  user        User       @relation(fields: [userId], references: [id])
+  equipo      Equipo       @relation(fields: [equipoId], references: [id])
+  user        User         @relation(fields: [userId], references: [id])
   repuestos   Repuesto[]
-  images      Image[]    @relation("ComponenteImage")
+  images      Image[]      @relation("ComponenteImage")
 }
 
 model Atributo {
   id                Int                 @id @default(autoincrement())
-  componenteId      Int
   nombre            String
   valor             String?
-  userId            Int? // Nuevo campo para rastrear el usuario que hizo el cambio
-  componente        Componente          @relation(fields: [componenteId], references: [id])
-  user              User?               @relation(fields: [userId], references: [id]) // Relación opcional con User
+  userId            Int?
+  equipoId          Int                 // ✅ ahora depende de componente
+  user              User?               @relation(fields: [userId], references: [id])
+  equipo            Equipo          @relation(fields: [equipoId], references: [id])
   AtributoHistorial AtributoHistorial[]
-  images           Image[]             @relation("AtributoImage") // Nueva relación con Image
+  images            Image[]             @relation("AtributoImage")
 }
+
+
 
 model AtributoHistorial {
   id            Int      @id @default(autoincrement())
@@ -193,6 +194,7 @@ model Equipo {
   imageUrl       String?
   ubicacionSinId String?
   componentes    Componente[]
+  atributos      Atributo[]   // 👈 Relación con Atributo
   ubicacion      Ubicacion    @relation(fields: [ubicacionId], references: [id])
   zona           Zona         @relation(fields: [zonaId], references: [id])
   OTbasico       OTbasico[]

@@ -4,22 +4,20 @@ const prisma = new PrismaClient();
 
 async function main() {
   try {
-    // Traer el último registro insertado
-    const ultimo = await prisma.ots.findFirst({
-      orderBy: { id: 'desc' },
-      select: {
-        id: true,
-        ottId: true,
-      },
+    const registros = [
+{ descripcionEquipo: "3er corte", zonaId: 1, ubicacionId: 625, userId: 1, ottId: "702251" },
+
+
+    ];
+
+    const result = await prisma.ots.createMany({
+      data: registros,
+      skipDuplicates: true, // evita error si ya existen
     });
 
-    if (ultimo) {
-      console.log(`✅ Último registro -> ID: ${ultimo.id} | ottId: ${ultimo.ottId}`);
-    } else {
-      console.log("⚠️ No hay registros en la tabla Ots.");
-    }
+    console.log(`✅ Registros insertados en Ots: ${result.count}`);
   } catch (error) {
-    console.error("❌ Error al consultar el último registro:", error);
+    console.error("❌ Error al crear registros en Ots:", error);
   } finally {
     await prisma.$disconnect();
   }

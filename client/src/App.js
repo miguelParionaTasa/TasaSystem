@@ -12,6 +12,7 @@ import General from "./pages/General";
 import Historico from "./pages/Historico";
 import Materiales from "./pages/Materiales"; // Nueva página
 import useAuth from "./hooks/useAuth";
+import Atributo from "./pages/Atributo";
 
 // Componente para proteger rutas
 const PrivateRoute = ({ element, authenticated }) => {
@@ -43,7 +44,8 @@ const App = () => {
     { path: "/historico", element: <Historico /> },
     { path: "/inventario", element: <Inventario /> },
     { path: "/lubricante", element: <Lubricante /> },
-    { path: "/materiales", element: <Materiales /> }, // Añadida
+    { path: "/materiales", element: <Materiales /> },
+    { path: "/atributo", element: <Atributo /> },  // Añadida
   ];
 
   return (

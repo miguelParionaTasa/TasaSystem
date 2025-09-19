@@ -2,14 +2,15 @@ const prisma = require("./prisma");
 
 // Crear un nuevo atributo
 const createAtributo = async (req, res) => {
-  const { componenteId, nombre, valor } = req.body;
+  const { equipoId, nombre, valor, userId } = req.body;
 
   try {
     const atributo = await prisma.atributo.create({
       data: {
-        componenteId,
+        equipoId,
         nombre,
         valor,
+        userId,
       },
     });
     res.status(201).json(atributo);
@@ -24,7 +25,12 @@ const getAllAtributos = async (req, res) => {
   try {
     const atributos = await prisma.atributo.findMany({
       include: {
-        componente: true, // Incluir el componente relacionado
+        equipo: {
+          include: {
+            ubicacion: { include: { zona: true } },
+          },
+        },
+        user: true,
       },
     });
     res.status(200).json(atributos);
@@ -37,12 +43,24 @@ const getAllAtributos = async (req, res) => {
 // Obtener un atributo por ID
 const getAtributoById = async (req, res) => {
   const { id } = req.params;
+  console.log("👉 ID recibido:", id);  // 👈 Verifica qué llega
 
   try {
+    if (!id) {
+      return res.status(400).json({ message: "Debe enviar un ID válido en la URL" });
+    }
+
     const atributo = await prisma.atributo.findUnique({
-      where: { id: parseInt(id) },
+      where: {
+        id: parseInt(id),
+      },
       include: {
-        componente: true, // Incluir el componente relacionado
+        equipo: {
+          include: {
+            ubicacion: { include: { zona: true } },
+          },
+        },
+        user: true,
       },
     });
 
@@ -52,24 +70,20 @@ const getAtributoById = async (req, res) => {
 
     res.status(200).json(atributo);
   } catch (error) {
-    console.error("Error al obtener atributo:", error);
+    console.error("Error al obtener atributo por ID:", error);
     res.status(500).json({ message: "Error al obtener atributo" });
   }
 };
 
-// Actualizar un atributo
-// Actualizar un atributo
+
+
+// Actualizar un atributo con historial
+// Después:
 const updateAtributo = async (req, res) => {
   const { id } = req.params;
   const { nombre, valor, userId } = req.body;
 
   try {
-    // Verificar si el token es válido
-    if (!req.headers.authorization) {
-      return res.status(401).json({ message: "Solicitud no autorizada" });
-    }
-
-    // Obtener el atributo actual para registrar el cambio
     const atributoActual = await prisma.atributo.findUnique({
       where: { id: parseInt(id) },
     });
@@ -78,29 +92,19 @@ const updateAtributo = async (req, res) => {
       return res.status(404).json({ message: "Atributo no encontrado" });
     }
 
-    // Obtener la fecha actual y ajustarla a UTC-5
-    const fechaCambio = new Date();
-    fechaCambio.setHours(fechaCambio.getHours() - 5); // Ajustar a UTC-5
-
-    // Crear un registro en el historial antes de actualizar
+    // Guardar historial
     await prisma.atributoHistorial.create({
       data: {
         atributoId: atributoActual.id,
         valorAnterior: atributoActual.valor,
         valorNuevo: valor,
-        userId: userId, // Guardar el userId que hizo el cambio
-        fechaCambio: fechaCambio, // Registrar la fecha ajustada
+        userId,
       },
     });
 
-    // Actualizar el atributo
     const updatedAtributo = await prisma.atributo.update({
       where: { id: parseInt(id) },
-      data: {
-        nombre,
-        valor,
-        userId: userId, // Opcional: actualizar el userId si es necesario
-      },
+      data: { nombre, valor, userId },
     });
 
     res.status(200).json(updatedAtributo);
@@ -115,32 +119,29 @@ const updateAtributo = async (req, res) => {
     }
   }
 };
+
 // Eliminar un atributo
 const deleteAtributo = async (req, res) => {
   const { id } = req.params;
 
   try {
-    await prisma.atributo.delete({
-      where: { id: parseInt(id) },
-    });
-    res.status(204).send(); // No content
+    await prisma.atributo.delete({ where: { id: parseInt(id) } });
+    res.status(204).send();
   } catch (error) {
     console.error("Error al eliminar atributo:", error);
     res.status(500).json({ message: "Error al eliminar atributo" });
   }
 };
+
+// Historial de un atributo
 const getAtributoHistorial = async (req, res) => {
-  const { id } = req.params; // ID del atributo
+  const { id } = req.params;
 
   try {
     const historial = await prisma.atributoHistorial.findMany({
       where: { atributoId: parseInt(id) },
-      include: {
-        user: true, // Incluir el usuario que hizo el cambio
-      },
-      orderBy: {
-        fechaCambio: 'desc', // Ordenar por fecha de cambio, más reciente primero
-      },
+      include: { user: true },
+      orderBy: { fechaCambio: "desc" },
     });
 
     if (historial.length === 0) {
@@ -153,7 +154,39 @@ const getAtributoHistorial = async (req, res) => {
     res.status(500).json({ message: "Error al obtener el historial del atributo." });
   }
 };
-// Exportar las funciones del controlador
+
+// 🔎 Buscar por zona, ubicación, equipo o nombre de atributo
+const searchAtributos = async (req, res) => {
+  const { zonaId, ubicacionId, equipoId, nombre } = req.query;
+
+  try {
+    const atributos = await prisma.atributo.findMany({
+      where: {
+        AND: [
+          zonaId ? { equipo: { zonaId: parseInt(zonaId) } } : {},
+          ubicacionId ? { equipo: { ubicacionId: parseInt(ubicacionId) } } : {},
+          equipoId ? { equipoId: parseInt(equipoId) } : {},
+          nombre ? { nombre: { contains: nombre, mode: "insensitive" } } : {},
+        ],
+      },
+      include: {
+        equipo: {
+          include: {
+            ubicacion: { include: { zona: true } },
+          },
+        },
+        user: true,
+      },
+    });
+
+    res.status(200).json(atributos);
+  } catch (error) {
+    console.error("Error en la búsqueda de atributos:", error);
+    res.status(500).json({ message: "Error en la búsqueda de atributos" });
+  }
+};
+
+
 module.exports = {
   createAtributo,
   getAllAtributos,
@@ -161,4 +194,5 @@ module.exports = {
   updateAtributo,
   deleteAtributo,
   getAtributoHistorial,
+  searchAtributos,
 };

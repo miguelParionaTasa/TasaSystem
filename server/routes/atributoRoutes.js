@@ -1,5 +1,4 @@
-// routes/atributoRoutes.js
-const express = require('express');
+const express = require("express");
 const {
   createAtributo,
   getAllAtributos,
@@ -7,17 +6,24 @@ const {
   updateAtributo,
   deleteAtributo,
   getAtributoHistorial,
-} = require('../controllers/atributoController');
-const authMiddleware = require('../middlewares/auth'); // Importar el middleware de autenticación
+  searchAtributos
+} = require("../controllers/atributoController");
+
+const authMiddleware = require("../middlewares/auth");
 
 const router = express.Router();
 
-// Rutas para el CRUD de atributos
-router.post('/', authMiddleware, createAtributo); // Crear atributo
-router.get('/', getAllAtributos); // Obtener todos los atributos
-router.get('/:id', getAtributoById); // Obtener atributo por ID
-router.put('/:id', updateAtributo); // Actualizar atributo
-router.delete('/:id', authMiddleware, deleteAtributo); // Eliminar atributo
-router.get('/:id/historial', getAtributoHistorial); 
+// CRUD
+router.post("/", createAtributo);
+router.get("/", getAllAtributos);
+
+// 🔹 rutas específicas primero
+router.get("/search", searchAtributos);
+router.get("/:id/historial", getAtributoHistorial);
+
+// 🔹 rutas con parámetro después
+router.get("/:id", getAtributoById);
+router.put("/:id", updateAtributo);
+router.delete("/:id", deleteAtributo);
 
 module.exports = router;
