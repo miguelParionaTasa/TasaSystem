@@ -1,24 +1,63 @@
-const prisma = require("./prisma");
-
+const prisma = require("./prisma"); // ruta correcta a tu cliente Prisma
+const cloudinary = require("../config/cloudinary");
 // Crear un nuevo atributo
-const createAtributo = async (req, res) => {
-  const { equipoId, nombre, valor, userId } = req.body;
-
+const uploadAtributoImage = async (req, res) => {
   try {
+    const { id } = req.params;
+
+    if (!req.file) return res.status(400).json({ message: "No se subió imagen" });
+
+    const result = await cloudinary.uploader.upload(req.file.path, { folder: "atributos" });
+
+    const updatedImage = await prisma.image.create({
+  data: {
+    url: result.secure_url,
+    atributos: { connect: { id: parseInt(id) } }, // plural 'atributos'
+  },
+});
+
+
+    res.status(201).json(updatedImage);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al subir imagen" });
+  }
+};
+
+const createAtributo = async (req, res) => {
+  try {
+    const { nombre, valor, equipoId, userId } = req.body;
+
+    let imagesData = [];
+    if (req.file) {
+      const fileBase64 = req.file.buffer.toString("base64");
+      const mimeType = req.file.mimetype;
+      const dataURI = `data:${mimeType};base64,${fileBase64}`;
+
+      const result = await cloudinary.uploader.upload(dataURI, { folder: "atributos" });
+      imagesData.push({ url: result.secure_url });
+    }
+
     const atributo = await prisma.atributo.create({
       data: {
-        equipoId,
         nombre,
         valor,
-        userId,
+        equipoId: parseInt(equipoId),
+        userId: parseInt(userId),
+        ...(imagesData.length > 0 && { images: { create: imagesData } }),
       },
+      include: { images: true, equipo: true, user: true },
     });
+
     res.status(201).json(atributo);
   } catch (error) {
-    console.error("Error al crear atributo:", error);
+    console.error("❌ Error al crear atributo:", error);
     res.status(500).json({ message: "Error al crear atributo" });
   }
 };
+
+
+
 
 // Obtener todos los atributos
 const getAllAtributos = async (req, res) => {
@@ -31,6 +70,7 @@ const getAllAtributos = async (req, res) => {
           },
         },
         user: true,
+        images: true, 
       },
     });
     res.status(200).json(atributos);
@@ -119,19 +159,59 @@ const updateAtributo = async (req, res) => {
     }
   }
 };
+const deleteImageFromUrl = async (url) => {
+  try {
+    // Extraer public_id de la URL
+    const parts = url.split('/');
+    const filenameWithExt = parts[parts.length - 1]; // ej: henaznvpb4tdauoliudh.png
+    const folder = parts[parts.length - 2];          // ej: atributos
+    const publicId = `${folder}/${filenameWithExt.split('.')[0]}`; // atributos/henaznvpb4tdauoliudh
 
-// Eliminar un atributo
+    const result = await cloudinary.uploader.destroy(publicId);
+    console.log('Imagen eliminada de Cloudinary:', result);
+    return result;
+  } catch (error) {
+    console.error('Error al eliminar imagen de Cloudinary:', error);
+    throw error;
+  }
+};
+
+
 const deleteAtributo = async (req, res) => {
   const { id } = req.params;
 
   try {
-    await prisma.atributo.delete({ where: { id: parseInt(id) } });
+    const atributo = await prisma.atributo.findUnique({
+      where: { id: parseInt(id) },
+      include: { images: true }
+    });
+
+    if (!atributo) return res.status(404).json({ message: "Atributo no encontrado" });
+
+    // Eliminar imágenes de Cloudinary
+    for (const img of atributo.images) {
+      await deleteImageFromUrl(img.url);
+    }
+
+    // Eliminar imágenes de la base de datos asociadas a este atributo
+    await prisma.image.deleteMany({
+      where: {
+        atributos: { some: { id: atributo.id } }
+      }
+    });
+
+    // Finalmente, eliminar el atributo
+    await prisma.atributo.delete({ where: { id: atributo.id } });
+
     res.status(204).send();
   } catch (error) {
     console.error("Error al eliminar atributo:", error);
     res.status(500).json({ message: "Error al eliminar atributo" });
   }
 };
+
+
+
 
 // Historial de un atributo
 const getAtributoHistorial = async (req, res) => {
@@ -161,23 +241,25 @@ const searchAtributos = async (req, res) => {
 
   try {
     const atributos = await prisma.atributo.findMany({
-      where: {
-        AND: [
-          zonaId ? { equipo: { zonaId: parseInt(zonaId) } } : {},
-          ubicacionId ? { equipo: { ubicacionId: parseInt(ubicacionId) } } : {},
-          equipoId ? { equipoId: parseInt(equipoId) } : {},
-          nombre ? { nombre: { contains: nombre, mode: "insensitive" } } : {},
-        ],
-      },
+  where: {
+    AND: [
+      zonaId ? { equipo: { zonaId: parseInt(zonaId) } } : {},
+      ubicacionId ? { equipo: { ubicacionId: parseInt(ubicacionId) } } : {},
+      equipoId ? { equipoId: parseInt(equipoId) } : {},
+      nombre ? { nombre: { contains: nombre, mode: "insensitive" } } : {},
+    ],
+  },
+  include: {
+    equipo: {
       include: {
-        equipo: {
-          include: {
-            ubicacion: { include: { zona: true } },
-          },
-        },
-        user: true,
+        ubicacion: { include: { zona: true } },
       },
-    });
+    },
+    user: true,
+    images: true, // ✅ incluye las imágenes aquí
+  },
+});
+
 
     res.status(200).json(atributos);
   } catch (error) {
@@ -187,6 +269,7 @@ const searchAtributos = async (req, res) => {
 };
 
 
+
 module.exports = {
   createAtributo,
   getAllAtributos,
@@ -194,5 +277,7 @@ module.exports = {
   updateAtributo,
   deleteAtributo,
   getAtributoHistorial,
+  uploadAtributoImage,
   searchAtributos,
 };
+

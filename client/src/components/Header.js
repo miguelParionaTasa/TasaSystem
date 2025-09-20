@@ -112,6 +112,12 @@ const puedeVerLubricante = storedUserId === "1";
             >
               Atributos
             </button>
+            <button
+              onClick={() => handleNavigate("/predictivo")}
+              className="block w-full text-left px-4 py-2 hover:bg-blue-300"
+            >
+              Predictivo
+            </button>
                 <button
                   onClick={() => handleNavigate("/historico")}
                   className="block w-full text-left px-4 py-2 hover:bg-blue-300"
@@ -222,6 +228,12 @@ const puedeVerLubricante = storedUserId === "1";
               className="block w-full text-left text-lg hover:bg-blue-300 px-2 py-1 rounded"
             >
               Atributos
+            </button>
+            <button
+              onClick={() => handleNavigate("/predictivo")}
+              className="block w-full text-left text-lg hover:bg-blue-300 px-2 py-1 rounded"
+            >
+              Predictivo
             </button>
             <button
               onClick={() => handleNavigate("/historico")}

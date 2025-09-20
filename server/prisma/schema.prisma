@@ -93,7 +93,7 @@ model Zona {
   ots          Ots[]
   ubicaciones  Ubicacion[]
   historico Historico[]
-
+  predictivos  Predictivo[]   // 👈 inversa aquí
 }
 
 model Ubicacion {
@@ -107,6 +107,7 @@ model Ubicacion {
   zona         Zona       @relation(fields: [zonaId], references: [id])
   historico    Historico[]
   lubricaciones Lubricacion[]
+    predictivos  Predictivo[]   // 👈 inversa aquí
 }
 
 
@@ -200,6 +201,7 @@ model Equipo {
   OTbasico       OTbasico[]
   ots            Ots[]
   images         Image[]      @relation("EquipoImage")
+    predictivos  Predictivo[]   // 👈 inversa aquí
 }
 
 model Image {
@@ -213,8 +215,10 @@ model Image {
   repuestoss   Repuesto[]     @relation("RepuestoImage")
   atributos    Atributo[]     @relation("AtributoImage") // Nueva relación con Atributo
    lubricaciones   Lubricacion[]  @relation("LubricacionImage") // inversa aquí
+predictivos    Predictivo[]   @relation("PredictivoImage") // 👈 inversa aquí
+}
 
- }
+ 
 
 model OTbasico {
   id          Int        @id @default(autoincrement())
@@ -287,3 +291,24 @@ model Configuracion {
   id        Int      @id @default(1) // solo habrá un registro
   fechaCorte String?
 }
+
+model Predictivo {
+  id                    Int        @id @default(autoincrement())
+  zonaId                Int
+  ubicacionId           Int
+  equipoId              Int
+  fecha                 DateTime   @default(now())
+  tecnica               String
+  recomendacionProveedor String?
+  recomendacionPredictivo String?
+  otGenerado            String?
+  comentario            String?
+  otRelacionada         String?
+
+  // Relaciones
+  zona       Zona      @relation(fields: [zonaId], references: [id])
+  ubicacion  Ubicacion @relation(fields: [ubicacionId], references: [id])
+  equipo     Equipo    @relation(fields: [equipoId], references: [id])
+  images     Image[]   @relation("PredictivoImage")
+}
+

@@ -13,6 +13,7 @@ import Historico from "./pages/Historico";
 import Materiales from "./pages/Materiales"; // Nueva página
 import useAuth from "./hooks/useAuth";
 import Atributo from "./pages/Atributo";
+import Predictivo from "./pages/Predictivo"; // 👈 Import nuevo
 
 // Componente para proteger rutas
 const PrivateRoute = ({ element, authenticated }) => {
@@ -46,6 +47,7 @@ const App = () => {
     { path: "/lubricante", element: <Lubricante /> },
     { path: "/materiales", element: <Materiales /> },
     { path: "/atributo", element: <Atributo /> },  // Añadida
+        { path: "/predictivo", element: <Predictivo /> }, // 👈 Añadida
   ];
 
   return (
