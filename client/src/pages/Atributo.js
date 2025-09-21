@@ -18,7 +18,36 @@ const [modalImage, setModalImage] = useState(null); // null o URL de la imagen a
 
   const token = localStorage.getItem("token");
   const userId = parseInt(localStorage.getItem("userId"));
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const res = await axiosInstance.get("/atributos");
+      const ordenados = res.data.sort((a, b) => {
+        const zonaA = a.equipo?.ubicacion?.zona?.name || "";
+        const zonaB = b.equipo?.ubicacion?.zona?.name || "";
+        if (zonaA !== zonaB) return zonaA.localeCompare(zonaB);
 
+        const ubicA = a.equipo?.ubicacion?.name || "";
+        const ubicB = b.equipo?.ubicacion?.name || "";
+        if (ubicA !== ubicB) return ubicA.localeCompare(ubicB);
+
+        const eqA = a.equipo?.name || "";
+        const eqB = b.equipo?.name || "";
+        if (eqA !== eqB) return eqA.localeCompare(eqB);
+
+        const atrA = a.nombre || "";
+        const atrB = b.nombre || "";
+        return atrA.localeCompare(atrB);
+      });
+
+      setAtributos(ordenados);
+    } catch (err) {
+      console.error("Error al cargar atributos:", err);
+    }
+  };
+
+  fetchData();
+}, []);
   // === Fetch zonas, ubicaciones y equipos ===
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}varios/zonas`)
@@ -313,7 +342,7 @@ setAtributos(prev =>
   </>
 )}
 
-{/* Modal de imágenes */}
+{/* Modal de todas las imágenes */}
 {modalImagesVisible && (
   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
     <div className="bg-white rounded-md max-w-6xl w-full p-4 overflow-auto relative">
@@ -324,40 +353,50 @@ setAtributos(prev =>
         ✖
       </button>
 
-      {/* Contenedor horizontal con scroll */}
       <div className="flex gap-4 overflow-x-auto py-2">
-        {atributos.filter(a => a.images?.length).map(atr =>
-          atr.images.map(img => (
-           <div className="flex gap-4 overflow-x-auto py-2">
-  {atributos.filter(a => a.images?.length).map(atr =>
-    atr.images.map(img => (
-      <div key={img.id} className="border rounded-md p-2 w-[200px] h-[200px] flex-shrink-0 flex flex-col items-center">
-        {/* Contenedor para centrar la imagen */}
-        <div className="w-full h-[120px] flex items-center justify-center bg-gray-100 rounded mb-2">
-          <img 
-            src={img.url} 
-            alt={atr.nombre} 
-            className="max-w-full max-h-full object-contain"
-          />
-        </div>
-        <p className="text-xs font-semibold truncate w-full">{atr.equipo?.ubicacion?.zona?.nombreMaximo || "N/A"}</p>
-        <p className="text-xs truncate w-full">{atr.equipo?.ubicacion?.name || "N/A"}</p>
-        <p className="text-xs truncate w-full">{atr.equipo?.name || "N/A"}</p>
-        <p className="text-xs truncate w-full">{atr.nombre}</p>
-        <p className="text-xs truncate w-full">{atr.valor}</p>
-      </div>
-    ))
-  )}
-  {atributos.filter(a => a.images?.length).length === 0 && <p className="text-center w-full">No hay imágenes disponibles</p>}
-</div>
-
-          ))
+        {atributos
+          .filter(a => a.images?.length)
+          .slice() // copia para no mutar el estado
+          .sort((a, b) => {
+            const zonaA = a.equipo?.ubicacion?.zona?.id || 0;
+            const zonaB = b.equipo?.ubicacion?.zona?.id || 0;
+            return zonaA - zonaB; // orden ascendente
+          })
+          .map(atr =>
+            atr.images.map(img => (
+              <div
+                key={img.id}
+                className="border rounded-md p-2 w-[200px] flex-shrink-0 flex flex-col items-center"
+              >
+                <div className="w-full h-[120px] flex items-center justify-center bg-gray-100 rounded mb-2">
+                  <img
+                    src={img.url}
+                    alt={atr.nombre}
+                    className="max-w-full max-h-full object-contain"
+                  />
+                </div>
+                <p className="text-xs font-semibold truncate w-full">
+                  {atr.equipo?.ubicacion?.zona?.nombreMaximo || "N/A"}
+                </p>
+                <p className="text-xs truncate w-full">
+                  {atr.equipo?.ubicacion?.name || "N/A"}
+                </p>
+                <p className="text-xs truncate w-full">
+                  {atr.equipo?.name || "N/A"}
+                </p>
+                <p className="text-xs truncate w-full">{atr.nombre}</p>
+                <p className="text-xs truncate w-full">{atr.valor}</p>
+              </div>
+            ))
+          )}
+        {atributos.filter(a => a.images?.length).length === 0 && (
+          <p className="text-center w-full">No hay imágenes disponibles</p>
         )}
-        {atributos.filter(a => a.images?.length).length === 0 && <p className="text-center w-full">No hay imágenes disponibles</p>}
       </div>
     </div>
   </div>
 )}
+
 
 {/* Modal de una imagen */}
 {modalImage && (
@@ -378,37 +417,7 @@ setAtributos(prev =>
   </div>
 )}
 
-{/* Modal de todas las imágenes */}
-{modalImagesVisible && (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-    <div className="bg-white rounded-md max-w-6xl w-full p-4 overflow-auto relative">
-      <button
-        className="absolute top-2 right-2 text-gray-700 text-lg font-bold"
-        onClick={() => setModalImagesVisible(false)}
-      >
-        ✖
-      </button>
 
-      <div className="flex gap-4 overflow-x-auto py-2">
-        {atributos.filter(a => a.images?.length).map(atr =>
-          atr.images.map(img => (
-            <div key={img.id} className="border rounded-md p-2 w-[200px] flex-shrink-0 flex flex-col items-center">
-              <div className="w-full h-[120px] flex items-center justify-center bg-gray-100 rounded mb-2">
-                <img src={img.url} alt={atr.nombre} className="max-w-full max-h-full object-contain" />
-              </div>
-              <p className="text-xs font-semibold truncate w-full">{atr.equipo?.ubicacion?.zona?.nombreMaximo || "N/A"}</p>
-              <p className="text-xs truncate w-full">{atr.equipo?.ubicacion?.name || "N/A"}</p>
-              <p className="text-xs truncate w-full">{atr.equipo?.name || "N/A"}</p>
-              <p className="text-xs truncate w-full">{atr.nombre}</p>
-              <p className="text-xs truncate w-full">{atr.valor}</p>
-            </div>
-          ))
-        )}
-        {atributos.filter(a => a.images?.length).length === 0 && <p className="text-center w-full">No hay imágenes disponibles</p>}
-      </div>
-    </div>
-  </div>
-)}
 
 
 
