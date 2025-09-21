@@ -1,7 +1,7 @@
 const express = require("express");
 const upload = require("../config/multer"); // tu configuración Multer
 const prisma = require("../controllers/prisma");
-const cloudinary = require("../config/cloudinary");
+const { uploadImage } = require("../config/cloudinary");
 const {
   createAtributo,
   getAllAtributos,
@@ -36,19 +36,21 @@ router.post("/", upload, createAtributo);
 router.post("/:id/upload-image", upload, async (req, res) => {
   try {
     const { id } = req.params;
-    if (!req.file) return res.status(400).json({ message: "No se subió ningún archivo" });
 
-    const fileBase64 = req.file.buffer.toString("base64");
-    const mimeType = req.file.mimetype;
-    const dataURI = `data:${mimeType};base64,${fileBase64}`;
+    if (!req.file) {
+      return res.status(400).json({ message: "No se subió ningún archivo" });
+    }
 
-    const result = await cloudinary.uploader.upload(dataURI, { folder: "atributos" });
+    // 👇 directamente subimos con nuestro helper (ya convierte a WebP y optimiza)
+    const result = await uploadImage(req.file.buffer, "atributos");
 
+    // Guardar en la BD
     const image = await prisma.image.create({
       data: {
         url: result.secure_url,
-        atributos: { connect: { id: parseInt(id) } }, // relaciona la imagen con el atributo
+        atributos: { connect: { id: parseInt(id) } },
       },
+      include: { atributos: true }, // opcional
     });
 
     res.status(201).json(image);
@@ -57,5 +59,7 @@ router.post("/:id/upload-image", upload, async (req, res) => {
     res.status(500).json({ message: "Error al subir imagen", error });
   }
 });
+
+
 
 module.exports = router;

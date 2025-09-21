@@ -1,5 +1,5 @@
 const prisma = require("./prisma"); // ruta correcta a tu cliente Prisma
-const cloudinary = require("../config/cloudinary");
+const { uploadImage } = require("../config/cloudinary");
 // Crear un nuevo atributo
 const uploadAtributoImage = async (req, res) => {
   try {
@@ -7,34 +7,31 @@ const uploadAtributoImage = async (req, res) => {
 
     if (!req.file) return res.status(400).json({ message: "No se subió imagen" });
 
-    const result = await cloudinary.uploader.upload(req.file.path, { folder: "atributos" });
+    // Usamos el buffer directo (gracias a memoryStorage)
+    const result = await uploadImage(req.file.buffer, "atributos");
 
     const updatedImage = await prisma.image.create({
-  data: {
-    url: result.secure_url,
-    atributos: { connect: { id: parseInt(id) } }, // plural 'atributos'
-  },
-});
-
+      data: {
+        url: result.secure_url,
+        atributos: { connect: { id: parseInt(id) } },
+      },
+    });
 
     res.status(201).json(updatedImage);
   } catch (error) {
-    console.error(error);
+    console.error("❌ Error al subir imagen:", error);
     res.status(500).json({ message: "Error al subir imagen" });
   }
 };
 
+// 📌 Crear un atributo (con posible imagen asociada)
 const createAtributo = async (req, res) => {
   try {
     const { nombre, valor, equipoId, userId } = req.body;
 
     let imagesData = [];
     if (req.file) {
-      const fileBase64 = req.file.buffer.toString("base64");
-      const mimeType = req.file.mimetype;
-      const dataURI = `data:${mimeType};base64,${fileBase64}`;
-
-      const result = await cloudinary.uploader.upload(dataURI, { folder: "atributos" });
+      const result = await uploadImage(req.file.buffer, "atributos");
       imagesData.push({ url: result.secure_url });
     }
 
@@ -55,8 +52,6 @@ const createAtributo = async (req, res) => {
     res.status(500).json({ message: "Error al crear atributo" });
   }
 };
-
-
 
 
 // Obtener todos los atributos

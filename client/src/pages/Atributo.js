@@ -171,23 +171,29 @@ if (newRow.imagen) formData.append("image", newRow.imagen);
   formData.append("image", file);
 
   try {
-    await axios.post(`${process.env.REACT_APP_API_URL}atributos/${atr.id}/upload-image`, formData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data"
-      }
-    });
+    const res = await axios.post(
+  `${process.env.REACT_APP_API_URL}atributos/${atr.id}/upload-image`,
+  formData,
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  }
+);
 
-    Swal.fire("Actualizado", "Imagen subida correctamente", "success");
+Swal.fire("Actualizado", "Imagen subida correctamente", "success");
 
-    // ⚡ Actualizar solo ese atributo en el estado
-    setAtributos(prev =>
-      prev.map(a =>
-        a.id === atr.id
-          ? { ...a, images: [{ url: URL.createObjectURL(file) }] } // temporalmente mostrar la imagen subida
-          : a
-      )
-    );
+// ⚡ Actualizar solo ese atributo en el estado
+setAtributos(prev =>
+  prev.map(a =>
+    a.id === atr.id
+      ? { ...a, images: [...(a.images || []), res.data] } // 👈 ahora sí existe res.data
+      : a
+  )
+);
+
+
 
     // opcional: refrescar desde backend si quieres la URL real
     // const res = await axios.get(`${process.env.REACT_APP_API_URL}atributos/${atr.id}`);
@@ -474,14 +480,15 @@ if (newRow.imagen) formData.append("image", newRow.imagen);
 
     // Abrir selector de archivo
     Swal.fire({
-      title: 'Subir imagen',
-      input: 'file',
-      inputAttributes: { accept: 'image/*', 'aria-label': 'Subir imagen' },
-      showCancelButton: true
-    }).then(result => {
-      const file = result?.value?.[0];
-      if (file) handleUploadImage(atr, file);
-    });
+  title: 'Subir imagen',
+  input: 'file',
+  inputAttributes: { accept: 'image/*', 'aria-label': 'Subir imagen' },
+  showCancelButton: true
+}).then(result => {
+  const file = result.value; // 👈 es el File directamente
+  if (file) handleUploadImage(atr, file);
+});
+
   }}
   className={`text-white px-3 py-1 rounded ${
     atr.images?.[0]?.url ? "bg-purple-600 hover:bg-purple-700" : "bg-orange-500 hover:bg-orange-600"

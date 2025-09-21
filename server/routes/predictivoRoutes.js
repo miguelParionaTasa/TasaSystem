@@ -1,6 +1,6 @@
 const express = require("express");
 const upload = require("../config/multer");
-const cloudinary = require("../config/cloudinary");
+const { uploadImage } = require("../config/cloudinary"); // helper centralizado
 const prisma = require("../controllers/prisma");
 const {
   createPredictivo,
@@ -25,31 +25,32 @@ router.delete("/:id", deletePredictivo);
 router.post("/:id/upload-image", upload, async (req, res) => {
   try {
     const { id } = req.params;
-    if (!req.file) return res.status(400).json({ message: "No se subió ningún archivo" });
+    const predictivoId = parseInt(id);
 
-    // Convertir buffer a base64 y formar un Data URI
-    const fileBase64 = req.file.buffer.toString("base64");
-    const mimeType = req.file.mimetype; // ej: "image/png"
-    const dataURI = `data:${mimeType};base64,${fileBase64}`;
+    if (isNaN(predictivoId)) {
+      return res.status(400).json({ message: "ID inválido" });
+    }
 
-    // Subir a Cloudinary
-    const result = await cloudinary.uploader.upload(dataURI, { folder: "predictivos" });
+    if (!req.file) {
+      return res.status(400).json({ message: "No se subió ningún archivo" });
+    }
 
-    // Guardar la URL en Prisma
+    // 👇 Subir usando helper que convierte a WebP optimizado
+    const result = await uploadImage(req.file.buffer, "predictivos");
+
+    // Guardar en la BD
     const image = await prisma.image.create({
-  data: {
-    url: result.secure_url,
-    predictivos: {
-      connect: { id: parseInt(id) }, // relaciona la imagen con el predictivo existente
-    },
-  },
-});
-
+      data: {
+        url: result.secure_url,
+        predictivos: { connect: { id: predictivoId } },
+      },
+      include: { predictivos: true }, // opcional, si quieres devolver relación
+    });
 
     res.status(201).json(image);
   } catch (error) {
     console.error("❌ Error al subir imagen:", error);
-    res.status(500).json({ message: "Error al subir imagen", error });
+    res.status(500).json({ message: "Error al subir imagen" });
   }
 });
 
