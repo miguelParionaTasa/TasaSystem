@@ -98,39 +98,32 @@ if (newRow.imagen) formData.append("image", newRow.imagen);
 
 
   // === Guardar edición ===
-  const handleSaveEdit = async atr => {
+  const handleSaveEdit = async (atr) => {
+  try {
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+
     const cambios = {};
     if (atr.nombre !== editedData.nombre) cambios.nombre = editedData.nombre;
     if (atr.valor !== editedData.valor) cambios.valor = editedData.valor;
+    cambios.userId = Number(userId);
 
-    if (Object.keys(cambios).length === 0) {
-      Swal.fire("Sin cambios", "No se realizaron cambios", "info");
-      setEditingId(null);
-      return;
-    }
+    await axios.put(
+      `${process.env.REACT_APP_API_URL}atributos/${atr.id}`,
+      cambios,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
 
-    const result = await Swal.fire({
-      title: "¿Confirmar cambios?",
-      text: `Se realizarán cambios en el atributo`,
-      icon: "info",
-      showCancelButton: true,
-      confirmButtonText: "Guardar",
-    });
+    Swal.fire("Éxito", "Atributo actualizado correctamente", "success");
+    setEditingId(null);         // 👈 antes usabas setEditingAtributo
+    await handleSubmit();       // 👈 refresca la tabla
+  } catch (error) {
+    console.error("Error al actualizar atributo:", error);
+    Swal.fire("Error", "No se pudo actualizar el atributo", "error");
+  }
+};
 
-    if (result.isConfirmed) {
-      try {
-        await axios.put(`${process.env.REACT_APP_API_URL}atributos/${atr.id}`, cambios, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        Swal.fire("Actualizado", "El atributo fue actualizado", "success");
-        setEditingId(null);
-        handleSubmit();
-      } catch (error) {
-        console.error(error);
-        Swal.fire("Error", "No se pudo actualizar el atributo", "error");
-      }
-    }
-  };
+
 
   // === Eliminar atributo ===
   const handleDelete = async atr => {
@@ -442,68 +435,91 @@ setAtributos(prev =>
                     ) : atr.valor}
                   </td>
                   <td className="border">
-                    <div className="flex gap-2 justify-center">
-                      {editingId === atr.id ? (
-                        <button onClick={() => handleSaveEdit(atr)} className="bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700">Guardar</button>
-                      ) : (
-                        <>
-                          <button onClick={() => {
-                            if (userId !== atr.userId) {
-  return Swal.fire(
-    "No permitido",
-    `Este atributo fue creado por ${atr.user.firstName} ${atr.user.lastName} y no puedes modificarlo`,
-    "error"
-  );
-}
- setEditingId(atr.id);
-                            setEditedData({ nombre: atr.nombre, valor: atr.valor });
-                          }} className="text-blue-600 hover:underline">Editar</button>
+  <div className="flex gap-2 justify-center">
+    {editingId === atr.id ? (
+      <>
+        <button
+          onClick={() => handleSaveEdit(atr)}
+          className="bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700"
+        >
+          Guardar
+        </button>
+        <button
+          onClick={() => {
+            setEditingId(null);
+            setEditedData({});
+          }}
+          className="bg-gray-500 text-white px-2 py-1 rounded hover:bg-gray-600"
+        >
+          Cancelar
+        </button>
+      </>
+    ) : (
+      <>
+        <button
+          onClick={() => {
+            if (userId !== atr.userId) {
+              return Swal.fire(
+                "No permitido",
+                `Este atributo fue creado por ${atr.user.firstName} ${atr.user.lastName} y no puedes modificarlo`,
+                "error"
+              );
+            }
+            setEditingId(atr.id);
+            setEditedData({ nombre: atr.nombre, valor: atr.valor });
+          }}
+          className="text-blue-600 hover:underline"
+        >
+          Editar
+        </button>
 
-                          <button onClick={() => handleDelete(atr)} className="text-red-600 hover:underline">Eliminar</button>
+        <button
+          onClick={() => handleDelete(atr)}
+          className="text-red-600 hover:underline"
+        >
+          Eliminar
+        </button>
 
-                         <button
-  onClick={() => {
-    // Si hay imagen, cualquier usuario puede verla
-    if (atr.images?.[0]?.url) {
-      setModalImage(atr.images[0].url);
-      return;
-    }
+        <button
+          onClick={() => {
+            // Si hay imagen, cualquier usuario puede verla
+            if (atr.images?.[0]?.url) {
+              setModalImage(atr.images[0].url);
+              return;
+            }
 
-    // Si no hay imagen, solo el creador puede subirla
-    if (userId !== atr.userId) {
-      return Swal.fire(
-        "No permitido",
-        `Este atributo fue creado por ${atr.user.firstName} ${atr.user.lastName} y no puedes subir imagen`,
-        "error"
-      );
-    }
+            // Si no hay imagen, solo el creador puede subirla
+            if (userId !== atr.userId) {
+              return Swal.fire(
+                "No permitido",
+                `Este atributo fue creado por ${atr.user.firstName} ${atr.user.lastName} y no puedes subir imagen`,
+                "error"
+              );
+            }
 
-    // Abrir selector de archivo
-    Swal.fire({
-  title: 'Subir imagen',
-  input: 'file',
-  inputAttributes: { accept: 'image/*', 'aria-label': 'Subir imagen' },
-  showCancelButton: true
-}).then(result => {
-  const file = result.value; // 👈 es el File directamente
-  if (file) handleUploadImage(atr, file);
-});
+            Swal.fire({
+              title: "Subir imagen",
+              input: "file",
+              inputAttributes: { accept: "image/*", "aria-label": "Subir imagen" },
+              showCancelButton: true,
+            }).then((result) => {
+              const file = result.value;
+              if (file) handleUploadImage(atr, file);
+            });
+          }}
+          className={`text-white px-3 py-1 rounded ${
+            atr.images?.[0]?.url
+              ? "bg-purple-600 hover:bg-purple-700"
+              : "bg-orange-500 hover:bg-orange-600"
+          }`}
+        >
+          {atr.images?.[0]?.url ? "Ver Imagen" : "Subir Imagen"}
+        </button>
+      </>
+    )}
+  </div>
+</td>
 
-  }}
-  className={`text-white px-3 py-1 rounded ${
-    atr.images?.[0]?.url ? "bg-purple-600 hover:bg-purple-700" : "bg-orange-500 hover:bg-orange-600"
-  }`}
->
-  {atr.images?.[0]?.url ? "Ver Imagen" : "Subir Imagen"}
-</button>
-
-
-
-
-  </>
-                      )}
-                    </div>
-                  </td>
                 </tr>
               ))}
 

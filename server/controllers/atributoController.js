@@ -127,15 +127,16 @@ const updateAtributo = async (req, res) => {
       return res.status(404).json({ message: "Atributo no encontrado" });
     }
 
-    // Guardar historial
+    // Guardar historial antes de actualizar
     await prisma.atributoHistorial.create({
-      data: {
-        atributoId: atributoActual.id,
-        valorAnterior: atributoActual.valor,
-        valorNuevo: valor,
-        userId,
-      },
-    });
+  data: {
+    atributo: { connect: { id: atributoActual.id } },
+    valorAnterior: atributoActual.valor?.toString() ?? "",
+    valorNuevo: valor?.toString() ?? atributoActual.valor?.toString() ?? "",
+    user: { connect: { id: Number(userId) } }, // 👈 conversión segura
+  }
+});
+
 
     const updatedAtributo = await prisma.atributo.update({
       where: { id: parseInt(id) },
