@@ -94,19 +94,33 @@ useEffect(() => {
   };
 
   // === Guardar nueva fila con imagen ===
-  const handleSaveNew = async () => {
-  if (!filter.equipo || !newRow?.nombre || !newRow?.valor) {
-    Swal.fire("Error", "Completa todos los campos", "error");
+  // Estado para evitar múltiples clics
+const [saving, setSaving] = useState(false);
+
+// === Guardar nueva fila con imagen ===
+const handleSaveNew = async () => {
+  if (!filter.equipo) {
+    Swal.fire("Error", "No hay equipo seleccionado", "error");
+    return;
+  }
+  if (!newRow?.nombre?.trim()) {
+    Swal.fire("Error", "Falta ingresar el nombre del atributo", "error");
+    return;
+  }
+  if (!newRow?.valor?.trim()) {
+    Swal.fire("Error", "Falta ingresar el valor del atributo", "error");
     return;
   }
 
-const formData = new FormData();
-formData.append("nombre", newRow.nombre);
-formData.append("valor", newRow.valor);
-formData.append("equipoId", filter.equipo);
-formData.append("userId", userId);
-if (newRow.imagen) formData.append("image", newRow.imagen); 
+  if (saving) return; // 🚫 evita doble clic
+  setSaving(true);
 
+  const formData = new FormData();
+  formData.append("nombre", newRow.nombre.trim());
+  formData.append("valor", newRow.valor.trim());
+  formData.append("equipoId", filter.equipo);
+  formData.append("userId", userId);
+  if (newRow.imagen) formData.append("image", newRow.imagen);
 
   try {
     await axios.post(`${process.env.REACT_APP_API_URL}atributos`, formData, {
@@ -116,13 +130,17 @@ if (newRow.imagen) formData.append("image", newRow.imagen);
       },
     });
 
-    Swal.fire("Añadido", "El atributo fue creado", "success");
+    Swal.fire("Añadido", "El atributo fue creado correctamente", "success");
     setNewRow(null);
     handleSubmit(new Event("submit"));
   } catch (error) {
     console.error("Error al crear atributo:", error.response || error);
+    Swal.fire("Error", "No se pudo guardar el atributo", "error");
+  } finally {
+    setSaving(false); // 🔓 libera el botón
   }
 };
+
 
 
 
@@ -332,11 +350,15 @@ setAtributos(prev =>
       </td>
       <td className="border">
         <button
-          onClick={handleSaveNew}
-          className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700 w-full"
-        >
-          Guardar
-        </button>
+  onClick={handleSaveNew}
+  disabled={saving} // 🚫 bloquea mientras guarda
+  className={`${
+    saving ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700"
+  } text-white px-4 py-1 rounded w-full`}
+>
+  {saving ? "Guardando..." : "Guardar"}
+</button>
+
       </td>
     </tr>
   </>

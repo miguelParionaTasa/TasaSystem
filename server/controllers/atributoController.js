@@ -1,5 +1,6 @@
 const prisma = require("./prisma"); // ruta correcta a tu cliente Prisma
-const { uploadImage } = require("../config/cloudinary");
+const { cloudinary, uploadImage } = require("../config/cloudinary");
+
 // Crear un nuevo atributo
 const uploadAtributoImage = async (req, res) => {
   try {
