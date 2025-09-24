@@ -190,14 +190,19 @@ const deleteAtributo = async (req, res) => {
       await deleteImageFromUrl(img.url);
     }
 
-    // Eliminar imágenes de la base de datos asociadas a este atributo
+    // Eliminar imágenes en la BD
     await prisma.image.deleteMany({
       where: {
         atributos: { some: { id: atributo.id } }
       }
     });
 
-    // Finalmente, eliminar el atributo
+    // 🔹 Eliminar historial asociado
+    await prisma.atributoHistorial.deleteMany({
+      where: { atributoId: atributo.id },
+    });
+
+    // Finalmente eliminar el atributo
     await prisma.atributo.delete({ where: { id: atributo.id } });
 
     res.status(204).send();
@@ -206,7 +211,6 @@ const deleteAtributo = async (req, res) => {
     res.status(500).json({ message: "Error al eliminar atributo" });
   }
 };
-
 
 
 
