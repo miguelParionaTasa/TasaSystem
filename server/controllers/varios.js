@@ -60,31 +60,36 @@ const getUbicacionesPorZona = async (req, res) => {
   }
 
   try {
-    // Filtramos las ubicaciones basadas en zonaId
+    // Filtramos las ubicaciones que pertenecen a la zona y que tengan equipos asociados
     const ubicaciones = await prisma.ubicacion.findMany({
       where: {
-        zonaId: parseInt(zonaId), // Filtramos por zonaId
+        zonaId: parseInt(zonaId),
+        equipos: {
+          some: {}, // Solo ubicaciones con al menos un equipo
+        },
       },
       include: {
         zona: true, // Incluir la relación con zona
-        equipos: true, // Incluir la relación con equipos si es necesario
+        equipos: true, // Incluir la relación con equipos
         ots: true, // Incluir la relación con Ots si es necesario
       },
     });
 
-    // Si no hay ubicaciones, respondemos con un mensaje adecuado
     if (ubicaciones.length === 0) {
       return res
         .status(404)
-        .json({ message: "No se encontraron ubicaciones para esta zona" });
+        .json({
+          message: "No se encontraron ubicaciones con equipos en esta zona",
+        });
     }
 
-    res.status(200).json(ubicaciones); // Retornamos las ubicaciones encontradas
+    res.status(200).json(ubicaciones);
   } catch (error) {
     console.error("Error al obtener ubicaciones por zona:", error);
     res.status(500).json({ message: "Error al obtener ubicaciones por zona" });
   }
 };
+
 module.exports = {
   getAllAreas,
   getAllZonas,

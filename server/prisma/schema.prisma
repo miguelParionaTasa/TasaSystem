@@ -23,6 +23,12 @@ model User {
   area              Area                @relation(fields: [areaId], references: [id])
   Atributo          Atributo[]
   AtributoHistorial AtributoHistorial[]
+   procesos          Procesos[]
+   procesosHistorial ProcesosHistorial[]
+   activo          Activo[]
+   activoHistorial ActivoHistorial[]
+   clinica          Clinica[]
+   clinicaHistorial ClinicaHistorial[]
   // Relación inversa (opcional si quieres ver quiénes han sido responsables)
   inventarioItems   InventarioItem[]   @relation("ResponsableInventario")
 }
@@ -97,18 +103,20 @@ model Zona {
 }
 
 model Ubicacion {
-  id           Int        @id @default(autoincrement())
-  name         String
-  nombreMaximo String
-  zonaId       Int
-  equipos      Equipo[]
-  OTbasico     OTbasico[]
-  ots          Ots[]
-  zona         Zona       @relation(fields: [zonaId], references: [id])
-  historico    Historico[]
+  id            Int           @id @default(autoincrement())
+  name          String
+  nombreMaximo  String
+  zonaId        Int
+  equipos       Equipo[]
+  OTbasico      OTbasico[]
+  ots           Ots[]
+  zona          Zona          @relation(fields: [zonaId], references: [id])
+  historico     Historico[]
   lubricaciones Lubricacion[]
-    predictivos  Predictivo[]   // 👈 inversa aquí
+  predictivos   Predictivo[]
+  procesos      Procesos[]     // 🔹 inversa nueva
 }
+
 
 
 model Lubricacion {
@@ -161,7 +169,61 @@ model Atributo {
   images            Image[]             @relation("AtributoImage")
 }
 
+model Clinica {
+  id                Int                 @id @default(autoincrement())
+  nombre            String
+  valor             String?
+  userId            Int?
+  equipoId          Int                 // ✅ ahora depende de componente
+  user              User?               @relation(fields: [userId], references: [id])
+  equipo            Equipo          @relation(fields: [equipoId], references: [id])
+  ClinicaHistorial ClinicaHistorial[]
+  images            Image[]             @relation("ClinicaImage")
+}
 
+model ClinicaHistorial {
+  id            Int      @id @default(autoincrement())
+  clinicaId    Int
+  valorAnterior String?
+  valorNuevo    String?
+  userId        Int
+  fechaCambio   DateTime @default(now())
+  clinica      Clinica @relation(fields: [clinicaId], references: [id])
+  user          User     @relation(fields: [userId], references: [id])
+}
+
+model Activo {
+  id              Int               @id @default(autoincrement())
+  nombre          String
+  valor           String?
+  valor2          String?           // 💡 segundo valor adicional
+  marca           String?           // 💡 marca del activo
+  modelo          String?           // 💡 modelo del activo
+  serie           String?           // 💡 número de serie
+  zona            String?           // 💡 texto libre (no relacionado a tabla)
+  ubicacion       String?           // 💡 texto libre (no relacionado a tabla)
+
+  userId          Int?
+  equipoId        Int?              // ⚙️ ahora es opcional, ya no es restrictivo
+
+  user            User?             @relation(fields: [userId], references: [id])
+  equipo          Equipo?           @relation(fields: [equipoId], references: [id])
+
+  activoHistorial ActivoHistorial[]
+  images          Image[]           @relation("ActivoImage")
+}
+
+
+model ActivoHistorial {
+  id            Int      @id @default(autoincrement())
+  activoId    Int
+  valorAnterior String?
+  valorNuevo    String?
+  userId        Int
+  fechaCambio   DateTime @default(now())
+  activo      Activo @relation(fields: [activoId], references: [id])
+  user          User     @relation(fields: [userId], references: [id])
+}
 
 model AtributoHistorial {
   id            Int      @id @default(autoincrement())
@@ -202,6 +264,8 @@ model Equipo {
   ots            Ots[]
   images         Image[]      @relation("EquipoImage")
     predictivos  Predictivo[]   // 👈 inversa aquí
+    activo  Activo[] 
+    clinica  Clinica[] 
 }
 
 model Image {
@@ -214,8 +278,11 @@ model Image {
   equiposs     Equipo[]       @relation("EquipoImage")
   repuestoss   Repuesto[]     @relation("RepuestoImage")
   atributos    Atributo[]     @relation("AtributoImage") // Nueva relación con Atributo
+   clinica    Clinica[]     @relation("ClinicaImage")
+   activo    Activo[]     @relation("ActivoImage")
    lubricaciones   Lubricacion[]  @relation("LubricacionImage") // inversa aquí
 predictivos    Predictivo[]   @relation("PredictivoImage") // 👈 inversa aquí
+ procesos        Procesos[]       @relation("ProcesosImage")
 }
 
  
@@ -312,3 +379,27 @@ model Predictivo {
   images     Image[]   @relation("PredictivoImage")
 }
 
+model Procesos {
+  id                Int                 @id @default(autoincrement())
+  nombre            String
+  valor             String?
+  userId            Int?
+  ubicacionId       Int?                // 🔹 ahora depende de ubicación
+  user              User?               @relation(fields: [userId], references: [id])
+  ubicacion         Ubicacion?          @relation(fields: [ubicacionId], references: [id])
+  ProcesosHistorial ProcesosHistorial[]
+  images            Image[]             @relation("ProcesosImage")
+}
+
+
+
+model ProcesosHistorial {
+  id              Int       @id @default(autoincrement())
+  procesoId       Int
+  valorAnterior   String?
+  valorNuevo      String?
+  userId          Int
+  fechaCambio     DateTime  @default(now())
+  proceso         Procesos  @relation(fields: [procesoId], references: [id])
+  user            User      @relation(fields: [userId], references: [id])
+}

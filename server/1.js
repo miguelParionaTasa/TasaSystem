@@ -4,37 +4,16 @@ const prisma = new PrismaClient();
 
 async function main() {
   try {
-    const registros = [
-      {
-        name: "TPSU SepSol#2 Alfa Laval FPNX 934 (XXXX H)",
-        Temp: "CHIV2-25",
-        OTmaximo: "715045",
-        estado: "APPR",
-        zonaId: 9,
-        ubicacionId: 271,
-        tecnico1: "Operador",
-        tecnico2: ""
+    // Eliminar activos con ID entre 964 y 967
+    const deleted = await prisma.activo.deleteMany({
+      where: {
+        id: { in: [964, 965, 966, 967] },
       },
-      {
-        name: "Caldero #1 VALV. REG GAS Mtto y Calib",
-        Temp: "CHIV2-25",
-        OTmaximo: "730720",
-        estado: "APPR",
-        zonaId: 11,
-        ubicacionId: 379,
-        tecnico1: "Operador",
-        tecnico2: ""
-      }
-    ];
-
-    const result = await prisma.OTbasico.createMany({
-      data: registros,
-      skipDuplicates: true, // evita error si el OTmaximo ya existe (porque es único)
     });
 
-    console.log(`✅ Registros insertados: ${result.count}`);
+    console.log(`✅ Se eliminaron ${deleted.count} activos.`);
   } catch (error) {
-    console.error("❌ Error al crear registros:", error);
+    console.error("❌ Error al eliminar activos:", error);
   } finally {
     await prisma.$disconnect();
   }

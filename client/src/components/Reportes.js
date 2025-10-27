@@ -203,61 +203,86 @@ const applyFilters = () => {
       <h2 className="text-2xl font-semibold mb-4 text-gray-800 p-2">Filtrar Componentes</h2>
 
       {/* filtros */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6 flex-wrap overflow-x-auto">
-        
-        <input 
-          type="text"
-          name="descripcion"
-          value={filters.descripcion}
-          onChange={handleFilterChange}
-          placeholder="Buscar por descripción..."
-          className="border p-2 rounded w-full sm:w-1/5 "
-        />
-
-        <select
-          name="zonaId"
-          value={filters.zonaId}
-          onChange={handleFilterChange}
-          className="border p-2 rounded w-full sm:w-1/6"
-        >
-          <option value="">Seleccionar zona</option>
-          {zonas.map((zona) => (
-            <option key={zona.id} value={zona.id}>{zona.name}</option>
-          ))}
-        </select>
-
-        <select
-          name="ubicacionId"
-          value={filters.ubicacionId}
-          onChange={handleFilterChange}
-          className="border p-2 rounded w-full sm:w-1/5 "
-          disabled={!filters.zonaId}
-        >
-          <option value="">Sin seleccionar</option>
-          {ubicaciones.map((ubicacion) => (
-            <option key={ubicacion.id} value={ubicacion.id}>{ubicacion.name}</option>
-          ))}
-        </select>
-
-        <select
-  name="hayPedidos"
-  value={filters.hayPedidos}
-  onChange={handleFilterChange}
-  className="border p-2 rounded w-full sm:w-1/6 "
->
-  <option value="">Todos</option>
-  <option value="Si">Sí</option>
-  <option value="No">No</option>
-</select>
+<div className="p-4 max-w-screen-xl mx-auto">
 
 
-        <button
-          onClick={applyFilters}
-          className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded w-full sm:w-1/5"
-        >
-          Filtrar
-        </button>
-      </div>
+  <div className="flex flex-col sm:flex-row sm:items-end gap-4 mb-6 flex-wrap overflow-x-auto">
+
+    {/* 🔹 Descripción */}
+    <div className="flex flex-col w-full sm:w-1/5">
+      <label className="text-sm font-medium text-gray-700 mb-1">Descripción</label>
+      <input 
+        type="text"
+        name="descripcion"
+        value={filters.descripcion}
+        onChange={handleFilterChange}
+        placeholder="Buscar por descripción..."
+        className="border p-2 rounded"
+      />
+    </div>
+
+    {/* 🔹 Zona */}
+    <div className="flex flex-col w-full sm:w-1/6">
+      <label className="text-sm font-medium text-gray-700 mb-1">Zona</label>
+      <select
+        name="zonaId"
+        value={filters.zonaId}
+        onChange={handleFilterChange}
+        className="border p-2 rounded"
+      >
+        <option value="">Seleccionar zona</option>
+        {zonas.map((zona) => (
+          <option key={zona.id} value={zona.id}>{zona.name}</option>
+        ))}
+      </select>
+    </div>
+
+    {/* 🔹 Ubicación */}
+    <div className="flex flex-col w-full sm:w-1/5">
+      <label className="text-sm font-medium text-gray-700 mb-1">Ubicación</label>
+      <select
+        name="ubicacionId"
+        value={filters.ubicacionId}
+        onChange={handleFilterChange}
+        className="border p-2 rounded"
+        disabled={!filters.zonaId}
+      >
+        <option value="">Sin seleccionar</option>
+        {ubicaciones.map((ubicacion) => (
+          <option key={ubicacion.id} value={ubicacion.id}>{ubicacion.name}</option>
+        ))}
+      </select>
+    </div>
+
+    {/* 🔹 Hay pedidos */}
+    <div className="flex flex-col w-full sm:w-1/6">
+      <label className="text-sm font-medium text-gray-700 mb-1">¿Tiene avance?</label>
+      <select
+        name="hayPedidos"
+        value={filters.hayPedidos}
+        onChange={handleFilterChange}
+        className="border p-2 rounded"
+      >
+        <option value="">Todos</option>
+        <option value="Si">Sí</option>
+        <option value="No">No</option>
+      </select>
+    </div>
+
+    {/* 🔹 Botón Filtrar */}
+    <div className="flex flex-col w-full sm:w-1/5">
+      <label className="text-sm font-medium text-transparent mb-1">.</label>
+      <button
+        onClick={applyFilters}
+        className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded"
+      >
+        Filtrar
+      </button>
+    </div>
+
+  </div>
+</div>
+
 
       {/* resultados */}
       <h2 className="text-2xl font-semibold mb-4 text-gray-800">Resultados</h2>

@@ -10,9 +10,12 @@ import Lubricante from "./pages/LubricacionesPage";
 import Reportes from "./components/Reportes";
 import General from "./pages/General";
 import Historico from "./pages/Historico";
+import Clinica from "./pages/Clinica";
 import Materiales from "./pages/Materiales"; // Nueva página
 import useAuth from "./hooks/useAuth";
 import Atributo from "./pages/Atributo";
+import Activo from "./pages/Activo";
+import Proceso from "./pages/Proceso";
 import Predictivo from "./pages/Predictivo"; // 👈 Import nuevo
 
 // Componente para proteger rutas
@@ -43,10 +46,13 @@ const App = () => {
     { path: "/reporte", element: <Reportes /> },
     { path: "/general", element: <General /> },
     { path: "/historico", element: <Historico /> },
+        { path: "/activo", element: <Activo /> },
+                { path: "/clinica", element: <Clinica /> },
     { path: "/inventario", element: <Inventario /> },
     { path: "/lubricante", element: <Lubricante /> },
     { path: "/materiales", element: <Materiales /> },
     { path: "/atributo", element: <Atributo /> },  // Añadida
+    { path: "/proceso", element: <Proceso /> },
         { path: "/predictivo", element: <Predictivo /> }, // 👈 Añadida
   ];
 

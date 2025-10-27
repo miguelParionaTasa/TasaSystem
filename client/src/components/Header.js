@@ -110,7 +110,13 @@ const puedeVerLubricante = storedUserId === "1";
               onClick={() => handleNavigate("/atributo")}
               className="block w-full text-left px-4 py-2 hover:bg-blue-300"
             >
-              Atributos
+              Datos técnicos
+            </button>
+              <button
+              onClick={() => handleNavigate("/proceso")}
+              className="block w-full text-left px-4 py-2 hover:bg-blue-300"
+            >
+              Procesos
             </button>
             <button
               onClick={() => handleNavigate("/predictivo")}
@@ -124,6 +130,19 @@ const puedeVerLubricante = storedUserId === "1";
                 >
                   Histórico
                 </button>
+                <button
+                  onClick={() => handleNavigate("/activo")}
+                  className="block w-full text-left px-4 py-2 hover:bg-blue-300"
+                >
+                  Activos
+                </button>
+                  <button
+                  onClick={() => handleNavigate("/clinica")}
+                  className="block w-full text-left px-4 py-2 hover:bg-blue-300"
+                >
+                  Clínica
+                </button>
+                
                   <button
                   onClick={() => handleNavigate("/inventario")}
                   className="block w-full text-left px-4 py-2 hover:bg-blue-300"
@@ -227,7 +246,13 @@ const puedeVerLubricante = storedUserId === "1";
               onClick={() => handleNavigate("/atributo")}
               className="block w-full text-left text-lg hover:bg-blue-300 px-2 py-1 rounded"
             >
-              Atributos
+              Datos técnicos
+            </button>
+            <button
+              onClick={() => handleNavigate("/proceso")}
+              className="block w-full text-left text-lg hover:bg-blue-300 px-2 py-1 rounded"
+            >
+              Procesos
             </button>
             <button
               onClick={() => handleNavigate("/predictivo")}
@@ -241,7 +266,18 @@ const puedeVerLubricante = storedUserId === "1";
             >
               Histórico
             </button>
-
+<button
+              onClick={() => handleNavigate("/activo")}
+              className="block w-full text-left text-lg hover:bg-blue-300 px-2 py-1 rounded"
+            >
+              Activos
+            </button>
+<button
+              onClick={() => handleNavigate("/clinica")}
+              className="block w-full text-left text-lg hover:bg-blue-300 px-2 py-1 rounded"
+            >
+              Clínica
+            </button>
               <button
               onClick={() => handleNavigate("/inventario")}
               className="block w-full text-left text-lg hover:bg-blue-300 px-2 py-1 rounded"

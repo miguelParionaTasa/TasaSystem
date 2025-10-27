@@ -12,6 +12,7 @@ const exportRoutes = require('./routes/export');
 const equipoRoutes = require("./routes/equipoRoutes");
 const componenteRoutes = require("./routes/componenteRoutes");
 const atributoRoutes = require("./routes/atributoRoutes");
+const procesoRoutes = require("./routes/procesoRoutes");
 const otsRoutes = require("./routes/otsRoutes");
 const lubricacionRoutes = require("./routes/lubricacionRoutes");
 const ottRoutes = require("./routes/OTTRoute");
@@ -20,6 +21,9 @@ const otConsumibleRoutes = require("./routes/otConsumibleRoutes");
 const inventarioRoutes = require("./routes/inventarioRoutes");
 const debugRoutes = require('./routes/debugRoutes');
 const predictivoRoutes = require("./routes/predictivoRoutes");
+const activoRoutes = require("./routes/activoRoutes");
+const clinicaRoutes = require("./routes/clinicaRoutes");
+
 // Configuración de la aplicación
 const app = express();
 require('dotenv').config();
@@ -40,6 +44,7 @@ app.use("/varios", variosRoutes);
 app.use("/equipos", equipoRoutes);
 app.use("/componentes", componenteRoutes);
 app.use("/atributos", atributoRoutes);
+app.use("/procesos", procesoRoutes);
 app.use("/ots", otsRoutes);
 app.use("/ott", ottRoutes);
 app.use("/inventario", inventarioRoutes);
@@ -48,6 +53,8 @@ app.use("/lubricacion", lubricacionRoutes);
 app.use("/historico", historicoRoutes);
 app.use('/export', exportRoutes);
 app.use("/predictivos", predictivoRoutes);
+app.use("/activos", activoRoutes);
+app.use("/clinicas", clinicaRoutes);
 
 // Aplicar el middleware de Prisma
 prisma.$use(prismaMiddleware); // Aplica el middleware aquí

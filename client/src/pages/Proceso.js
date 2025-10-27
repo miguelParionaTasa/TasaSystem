@@ -2,29 +2,39 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 
-const Atributo = () => {
+const Proceso = () => {
   const [filter, setFilter] = useState({ zona: "", ubicacion: "", equipo: "" });
   const [zonas, setZonas] = useState([]);
+  const [modalAddVisible, setModalAddVisible] = useState(false);
+
   const [ubicaciones, setUbicaciones] = useState([]);
   const [equipos, setEquipos] = useState([]);
-  const [atributos, setAtributos] = useState([]);
+  const [procesos, setProcesos] = useState([]);
   const [modalImagesVisible, setModalImagesVisible] = useState(false);
-  const [modalImage, setModalImage] = useState(null);
-  const [modalAddVisible, setModalAddVisible] = useState(false);
-  const [newRow, setNewRow] = useState({ nombre: "", valor: "", imagen: null });
-  const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [modalImage, setModalImage] = useState(null);
 
   const [editingId, setEditingId] = useState(null);
   const [editedData, setEditedData] = useState({});
+  const [newRow, setNewRow] = useState(null);
+
+  const handleOpenAddModal = () => {
+  if (!filter.ubicacion) {
+    Swal.fire("Seleccione una ubicación en el filtro", "", "warning");
+    return;
+  }
+  setNewRow({ nombre: "", valor: "", imagen: null });
+  setModalAddVisible(true);
+};
+
   const token = localStorage.getItem("token");
   const userId = parseInt(localStorage.getItem("userId"));
 
-  // === Cargar atributos ===
+  // === Cargar procesos ===
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}atributos`);
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}procesos`);
         const ordenados = res.data.sort((a, b) => {
           const zonaA = a.equipo?.ubicacion?.zona?.name || "";
           const zonaB = b.equipo?.ubicacion?.zona?.name || "";
@@ -38,62 +48,73 @@ const Atributo = () => {
           const eqB = b.equipo?.name || "";
           if (eqA !== eqB) return eqA.localeCompare(eqB);
 
-          const atrA = a.nombre || "";
-          const atrB = b.nombre || "";
-          return atrA.localeCompare(atrB);
+          const procA = a.nombre || "";
+          const procB = b.nombre || "";
+          return procA.localeCompare(procB);
         });
-        setAtributos(ordenados);
+
+        setProcesos(ordenados);
       } catch (err) {
-        console.error("Error al cargar atributos:", err);
+        console.error("Error al cargar procesos:", err);
       }
     };
+
     fetchData();
   }, []);
 
-  // === Cargar filtros ===
+  // === Fetch zonas, ubicaciones y equipos ===
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}varios/zonas`)
-      .then(res => setZonas(res.data))
-      .catch(err => console.error(err));
+    axios
+      .get(`${process.env.REACT_APP_API_URL}varios/zonas`)
+      .then((res) => setZonas(res.data))
+      .catch((err) => console.error(err));
   }, []);
 
   useEffect(() => {
     if (!filter.zona) return setUbicaciones([]);
-    axios.get(`${process.env.REACT_APP_API_URL}varios/ubicaciones/por-zona?zonaId=${filter.zona}`)
-      .then(res => setUbicaciones(res.data))
-      .catch(err => console.error(err));
+    axios
+      .get(`${process.env.REACT_APP_API_URL}varios/ubicaciones/por-zona?zonaId=${filter.zona}`)
+      .then((res) => setUbicaciones(res.data))
+      .catch((err) => console.error(err));
   }, [filter.zona]);
 
   useEffect(() => {
     if (!filter.ubicacion) return setEquipos([]);
-    axios.get(`${process.env.REACT_APP_API_URL}equipos/por-zona/${filter.zona}?ubicacionId=${filter.ubicacion}`)
-      .then(res => setEquipos(res.data))
-      .catch(err => console.error(err));
+    axios
+      .get(`${process.env.REACT_APP_API_URL}equipos/por-zona/${filter.zona}?ubicacionId=${filter.ubicacion}`)
+      .then((res) => setEquipos(res.data))
+      .catch((err) => console.error(err));
   }, [filter.ubicacion, filter.zona]);
 
-  // === Cambiar filtros ===
   const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilter((prev) => {
-      if (name === "zona") return { zona: value, ubicacion: "", equipo: "" };
-      if (name === "ubicacion") return { ...prev, ubicacion: value, equipo: "" };
-      return { ...prev, [name]: value };
-    });
-  };
+  const { name, value } = e.target;
 
-  // === Buscar atributos ===
-  const handleSubmit = async e => {
+  setFilter((prev) => {
+    if (name === "zona") {
+      // 🔹 Cambia zona → resetea ubicación y equipo
+      return { zona: value, ubicacion: "", equipo: "" };
+    }
+    if (name === "ubicacion") {
+      // 🔹 Cambia ubicación → resetea equipo
+      return { ...prev, ubicacion: value, equipo: "" };
+    }
+    return { ...prev, [name]: value };
+  });
+};
+
+
+  const handleSubmit = async (e) => {
     e?.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}atributos/search`, {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}procesos/search`, {
         params: {
           zonaId: filter.zona || undefined,
           ubicacionId: filter.ubicacion || undefined,
           equipoId: filter.equipo || undefined,
         },
       });
-      setAtributos(response.data || []);
+      setProcesos(response.data || []);
     } catch (error) {
       console.error(error);
     } finally {
@@ -101,23 +122,26 @@ const Atributo = () => {
     }
   };
 
-  // === Guardar nuevo atributo ===
+  // === Guardar nueva fila con imagen ===
+  const [saving, setSaving] = useState(false);
+
   const handleSaveNew = async () => {
     if (!filter.equipo) {
       Swal.fire("Error", "No hay equipo seleccionado", "error");
       return;
     }
     if (!newRow?.nombre?.trim()) {
-      Swal.fire("Error", "Falta ingresar el nombre del atributo", "error");
+      Swal.fire("Error", "Falta ingresar el nombre del proceso", "error");
       return;
     }
     if (!newRow?.valor?.trim()) {
-      Swal.fire("Error", "Falta ingresar el valor del atributo", "error");
+      Swal.fire("Error", "Falta ingresar el valor del proceso", "error");
       return;
     }
-    if (saving) return;
 
+    if (saving) return;
     setSaving(true);
+
     const formData = new FormData();
     formData.append("nombre", newRow.nombre.trim());
     formData.append("valor", newRow.valor.trim());
@@ -126,78 +150,68 @@ const Atributo = () => {
     if (newRow.imagen) formData.append("image", newRow.imagen);
 
     try {
-      await axios.post(`${process.env.REACT_APP_API_URL}atributos`, formData, {
+      await axios.post(`${process.env.REACT_APP_API_URL}procesos`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         },
       });
-      Swal.fire("Añadido", "El atributo fue creado correctamente", "success");
-      setNewRow({ nombre: "", valor: "", imagen: null });
-      setModalAddVisible(false);
+
+      Swal.fire("Añadido", "El proceso fue creado correctamente", "success");
+      setNewRow(null);
       handleSubmit(new Event("submit"));
     } catch (error) {
-      console.error("Error al crear atributo:", error.response || error);
-      Swal.fire("Error", "No se pudo guardar el atributo", "error");
+      console.error("Error al crear proceso:", error.response || error);
+      Swal.fire("Error", "No se pudo guardar el proceso", "error");
     } finally {
       setSaving(false);
     }
   };
 
-  // === Abrir modal nuevo atributo ===
-  const handleOpenAddModal = () => {
-    if (!filter.equipo) {
-      Swal.fire("Seleccione equipo en menú filtrar", "", "warning");
-      return;
-    }
-    setModalAddVisible(true);
-  };
-
-  // === Guardar edición existente ===
-  const handleSaveEdit = async (atr) => {
+  // === Guardar edición ===
+  const handleSaveEdit = async (proc) => {
     try {
       const cambios = {};
-      if (atr.nombre !== editedData.nombre) cambios.nombre = editedData.nombre;
-      if (atr.valor !== editedData.valor) cambios.valor = editedData.valor;
+      if (proc.nombre !== editedData.nombre) cambios.nombre = editedData.nombre;
+      if (proc.valor !== editedData.valor) cambios.valor = editedData.valor;
       cambios.userId = Number(userId);
 
-      await axios.put(
-        `${process.env.REACT_APP_API_URL}atributos/${atr.id}`,
-        cambios,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await axios.put(`${process.env.REACT_APP_API_URL}procesos/${proc.id}`, cambios, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-      Swal.fire("Éxito", "Atributo actualizado correctamente", "success");
+      Swal.fire("Éxito", "Proceso actualizado correctamente", "success");
       setEditingId(null);
       await handleSubmit();
     } catch (error) {
-      console.error("Error al actualizar atributo:", error);
-      Swal.fire("Error", "No se pudo actualizar el atributo", "error");
+      console.error("Error al actualizar proceso:", error);
+      Swal.fire("Error", "No se pudo actualizar el proceso", "error");
     }
   };
 
-  // === Eliminar atributo ===
-  const handleDelete = async atr => {
-    if (userId !== atr.userId) {
+  // === Eliminar proceso ===
+  const handleDelete = async (proc) => {
+    if (userId !== proc.userId) {
       return Swal.fire(
         "No permitido",
-        `Este atributo fue creado por ${atr.user.firstName} ${atr.user.lastName} y no puedes eliminarlo`,
+        `Este proceso fue creado por ${proc.user.firstName} ${proc.user.lastName} y no puedes eliminarlo`,
         "error"
       );
     }
+
     const result = await Swal.fire({
       title: "¿Está seguro?",
-      text: `Se eliminará el atributo: ${atr.nombre}`,
+      text: `Se eliminará el proceso: ${proc.nombre}`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Sí, eliminar",
     });
     if (result.isConfirmed) {
       try {
-        await axios.delete(`${process.env.REACT_APP_API_URL}atributos/${atr.id}`, {
+        await axios.delete(`${process.env.REACT_APP_API_URL}procesos/${proc.id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        Swal.fire("Eliminado", "El atributo fue eliminado", "success");
+        Swal.fire("Eliminado", "El proceso fue eliminado", "success");
         handleSubmit();
       } catch (error) {
         console.error(error);
@@ -207,13 +221,15 @@ const Atributo = () => {
   };
 
   // === Subir imagen existente ===
-  const handleUploadImage = async (atr, file) => {
+  const handleUploadImage = async (proc, file) => {
     if (!file) return;
+
     const formData = new FormData();
     formData.append("image", file);
+
     try {
       const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}atributos/${atr.id}/upload-image`,
+        `${process.env.REACT_APP_API_URL}procesos/${proc.id}/upload-image`,
         formData,
         {
           headers: {
@@ -222,12 +238,12 @@ const Atributo = () => {
           },
         }
       );
+
       Swal.fire("Actualizado", "Imagen subida correctamente", "success");
-      setAtributos(prev =>
-        prev.map(a =>
-          a.id === atr.id
-            ? { ...a, images: [...(a.images || []), res.data] }
-            : a
+
+      setProcesos((prev) =>
+        prev.map((p) =>
+          p.id === proc.id ? { ...p, images: [...(p.images || []), res.data] } : p
         )
       );
     } catch (error) {
@@ -236,14 +252,9 @@ const Atributo = () => {
     }
   };
 
-  // === Obtener nombres de zona, ubicación y equipo seleccionados ===
-  const zonaSel = zonas.find(z => z.id === Number(filter.zona));
-  const ubicSel = ubicaciones.find(u => u.id === Number(filter.ubicacion));
-  const equipoSel = equipos.find(e => e.id === Number(filter.equipo));
-
   return (
     <div className="p-4 max-w-screen-xl mx-auto">
-      <h1 className="text-2xl font-bold text-gray-800">Consulta de Datos Técnicos</h1>
+      <h1 className="text-2xl font-bold text-gray-800">Consulta de Procesos</h1>
 
       {/* Formulario de filtro */}
       <form onSubmit={handleSubmit} className="flex flex-wrap items-end gap-4 bg-gray-50 p-4 rounded-md shadow-md mb-6">
@@ -256,15 +267,9 @@ const Atributo = () => {
         </div>
         <div>
           <label className="block font-semibold text-gray-700 mb-2">Ubicación</label>
-       <select
-  name="ubicacion"
-  value={filter.ubicacion}
-  onChange={handleFilterChange}
-  disabled={!filter.zona}
-  className="w-[320px] p-2 border border-gray-300 rounded-md"
->
-  <option value="">Todas las ubicaciones</option>
-  {ubicaciones
+          <select name="ubicacion" value={filter.ubicacion} onChange={handleFilterChange} disabled={!filter.zona} className="w-[320px] p-2 border border-gray-300 rounded-md">
+            <option value="">Todas las ubicaciones</option>
+            {ubicaciones
     .slice() // hace una copia para no mutar el original
     .sort((a, b) => a.name.localeCompare(b.name)) // ordena A-Z por nombre
     .map(u => (
@@ -272,20 +277,13 @@ const Atributo = () => {
         {u.name}
       </option>
     ))}
-</select>
-
+          </select>
         </div>
         <div>
           <label className="block font-semibold text-gray-700 mb-2">Equipo</label>
-          <select
-  name="equipo"
-  value={filter.equipo}
-  onChange={handleFilterChange}
-  disabled={!filter.ubicacion}
-  className="w-[320px] p-2 border border-gray-300 rounded-md"
->
-  <option value="">Todos los equipos</option>
-  {equipos
+          <select name="equipo" value={filter.equipo} onChange={handleFilterChange} disabled={!filter.ubicacion} className="w-[320px] p-2 border border-gray-300 rounded-md">
+            <option value="">Todos los equipos</option>
+            {equipos
     .slice() // copia para no alterar el original
     .sort((a, b) => a.name.localeCompare(b.name)) // orden A-Z
     .map(eq => (
@@ -293,8 +291,7 @@ const Atributo = () => {
         {eq.name}
       </option>
     ))}
-</select>
-
+          </select>
         </div>
         <div className="col-span-3 flex justify-end mt-4">
           <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition">Filtrar</button>
@@ -303,12 +300,13 @@ const Atributo = () => {
 
       {/* Botones de acción */}
       <div className="flex gap-4 mb-4">
-        <button
-  onClick={handleOpenAddModal} // <-- usa tu función que abre el modal
+       <button
+  onClick={handleOpenAddModal}
   className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
 >
-  ➕ Añadir dato Técnico
+  ➕ Añadir proceso
 </button>
+
         <button
     onClick={() => setModalImagesVisible(true)}
     className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
@@ -316,60 +314,7 @@ const Atributo = () => {
     🖼 Ver imágenes
   </button>
       </div>
- {/* === MODAL PARA AGREGAR NUEVO ATRIBUTO === */}
-      {modalAddVisible && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-md p-6 w-full max-w-lg relative shadow-lg">
-            <button
-              onClick={() => setModalAddVisible(false)}
-              className="absolute top-2 right-2 text-gray-700 text-lg font-bold"
-            >
-              ✖
-            </button>
-            <h2 className="text-xl font-semibold mb-4 text-center text-gray-800">
-              ➕ Añadir dato Técnico
-            </h2>
 
-            <p className="text-sm mb-4 text-gray-600">
-              <b>Zona:</b> {zonaSel?.nombreMaximo || "N/A"} <br />
-              <b>Ubicación:</b> {ubicSel?.name || "N/A"} <br />
-              <b>Equipo:</b> {equipoSel?.name || "N/A"}
-            </p>
-
-            <div className="flex flex-col gap-3">
-              <input
-                type="text"
-                value={newRow.nombre}
-                onChange={(e) => setNewRow((prev) => ({ ...prev, nombre: e.target.value }))}
-                placeholder="Nombre del atributo"
-                className="p-2 border rounded w-full"
-              />
-              <input
-                type="text"
-                value={newRow.valor}
-                onChange={(e) => setNewRow((prev) => ({ ...prev, valor: e.target.value }))}
-                placeholder="Valor del atributo"
-                className="p-2 border rounded w-full"
-              />
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => setNewRow((prev) => ({ ...prev, imagen: e.target.files[0] }))}
-                className="p-2 border rounded w-full"
-              />
-              <button
-                onClick={handleSaveNew}
-                disabled={saving}
-                className={`${
-                  saving ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700"
-                } text-white px-4 py-2 rounded w-full`}
-              >
-                {saving ? "Guardando..." : "Guardar atributo"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
       {/* Tabla */}
       {loading ? (
         <p className="text-center mt-4">Cargando...</p>
@@ -381,13 +326,89 @@ const Atributo = () => {
                 <th className="py-2 px-4 border border-gray-400">Zona</th>
                 <th className="py-2 px-4 border border-gray-400">Ubicación</th>
                 <th className="py-2 px-4 border border-gray-400">Equipo</th>
-                <th className="py-2 px-4 border border-gray-400">Atributo</th>
+                <th className="py-2 px-4 border border-gray-400">proceso</th>
                 <th className="py-2 px-4 border border-gray-400">Valor</th>
                 <th className="py-2 px-4 border border-gray-400">Acciones</th>
               </tr>
             </thead>
             <tbody className="bg-gray-100">
               
+           {modalAddVisible && (
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+    <div className="bg-white p-6 rounded-2xl w-[440px] shadow-lg relative">
+
+      {/* Botón de cierre */}
+      <button
+        onClick={() => setModalAddVisible(false)}
+        className="absolute top-3 right-3 text-gray-500 hover:text-red-500 text-lg font-bold"
+      >
+        ✖
+      </button>
+
+      <h2 className="text-xl font-semibold mb-4 text-center">➕ Añadir Proceso</h2>
+
+      {/* Información de contexto */}
+      <div className="bg-gray-100 rounded-lg p-3 mb-4 text-sm">
+        <p><strong>Zona:</strong> {zonas.find(z => z.id === parseInt(filter.zona))?.name || "No seleccionada"}</p>
+        <p><strong>Ubicación:</strong> {ubicaciones.find(u => u.id === parseInt(filter.ubicacion))?.name || "No seleccionada"}</p>
+      </div>
+
+      {/* Campos de entrada */}
+      <div className="space-y-3">
+        <input
+          type="text"
+          placeholder="Nombre del proceso"
+          value={newRow?.nombre || ""}
+          onChange={(e) => setNewRow({ ...newRow, nombre: e.target.value })}
+          className="w-full border p-2 rounded-md"
+        />
+
+        <input
+          type="text"
+          placeholder="Valor del proceso"
+          value={newRow?.valor || ""}
+          onChange={(e) => setNewRow({ ...newRow, valor: e.target.value })}
+          className="w-full border p-2 rounded-md"
+        />
+
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => setNewRow({ ...newRow, imagen: e.target.files[0] })}
+          className="w-full border p-2 rounded-md"
+        />
+
+        {newRow?.imagen && (
+          <img
+            src={URL.createObjectURL(newRow.imagen)}
+            alt="Vista previa"
+            className="w-full h-40 object-contain border rounded-md mt-2"
+          />
+        )}
+      </div>
+
+      {/* Botones de acción */}
+      <div className="flex justify-between mt-6">
+        <button
+          onClick={() => setModalAddVisible(false)}
+          className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 w-1/2 mr-2"
+        >
+          Cancelar
+        </button>
+
+        <button
+          onClick={async () => {
+            await handleSaveNew();
+            setModalAddVisible(false);
+          }}
+          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-1/2 ml-2"
+        >
+          Guardar
+        </button>
+      </div>
+    </div>
+  </div>
+)}
 
 {/* Modal de todas las imágenes */}
 {modalImagesVisible && (
@@ -401,7 +422,7 @@ const Atributo = () => {
       </button>
 
       <div className="flex gap-4 overflow-x-auto py-2">
-        {atributos
+        {procesos
           .filter(a => a.images?.length)
           .slice() // copia para no mutar el estado
           .sort((a, b) => {
@@ -436,7 +457,7 @@ const Atributo = () => {
               </div>
             ))
           )}
-        {atributos.filter(a => a.images?.length).length === 0 && (
+        {procesos.filter(a => a.images?.length).length === 0 && (
           <p className="text-center w-full">No hay imágenes disponibles</p>
         )}
       </div>
@@ -457,7 +478,7 @@ const Atributo = () => {
       </button>
       <img
         src={modalImage}
-        alt="Atributo"
+        alt="proceso"
         className="mt-6 w-full max-h-[70vh] object-contain"
       />
     </div>
@@ -468,7 +489,7 @@ const Atributo = () => {
 
 
 
-              {atributos
+              {procesos
               .slice() // para no mutar el estado original
               .sort((a, b) => {
     const zonaA = a.equipo?.ubicacion?.zona?.id || 0;
@@ -517,7 +538,7 @@ const Atributo = () => {
             if (userId !== atr.userId) {
               return Swal.fire(
                 "No permitido",
-                `Este atributo fue creado por ${atr.user.firstName} ${atr.user.lastName} y no puedes modificarlo`,
+                `Este proceso fue creado por ${atr.user.firstName} ${atr.user.lastName} y no puedes modificarlo`,
                 "error"
               );
             }
@@ -548,7 +569,7 @@ const Atributo = () => {
             if (userId !== atr.userId) {
               return Swal.fire(
                 "No permitido",
-                `Este atributo fue creado por ${atr.user.firstName} ${atr.user.lastName} y no puedes subir imagen`,
+                `Este proceso fue creado por ${atr.user.firstName} ${atr.user.lastName} y no puedes subir imagen`,
                 "error"
               );
             }
@@ -584,7 +605,7 @@ const Atributo = () => {
         </div>
         
       )}
-      {!loading && atributos.length === 0 && <p className="text-center mt-4">No se encontraron atributos.</p>}
+      {!loading && procesos.length === 0 && <p className="text-center mt-4">No se encontraron procesos.</p>}
     </div>
   
 
@@ -592,4 +613,4 @@ const Atributo = () => {
   
 };
 
-export default Atributo;
+export default Proceso;
