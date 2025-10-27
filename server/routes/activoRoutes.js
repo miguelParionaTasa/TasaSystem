@@ -40,14 +40,16 @@ router.post("/:id/upload-image", upload, async (req, res) => {
       return res.status(400).json({ message: "No se subió ningún archivo" });
     }
 
+    // Subir a Cloudinary
     const result = await uploadImage(req.file.buffer, "activos");
 
+    // Guardar referencia en BD
     const image = await prisma.image.create({
       data: {
         url: result.secure_url,
-        activos: { connect: { id: parseInt(id) } },
+        activo: { connect: { id: parseInt(id) } }, // ✅ debe ser "activo", no "activos"
       },
-      include: { activos: true },
+      include: { activo: true },
     });
 
     res.status(201).json(image);
@@ -56,5 +58,6 @@ router.post("/:id/upload-image", upload, async (req, res) => {
     res.status(500).json({ message: "Error al subir imagen", error });
   }
 });
+
 
 module.exports = router;

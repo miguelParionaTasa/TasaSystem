@@ -151,32 +151,49 @@ useEffect(() => {
   };
 const zonaId = getZonaIdFromText(filter.zona);
   // === Subir imagen ===
-  const handleUploadImage = async (activo, file) => {
-    if (!file) return;
-    const formData = new FormData();
-    formData.append("image", file);
-    try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}activos/${activo.id}/upload-image`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      Swal.fire("Actualizado", "Imagen subida correctamente", "success");
-      setActivos((prev) =>
-        prev.map((a) =>
-          a.id === activo.id ? { ...a, images: [...(a.images || []), res.data] } : a
-        )
-      );
-    } catch (error) {
-      console.error(error);
-      Swal.fire("Error", "No se pudo subir la imagen", "error");
-    }
-  };
+ const handleUploadImage = async (activo, file) => {
+  if (!file) return;
+
+  const maxSizeMB = 2;
+  const fileSizeMB = file.size / (1024 * 1024);
+
+  if (fileSizeMB >= maxSizeMB) {
+    Swal.fire(
+      "Archivo demasiado grande",
+      `El archivo pesa ${fileSizeMB.toFixed(2)} MB. El máximo permitido es 2 MB.`,
+      "warning"
+    );
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("image", file);
+
+  try {
+    const res = await axios.post(
+      `${process.env.REACT_APP_API_URL}activos/${activo.id}/upload-image`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    Swal.fire("Actualizado", "Imagen subida correctamente", "success");
+    setActivos((prev) =>
+      prev.map((a) =>
+        a.id === activo.id
+          ? { ...a, images: [...(a.images || []), res.data] }
+          : a
+      )
+    );
+  } catch (error) {
+    console.error(error);
+    Swal.fire("Error", "No se pudo subir la imagen", "error");
+  }
+};
 
   // === Editar activo ===
   const handleEditActivo = async (activo) => {
@@ -472,12 +489,48 @@ const zonaId = getZonaIdFromText(filter.zona);
 
         {/* Subir imagen */}
         <input
-          type="file"
-          accept="image/*"
-          onChange={(e) =>
-            setNewActivo({ ...newActivo, imagen: e.target.files[0] })
-          }
-        />
+  type="file"
+  accept="image/*"
+  onChange={(e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const maxSizeMB = 2;
+    const fileSizeMB = file.size / (1024 * 1024);
+
+    if (fileSizeMB >= maxSizeMB) {
+      Swal.fire(
+        "Archivo demasiado grande",
+        `El archivo pesa ${fileSizeMB.toFixed(2)} MB. El máximo permitido es 2 MB.`,
+        "warning"
+      );
+      e.target.value = "";
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setNewActivo((prev) => ({
+        ...prev,
+        imagen: file,
+        preview: event.target.result,
+      }));
+    };
+    reader.readAsDataURL(file);
+  }}
+  className="p-2 border rounded w-full"
+/>
+
+{newActivo.preview && (
+  <div className="mt-2 flex justify-center">
+    <img
+      src={newActivo.preview}
+      alt="Vista previa"
+      className="w-32 h-32 object-cover border rounded-md"
+    />
+  </div>
+)}
+
 
         {/* Botón Guardar */}
         <button

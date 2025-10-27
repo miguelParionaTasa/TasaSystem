@@ -207,34 +207,49 @@ const Atributo = () => {
   };
 
   // === Subir imagen existente ===
-  const handleUploadImage = async (atr, file) => {
-    if (!file) return;
-    const formData = new FormData();
-    formData.append("image", file);
-    try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}atributos/${atr.id}/upload-image`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      Swal.fire("Actualizado", "Imagen subida correctamente", "success");
-      setAtributos(prev =>
-        prev.map(a =>
-          a.id === atr.id
-            ? { ...a, images: [...(a.images || []), res.data] }
-            : a
-        )
-      );
-    } catch (error) {
-      console.error(error);
-      Swal.fire("Error", "No se pudo subir la imagen", "error");
-    }
-  };
+ const handleUploadImage = async (atr, file) => {
+  if (!file) return;
+
+  const maxSizeMB = 2;
+  const fileSizeMB = file.size / (1024 * 1024);
+
+  if (fileSizeMB >= maxSizeMB) {
+    Swal.fire(
+      "Archivo demasiado grande",
+      `El archivo pesa ${fileSizeMB.toFixed(2)} MB. El máximo permitido es 2 MB.`,
+      "warning"
+    );
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("image", file);
+
+  try {
+    const res = await axios.post(
+      `${process.env.REACT_APP_API_URL}atributos/${atr.id}/upload-image`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    Swal.fire("Actualizado", "Imagen subida correctamente", "success");
+    setAtributos(prev =>
+      prev.map(a =>
+        a.id === atr.id
+          ? { ...a, images: [...(a.images || []), res.data] }
+          : a
+      )
+    );
+  } catch (error) {
+    console.error(error);
+    Swal.fire("Error", "No se pudo subir la imagen", "error");
+  }
+};
+
 
   // === Obtener nombres de zona, ubicación y equipo seleccionados ===
   const zonaSel = zonas.find(z => z.id === Number(filter.zona));
@@ -352,11 +367,45 @@ const Atributo = () => {
                 className="p-2 border rounded w-full"
               />
               <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => setNewRow((prev) => ({ ...prev, imagen: e.target.files[0] }))}
-                className="p-2 border rounded w-full"
-              />
+  type="file"
+  accept="image/*"
+  onChange={(e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const maxSizeMB = 2;
+    const fileSizeMB = file.size / (1024 * 1024);
+
+    if (fileSizeMB >= maxSizeMB) {
+      Swal.fire(
+        "Archivo demasiado grande",
+        `El archivo pesa ${fileSizeMB.toFixed(2)} MB. El máximo permitido es 2 MB.`,
+        "warning"
+      );
+      e.target.value = "";
+      return;
+    }
+
+    // mostrar previsualización y guardar imagen
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setNewRow((prev) => ({ ...prev, imagen: file, preview: event.target.result }));
+    };
+    reader.readAsDataURL(file);
+  }}
+  className="p-2 border rounded w-full"
+/>
+
+{newRow.preview && (
+  <div className="mt-2 flex justify-center">
+    <img
+      src={newRow.preview}
+      alt="Vista previa"
+      className="w-32 h-32 object-cover border rounded-md"
+    />
+  </div>
+)}
+
               <button
                 onClick={handleSaveNew}
                 disabled={saving}

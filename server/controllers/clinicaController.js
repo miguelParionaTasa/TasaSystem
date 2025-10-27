@@ -3,26 +3,45 @@ const { cloudinary, uploadImage } = require("../config/cloudinary");
 
 // 📸 Subir imagen a una clínica existente
 const uploadClinicaImage = async (req, res) => {
-  try {
-    const { id } = req.params;
+  upload(req, res, async (err) => {
+    try {
+      // ⚠️ 1️⃣ Validar errores de Multer (como límite de tamaño)
+      if (err) {
+        if (err.code === "LIMIT_FILE_SIZE") {
+          return res
+            .status(400)
+            .json({ message: "El archivo excede el tamaño máximo permitido de 2 MB." });
+        }
+        return res.status(500).json({ message: "Error al procesar el archivo.", error: err.message });
+      }
 
-    if (!req.file) return res.status(400).json({ message: "No se subió imagen" });
+      // ⚠️ 2️⃣ Validar que haya imagen
+      const { id } = req.params;
+      if (!req.file) {
+        return res.status(400).json({ message: "No se subió ninguna imagen." });
+      }
 
-    const result = await uploadImage(req.file.buffer, "clinica");
+      // ⚙️ 3️⃣ Subir imagen a Cloudinary (ya optimizada a WebP)
+      const result = await uploadImage(req.file.buffer, "clinica");
 
-    const updatedImage = await prisma.image.create({
-      data: {
-        url: result.secure_url,
-        clinica: { connect: { id: parseInt(id) } },
-      },
-    });
+      // 💾 4️⃣ Guardar referencia en BD
+      const newImage = await prisma.image.create({
+        data: {
+          url: result.secure_url,
+          clinica: { connect: { id: parseInt(id) } },
+        },
+      });
 
-    res.status(201).json(updatedImage);
-  } catch (error) {
-    console.error("❌ Error al subir imagen de clínica:", error);
-    res.status(500).json({ message: "Error al subir imagen" });
-  }
+      // ✅ 5️⃣ Responder éxito
+      res.status(201).json(newImage);
+
+    } catch (error) {
+      console.error("❌ Error al subir imagen de clínica:", error);
+      res.status(500).json({ message: "Error al subir imagen.", error: error.message });
+    }
+  });
 };
+
 
 // 📌 Crear nueva clínica (con posible imagen)
 const createClinica = async (req, res) => {

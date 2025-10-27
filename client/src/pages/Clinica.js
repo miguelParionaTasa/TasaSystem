@@ -4,6 +4,8 @@ import Swal from "sweetalert2";
 
 const Clinica = () => {
   const [filter, setFilter] = useState({ zona: "", ubicacion: "", equipo: "" });
+  const [uploading, setUploading] = useState(false);
+
   const [zonas, setZonas] = useState([]);
   const [ubicaciones, setUbicaciones] = useState([]);
   const [equipos, setEquipos] = useState([]);
@@ -187,32 +189,67 @@ const handleSaveEdit = async (item) => {
   };
 
   // === Subir imagen ===
-  const handleUploadImage = async (item, file) => {
-    if (!file) return;
-    const formData = new FormData();
-    formData.append("image", file);
-    try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}clinicas/${item.id}/upload-image`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      Swal.fire("Actualizado", "Imagen subida correctamente", "success");
-      setClinicas(prev =>
-        prev.map(c =>
-          c.id === item.id ? { ...c, images: [...(c.images || []), res.data] } : c
-        )
-      );
-    } catch (error) {
-      console.error(error);
-      Swal.fire("Error", "No se pudo subir la imagen", "error");
-    }
-  };
+const handleUploadImage = async (item, file) => {
+  if (!file) return;
+
+  // ⚠️ Validación de tamaño de archivo (2 MB)
+  const maxSizeMB = 2;
+  const fileSizeMB = file.size / (1024 * 1024);
+
+  if (fileSizeMB >= maxSizeMB) {
+    return Swal.fire(
+      "Archivo demasiado grande",
+      `El archivo pesa ${fileSizeMB.toFixed(2)} MB. El máximo permitido es 2 MB.`,
+      "warning"
+    );
+  }
+
+  setUploading(true);
+
+  Swal.fire({
+    title: "Subiendo imagen...",
+    text: "Por favor espera mientras se carga la imagen",
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    didOpen: () => {
+      Swal.showLoading();
+    },
+  });
+
+  const formData = new FormData();
+  formData.append("image", file);
+
+  try {
+    const res = await axios.post(
+      `${process.env.REACT_APP_API_URL}clinicas/${item.id}/upload-image`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    Swal.fire("Actualizado", "Imagen subida correctamente", "success");
+
+    // Actualiza la lista local
+    setClinicas((prev) =>
+      prev.map((c) =>
+        c.id === item.id
+          ? { ...c, images: [...(c.images || []), res.data] }
+          : c
+      )
+    );
+  } catch (error) {
+    console.error(error);
+    Swal.fire("Error", "No se pudo subir la imagen", "error");
+  } finally {
+    setUploading(false);
+  }
+};
+
+
 
   // === Datos seleccionados ===
   const zonaSel = zonas.find(z => z.id === Number(filter.zona));
@@ -296,8 +333,31 @@ const handleSaveEdit = async (item) => {
             <div className="flex flex-col gap-3">
               <input type="text" value={newRow.nombre} onChange={e => setNewRow(p => ({ ...p, nombre: e.target.value }))} placeholder="Nombre" className="p-2 border rounded" />
               <input type="text" value={newRow.valor} onChange={e => setNewRow(p => ({ ...p, valor: e.target.value }))} placeholder="Valor" className="p-2 border rounded" />
-              <input type="file" accept="image/*" onChange={e => setNewRow(p => ({ ...p, imagen: e.target.files[0] }))} className="p-2 border rounded" />
-              <button onClick={handleSaveNew} disabled={saving} className={`text-white px-4 py-2 rounded ${saving ? "bg-gray-400" : "bg-green-600 hover:bg-green-700"}`}>
+              <input
+  type="file"
+  accept="image/*"
+  onChange={(e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const maxSizeMB = 2;
+    const fileSizeMB = file.size / (1024 * 1024);
+
+    if (fileSizeMB >= maxSizeMB) {
+      Swal.fire(
+        "Archivo demasiado grande",
+        `El archivo pesa ${fileSizeMB.toFixed(2)} MB. El máximo permitido es 2 MB.`,
+        "warning"
+      );
+      e.target.value = ""; // limpia el input
+      return;
+    }
+
+    setNewRow((p) => ({ ...p, imagen: file }));
+  }}
+  className="p-2 border rounded"
+/>
+<button onClick={handleSaveNew} disabled={saving} className={`text-white px-4 py-2 rounded ${saving ? "bg-gray-400" : "bg-green-600 hover:bg-green-700"}`}>
                 {saving ? "Guardando..." : "Guardar"}
               </button>
             </div>
