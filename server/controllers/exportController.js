@@ -7,22 +7,34 @@ async function exportDatabase(req, res) {
 
     // Listado de todos los modelos que deseas exportar
     const models = {
-      Users: await prisma.user.findMany(),
-      Areas: await prisma.area.findMany(),
-      Ots: await prisma.ots.findMany(),
-      OTConsumibles: await prisma.oTConsumible.findMany(),
-      Consumibles: await prisma.consumible.findMany(),
-      Zonas: await prisma.zona.findMany(),
-      Ubicaciones: await prisma.ubicacion.findMany(),
-      Componentes: await prisma.componente.findMany(),
-      Atributos: await prisma.atributo.findMany(),
-      AtributoHistorial: await prisma.atributoHistorial.findMany(),
-      Repuestos: await prisma.repuesto.findMany(),
-      Equipos: await prisma.equipo.findMany(),
-      Images: await prisma.image.findMany(),
-      OTbasico: await prisma.oTbasico.findMany(),
-      Historico: await prisma.historico.findMany(), // 🔹 Nuevo modelo agregado
-    };
+  Activos: await prisma.activo.findMany(),
+  ActivoHistorial: await prisma.activoHistorial.findMany(),
+  Areas: await prisma.area.findMany(),
+  Atributos: await prisma.atributo.findMany(),
+  AtributoHistorial: await prisma.atributoHistorial.findMany(),
+  Clinicas: await prisma.clinica.findMany(),
+  ClinicaHistorial: await prisma.clinicaHistorial.findMany(),
+  Componentes: await prisma.componente.findMany(),
+  Configuracion: await prisma.configuracion.findMany(),
+  Consumibles: await prisma.consumible.findMany(),
+  Equipos: await prisma.equipo.findMany(),
+  HistorialItems: await prisma.historialItem.findMany(),
+  Historico: await prisma.historico.findMany(),
+  Images: await prisma.image.findMany(),
+  InventarioItems: await prisma.inventarioItem.findMany(),
+  Lubricaciones: await prisma.lubricacion.findMany(),
+  OTbasico: await prisma.oTbasico.findMany(),
+  OTConsumibles: await prisma.oTConsumible.findMany(),
+  Ots: await prisma.ots.findMany(),
+  Predictivos: await prisma.predictivo.findMany(),
+  Procesos: await prisma.procesos.findMany(),
+  ProcesosHistorial: await prisma.procesosHistorial.findMany(),
+  Repuestos: await prisma.repuesto.findMany(),
+  Users: await prisma.user.findMany(),
+  Ubicaciones: await prisma.ubicacion.findMany(),
+  Zonas: await prisma.zona.findMany(),
+};
+
 
     for (const [modelName, data] of Object.entries(models)) {
       const worksheet = workbook.addWorksheet(modelName);
