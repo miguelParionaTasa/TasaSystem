@@ -388,76 +388,95 @@ useEffect(() => {
       ) : (
         <div className="overflow-x-auto">
           <div className="overflow-x-auto">
-<table className="w-full border border-gray-400 text-sm text-center table-fixed">
-  <thead>
-    <tr className="bg-gray-300 border border-gray-400">
-      <th className="w-1/9 px-2">N° Activo</th>
-      <th className="w-1/9 px-2">Placa</th>
-      <th className="w-1/9 px-2">Descripción</th>
-      <th className="w-1/9 px-2">Marca</th>
-      <th className="w-1/9 px-2">Modelo</th>
-      <th className="w-1/9 px-2">Serie</th>
-      <th className="w-1/9 px-2">Zona</th>
-      <th className="w-1/9 px-2">Ubicación</th>
-      <th className="w-1/9 px-2">Acción</th>
-    </tr>
-  </thead>
-  <tbody>
-    {activos.map((a) => (
-      <tr key={a.id} className="border border-gray-400 hover:bg-gray-100 transition">
-        <td className="px-2 break-words whitespace-normal">{a.nombre}</td>
-        <td className="px-2 break-words whitespace-normal">{a.valor || "-"}</td>
-        <td className="px-2 break-words whitespace-normal">{a.valor2 || "-"}</td>
-        <td className="px-2 break-words whitespace-normal">{a.marca || "-"}</td>
-        <td className="px-2 break-words whitespace-normal">{a.modelo || "-"}</td>
-        <td className="px-2 break-words whitespace-normal">{a.serie || "-"}</td>
-        <td className="px-2 break-words whitespace-normal">{a.zona || a.equipo?.ubicacion?.zona?.nombreMaximo || "-"}</td>
-        <td className="px-2 break-words whitespace-normal">{a.ubicacion || a.equipo?.ubicacion?.name || "-"}</td>
-        <td className="flex justify-center gap-2 px-2">
-          {a.images?.[0]?.url ? (
-            <button
-              className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
-              onClick={() => setModalImage(a.images[0].url)}
-            >
-              Ver
-            </button>
-          ) : (
-            <button
-              disabled={isUploading}
-              className={`px-3 py-1 rounded text-white ${
-                isUploading ? "bg-gray-400 cursor-not-allowed" : "bg-orange-600 hover:bg-orange-700"
-              }`}
-              onClick={() => {
-                if (isUploading) return;
+<div className="w-full overflow-x-auto md:overflow-visible">
+   <table className="border border-gray-400 text-sm text-center
+                     table-fixed min-w-[1080px]">
 
-                Swal.fire({
-                  title: "Subir imagen",
-                  input: "file",
-                  inputAttributes: { accept: "image/*" },
-                  showCancelButton: true,
-                }).then((res) => {
-                  if (res.value) {
-                    setIsUploading(true);
-                    handleUploadImage(a, res.value)
-                      .finally(() => setIsUploading(false));
-                  }
-                });
-              }}
-            >
-              {isUploading ? "Subiendo..." : "Subir"}
-            </button>
-          )}
-          <button
-            className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
-            onClick={() => handleEditActivo(a)}
-          >
-            Editar
-          </button>
-        </td>
+
+    <thead>
+      <tr className="bg-gray-300 border border-gray-400">
+        <th className="px-2 min-w-[80px]  max-w-[120px] md:min-w-0">N° Activo</th>
+        <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Placa</th>
+        <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Descripción</th>
+        <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Marca</th>
+        <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Modelo</th>
+        <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Serie</th>
+        <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Zona</th>
+        <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Ubicación</th>
+        <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Acción</th>
       </tr>
-    ))}
-  </tbody>
-</table>
+    </thead>
+
+    <tbody>
+      {activos.map((a) => (
+        <tr key={a.id} className="border border-gray-400 hover:bg-gray-100 transition">
+          
+          <td className="px-2 break-words whitespace-normal">{a.nombre}</td>
+          <td className="px-2 break-words whitespace-normal">{a.valor || "-"}</td>
+          <td className="px-2 break-words whitespace-normal">{a.valor2 || "-"}</td>
+          <td className="px-2 break-words whitespace-normal">{a.marca || "-"}</td>
+          <td className="px-2 break-words whitespace-normal">{a.modelo || "-"}</td>
+          <td className="px-2 break-words whitespace-normal">{a.serie || "-"}</td>
+
+          <td className="px-2 break-words whitespace-normal">
+            {a.zona || a.equipo?.ubicacion?.zona?.nombreMaximo || "-"}
+          </td>
+
+          <td className="px-2 break-words whitespace-normal">
+            {a.ubicacion || a.equipo?.ubicacion?.name || "-"}
+          </td>
+
+          <td className="px-2 flex justify-center gap-2">
+
+            {a.images?.[0]?.url ? (
+              <button
+                className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+                onClick={() => setModalImage(a.images[0].url)}
+              >
+                Ver
+              </button>
+            ) : (
+              <button
+                disabled={isUploading}
+                className={`px-3 py-1 rounded text-white ${
+                  isUploading ? "bg-gray-400 cursor-not-allowed" : "bg-orange-600 hover:bg-orange-700"
+                }`}
+                onClick={() => {
+                  if (isUploading) return;
+                  Swal.fire({
+                    title: "Subir imagen",
+                    input: "file",
+                    inputAttributes: { accept: "image/*" },
+                    showCancelButton: true,
+                  }).then((res) => {
+                    if (res.value) {
+                      setIsUploading(true);
+                      handleUploadImage(a, res.value).finally(() =>
+                        setIsUploading(false)
+                      );
+                    }
+                  });
+                }}
+              >
+                {isUploading ? "Subiendo..." : "Subir"}
+              </button>
+            )}
+
+            <button
+              className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
+              onClick={() => handleEditActivo(a)}
+            >
+              Editar
+            </button>
+
+          </td>
+        </tr>
+      ))}
+    </tbody>
+
+  </table>
+</div>
+
 
 </div>
 
