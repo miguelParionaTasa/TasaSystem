@@ -437,29 +437,33 @@ useEffect(() => {
               </button>
             ) : (
               <button
-                disabled={isUploading}
-                className={`px-3 py-1 rounded text-white ${
-                  isUploading ? "bg-gray-400 cursor-not-allowed" : "bg-orange-600 hover:bg-orange-700"
-                }`}
-                onClick={() => {
-                  if (isUploading) return;
-                  Swal.fire({
-                    title: "Subir imagen",
-                    input: "file",
-                    inputAttributes: { accept: "image/*" },
-                    showCancelButton: true,
-                  }).then((res) => {
-                    if (res.value) {
-                      setIsUploading(true);
-                      handleUploadImage(a, res.value).finally(() =>
-                        setIsUploading(false)
-                      );
-                    }
-                  });
-                }}
-              >
-                {isUploading ? "Subiendo..." : "Subir"}
-              </button>
+  disabled={isUploading}
+  className={`px-3 py-1 rounded text-white ${
+    isUploading ? "bg-gray-400 cursor-not-allowed" : "bg-orange-600 hover:bg-orange-700"
+  }`}
+  onClick={() => {
+    if (isUploading) return;
+
+    Swal.fire({
+      title: "Subir imagen",
+      input: "file",
+      inputAttributes: {
+        accept: "image/*",
+        capture: "environment", // o "user" para cámara frontal
+      },
+      showCancelButton: true,
+    }).then((res) => {
+      if (res.value) {
+        setIsUploading(true);
+        handleUploadImage(a, res.value).finally(() =>
+          setIsUploading(false)
+        );
+      }
+    });
+  }}
+>
+  {isUploading ? "Subiendo..." : "Subir"}
+</button>
             )}
 
             <button
@@ -568,15 +572,16 @@ useEffect(() => {
 
 
         {/* Subir imagen */}
-        <input
+       <input
   name="image"
   type="file"
   accept="image/*"
+  capture="environment" // Usa la cámara trasera. Usa "user" para la delantera
   onChange={(e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    const maxSizeMB = 4;
+    const maxSizeMB = 2;
     const fileSizeMB = file.size / (1024 * 1024);
 
     if (fileSizeMB >= maxSizeMB) {
@@ -593,7 +598,7 @@ useEffect(() => {
     reader.onload = (event) => {
       setNewActivo((prev) => ({
         ...prev,
-        image: file,       // ← CAMBIADO
+        image: file,
         preview: event.target.result,
       }));
     };
@@ -601,6 +606,7 @@ useEffect(() => {
   }}
   className="p-2 border rounded w-full"
 />
+
 
 
 {newActivo.preview && (
