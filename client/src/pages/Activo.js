@@ -155,13 +155,13 @@ const zonaId = getZonaIdFromText(filter.zona);
  const handleUploadImage = async (activo, file) => {
   if (!file) return;
 
-  const maxSizeMB = 4;
+  const maxSizeMB = 6;
   const fileSizeMB = file.size / (1024 * 1024);
 
   if (fileSizeMB >= maxSizeMB) {
     Swal.fire(
       "Archivo demasiado grande",
-      `El archivo pesa ${fileSizeMB.toFixed(2)} MB. El máximo permitido es 2 MB.`,
+      `El archivo pesa ${fileSizeMB.toFixed(2)} MB. El máximo permitido es 6 MB.`,
       "warning"
     );
     return;
@@ -290,13 +290,13 @@ const handleSelectNewImage = (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
-  const maxSizeMB = 4;
+  const maxSizeMB = 6;
   const fileSizeMB = file.size / (1024 * 1024);
 
   if (fileSizeMB >= maxSizeMB) {
     Swal.fire(
       "Archivo demasiado grande",
-      `El archivo pesa ${fileSizeMB.toFixed(2)} MB. El máximo permitido es 4 MB.`,
+      `El archivo pesa ${fileSizeMB.toFixed(2)} MB. El máximo permitido es 6 MB.`,
       "warning"
     );
     e.target.value = "";
