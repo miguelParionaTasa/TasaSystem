@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 
@@ -282,6 +282,38 @@ useEffect(() => {
   };
 }, [modalAddVisible]);
 
+const galleryInputRef = useRef();
+const cameraInputRef = useRef();
+const galleryInputNewRef = useRef();
+const cameraInputNewRef = useRef();
+const handleSelectNewImage = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const maxSizeMB = 4;
+  const fileSizeMB = file.size / (1024 * 1024);
+
+  if (fileSizeMB >= maxSizeMB) {
+    Swal.fire(
+      "Archivo demasiado grande",
+      `El archivo pesa ${fileSizeMB.toFixed(2)} MB. El máximo permitido es 4 MB.`,
+      "warning"
+    );
+    e.target.value = "";
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    setNewActivo((prev) => ({
+      ...prev,
+      image: file,
+      preview: event.target.result,
+    }));
+  };
+  reader.readAsDataURL(file);
+};
+
   return (
     <div className="p-4 max-w-screen-xl mx-auto">
       <h1 className="text-2xl font-bold text-gray-800 mb-4">Gestión de Activos</h1>
@@ -407,72 +439,109 @@ useEffect(() => {
       </tr>
     </thead>
 
-    <tbody>
-      {activos.map((a) => (
-        <tr key={a.id} className="border border-gray-400 hover:bg-gray-100 transition">
-          
-          <td className="px-2 break-words whitespace-normal">{a.nombre}</td>
-          <td className="px-2 break-words whitespace-normal">{a.valor || "-"}</td>
-          <td className="px-2 break-words whitespace-normal">{a.valor2 || "-"}</td>
-          <td className="px-2 break-words whitespace-normal">{a.marca || "-"}</td>
-          <td className="px-2 break-words whitespace-normal">{a.modelo || "-"}</td>
-          <td className="px-2 break-words whitespace-normal">{a.serie || "-"}</td>
+   <tbody>
+  {activos.map((a) => (
+    <tr key={a.id} className="border border-gray-400 hover:bg-gray-100 transition">
+      
+      <td className="px-2 break-words whitespace-normal">{a.nombre}</td>
+      <td className="px-2 break-words whitespace-normal">{a.valor || "-"}</td>
+      <td className="px-2 break-words whitespace-normal">{a.valor2 || "-"}</td>
+      <td className="px-2 break-words whitespace-normal">{a.marca || "-"}</td>
+      <td className="px-2 break-words whitespace-normal">{a.modelo || "-"}</td>
+      <td className="px-2 break-words whitespace-normal">{a.serie || "-"}</td>
 
-          <td className="px-2 break-words whitespace-normal">
-            {a.zona || a.equipo?.ubicacion?.zona?.nombreMaximo || "-"}
-          </td>
+      <td className="px-2 break-words whitespace-normal">
+        {a.zona || a.equipo?.ubicacion?.zona?.nombreMaximo || "-"}
+      </td>
 
-          <td className="px-2 break-words whitespace-normal">
-            {a.ubicacion || a.equipo?.ubicacion?.name || "-"}
-          </td>
+      <td className="px-2 break-words whitespace-normal">
+        {a.ubicacion || a.equipo?.ubicacion?.name || "-"}
+      </td>
 
-          <td className="px-2 flex justify-center gap-2">
+      <td className="px-2 flex justify-center gap-2">
 
-            {a.images?.[0]?.url ? (
-              <button
-                className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
-                onClick={() => setModalImage(a.images[0].url)}
-              >
-                Ver
-              </button>
-            ) : (
-              <button
-                disabled={isUploading}
-                className={`px-3 py-1 rounded text-white ${
-                  isUploading ? "bg-gray-400 cursor-not-allowed" : "bg-orange-600 hover:bg-orange-700"
-                }`}
-                onClick={() => {
-                  if (isUploading) return;
-                  Swal.fire({
-                    title: "Subir imagen",
-                    input: "file",
-                    inputAttributes: { accept: "image/*" },
-                    showCancelButton: true,
-                  }).then((res) => {
-                    if (res.value) {
-                      setIsUploading(true);
-                      handleUploadImage(a, res.value).finally(() =>
-                        setIsUploading(false)
-                      );
-                    }
-                  });
-                }}
-              >
-                {isUploading ? "Subiendo..." : "Subir"}
-              </button>
-            )}
-
+        {a.images?.[0]?.url ? (
+          <button
+            className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+            onClick={() => setModalImage(a.images[0].url)}
+          >
+            Ver
+          </button>
+        ) : (
+          <>
             <button
-              className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
-              onClick={() => handleEditActivo(a)}
+              disabled={isUploading}
+              className={`px-3 py-1 rounded text-white ${
+                isUploading ? "bg-gray-400 cursor-not-allowed" : "bg-orange-600 hover:bg-orange-700"
+              }`}
+              onClick={() => {
+                if (isUploading) return;
+
+                Swal.fire({
+                  title: "Seleccionar opción",
+                  text: "¿Cómo deseas subir la imagen?",
+                  showDenyButton: true,
+                  showCancelButton: true,
+                  confirmButtonText: "Tomar foto",
+                  denyButtonText: "Desde galería",
+                  cancelButtonText: "Cancelar",
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    cameraInputRef.current.click();
+                  } else if (result.isDenied) {
+                    galleryInputRef.current.click();
+                  }
+                });
+              }}
             >
-              Editar
+              {isUploading ? "Subiendo..." : "Subir"}
             </button>
 
-          </td>
-        </tr>
-      ))}
-    </tbody>
+            {/* INPUT GALERÍA OCULTO */}
+            <input
+              type="file"
+              accept="image/*"
+              ref={galleryInputRef}
+              style={{ display: "none" }}
+              onChange={(e) => {
+                if (!e.target.files.length) return;
+                setIsUploading(true);
+                handleUploadImage(a, e.target.files[0]).finally(() =>
+                  setIsUploading(false)
+                );
+              }}
+            />
+
+            {/* INPUT CÁMARA OCULTO */}
+            <input
+              type="file"
+              accept="image/*"
+              capture="environment"
+              ref={cameraInputRef}
+              style={{ display: "none" }}
+              onChange={(e) => {
+                if (!e.target.files.length) return;
+                setIsUploading(true);
+                handleUploadImage(a, e.target.files[0]).finally(() =>
+                  setIsUploading(false)
+                );
+              }}
+            />
+          </>
+        )}
+
+        <button
+          className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
+          onClick={() => handleEditActivo(a)}
+        >
+          Editar
+        </button>
+
+      </td>
+    </tr>
+  ))}
+</tbody>
+
 
   </table>
 </div>
@@ -566,41 +635,60 @@ useEffect(() => {
   className="p-2 border rounded focus:ring focus:ring-green-200"
 />
 
+{/* Botón Subir Imagen */}
+<button
+  type="button"
+  className="bg-orange-600 text-white py-2 rounded hover:bg-orange-700"
+  onClick={() => {
+    Swal.fire({
+      title: "Seleccionar opción",
+      text: "¿Cómo deseas subir la imagen?",
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: "Tomar foto",
+      denyButtonText: "Desde galería",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        cameraInputNewRef.current.click();
+      } else if (result.isDenied) {
+        galleryInputNewRef.current.click();
+      }
+    });
+  }}
+>
+  Subir Imagen
+</button>
 
-        {/* Subir imagen */}
-        <input
-  name="image"
+{/* INPUT GALERÍA OCULTO */}
+<input
   type="file"
   accept="image/*"
-  onChange={(e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const maxSizeMB = 4;
-    const fileSizeMB = file.size / (1024 * 1024);
-
-    if (fileSizeMB >= maxSizeMB) {
-      Swal.fire(
-        "Archivo demasiado grande",
-        `El archivo pesa ${fileSizeMB.toFixed(2)} MB. El máximo permitido es 2 MB.`,
-        "warning"
-      );
-      e.target.value = "";
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      setNewActivo((prev) => ({
-        ...prev,
-        image: file,       // ← CAMBIADO
-        preview: event.target.result,
-      }));
-    };
-    reader.readAsDataURL(file);
-  }}
-  className="p-2 border rounded w-full"
+  ref={galleryInputNewRef}
+  style={{ display: "none" }}
+  onChange={handleSelectNewImage}
 />
+
+{/* INPUT CÁMARA OCULTO */}
+<input
+  type="file"
+  accept="image/*"
+  capture="environment"
+  ref={cameraInputNewRef}
+  style={{ display: "none" }}
+  onChange={handleSelectNewImage}
+/>
+
+{/* VISTA PREVIA */}
+{newActivo.preview && (
+  <div className="mt-2 flex justify-center">
+    <img
+      src={newActivo.preview}
+      alt="Vista previa"
+      className="w-32 h-32 object-cover border rounded-md"
+    />
+  </div>
+)}
 
 
 {newActivo.preview && (
