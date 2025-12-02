@@ -7,44 +7,75 @@ async function exportDatabase(req, res) {
 
     // Listado de todos los modelos que deseas exportar
     const models = {
-  Activos: await prisma.activo.findMany(),
-  ActivoHistorial: await prisma.activoHistorial.findMany(),
-  Areas: await prisma.area.findMany(),
-  Atributos: await prisma.atributo.findMany(),
-  AtributoHistorial: await prisma.atributoHistorial.findMany(),
-  Clinicas: await prisma.clinica.findMany(),
-  ClinicaHistorial: await prisma.clinicaHistorial.findMany(),
-  Componentes: await prisma.componente.findMany(),
-  Configuracion: await prisma.configuracion.findMany(),
-  Consumibles: await prisma.consumible.findMany(),
-  Equipos: await prisma.equipo.findMany(),
-  HistorialItems: await prisma.historialItem.findMany(),
-  Historico: await prisma.historico.findMany(),
-  Images: await prisma.image.findMany(),
-  InventarioItems: await prisma.inventarioItem.findMany(),
-  Lubricaciones: await prisma.lubricacion.findMany(),
-  OTbasico: await prisma.oTbasico.findMany(),
-  OTConsumibles: await prisma.oTConsumible.findMany(),
-  Ots: await prisma.ots.findMany(),
-  Predictivos: await prisma.predictivo.findMany(),
-  Procesos: await prisma.procesos.findMany(),
-  ProcesosHistorial: await prisma.procesosHistorial.findMany(),
-  Repuestos: await prisma.repuesto.findMany(),
-  Users: await prisma.user.findMany(),
-  Ubicaciones: await prisma.ubicacion.findMany(),
-  Zonas: await prisma.zona.findMany(),
-};
+      Activos: await prisma.activo.findMany({
+        include: { images: true }  // Incluir imágenes asociadas
+      }),
+      ActivoHistorial: await prisma.activoHistorial.findMany(),
+      Areas: await prisma.area.findMany(),
+      Atributos: await prisma.atributo.findMany({
+        include: { images: true }  // Incluir imágenes asociadas
+      }),
+      AtributoHistorial: await prisma.atributoHistorial.findMany(),
+      Clinicas: await prisma.clinica.findMany({
+        include: { images: true }  // Incluir imágenes asociadas
+      }),
+      ClinicaHistorial: await prisma.clinicaHistorial.findMany(),
+      Componentes: await prisma.componente.findMany({
+        include: { images: true }  // Incluir imágenes asociadas
+      }),
+      Configuracion: await prisma.configuracion.findMany(),
+      Consumibles: await prisma.consumible.findMany(),
+      Equipos: await prisma.equipo.findMany({
+        include: { images: true }  // Incluir imágenes asociadas
+      }),
+      HistorialItems: await prisma.historialItem.findMany(),
+      Historico: await prisma.historico.findMany(),
+      Images: await prisma.image.findMany(),
+      InventarioItems: await prisma.inventarioItem.findMany(),
+      Lubricaciones: await prisma.lubricacion.findMany({
+        include: { images: true }  // Incluir imágenes asociadas
+      }),
+      OTbasico: await prisma.oTbasico.findMany(),
+      OTConsumibles: await prisma.oTConsumible.findMany(),
+      Ots: await prisma.ots.findMany(),
+      Predictivos: await prisma.predictivo.findMany({
+        include: { images: true }  // Incluir imágenes asociadas
+      }),
+      Procesos: await prisma.procesos.findMany({
+        include: { images: true }  // Incluir imágenes asociadas
+      }),
+      ProcesosHistorial: await prisma.procesosHistorial.findMany(),
+      Repuestos: await prisma.repuesto.findMany({
+        include: { images: true }  // Incluir imágenes asociadas
+      }),
+      Users: await prisma.user.findMany(),
+      Ubicaciones: await prisma.ubicacion.findMany(),
+      Zonas: await prisma.zona.findMany(),
+    };
 
-
+    // Agregar las filas de cada modelo al archivo Excel
     for (const [modelName, data] of Object.entries(models)) {
       const worksheet = workbook.addWorksheet(modelName);
 
       if (data.length > 0) {
-        worksheet.columns = Object.keys(data[0]).map((key) => ({
+        // Para cada modelo, agregamos las columnas, incluyendo las imágenes si existen
+        const sampleRow = data[0];
+        worksheet.columns = Object.keys(sampleRow).map((key) => ({
           header: key,
           key: key,
           width: 20,
         }));
+
+        // Si hay imágenes, agregar una columna para la URL de la imagen
+        data.forEach(row => {
+          // Incluir las URLs de las imágenes asociadas si existen
+          if (row.images && row.images.length > 0) {
+            row.images = row.images.map(image => image.url).join(', '); // Concatenar las URLs
+          } else {
+            row.images = '(Sin imagen)';
+          }
+        });
+
         worksheet.addRows(data);
       } else {
         worksheet.addRow(['(Sin datos)']);
