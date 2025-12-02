@@ -55,14 +55,6 @@ const getZonaIdFromText = (zonaText) => {
   const match = zonaText.match(/^\d+/); // toma todos los dígitos al inicio
   return match ? Number(match[0]) : null;
 };
-const fixFile = (file) => {
-  // Si la cámara devuelve un BLOB sin nombre
-  if (!file.name || file.name.trim() === "") {
-    return new File([file], "foto.jpg", { type: file.type || "image/jpeg" });
-  }
-
-  return file;
-};
 
 const newActivoZonaId = getZonaIdFromText(newActivo.zona);
   // === Cargar Ubicaciones según zona seleccionada ===
@@ -148,7 +140,7 @@ useEffect(() => {
 
     try {
       await axios.post(`${process.env.REACT_APP_API_URL}activos`, formData, {
-        headers: { Authorization: `Bearer ${token}`},
+        headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" },
       });
       Swal.fire("Éxito", "Activo registrado correctamente", "success");
       setModalAddVisible(false);
@@ -185,6 +177,7 @@ const zonaId = getZonaIdFromText(filter.zona);
       {
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
         },
       }
     );
@@ -297,17 +290,16 @@ const handleSelectNewImage = (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
-  const fixedFile = fixFile(file); // ← ARREGLA BLOB DE CÁMARA
-
   const maxSizeMB = 6;
-  const fileSizeMB = fixedFile.size / (1024 * 1024);
+  const fileSizeMB = file.size / (1024 * 1024);
 
-  if (fileSizeMB > maxSizeMB) {
+  if (fileSizeMB >= maxSizeMB) {
     Swal.fire(
       "Archivo demasiado grande",
-      `El archivo pesa ${fileSizeMB.toFixed(2)} MB. El máximo permitido es ${maxSizeMB} MB.`,
+      `El archivo pesa ${fileSizeMB.toFixed(2)} MB. El máximo permitido es 6 MB.`,
       "warning"
     );
+    e.target.value = "";
     return;
   }
 
@@ -315,13 +307,12 @@ const handleSelectNewImage = (e) => {
   reader.onload = (event) => {
     setNewActivo((prev) => ({
       ...prev,
-      image: fixedFile,
+      image: file,
       preview: event.target.result,
     }));
   };
-  reader.readAsDataURL(fixedFile);
+  reader.readAsDataURL(file);
 };
-
 
   return (
     <div className="p-4 max-w-screen-xl mx-auto">
@@ -531,7 +522,7 @@ const handleSelectNewImage = (e) => {
               onChange={(e) => {
                 if (!e.target.files.length) return;
                 setIsUploading(true);
-                handleUploadImage(a, fixFile(e.target.files[0])).finally(() =>
+                handleUploadImage(a, e.target.files[0]).finally(() =>
                   setIsUploading(false)
                 );
               }}
