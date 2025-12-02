@@ -697,18 +697,6 @@ const handleSelectNewImage = (e) => {
   </div>
 )}
 
-
-{newActivo.preview && (
-  <div className="mt-2 flex justify-center">
-    <img
-      src={newActivo.preview}
-      alt="Vista previa"
-      className="w-32 h-32 object-cover border rounded-md"
-    />
-  </div>
-)}
-
-
         {/* Botón Guardar */}
         <button
           onClick={handleSaveNew}
