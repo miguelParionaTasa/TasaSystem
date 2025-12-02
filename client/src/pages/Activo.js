@@ -119,37 +119,44 @@ useEffect(() => {
 
   // === Guardar nuevo activo ===
   const handleSaveNew = async () => {
-    if (!newActivo.nombre?.trim()) {
-      Swal.fire("Error", "Falta ingresar el nombre del activo", "error");
-      return;
-    }
+  if (!newActivo.nombre?.trim()) {
+    Swal.fire("Error", "Falta ingresar el nombre del activo", "error");
+    return;
+  }
 
-    const formData = new FormData();
+  const formData = new FormData();
 
-    // Se guarda el nombre de la zona y la ubicación, no su ID
-    Object.entries(newActivo).forEach(([k, v]) => {
-      if (v && k !== "imagen") formData.append(k, v);
+  Object.entries(newActivo).forEach(([k, v]) => {
+    if (!v) return;
+    if (k === "image") return;     // archivo aparte
+    if (k === "preview") return;   // NO ENVIAR BASE64
+    formData.append(k, v);
+  });
+
+  if (newActivo.image) {
+    formData.append("image", newActivo.image);
+  }
+
+  formData.append("userId", userId);
+  if (filter.equipo) formData.append("equipoId", filter.equipo);
+
+  try {
+    await axios.post(`${process.env.REACT_APP_API_URL}activos`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
     });
 
-    if (newActivo.imagen) {
-      formData.append("file", newActivo.imagen);
-    }
+    Swal.fire("Éxito", "Activo registrado correctamente", "success");
+    setModalAddVisible(false);
+    handleSubmit();
+  } catch (err) {
+    console.error(err);
+    Swal.fire("Error", "No se pudo registrar el activo", "error");
+  }
+};
 
-    formData.append("userId", userId);
-    if (filter.equipo) formData.append("equipoId", filter.equipo);
-
-    try {
-      await axios.post(`${process.env.REACT_APP_API_URL}activos`, formData, {
-        headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" },
-      });
-      Swal.fire("Éxito", "Activo registrado correctamente", "success");
-      setModalAddVisible(false);
-      handleSubmit();
-    } catch (err) {
-      console.error(err);
-      Swal.fire("Error", "No se pudo registrar el activo", "error");
-    }
-  };
 const zonaId = getZonaIdFromText(filter.zona);
   // === Subir imagen ===
  const handleUploadImage = async (activo, file) => {
