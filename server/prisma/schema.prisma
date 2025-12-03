@@ -31,6 +31,9 @@ model User {
    clinicaHistorial ClinicaHistorial[]
   // Relación inversa (opcional si quieres ver quiénes han sido responsables)
   inventarioItems   InventarioItem[]   @relation("ResponsableInventario")
+    tarjetasRojas        TarjetaRoja[]
+  tarjetasRojasHistorial TarjetaRojaHistorial[]
+
 }
 
 model Area {
@@ -269,23 +272,24 @@ model Equipo {
 }
 
 model Image {
-  id           Int            @id @default(autoincrement())
-  url          String
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  componentess Componente[]   @relation("ComponenteImage")
-  consumibless OTConsumible[] @relation("ConsumibleImage")
-  equiposs     Equipo[]       @relation("EquipoImage")
-  repuestoss   Repuesto[]     @relation("RepuestoImage")
-  atributos    Atributo[]     @relation("AtributoImage") // Nueva relación con Atributo
-   clinica    Clinica[]     @relation("ClinicaImage")
-   activo    Activo[]     @relation("ActivoImage")
-   lubricaciones   Lubricacion[]  @relation("LubricacionImage") // inversa aquí
-predictivos    Predictivo[]   @relation("PredictivoImage") // 👈 inversa aquí
- procesos        Procesos[]       @relation("ProcesosImage")
-}
+  id            Int              @id @default(autoincrement())
+  url           String
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
 
- 
+  componentess  Componente[]     @relation("ComponenteImage")
+  consumibless  OTConsumible[]   @relation("ConsumibleImage")
+  equiposs      Equipo[]         @relation("EquipoImage")
+  repuestoss    Repuesto[]       @relation("RepuestoImage")
+  atributos     Atributo[]       @relation("AtributoImage")
+  clinica       Clinica[]        @relation("ClinicaImage")
+  activo        Activo[]         @relation("ActivoImage")
+  lubricaciones Lubricacion[]    @relation("LubricacionImage")
+  predictivos   Predictivo[]     @relation("PredictivoImage")
+  procesos      Procesos[]       @relation("ProcesosImage")
+
+  tarjetasRojas TarjetaRoja[]    @relation("TarjetaRojaImage") // 👈 nuevo
+}
 
 model OTbasico {
   id          Int        @id @default(autoincrement())
@@ -402,4 +406,41 @@ model ProcesosHistorial {
   fechaCambio     DateTime  @default(now())
   proceso         Procesos  @relation(fields: [procesoId], references: [id])
   user            User      @relation(fields: [userId], references: [id])
+}
+
+model TarjetaRoja {
+  id              Int       @id @default(autoincrement())
+  reporta         String
+  dniReporta      String
+  fecha           DateTime   @default(now())
+  pet             String?
+  zona            String?
+  equipo          String?
+  componente      String?
+  descripcion     String?
+  tipoDeteccion   String?
+  comentario1     String?
+  comentario2     String?
+
+  userId          Int?       // quién registró
+  user            User?      @relation(fields: [userId], references: [id])
+
+  images          Image[]    @relation("TarjetaRojaImage")
+
+  historial       TarjetaRojaHistorial[]
+
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
+model TarjetaRojaHistorial {
+  id             Int       @id @default(autoincrement())
+  tarjetaId      Int
+  campo          String     // ej: "zona", "descripcion", etc.
+  valorAnterior  String?
+  valorNuevo     String?
+  userId         Int
+  fechaCambio    DateTime   @default(now())
+
+  tarjeta        TarjetaRoja @relation(fields: [tarjetaId], references: [id])
+  user           User         @relation(fields: [userId], references: [id])
 }

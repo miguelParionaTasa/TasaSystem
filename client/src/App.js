@@ -11,6 +11,7 @@ import Reportes from "./components/Reportes";
 import General from "./pages/General";
 import Historico from "./pages/Historico";
 import Clinica from "./pages/Clinica";
+import TarjetaRoja from "./pages/TarjetaRoja";
 import Materiales from "./pages/Materiales"; // Nueva página
 import useAuth from "./hooks/useAuth";
 import Atributo from "./pages/Atributo";
@@ -48,6 +49,8 @@ const App = () => {
     { path: "/historico", element: <Historico /> },
         { path: "/activo", element: <Activo /> },
                 { path: "/clinica", element: <Clinica /> },
+    
+                { path: "/tarjetaroja", element: <TarjetaRoja /> },
     { path: "/inventario", element: <Inventario /> },
     { path: "/lubricante", element: <Lubricante /> },
     { path: "/materiales", element: <Materiales /> },

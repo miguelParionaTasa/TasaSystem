@@ -23,6 +23,7 @@ const debugRoutes = require('./routes/debugRoutes');
 const predictivoRoutes = require("./routes/predictivoRoutes");
 const activoRoutes = require("./routes/activoRoutes");
 const clinicaRoutes = require("./routes/clinicaRoutes");
+const tarjetaRojaRoutes = require("./routes/tarjetaRojaRoutes");
 
 // Configuración de la aplicación
 const app = express();
@@ -39,6 +40,7 @@ app.use(express.json());
 app.use(cors(corsOptions));
 app.use('/debug', debugRoutes);
 app.use("/useres", userRoutes); // Rutas de usuario
+app.use("/tarjeta-roja", tarjetaRojaRoutes);
 app.use("/consumibles", consumibleRoutes);
 app.use("/varios", variosRoutes);
 app.use("/equipos", equipoRoutes);

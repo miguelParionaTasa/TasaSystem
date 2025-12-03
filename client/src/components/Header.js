@@ -143,6 +143,12 @@ const puedeVerLubricante = storedUserId === "1";
                   Clínica
                 </button>
                 
+                <button
+                  onClick={() => handleNavigate("/tarjetaroja")}
+                  className="block w-full text-left px-4 py-2 hover:bg-blue-300"
+                >
+                  TarjetaRoja
+                </button>
                   <button
                   onClick={() => handleNavigate("/inventario")}
                   className="block w-full text-left px-4 py-2 hover:bg-blue-300"
@@ -277,6 +283,12 @@ const puedeVerLubricante = storedUserId === "1";
               className="block w-full text-left text-lg hover:bg-blue-300 px-2 py-1 rounded"
             >
               Clínica
+            </button>
+            <button
+              onClick={() => handleNavigate("/tarjetaroja")}
+              className="block w-full text-left text-lg hover:bg-blue-300 px-2 py-1 rounded"
+            >
+              TarjetaRoja
             </button>
               <button
               onClick={() => handleNavigate("/inventario")}
