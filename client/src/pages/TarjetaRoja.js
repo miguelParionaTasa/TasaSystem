@@ -67,40 +67,10 @@ const TarjetaRoja = () => {
     fetch();
   }, []);
 
-  // --- Aplicar filtro cliente-side ---
-  useEffect(() => {
-    const apply = () => {
-      let data = [...tarjetas];
-
-      if (filter.pet) data = data.filter((d) => (d.pet || "").toString().toLowerCase() === filter.pet.toLowerCase());
-      if (filter.zona) data = data.filter((d) => (d.zona || "").toString().toLowerCase() === filter.zona.toLowerCase());
-      if (filter.tipoDeteccion) data = data.filter((d) => (d.tipoDeteccion || "").toString().toLowerCase() === filter.tipoDeteccion.toLowerCase());
-      if (filter.searchText) {
-        const q = filter.searchText.toLowerCase();
-        data = data.filter(
-          (d) =>
-            (d.reporta || "").toLowerCase().includes(q) ||
-            (d.descripcion || "").toLowerCase().includes(q) ||
-            (d.componente || "").toLowerCase().includes(q) ||
-            (d.equipo || "").toLowerCase().includes(q)
-        );
-      }
-      if (filter.dateFrom) {
-        const from = new Date(filter.dateFrom);
-        data = data.filter((d) => new Date(d.fecha) >= from);
-      }
-      if (filter.dateTo) {
-        const to = new Date(filter.dateTo);
-        // incluir todo el día
-        to.setHours(23, 59, 59, 999);
-        data = data.filter((d) => new Date(d.fecha) <= to);
-      }
-
-      setFiltered(data);
-    };
-
-    apply();
-  }, [filter, tarjetas]);
+  // --- // Solo actualizar tarjetas cuando llegan nuevas desde la API, sin filtrar
+useEffect(() => {
+  setFiltered(tarjetas);
+}, [tarjetas]);
 
   // --- Handlers de filtro ---
   const handleFilterChange = (e) => {
@@ -108,9 +78,19 @@ const TarjetaRoja = () => {
     setFilter((p) => ({ ...p, [name]: value }));
   };
 
-  const handleClearFilters = () => {
-    setFilter({ pet: "", zona: "", tipoDeteccion: "", dateFrom: "", dateTo: "", searchText: "" });
-  };
+const handleClearFilters = () => {
+  setFilter({
+    pet: "",
+    zona: "",
+    tipoDeteccion: "",
+    dateFrom: "",
+    dateTo: "",
+    searchText: "",
+  });
+
+  setFiltered(tarjetas);
+};
+
 
   // --- Subir imagen (igual al de Activos) ---
   const handleUploadImage = async (tarjeta, file) => {
@@ -167,6 +147,37 @@ const TarjetaRoja = () => {
       }
     });
   };
+const applyFilters = () => {
+  let data = [...tarjetas];
+
+  if (filter.pet) data = data.filter((d) => (d.pet || "").toLowerCase() === filter.pet.toLowerCase());
+  if (filter.zona) data = data.filter((d) => (d.zona || "").toLowerCase() === filter.zona.toLowerCase());
+  if (filter.tipoDeteccion) data = data.filter((d) => (d.tipoDeteccion || "").toLowerCase() === filter.tipoDeteccion.toLowerCase());
+
+  if (filter.searchText) {
+    const q = filter.searchText.toLowerCase();
+    data = data.filter(
+      (d) =>
+        (d.reporta || "").toLowerCase().includes(q) ||
+        (d.descripcion || "").toLowerCase().includes(q) ||
+        (d.componente || "").toLowerCase().includes(q) ||
+        (d.equipo || "").toLowerCase().includes(q)
+    );
+  }
+
+  if (filter.dateFrom) {
+    const from = new Date(filter.dateFrom);
+    data = data.filter((d) => new Date(d.fecha) >= from);
+  }
+
+  if (filter.dateTo) {
+    const to = new Date(filter.dateTo);
+    to.setHours(23, 59, 59, 999);
+    data = data.filter((d) => new Date(d.fecha) <= to);
+  }
+
+  setFiltered(data);
+};
 
   // manejadores de inputs ocultos
   const onGalleryChange = (e) => {
@@ -332,8 +343,14 @@ const TarjetaRoja = () => {
         </div>
 
         <div className="flex items-end gap-2">
-          <button type="button" onClick={() => setFiltered(tarjetas)} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Aplicar</button>
-          <button type="button" onClick={handleClearFilters} className="bg-gray-300 px-3 py-2 rounded">Limpiar</button>
+          <button 
+  type="button" 
+  onClick={applyFilters} 
+  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+>
+  Aplicar
+</button>
+<button type="button" onClick={handleClearFilters} className="bg-gray-300 px-3 py-2 rounded">Limpiar</button>
         </div>
       </form>
 
