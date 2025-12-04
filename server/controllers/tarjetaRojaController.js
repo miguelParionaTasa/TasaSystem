@@ -100,7 +100,7 @@ const uploadTarjetaRojaImage = async (req, res) => {
     const image = await prisma.image.create({
       data: {
         url: result.secure_url,
-        tarjetaRojas: { connect: { id: Number(id) } },
+        tarjetasRojas: { connect: { id: Number(id) } },
       },
     });
 
