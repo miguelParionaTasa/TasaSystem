@@ -1,7 +1,7 @@
 const express = require("express");
 const upload = require("../config/multer"); // tu configuración Multer
 const prisma = require("../controllers/prisma");
-const { uploadImage } = require("../config/cloudinary");
+const { uploadImage, uploadPdf } = require("../config/cloudinary");
 const {
   createAtributo,
   getAllAtributos,
@@ -33,7 +33,7 @@ router.delete("/:id", deleteAtributo);
 router.post("/", upload, createAtributo);
 
 // 🔹 Subir o actualizar imagen de un atributo existente
-router.post("/:id/upload-image", upload, async (req, res) => {
+router.post("/:id/upload-file", upload, async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -41,22 +41,29 @@ router.post("/:id/upload-image", upload, async (req, res) => {
       return res.status(400).json({ message: "No se subió ningún archivo" });
     }
 
-    // 👇 directamente subimos con nuestro helper (ya convierte a WebP y optimiza)
-    const result = await uploadImage(req.file.buffer, "atributos");
+    // Detectar tipo MIME
+    const isPdf = req.file.mimetype === "application/pdf";
 
-    // Guardar en la BD
-    const image = await prisma.image.create({
+    // Subir a Cloudinary
+    const result = isPdf
+      ? await uploadPdf(req.file.buffer, "atributos")
+      : await uploadImage(req.file.buffer, "atributos");
+
+    // Guardar en tabla image (usa tu relación REAL)
+    const file = await prisma.image.create({
       data: {
         url: result.secure_url,
+        tipo: isPdf ? "PDF" : "IMAGEN",
+        // 🔥 ESTA ES LA CORRECCIÓN CLAVE
         atributos: { connect: { id: parseInt(id) } },
       },
-      include: { atributos: true }, // opcional
+      include: { atributos: true },
     });
 
-    res.status(201).json(image);
+    return res.status(201).json(file);
   } catch (error) {
-    console.error("❌ Error al subir imagen:", error);
-    res.status(500).json({ message: "Error al subir imagen", error });
+    console.error("❌ Error al subir archivo:", error);
+    res.status(500).json({ message: "Error al subir archivo", error });
   }
 });
 

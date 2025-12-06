@@ -103,46 +103,51 @@ const Atributo = () => {
 
   // === Guardar nuevo atributo ===
   const handleSaveNew = async () => {
-    if (!filter.equipo) {
-      Swal.fire("Error", "No hay equipo seleccionado", "error");
-      return;
-    }
-    if (!newRow?.nombre?.trim()) {
-      Swal.fire("Error", "Falta ingresar el nombre del atributo", "error");
-      return;
-    }
-    if (!newRow?.valor?.trim()) {
-      Swal.fire("Error", "Falta ingresar el valor del atributo", "error");
-      return;
-    }
-    if (saving) return;
+  if (!filter.equipo) {
+    Swal.fire("Error", "No hay equipo seleccionado", "error");
+    return;
+  }
+  if (!newRow?.nombre?.trim()) {
+    Swal.fire("Error", "Falta ingresar el nombre del atributo", "error");
+    return;
+  }
+  if (!newRow?.valor?.trim()) {
+    Swal.fire("Error", "Falta ingresar el valor del atributo", "error");
+    return;
+  }
+  if (saving) return;
 
-    setSaving(true);
-    const formData = new FormData();
-    formData.append("nombre", newRow.nombre.trim());
-    formData.append("valor", newRow.valor.trim());
-    formData.append("equipoId", filter.equipo);
-    formData.append("userId", userId);
-    if (newRow.imagen) formData.append("image", newRow.imagen);
+  setSaving(true);
+  const formData = new FormData();
+  formData.append("nombre", newRow.nombre.trim());
+  formData.append("valor", newRow.valor.trim());
+  formData.append("equipoId", Number(filter.equipo)); // 🔹 convertir a número
+  formData.append("userId", Number(userId));          // 🔹 convertir a número
 
-    try {
-      await axios.post(`${process.env.REACT_APP_API_URL}atributos`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      Swal.fire("Añadido", "El atributo fue creado correctamente", "success");
-      setNewRow({ nombre: "", valor: "", imagen: null });
-      setModalAddVisible(false);
-      handleSubmit(new Event("submit"));
-    } catch (error) {
-      console.error("Error al crear atributo:", error.response || error);
-      Swal.fire("Error", "No se pudo guardar el atributo", "error");
-    } finally {
-      setSaving(false);
-    }
-  };
+  if (newRow.file) {
+    formData.append("image", newRow.file); // 🔹 clave coincide con multer
+  }
+
+  try {
+    await axios.post(`${process.env.REACT_APP_API_URL}atributos`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    Swal.fire("Añadido", "El atributo fue creado correctamente", "success");
+    setNewRow({ nombre: "", valor: "", file: null, preview: null });
+    setModalAddVisible(false);
+    handleSubmit(new Event("submit"));
+  } catch (error) {
+    console.error("Error al crear atributo:", error.response || error);
+    Swal.fire("Error", "No se pudo guardar el atributo", "error");
+  } finally {
+    setSaving(false);
+  }
+};
+
 
   // === Abrir modal nuevo atributo ===
   const handleOpenAddModal = () => {
@@ -368,43 +373,38 @@ const Atributo = () => {
               />
               <input
   type="file"
-  accept="image/*"
+  accept="image/*,application/pdf"
   onChange={(e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    const maxSizeMB = 2;
-    const fileSizeMB = file.size / (1024 * 1024);
-
-    if (fileSizeMB >= maxSizeMB) {
-      Swal.fire(
-        "Archivo demasiado grande",
-        `El archivo pesa ${fileSizeMB.toFixed(2)} MB. El máximo permitido es 2 MB.`,
-        "warning"
-      );
-      e.target.value = "";
-      return;
-    }
-
-    // mostrar previsualización y guardar imagen
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      setNewRow((prev) => ({ ...prev, imagen: file, preview: event.target.result }));
-    };
-    reader.readAsDataURL(file);
+    setNewRow((prev) => ({
+      ...prev,
+      file,
+      preview: file.type === "application/pdf"
+        ? "pdf"
+        : URL.createObjectURL(file),
+    }));
   }}
-  className="p-2 border rounded w-full"
+  className="border p-1 rounded w-full"
 />
-
 {newRow.preview && (
   <div className="mt-2 flex justify-center">
-    <img
-      src={newRow.preview}
-      alt="Vista previa"
-      className="w-32 h-32 object-cover border rounded-md"
-    />
+    {newRow.preview === "pdf" ? (
+      <div className="flex flex-col items-center">
+        <span className="text-red-600 font-bold text-lg">📄 PDF</span>
+        <p className="text-sm text-gray-600">{newRow.file?.name}</p>
+      </div>
+    ) : (
+      <img
+        src={newRow.preview}
+        alt="Vista previa"
+        className="w-32 h-32 object-cover border rounded-md"
+      />
+    )}
   </div>
 )}
+
 
               <button
                 onClick={handleSaveNew}
@@ -494,7 +494,7 @@ const Atributo = () => {
 )}
 
 
-{/* Modal de una imagen */}
+{/* Modal de archivo */}
 {modalImage && (
   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div className="bg-white p-4 rounded-md max-w-lg w-full relative">
@@ -504,14 +504,24 @@ const Atributo = () => {
       >
         ✖
       </button>
-      <img
-        src={modalImage}
-        alt="Atributo"
-        className="mt-6 w-full max-h-[70vh] object-contain"
-      />
+
+      {modalImage.endsWith(".pdf") ? (
+        <iframe
+          src={modalImage}
+          className="mt-6 w-full h-[70vh]"
+          title="PDF Atributo"
+        />
+      ) : (
+        <img
+          src={modalImage}
+          alt="Atributo"
+          className="mt-6 w-full max-h-[70vh] object-contain"
+        />
+      )}
     </div>
   </div>
 )}
+
 
 
 

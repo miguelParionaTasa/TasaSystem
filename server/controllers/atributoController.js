@@ -1,7 +1,32 @@
 const prisma = require("./prisma"); // ruta correcta a tu cliente Prisma
-const { cloudinary, uploadImage } = require("../config/cloudinary");
+const { cloudinary, uploadImage, uploadFile } = require("../config/cloudinary");
+
+
 
 // Crear un nuevo atributo
+const uploadPDFtoAtributo = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!req.file)
+      return res.status(400).json({ message: "No se subió archivo" });
+
+    const pdf = await uploadPDF(req.file.buffer, "atributos");
+
+    const saved = await prisma.image.create({
+      data: {
+        url: pdf.secure_url,
+        atributos: { connect: { id: parseInt(id) } }
+      },
+    });
+
+    res.status(201).json(saved);
+  } catch (error) {
+    console.error("❌ Error al subir PDF:", error);
+    res.status(500).json({ message: "Error al subir PDF" });
+  }
+};
+
 const uploadAtributoImage = async (req, res) => {
   try {
     const { id } = req.params;
@@ -27,32 +52,73 @@ const uploadAtributoImage = async (req, res) => {
 
 // 📌 Crear un atributo (con posible imagen asociada)
 const createAtributo = async (req, res) => {
+  console.log("BODY:", req.body);
+  console.log("FILE:", req.file);
+
   try {
     const { nombre, valor, equipoId, userId } = req.body;
 
-    let imagesData = [];
-    if (req.file) {
-      const result = await uploadImage(req.file.buffer, "atributos");
-      imagesData.push({ url: result.secure_url });
+    if (!equipoId || isNaN(equipoId)) {
+      return res.status(400).json({ message: "equipoId es obligatorio y debe ser número" });
     }
 
+    if (!userId || isNaN(userId)) {
+      return res.status(400).json({ message: "userId es obligatorio y debe ser número" });
+    }
+
+    if (!nombre?.trim()) {
+      return res.status(400).json({ message: "El nombre es obligatorio" });
+    }
+
+    let imagesData = [];
+
+    // 📌 1. Si viene archivo, lo subimos (PDF o imagen)
+   if (req.file) {
+  const publicId = req.file.originalname
+    .replace(/\s+/g, "_")       // espacios por _
+    .replace(/[^a-zA-Z0-9_\-]/g, ""); // limpiar caracteres raros
+
+  const result = await uploadFile(req.file.buffer, req.file.mimetype, {
+    folder: req.file.mimetype === "application/pdf" ? "atributos-pdf" : "atributos",
+    public_id: publicId,
+  });
+
+  imagesData.push({
+    url: result.secure_url,
+  });
+}
+
+
+
+    // 📌 2. Crear el atributo en Prisma
     const atributo = await prisma.atributo.create({
       data: {
-        nombre,
-        valor,
-        equipoId: parseInt(equipoId),
-        userId: parseInt(userId),
-        ...(imagesData.length > 0 && { images: { create: imagesData } }),
+        nombre: nombre.trim(),
+        valor: valor?.trim() || null,
+        equipoId: Number(equipoId),
+        userId: Number(userId),
+
+        // Si hay archivo, se crea la relación
+        ...(imagesData.length > 0 && {
+          images: { create: imagesData }
+        }),
       },
-      include: { images: true, equipo: true, user: true },
+
+      include: {
+        images: true,
+        equipo: true,
+        user: true,
+      },
     });
 
-    res.status(201).json(atributo);
+    return res.status(201).json(atributo);
+
   } catch (error) {
     console.error("❌ Error al crear atributo:", error);
     res.status(500).json({ message: "Error al crear atributo" });
   }
 };
+
 
 
 // Obtener todos los atributos
@@ -273,6 +339,7 @@ const searchAtributos = async (req, res) => {
 
 module.exports = {
   createAtributo,
+  uploadPDFtoAtributo,
   getAllAtributos,
   getAtributoById,
   updateAtributo,

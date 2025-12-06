@@ -1,6 +1,6 @@
 const cloudinary = require("cloudinary").v2;
 
-// Configurar las credenciales de Cloudinary usando variables de entorno
+// Configurar credenciales
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -8,22 +8,62 @@ cloudinary.config({
 });
 
 /**
- * 📌 Helper para subir imágenes comprimidas en formato WebP
- * @param {Buffer} fileBuffer - El buffer del archivo (ej: req.file.buffer de multer)
- * @param {String} folder - Carpeta en Cloudinary (por defecto "atributos")
+ * Subir imagen WebP optimizada
  */
-const uploadImage = async (fileBuffer, folder = "atributos") => {
-  const dataURI = `data:image/png;base64,${fileBuffer.toString("base64")}`;
+const uploadImage = async (fileBuffer, options = {}) => {
+  const { folder = "atributos", width = 1000, height = 1000, quality = "auto:best", public_id } = options;
 
-  return await cloudinary.uploader.upload(dataURI, {
-    folder,
-    format: "webp",        // Fuerza salida en WebP
-    quality: "auto:good",  // Compresión automática
-    fetch_format: "auto",  // Ajusta al mejor formato posible
-    transformation: [
-      { width: 1000, height: 1000, crop: "limit" } // limita resolución gigante
-    ]
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        folder,
+        resource_type: "image",
+        format: "webp",
+        quality,
+        fetch_format: "auto",
+        transformation: [{ width, height, crop: "limit" }],
+        public_id,
+      },
+      (err, result) => (err ? reject(err) : resolve(result))
+    );
+
+    uploadStream.end(fileBuffer);
   });
 };
 
-module.exports = { cloudinary, uploadImage };
+/**
+ * Subir PDF como imagen de alta calidad (PNG)
+ */
+const uploadPdfAsImage = async (fileBuffer, options = {}) => {
+  const { folder = "atributos-pdf", width = 2000, height = 2000, quality = "auto:best", public_id } = options;
+
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        folder,
+        resource_type: "image", // importante: tratar PDF como imagen
+        format: "png",          // primera página como imagen
+        quality,
+        fetch_format: "auto",
+        transformation: [{ width, height, crop: "limit" }],
+        public_id,
+      },
+      (err, result) => (err ? reject(err) : resolve(result))
+    );
+
+    uploadStream.end(fileBuffer);
+  });
+};
+
+/**
+ * Subir archivo según tipo
+ */
+const uploadFile = async (fileBuffer, mimetype, options = {}) => {
+  if (mimetype === "application/pdf") {
+    return uploadPdfAsImage(fileBuffer, options);
+  } else {
+    return uploadImage(fileBuffer, options);
+  }
+};
+
+module.exports = { cloudinary, uploadImage, uploadPdfAsImage, uploadFile };
