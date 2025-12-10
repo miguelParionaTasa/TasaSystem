@@ -205,6 +205,8 @@ model Activo {
   serie           String?           // 💡 número de serie
   zona            String?           // 💡 texto libre (no relacionado a tabla)
   ubicacion       String?           // 💡 texto libre (no relacionado a tabla)
+  
+  historial       String?           // 💡 nuevo campo editable para intervenciones/mantenimientos
 
   userId          Int?
   equipoId        Int?              // ⚙️ ahora es opcional, ya no es restrictivo

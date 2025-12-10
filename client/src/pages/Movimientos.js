@@ -312,127 +312,79 @@ const handleSubmitOT = async (e) => {
   if (isSubmittingOT) return;
   setIsSubmittingOT(true);
 
-  // Validación: solo una opción entre OT seleccionada y OT manual
-  if (!isOtValid && !(otName.trim() === "" && otValue.trim() !== "")) {
-    Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: "Debes seleccionar una OT válida de la lista o ingresar un valor manual en el campo 'Valor OT'.",
-    });
-    setIsSubmittingOT(false);
-    return;
-  }
+  const errores = [];
 
+  // 1️⃣ Validación OT, zona y ubicación
+  if (!zonaId) errores.push("Seleccione zona");
+  if (!ubicacionId && !ubicacionSinId) errores.push("Seleccione o designe ubicación");
+  if (!isOtValid && otValue.trim() === "" && !otId) {
+    errores.push("Seleccione o designe una OT");
+  }
   if (isOtValid && otValue.trim() !== "") {
+    errores.push("Usa solo una opción: selecciona OT de la lista o ingresa valor manual, no ambos");
+  }
+
+  // 2️⃣ Validación consumibles
+  if (selectedConsumibles.length === 0) {
+    errores.push("Debe agregar al menos un consumible");
+  } else {
+    selectedConsumibles.forEach((c, index) => {
+      if (c.isEditing) {
+        if (!c.name || !c.unidadMedida) {
+          errores.push(`Fila ${index + 1}: Debes escribir un nombre y una unidad de medida para el consumible`);
+        }
+        if (!c.cantidad || c.cantidad <= 0) {
+          errores.push(`Fila ${index + 1}: Debes ingresar una cantidad mayor a 0`);
+        }
+      } else {
+        if (!c.id) {
+          errores.push(`Fila ${index + 1}: Debes seleccionar un consumible válido desde la lista`);
+        }
+        if (!c.cantidad || c.cantidad <= 0) {
+          errores.push(`Fila ${index + 1}: Debes ingresar una cantidad mayor a 0`);
+        }
+      }
+    });
+  }
+
+  // 3️⃣ Validaciones adicionales
+  if (!descripcionEquipo?.trim()) errores.push("Completa Motivo de compra");
+
+  // 4️⃣ Mostrar todos los errores juntos
+  if (errores.length > 0) {
     Swal.fire({
       icon: "error",
-      title: "Error",
-      text: "Por favor, usa solo una opción: selecciona una OT de la lista o ingresa un valor manual, no ambos.",
+      title: "Falta completar lo siguiente:",
+      html: errores.map((e) => `• ${e}`).join("<br>"),
     });
     setIsSubmittingOT(false);
     return;
   }
 
-  // Validación de consumibles
-  const consumiblesValidos = selectedConsumibles.filter((c, index) => {
-  if (c.isEditing) {
-    // Validación de campos manuales
-    if (!c.name || !c.unidadMedida) {
-      Swal.fire({
-        icon: "error",
-        title: `Fila ${index + 1} incompleta`,
-        text: "Debes escribir un nombre y una unidad de medida para el consumible.",
-      });
-      return false;
+  // 5️⃣ Si todo está bien, enviar OT
+  try {
+    let finalUbicacionId = ubicacionId || selectedOt?.ubicacionId;
+
+    if (!finalUbicacionId && otId) {
+      const otSeleccionada = ots.find((ot) => ot.id === parseInt(otId, 10));
+      finalUbicacionId = otSeleccionada?.OTbasico?.ubicacionId || null;
     }
-    return true;
-  } else {
-    // Validación para selección desde la base de datos
-    
-  if (!c.id) {
-  Swal.fire({
-    icon: "error",
-    title: `Consumible no seleccionado correctamente en fila ${index + 1}`,
-    text: `Debes seleccionar un consumible válido desde la lista desplegable.`,
-  });
-  return false;
-}
 
-    if (!c.cantidad || c.cantidad <= 0) {
-      Swal.fire({
-        icon: "error",
-        title: `Cantidad inválida en fila ${index + 1}`,
-        text: "Debes ingresar una cantidad mayor a 0.",
-      });
-      return false;
-    }
-    return true;
-  }
-});
-
-if (consumiblesValidos.length !== selectedConsumibles.length) {
-  setIsSubmittingOT(false);
-  return;
-}
-
-
-  // Validaciones adicionales
-  const errorMessages = [];
-  if (!zonaId) errorMessages.push("Zona");
-  if (!otValue && !otId) errorMessages.push("Nombre de OT o ID de OT");
-
-  if (errorMessages.length > 0) {
-    Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: `Por favor, complete el campo: ${errorMessages.join(", ")}.`,
-    });
-    setIsSubmittingOT(false);
-    return;
-  }
-
- try {
-  // 👇 Detecta ubicación desde la OT si no se eligió manualmente
-let finalUbicacionId = ubicacionId
-  ? ubicacionId
-  : selectedOt?.ubicacionId;
-
-if (!finalUbicacionId && otId) {
-  const otSeleccionada = ots.find((ot) => ot.id === parseInt(otId, 10));
-  console.log("OT seleccionada:", otSeleccionada);
-  console.log("otId recibido en handleSubmit:", otId);
-console.log("ots disponibles:", ots);
-
-console.log("DEBUG OT seleccionada:", JSON.stringify(otSeleccionada, null, 2));
-
-  if (otSeleccionada?.OTbasico?.ubicacionId) {
-    finalUbicacionId = otSeleccionada.OTbasico.ubicacionId;
-    console.log("Usando ubicacionId desde OTbasico:", finalUbicacionId);
-  } else {
-    console.warn("⚠️ No se encontró ubicacionId en OTbasico");
-  }
-}
-
-const ubicacionIdNumerica = finalUbicacionId ? parseInt(finalUbicacionId, 10) : null;
-
-// ✅ Usa el valor corregido en otData
-const otData = {
-  ottId: otId,
-  OT: String(otValue),
-  equipoId: equipoId ? parseInt(equipoId, 10) : null,
-  descripcionEquipo,
-  zonaId: parseInt(zonaId, 10),
-  ubicacionId: ubicacionIdNumerica,
-  ubicacionSinId,
-  userId: localStorage.getItem("userId"),
-};
-console.log("Cuerpo de la solicitud de OT:", otData);
+    const otData = {
+      ottId: otId,
+      OT: String(otValue),
+      equipoId: equipoId ? parseInt(equipoId, 10) : null,
+      descripcionEquipo,
+      zonaId: parseInt(zonaId, 10),
+      ubicacionId: finalUbicacionId ? parseInt(finalUbicacionId, 10) : null,
+      ubicacionSinId,
+      userId: localStorage.getItem("userId"),
+    };
 
     const token = localStorage.getItem("token");
     const createdOT = await createOT(otData, token);
-    console.log("OT creada:", createdOT);
 
-    for (const consumible of consumiblesValidos) {
+    for (const consumible of selectedConsumibles) {
       const otConsumibleData = {
         consumibleId: consumible.id,
         nombreConsumible: consumible.name,
@@ -441,14 +393,14 @@ console.log("Cuerpo de la solicitud de OT:", otData);
         otId: createdOT.id,
         userId: localStorage.getItem("userId"),
       };
-
       await createOTConsumible(otConsumibleData, token);
     }
 
     Swal.fire({
       icon: "success",
       title: "Éxito",
-      html: `OT y consumibles registrados correctamente.`  });
+      html: "OT y consumibles registrados correctamente.",
+    });
 
     // Limpiar campos
     setOtName("");
@@ -461,8 +413,7 @@ console.log("Cuerpo de la solicitud de OT:", otData);
     setSelectedConsumibles([]);
     setSearchOt("");
     setIsOtValid(false);
-    // Mostrar tabla de consumibles
-setMostrarTabla(false);
+    setMostrarTabla(false);
 
   } catch (err) {
     console.error("Error al registrar OT o consumibles:", err);
@@ -475,7 +426,6 @@ setMostrarTabla(false);
     setIsSubmittingOT(false);
   }
 };
-
 
 
 
@@ -671,7 +621,7 @@ setMostrarTabla(false);
             htmlFor="descripcionEquipo"
             className="block text-lg font-medium text-gray-700"
           >
-            Comentarios adicionales
+            Motivo de compra
           </label>
           <textarea
             id="descripcionEquipo"

@@ -92,11 +92,13 @@ const deleteConsumible = async (req, res) => {
     console.error("Error al eliminar consumible:", error);
     res.status(500).json({ message: "Error al eliminar consumible" });
   }
-};const searchConsumibles = async (req, res) => {
+};
+const searchConsumibles = async (req, res) => {
   try {
     const q = (req.query.q || "").trim();
     const page = Math.max(parseInt(req.query.page ?? "1", 10), 1);
-    const take = Math.min(Math.max(parseInt(req.query.take ?? "50", 10), 1), 100);
+    const take = Math.min(Math.max(parseInt(req.query.take ?? "50", 10), 1), 500);
+
     const skip = (page - 1) * take;
 
     if (!q) {

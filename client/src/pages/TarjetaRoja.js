@@ -44,9 +44,15 @@ const TarjetaRoja = () => {
         const res = await axios.get(`${API}tarjeta-roja`, {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
-        const data = res.data || [];
-        setTarjetas(data);
-        setFiltered(data);
+       const data = res.data || [];
+
+const ordenado = data.sort(
+  (a, b) => new Date(b.fecha) - new Date(a.fecha)
+);
+
+setTarjetas(ordenado);
+setFiltered(ordenado);
+
 
         // generar opciones dinámicas según data
         const pets = Array.from(new Set(data.map((t) => t.pet).filter(Boolean))).sort();
@@ -176,8 +182,12 @@ const applyFilters = () => {
     data = data.filter((d) => new Date(d.fecha) <= to);
   }
 
+  // ✅ ORDENAR: más reciente → más antiguo
+  data.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+
   setFiltered(data);
 };
+
 
   // manejadores de inputs ocultos
   const onGalleryChange = (e) => {
@@ -247,10 +257,10 @@ const applyFilters = () => {
             ${tipoOptionsHtml}
           </select>
 
-          <label class="swal2-label">Comentario 1</label>
+          <label class="swal2-label">Status</label>
           <textarea id="comentario1" class="swal2-textarea" readonly>${tarjeta.comentario1 || ""}</textarea>
 
-          <label class="swal2-label">Comentario 2 (editable)</label>
+          <label class="swal2-label">Comentario (editable)</label>
           <textarea id="comentario2" class="swal2-textarea" placeholder="Ingrese estado o cierre...">${tarjeta.comentario2 || ""}</textarea>
         </div>
       `,
@@ -343,88 +353,127 @@ const applyFilters = () => {
         </div>
 
         <div className="flex items-end gap-2">
-          <button 
-  type="button" 
-  onClick={applyFilters} 
-  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
->
-  Aplicar
-</button>
-<button type="button" onClick={handleClearFilters} className="bg-gray-300 px-3 py-2 rounded">Limpiar</button>
+          <div className="flex items-end gap-3">
+  <button 
+    type="button" 
+    onClick={applyFilters} 
+    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+  >
+    Aplicar
+  </button>
+
+  <button 
+    type="button" 
+    onClick={handleClearFilters} 
+    className="bg-gray-300 px-3 py-2 rounded"
+  >
+    Limpiar
+  </button>
+
+  {/* ✅ Contador de filas */}
+  <div className="px-3 py-2 bg-gray-100 border rounded text-sm font-medium text-gray-700">
+    Tarjetas: <span className="font-bold">{filtered.length}</span>
+  </div>
+</div>
+
         </div>
       </form>
 
       {/* tabla */}
-      {loading ? (
-        <p className="text-center">Cargando...</p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="min-w-[1100px] table-fixed text-sm text-center border border-gray-300">
-            <thead className="bg-gray-200">
-              <tr>
-                <th className="px-2">Reporta</th>
-                <th className="px-2">DNI</th>
-                <th className="px-2">Fecha</th>
-                <th className="px-2">PET</th>
-                <th className="px-2">Zona</th>
-                <th className="px-2">Equipo</th>
-                <th className="px-2">Componente</th>
-                <th className="px-2">Descripción</th>
-                <th className="px-2">Tipo detección</th>
-                <th className="px-2">Comentario 1</th>
-                <th className="px-2">Comentario 2</th>
-                <th className="px-2">Acción</th>
-                <th className="px-2">Imagen</th>
-              </tr>
-            </thead>
+     {loading ? (
+  <p className="text-center">Cargando...</p>
+) : (
+  <div className="overflow-x-auto">
+    <table className="border border-gray-400 text-sm text-center table-fixed w-full">
+      <thead className="bg-gray-200">
+        <tr>
+          <th className="px-2">Reporta</th>
+          <th className="px-2">Fecha</th>
+          <th className="px-2">PET</th>
+          <th className="px-2">Zona</th>
+          <th className="px-2">Equipo</th>
+          <th className="px-2">Componente</th>
+          <th className="px-2">Descripción</th>
+          <th className="px-2">Tipo detección</th>
+          <th className="px-2">Status</th>
+          <th className="px-2">Comentario</th>
+          <th className="px-2">Acciones</th>
+        </tr>
+      </thead>
 
-            <tbody>
-              {filtered.map((t) => (
-                <tr key={t.id} className="border-t hover:bg-gray-50">
-                  
-                  <td className="px-2 py-2 break-words">{t.reporta}</td>
-                  <td className="px-2 py-2 break-words">{t.dniReporta}</td>
-                  <td className="px-2 py-2 break-words">{new Date(t.fecha).toLocaleString()}</td>
-                  <td className="px-2 py-2 break-words">{t.pet || "-"}</td>
-                  <td className="px-2 py-2 break-words">{t.zona || "-"}</td>
-                  <td className="px-2 py-2 break-words">{t.equipo || "-"}</td>
-                  <td className="px-2 py-2 break-words">{t.componente || "-"}</td>
-                  <td className="px-2 py-2 break-words">{t.descripcion || "-"}</td>
-                  <td className="px-2 py-2 break-words">{t.tipoDeteccion || "-"}</td>
-                  <td className="px-2 py-2 break-words">{t.comentario1 || "-"}</td>
-                  <td className="px-2 py-2 break-words">{t.comentario2 || "-"}</td>
+      <tbody>
+        {filtered.map((t) => (
+          <tr key={t.id} className="border-t hover:bg-gray-50">
+            <td className="px-2 py-2 break-words">{t.reporta}</td>
+            <td className="px-2 py-2 break-words">
+              {new Date(t.fecha).toLocaleString()}
+            </td>
+            <td className="px-2 py-2 break-words">{t.pet || "-"}</td>
+            <td className="px-2 py-2 break-words">{t.zona || "-"}</td>
+            <td className="px-2 py-2 break-words">{t.equipo || "-"}</td>
+            <td className="px-2 py-2 break-words">{t.componente || "-"}</td>
+            <td className="px-2 py-2 break-words">{t.descripcion || "-"}</td>
+            <td className="px-2 py-2 break-words">{t.tipoDeteccion || "-"}</td>
+            <td className="px-2 py-2 break-words">{t.comentario1 || "-"}</td>
+            <td className="px-2 py-2 break-words">{t.comentario2 || "-"}</td>
 
-                  <td className="px-2 py-2 flex gap-2 justify-center">
-                    <button className="bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700" onClick={() => handleEditTarjeta(t)}>
-                      Editar
-                    </button>
-                  </td>
-                  <td className="px-2 py-2">
-                    {t.images?.[0]?.url ? (
-                      <button className="bg-blue-600 text-white px-2 py-1 rounded" onClick={() => setModalImage(t.images[0].url)}>
-                        Ver
-                      </button>
-                    ) : (
-                      <>
-                        <button
-                          disabled={isUploading}
-                          className={`px-2 py-1 rounded text-white ${isUploading ? "bg-gray-400" : "bg-orange-600 hover:bg-orange-700"}`}
-                          onClick={() => promptUploadForRow(t)}
-                        >
-                          {isUploading ? "Subiendo..." : "Subir"}
-                        </button>
-                        {/* inputs ocultos compartidos */}
-                        <input ref={galleryInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={onGalleryChange} />
-                        <input ref={cameraInputRef} type="file" accept="image/*" capture="environment" style={{ display: "none" }} onChange={onCameraChange} />
-                      </>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+            {/* ✅ Columna unificada de acciones */}
+            <td className="px-2 py-2 flex flex-col gap-2 items-center justify-center">
+              {/* Editar */}
+              <button
+                className="bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700"
+                onClick={() => handleEditTarjeta(t)}
+              >
+                Editar
+              </button>
+
+              {/* Imagen */}
+              {t.images?.[0]?.url ? (
+                <button
+                  className="bg-blue-600 text-white px-2 py-1 rounded"
+                  onClick={() => setModalImage(t.images[0].url)}
+                >
+                  Ver imagen
+                </button>
+              ) : (
+                <>
+                  <button
+                    disabled={isUploading}
+                    className={`px-2 py-1 rounded text-white ${
+                      isUploading
+                        ? "bg-gray-400"
+                        : "bg-orange-600 hover:bg-orange-700"
+                    }`}
+                    onClick={() => promptUploadForRow(t)}
+                  >
+                    {isUploading ? "Subiendo..." : "Subir imagen"}
+                  </button>
+
+                  {/* inputs ocultos compartidos */}
+                  <input
+                    ref={galleryInputRef}
+                    type="file"
+                    accept="image/*"
+                    style={{ display: "none" }}
+                    onChange={onGalleryChange}
+                  />
+                  <input
+                    ref={cameraInputRef}
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    style={{ display: "none" }}
+                    onChange={onCameraChange}
+                  />
+                </>
+              )}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)}
 
       {/* modal imagen */}
       {modalImage && (

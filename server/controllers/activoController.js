@@ -2,6 +2,36 @@
 const prisma = require("./prisma");
 const { cloudinary, uploadImage } = require("../config/cloudinary");
 
+
+// 🔎 Obtener solo el historial de intervenciones de un activo
+const getActivoHistorialText = async (req, res) => {
+  const { id } = req.params;
+
+  if (!id || isNaN(id)) {
+    return res.status(400).json({ message: "ID inválido" });
+  }
+
+  try {
+    const activo = await prisma.activo.findUnique({
+      where: { id: Number(id) },
+      select: {
+        id: true,
+        nombre: true,
+        historial: true, // ✅ solo seleccionamos este campo
+      },
+    });
+
+    if (!activo) {
+      return res.status(404).json({ message: "Activo no encontrado" });
+    }
+
+    res.status(200).json(activo);
+  } catch (error) {
+    console.error("❌ Error al obtener historial de texto:", error);
+    res.status(500).json({ message: "Error al obtener historial del activo" });
+  }
+};
+
 // 📤 Subir imagen asociada a un activo
 const uploadActivoImage = async (req, res) => {
   try {
@@ -333,5 +363,5 @@ module.exports = {
   deleteActivo,
   getActivoHistorial,
   uploadActivoImage,
-  searchActivos,
+getActivoHistorialText,  searchActivos,
 };

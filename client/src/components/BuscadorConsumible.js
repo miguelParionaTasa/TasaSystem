@@ -33,14 +33,15 @@ export default function BuscadorConsumible({
     try {
       setLoading(true);
       const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}consumibles/search?q=${encodeURIComponent(query)}`
-      );
+  `${process.env.REACT_APP_API_URL}consumibles/search?q=${encodeURIComponent(query)}&take=200`
+);
+
       const arr = res?.data?.data ?? [];
       const filtered = excludeIds.length
         ? arr.filter((x) => !excludeIds.includes(x.id))
         : arr;
 
-      setResults(filtered.slice(0, 20));
+      setResults(filtered.slice(0, 200));
       setOpen(true);
     } catch (e) {
       console.error("Error buscando consumibles:", e);

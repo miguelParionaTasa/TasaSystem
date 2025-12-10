@@ -10,6 +10,7 @@ const {
   deleteActivo,
   getActivoHistorial,
   searchActivos,
+  getActivoHistorialText,
   uploadActivoImage,
 } = require("../controllers/activoController");
 
@@ -30,6 +31,7 @@ router.delete("/:id", deleteActivo);
 
 // 🔹 Crear activo con o sin imagen
 router.post("/", upload, createActivo);
+router.get("/historial-text/:id", getActivoHistorialText);
 
 // 🔹 Subir o actualizar imagen de un activo existente
 router.post("/:id/upload-image", upload, async (req, res) => {

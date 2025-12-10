@@ -429,7 +429,7 @@ const handleSelectNewImage = (e) => {
           <div className="overflow-x-auto">
 <div className="w-full overflow-x-auto md:overflow-visible">
    <table className="border border-gray-400 text-sm text-center
-                     table-fixed min-w-[1080px]">
+                     table-fixed w-full">
 
 
     <thead>
