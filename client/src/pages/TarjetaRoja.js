@@ -406,7 +406,14 @@ const applyFilters = () => {
           <tr key={t.id} className="border-t hover:bg-gray-50">
             <td className="px-2 py-2 break-words">{t.reporta}</td>
             <td className="px-2 py-2 break-words">
-              {new Date(t.fecha).toLocaleString()}
+              {(() => {
+  const d = new Date(t.fecha);
+  const day = String(d.getDate()).padStart(2, "0");
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const year = String(d.getFullYear()).slice(-2);
+  return `${day}-${month}-${year}`;
+})()}
+
             </td>
             <td className="px-2 py-2 break-words">{t.pet || "-"}</td>
             <td className="px-2 py-2 break-words">{t.zona || "-"}</td>
