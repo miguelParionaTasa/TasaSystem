@@ -89,13 +89,12 @@ const handleClearFilters = () => {
     pet: "",
     zona: "",
     tipoDeteccion: "",
-    dateFrom: "",
-    dateTo: "",
+    season: "",
     searchText: "",
   });
-
   setFiltered(tarjetas);
 };
+
 
 
   // --- Subir imagen (igual al de Activos) ---
@@ -156,37 +155,40 @@ const handleClearFilters = () => {
 const applyFilters = () => {
   let data = [...tarjetas];
 
+  // pet
   if (filter.pet) data = data.filter((d) => (d.pet || "").toLowerCase() === filter.pet.toLowerCase());
-  if (filter.zona) data = data.filter((d) => (d.zona || "").toLowerCase() === filter.zona.toLowerCase());
-  if (filter.tipoDeteccion) data = data.filter((d) => (d.tipoDeteccion || "").toLowerCase() === filter.tipoDeteccion.toLowerCase());
 
+  // zona
+  if (filter.zona) data = data.filter((d) => (d.zona || "").toLowerCase() === filter.zona.toLowerCase());
+
+  // tipo detección
+  if (filter.tipoDeteccion)
+    data = data.filter((d) => (d.tipoDeteccion || "").toLowerCase() === filter.tipoDeteccion.toLowerCase());
+
+  // 🔥 NUEVO — selector de temporada / todos
+  if (filter.season === "temporada") {
+    const year = new Date().getFullYear();
+    const start = new Date(`${year}-11-07`);
+    data = data.filter((d) => new Date(d.fecha) >= start);
+  } else {
+    const start = new Date("2010-01-01");
+    data = data.filter((d) => new Date(d.fecha) >= start);
+  }
+
+  // búsqueda general
   if (filter.searchText) {
-    const q = filter.searchText.toLowerCase();
+    const text = filter.searchText.toLowerCase();
     data = data.filter(
       (d) =>
-        (d.reporta || "").toLowerCase().includes(q) ||
-        (d.descripcion || "").toLowerCase().includes(q) ||
-        (d.componente || "").toLowerCase().includes(q) ||
-        (d.equipo || "").toLowerCase().includes(q)
+        d.reporta?.toLowerCase().includes(text) ||
+        d.equipo?.toLowerCase().includes(text) ||
+        d.descripcion?.toLowerCase().includes(text)
     );
   }
 
-  if (filter.dateFrom) {
-    const from = new Date(filter.dateFrom);
-    data = data.filter((d) => new Date(d.fecha) >= from);
-  }
-
-  if (filter.dateTo) {
-    const to = new Date(filter.dateTo);
-    to.setHours(23, 59, 59, 999);
-    data = data.filter((d) => new Date(d.fecha) <= to);
-  }
-
-  // ✅ ORDENAR: más reciente → más antiguo
-  data.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-
   setFiltered(data);
 };
+
 
 
   // manejadores de inputs ocultos
@@ -338,14 +340,18 @@ const applyFilters = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Fecha desde</label>
-          <input type="date" name="dateFrom" value={filter.dateFrom} onChange={handleFilterChange} className="p-2 border rounded" />
-        </div>
+  <label className="block text-sm font-medium mb-1">Rango de fecha</label>
+  <select
+    name="season"
+    value={filter.season}
+    onChange={handleFilterChange}
+    className="p-2 border rounded"
+  >
+    <option value="">Todos</option>
+    <option value="temporada">Temporada</option>
+  </select>
+</div>
 
-        <div>
-          <label className="block text-sm font-medium mb-1">Fecha hasta</label>
-          <input type="date" name="dateTo" value={filter.dateTo} onChange={handleFilterChange} className="p-2 border rounded" />
-        </div>
 
         <div>
           <label className="block text-sm font-medium mb-1">Buscar</label>
@@ -384,7 +390,7 @@ const applyFilters = () => {
   <p className="text-center">Cargando...</p>
 ) : (
   <div className="overflow-x-auto">
-    <table className="border border-gray-400 text-sm text-center table-fixed w-full">
+    <table className="min-w-[950px] w-full border text-sm text-left">
       <thead className="bg-gray-200">
         <tr>
           <th className="px-2">Reporta</th>

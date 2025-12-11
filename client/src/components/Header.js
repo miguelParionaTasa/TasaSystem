@@ -199,7 +199,14 @@ const puedeVerLubricante = storedUserId === "1";
             </button>
           )}
         </div>
-
+{/* Nombre de usuario (solo mobile) */}
+<div className="md:hidden absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+  {userName && (
+    <span className="text-lg font-semibold text-gray-800">
+      {userName}
+    </span>
+  )}
+</div>
         {/* Hamburger (mobile) */}
         <div className="md:hidden z-50">
           <button
@@ -221,7 +228,8 @@ const puedeVerLubricante = storedUserId === "1";
         <div className="fixed inset-0 z-40">
           <div className="absolute inset-0 bg-black bg-opacity-30" onClick={closeAllMenus} />
 
-          <nav className="absolute top-0 left-0 w-4/5 max-w-xs h-full bg-white shadow-xl p-4 space-y-4">
+          <nav className="absolute top-0 left-0 w-4/5 max-w-xs h-full bg-white shadow-xl p-4 space-y-4 overflow-y-auto">
+
             <button
               onClick={() => handleNavigate("/movimientos")}
               className="block w-full text-left text-lg hover:bg-blue-300 px-2 py-1 rounded"
