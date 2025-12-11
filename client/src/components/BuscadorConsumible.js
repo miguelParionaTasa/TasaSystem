@@ -6,13 +6,13 @@ export default function BuscadorConsumible({
   onSelect,
   excludeIds = [],
   placeholder = "Buscar consumible...",
-  ignoreValidation = false, // <- NUEVO: para el icono "+"
+  ignoreValidation = false,
 }) {
   const [term, setTerm] = useState(initialText);
   const [results, setResults] = useState([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [selected, setSelected] = useState(false); // <- NUEVO
+  const [selected, setSelected] = useState(false);
   const ref = useRef(null);
 
   useEffect(() => {
@@ -38,7 +38,9 @@ export default function BuscadorConsumible({
     try {
       setLoading(true);
       const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}consumibles/search?q=${encodeURIComponent(query)}&take=200`
+        `${process.env.REACT_APP_API_URL}consumibles/search?q=${encodeURIComponent(
+          query
+        )}&take=200`
       );
 
       const arr = res?.data?.data ?? [];
@@ -56,14 +58,9 @@ export default function BuscadorConsumible({
     }
   };
 
-  // Debounce
-  useEffect(() => {
-    if (!term) return;
-    const id = setTimeout(() => search(term), 400);
-    return () => clearTimeout(id);
-  }, [term]);
+  // ❌ YA NO BUSCA AUTOMÁTICAMENTE
+  // Debounce eliminado
 
-  // ✅ Determinar color
   const getBorderColor = () => {
     if (ignoreValidation) return "border-gray-300";
     if (!term) return "border-gray-300";
@@ -87,7 +84,12 @@ export default function BuscadorConsumible({
           value={term}
           onChange={(e) => {
             setTerm(e.target.value);
-            setSelected(false); // <- si escribe, ya no está seleccionado
+            setSelected(false);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              search(term); // 🔥 BUSCAR SOLO AL PRESIONAR ENTER
+            }
           }}
           onFocus={() => term && setOpen(true)}
           placeholder={placeholder}
@@ -98,7 +100,7 @@ export default function BuscadorConsumible({
         {/* Botón búsqueda */}
         <button
           type="button"
-          onClick={() => search(term)}
+          onClick={() => search(term)} // 🔥 BUSCAR SOLO AL HACER CLICK
           className="absolute right-2 top-2 text-gray-600 hover:text-blue-600"
         >
           🔍
@@ -112,7 +114,6 @@ export default function BuscadorConsumible({
         )}
       </div>
 
-      {/* Resultados */}
       {open && results.length > 0 && (
         <ul className="absolute left-0 right-0 mt-1 max-h-48 overflow-auto bg-white border border-gray-300 rounded-lg z-10 shadow">
           {results.map((item) => (
@@ -121,7 +122,7 @@ export default function BuscadorConsumible({
               onClick={() => {
                 onSelect?.(item);
                 setTerm(item.name);
-                setSelected(true);   // ✅ seleccionado real
+                setSelected(true);
                 setOpen(false);
               }}
               className="cursor-pointer hover:bg-gray-100 px-3 py-2 text-sm"
