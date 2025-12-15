@@ -15,13 +15,14 @@ const TarjetaRoja = () => {
 
   // filtros
   const [filter, setFilter] = useState({
-    pet: "",
-    zona: "",
-    tipoDeteccion: "",
-    dateFrom: "",
-    dateTo: "",
-    searchText: "",
-  });
+  pet: "",
+  zona: "",
+  tipoDeteccion: "",
+  season: "",
+  status: "", // 👈 NUEVO
+  searchText: "",
+});
+
 
   // opciones dinámicas
   const [petsOptions, setPetsOptions] = useState([]);
@@ -90,11 +91,11 @@ const handleClearFilters = () => {
     zona: "",
     tipoDeteccion: "",
     season: "",
+    status: "", // 👈
     searchText: "",
   });
   setFiltered(tarjetas);
 };
-
 
 
   // --- Subir imagen (igual al de Activos) ---
@@ -165,6 +166,8 @@ const applyFilters = () => {
   if (filter.tipoDeteccion)
     data = data.filter((d) => (d.tipoDeteccion || "").toLowerCase() === filter.tipoDeteccion.toLowerCase());
 
+  
+
   // 🔥 NUEVO — selector de temporada / todos
   if (filter.season === "temporada") {
     const year = new Date().getFullYear();
@@ -185,6 +188,23 @@ const applyFilters = () => {
         d.descripcion?.toLowerCase().includes(text)
     );
   }
+// 🔥 FILTRO STATUS (CORRECTO)
+if (filter.status === "Abierto") {
+  data = data.filter(
+    (d) =>
+      !d.comentario1 ||
+      d.comentario1.trim().toLowerCase() !== "cerrado"
+  );
+}
+
+if (filter.status === "Cerrado") {
+  data = data.filter(
+    (d) =>
+      d.comentario1 &&
+      d.comentario1.trim().toLowerCase() === "cerrado"
+  );
+}
+
 
   setFiltered(data);
 };
@@ -338,7 +358,19 @@ const applyFilters = () => {
             ))}
           </select>
         </div>
-
+<div>
+  <label className="block text-sm font-medium mb-1">Status</label>
+  <select
+    name="status"
+    value={filter.status}
+    onChange={handleFilterChange}
+    className="p-2 border rounded"
+  >
+    <option value="">Todos</option>
+    <option value="Abierto">Abierto</option>
+    <option value="Cerrado">Cerrado</option>
+  </select>
+</div>
         <div>
   <label className="block text-sm font-medium mb-1">Rango de fecha</label>
   <select

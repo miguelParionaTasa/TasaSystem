@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 async function main() {
   try {
     const registros = [
-      
+     
     ];
 
     const result = await prisma.tarjetaRoja.createMany({
