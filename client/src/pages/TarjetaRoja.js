@@ -32,10 +32,6 @@ const TarjetaRoja = () => {
   // imagen modal
   const [modalImage, setModalImage] = useState(null);
 
-  // refs para inputs (por fila usamos refs clonables)
-  const galleryInputRef = useRef(null);
-  const cameraInputRef = useRef(null);
-  const currentRowRef = useRef(null); // almacena la tarjeta actual para subir
 
   // --- Cargar todas las tarjetas (cliente-side filtering) ---
   useEffect(() => {
@@ -211,6 +207,10 @@ if (filter.status === "Cerrado") {
 
 
 
+  // refs para inputs (por fila usamos refs clonables)
+  const galleryInputRef = useRef(null);
+  const cameraInputRef = useRef(null);
+  const currentRowRef = useRef(null); // almacena la tarjeta actual para subir
   // manejadores de inputs ocultos
   const onGalleryChange = (e) => {
     const file = e.target.files?.[0];
@@ -422,7 +422,7 @@ if (filter.status === "Cerrado") {
   <p className="text-center">Cargando...</p>
 ) : (
   <div className="overflow-x-auto">
-    <table className="min-w-[950px] w-full border text-sm text-left">
+    <table className="min-w-[950px] w-full border text-sm text-left table-fixed">
       <thead className="bg-gray-200">
         <tr>
           <th className="px-2">Reporta</th>
@@ -483,33 +483,59 @@ if (filter.status === "Cerrado") {
               ) : (
                 <>
                   <button
-                    disabled={isUploading}
-                    className={`px-2 py-1 rounded text-white ${
-                      isUploading
-                        ? "bg-gray-400"
-                        : "bg-orange-600 hover:bg-orange-700"
-                    }`}
-                    onClick={() => promptUploadForRow(t)}
-                  >
-                    {isUploading ? "Subiendo..." : "Subir imagen"}
-                  </button>
+  disabled={isUploading}
+  onClick={() => {
+    Swal.fire({
+      title: "Seleccionar opción",
+      text: "¿Cómo deseas subir la imagen?",
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: "Tomar foto",
+      denyButtonText: "Desde galería",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        cameraInputRef.current?.click();
+      } else if (result.isDenied) {
+        galleryInputRef.current?.click();
+      }
+    });
+  }}
+  className={`px-3 py-1 rounded text-white transition
+    ${
+      isUploading
+        ? "bg-gray-400 cursor-not-allowed"
+        : "bg-orange-600 hover:bg-orange-700"
+    }`}
+>
+  {isUploading ? "Subiendo..." : "Subir"}
+</button>
+
+
 
                   {/* inputs ocultos compartidos */}
                   <input
-                    ref={galleryInputRef}
-                    type="file"
-                    accept="image/*"
-                    style={{ display: "none" }}
-                    onChange={onGalleryChange}
-                  />
-                  <input
-                    ref={cameraInputRef}
-                    type="file"
-                    accept="image/*"
-                    capture="environment"
-                    style={{ display: "none" }}
-                    onChange={onCameraChange}
-                  />
+  type="file"
+  accept="image/*"
+  ref={galleryInputRef}
+  style={{ display: "none" }}
+  onChange={(e) => {
+    if (!e.target.files.length) return;
+    handleUploadImage(tarjeta, e.target.files[0]);
+  }}
+/>
+
+<input
+  type="file"
+  accept="image/*"
+  capture="environment"
+  ref={cameraInputRef}
+  style={{ display: "none" }}
+  onChange={(e) => {
+    if (!e.target.files.length) return;
+    handleUploadImage(tarjeta, e.target.files[0]);
+  }}
+/>
+
                 </>
               )}
             </td>
