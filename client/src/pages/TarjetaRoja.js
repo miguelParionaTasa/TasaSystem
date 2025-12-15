@@ -7,6 +7,7 @@ const TarjetaRoja = () => {
   const API = process.env.REACT_APP_API_URL;
   const token = localStorage.getItem("token");
   const userId = parseInt(localStorage.getItem("userId"));
+const [activeTarjeta, setActiveTarjeta] = useState(null);
 
   const [tarjetas, setTarjetas] = useState([]);
   const [filtered, setFiltered] = useState([]);
@@ -485,6 +486,7 @@ if (filter.status === "Cerrado") {
                   <button
   disabled={isUploading}
   onClick={() => {
+    setActiveTarjeta(t);
     Swal.fire({
       title: "Seleccionar opción",
       text: "¿Cómo deseas subir la imagen?",
@@ -501,26 +503,27 @@ if (filter.status === "Cerrado") {
     });
   }}
   className={`px-3 py-1 rounded text-white transition
-    ${
-      isUploading
-        ? "bg-gray-400 cursor-not-allowed"
-        : "bg-orange-600 hover:bg-orange-700"
-    }`}
+    ${isUploading ? "bg-gray-400" : "bg-orange-600 hover:bg-orange-700"}`}
 >
   {isUploading ? "Subiendo..." : "Subir"}
 </button>
 
 
 
-                  {/* inputs ocultos compartidos */}
-                  <input
+                </>
+              )}
+            </td>
+          </tr>
+        ))}
+        <input
   type="file"
   accept="image/*"
   ref={galleryInputRef}
   style={{ display: "none" }}
   onChange={(e) => {
-    if (!e.target.files.length) return;
-    handleUploadImage(tarjeta, e.target.files[0]);
+    if (!e.target.files.length || !activeTarjeta) return;
+    handleUploadImage(activeTarjeta, e.target.files[0]);
+    e.target.value = "";
   }}
 />
 
@@ -531,16 +534,12 @@ if (filter.status === "Cerrado") {
   ref={cameraInputRef}
   style={{ display: "none" }}
   onChange={(e) => {
-    if (!e.target.files.length) return;
-    handleUploadImage(tarjeta, e.target.files[0]);
+    if (!e.target.files.length || !activeTarjeta) return;
+    handleUploadImage(activeTarjeta, e.target.files[0]);
+    e.target.value = "";
   }}
 />
 
-                </>
-              )}
-            </td>
-          </tr>
-        ))}
       </tbody>
     </table>
   </div>
