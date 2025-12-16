@@ -71,11 +71,6 @@ setFiltered(ordenado);
     fetch();
   }, []);
 
-  // --- // Solo actualizar tarjetas cuando llegan nuevas desde la API, sin filtrar
-useEffect(() => {
-  setFiltered(tarjetas);
-}, [tarjetas]);
-
   // --- Handlers de filtro ---
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
