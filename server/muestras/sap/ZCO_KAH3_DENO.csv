@@ -1,0 +1,51 @@
+MANDT,NOMBRE,DESCRIPCION
+600,0010_G0                       ,Activos menores
+600,0010_G1                       ,Variación de existencias
+600,0010_G10                      ,Publicidad
+600,0010_G11                      ,Consultorías y asesorías
+600,0010_G12                      ,Licencias software y proyecto sap
+600,0010_G13                      ,Custodia de documentos
+600,0010_G14                      ,Reparación y mantenimiento
+600,0010_G15                      ,Alquileres
+600,0010_G16                      ,Agua y luz
+600,0010_G17                      ,"Gastos de comunicaciones, internet y cab"
+600,0010_G18                      ,Servicio de vigilancia
+600,0010_G19                      ,Gastos de personal y útiles de oficina
+600,0010_G2                       ,Compras
+600,0010_G20                      ,Capacitaciones
+600,0010_G21                      ,Mantenimiento y ornato de instalaciones
+600,0010_G22                      ,Servicios prestados por terceros
+600,0010_G23                      ,Impresiones y empastado
+600,0010_G24                      ,Peaje y estacionamiento
+600,0010_G25                      ,Otros serrvicios prestados por terceros
+600,0010_G26                      ,"Proyectos, investigaciones"
+600,0010_G27                      ,Combustible
+600,0010_G28                      ,Otros gastos
+600,0010_G29                      ,Tributos
+600,0010_G3                       ,Remuneraciones y Gastos de personal
+600,0010_G30                      ,Seguros
+600,0010_G31                      ,Suscripciones
+600,0010_G32                      ,Autorizaciones y Licencias
+600,0010_G34                      ,Depreciación
+600,0010_G35                      ,Gastos Financieros
+600,0010_G4                       ,Servicio de transporte y movilidad
+600,0010_G5                       ,"Portes, correo y correspondencia"
+600,0010_G6                       ,Gastos de viaje
+600,0010_G7                       ,Servicios corporativos
+600,0010_G8                       ,Gastos legales
+600,0010_G9                       ,Auditoría
+600,0010_GTOS                     ,GASTOS TOTALES
+600,0011_COSTO                    ,Costo operativo
+600,0011_CTAS                     ,Agrupador 2015
+600,0011_CTAS.1                   ,INGRESOS
+600,0011_CTAS.10                  ,Alimentación
+600,0011_CTAS.11                  ,Alquiler estacionamiento
+600,0011_CTAS.12                  ,Estratégica
+600,0011_CTAS.13                  ,Limpieza de oficinas
+600,0011_CTAS.14                  ,Luz y mantenimiento
+600,0011_CTAS.15                  ,Mantenimiento automóviles
+600,0011_CTAS.16                  ,Mantenimiento oficina
+600,0011_CTAS.17                  ,Alquiler oficinas
+600,0011_CTAS.18                  ,Movilidad
+600,0011_CTAS.19                  ,Seguridad y vigilancia
+600,0011_CTAS.2                   ,Consumo de suministro y repuestos

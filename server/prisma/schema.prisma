@@ -80,6 +80,25 @@ model OTConsumible {
   images           Image[]     @relation("ConsumibleImage")
 }
 
+model OTMovimientoSAP {
+  id               Int      @id @default(autoincrement())
+
+  // Datos OT (cabecera SAP)
+  otNumero         String
+  descripcionOT    String?
+  zona             String?
+  ubicacion        String?
+  comentarioOT     String?
+
+  // Datos material
+  codigoMaterial   String
+  nombreMaterial   String?
+  unidadMedida     String?
+  cantidad         Float
+  reservaSAP       String?
+  comentario       String?
+  fechaPedido      DateTime?
+}
 
 model Consumible {
   id            Int            @id @default(autoincrement())

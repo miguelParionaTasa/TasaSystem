@@ -1,22 +1,29 @@
+
 require('dotenv').config();
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function main() {
-  try {
-    // Eliminar activos con ID entre 964 y 967
-    const deleted = await prisma.activo.deleteMany({
-      where: {
-        id: { in: [964, 965, 966, 967] },
-      },
-    });
+  const data = [
+    {name: 'TPSU_Mantto quemador y Calibrar Caldero Vapor#1', Temp: 'CHIV2-25', OTmaximo: '756944', estado: 'WAPPR', zonaId: 11, ubicacionId: 379, equipoId: null, tecnico1: 'Systema', tecnico2:''},
+{name: 'T1-26 MP SABA Sistema Hidráulico LS', Temp: 'CHIV2-25', OTmaximo: '762865', estado: 'WAPPR', zonaId: 1, ubicacionId: 612, equipoId: null, tecnico1: 'Systema', tecnico2:''},
 
-    console.log(`✅ Se eliminaron ${deleted.count} activos.`);
-  } catch (error) {
-    console.error("❌ Error al eliminar activos:", error);
-  } finally {
-    await prisma.$disconnect();
-  }
+  ];
+
+  const res = await prisma.oTbasico.createMany({
+    data,
+    skipDuplicates: true, // evita error si algún OTmaximo ya existe
+  });
+
+  console.log(`OTbasico insertados: ${res.count}`);
 }
 
-main();
+main()
+  .catch((e) => {
+    console.error('Error al insertar OTbasico:', e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
+``

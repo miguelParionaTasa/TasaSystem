@@ -12,13 +12,18 @@ const Materiales = () => {
   const [fechaCorte, setFechaCorte] = useState("FECHA");
   const [editando, setEditando] = useState(false);
   const userId = localStorage.getItem("userId");
+const [allMovimientos, setAllMovimientos] = useState([]);
 
   const [zonas, setZonas] = useState([]);
   const [ubicaciones, setUbicaciones] = useState([]);
   const [materiales, setMateriales] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // === Obtener fechaCorte desde backend ===
+  const excludedMaterials = [
+        '31013855','31013867','31013865','31013863','31013875','31013874','31013866','31009821','31009837','31009820','31026229','31009836','31009823','31009838','31010184','31010191','31015361','31015363','31015445','31015346','30000506','31015349','31010296','31003986','31015444','31015419','31015427','31015439','31009310','31029768','31029557','31029214','31015365','31009813','31013843','32005548','32001606','31015423','32005531','20000627','31013880','31032187','31032194','31008885','31009898','31015425','32004042','32005402','31015347','31010996',
+      ];
+
+      // === Obtener fechaCorte desde backend ===
   useEffect(() => {
     const fetchFecha = async () => {
       try {
@@ -47,106 +52,122 @@ const Materiales = () => {
 };
 
 
-  // === Obtener zonas ===
-  useEffect(() => {
-    const fetchZonas = async () => {
-      try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}varios/zonas`);
-        setZonas(response.data);
-      } catch (error) {
-        console.error("Error al obtener zonas:", error);
-      }
-    };
-    fetchZonas();
-  }, []);
-
-  // === Obtener ubicaciones por zona ===
-  useEffect(() => {
-    const fetchUbicaciones = async () => {
-      if (filter.zona) {
-        try {
-          const response = await axios.get(
-            `${process.env.REACT_APP_API_URL}varios/ubicaciones/por-zona?zonaId=${filter.zona}`
-          );
-          setUbicaciones(response.data);
-        } catch (error) {
-          console.error("Error al obtener ubicaciones:", error);
-        }
-      } else {
-        setUbicaciones([]);
-      }
-    };
-    fetchUbicaciones();
-  }, [filter.zona]);
-
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilter((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
+useEffect(() => {
+  const fetchSapData = async () => {
     try {
-      const userId = localStorage.getItem("userId");
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}sap-movimientos`
+      );
 
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}ots/search`, {
-        params: {
-          zona: filter.zona || undefined,
-          ubicacion: filter.ubicacion || undefined,
-          scope: "miGrupo",
-          userId: userId,
-        },
+      const data = response.data;
+
+      setAllMovimientos(data); // 🔥 FALTABA ESTO
+
+      const zonasUnicas = [...new Set(data.map((item) => item.zona))];
+
+      zonasUnicas.sort((a, b) => {
+        const numA = parseInt(a.split(".")[0]);
+        const numB = parseInt(b.split(".")[0]);
+        return numA - numB;
       });
 
-      let allConsumibles = [];
-      response.data.forEach((ot) => {
-        if (ot.otConsumibles) {
-          const zonaEncontrada =
-            ot.zona?.nombreMaximo ||
-            zonas.find((z) => z.id === ot.zonaId || z.id === ot.OTbasico?.zonaId)?.nombreMaximo;
+      setZonas(zonasUnicas);
 
-          ot.otConsumibles.forEach((consumible) => {
-  allConsumibles.push({
-    ...consumible,
-    ot: {
-      ottId: ot.OTbasico?.OTmaximo || ot.ottId,
-      zonaName: zonaEncontrada || "N/A",
-      ubicacionName: ot.ubicacion?.name || "N/A",
-      otName: ot.OTbasico?.name || "N/A",   // ✅ nombre de la OT
-    },
-  });
-});
-
-        }
-      });
-
-     if (filter.consumible.trim() !== "") {
-  allConsumibles = allConsumibles.filter(
-    (c) =>
-      c.consumible?.name?.toLowerCase().includes(filter.consumible.toLowerCase()) ||
-      c.nombreConsumible?.toLowerCase().includes(filter.consumible.toLowerCase())
-  );
-}
-
-// ✅ Nuevo filtro por Código SAP
-if (filter.sap.trim() !== "") {
-  allConsumibles = allConsumibles.filter(
-    (c) =>
-      c.consumible?.consumibleSap?.toString().includes(filter.sap) ||
-      c.consumibleSap?.toString().includes(filter.sap)
-  );
-}
-
-
-      setMateriales(allConsumibles);
     } catch (error) {
-      console.error("Error al obtener consumibles:", error);
-    } finally {
-      setLoading(false);
+      console.error("Error al cargar datos SAP:", error);
     }
   };
+
+  fetchSapData();
+}, []);
+
+
+const ubicacionesFiltradas = React.useMemo(() => {
+  if (!filter.zona) return [];
+
+  return [...new Set(
+    allMovimientos
+      .filter((item) => item.zona === filter.zona)
+      .map((item) => item.ubicacion)
+  )].sort((a, b) => a.localeCompare(b));
+}, [filter.zona, allMovimientos]);
+
+
+ const handleFilterChange = (e) => {
+  const { name, value } = e.target;
+
+  if (name === "zona") {
+    setFilter((prev) => ({
+      ...prev,
+      zona: value,
+      ubicacion: "" // 🔥 reset automático
+    }));
+  } else {
+    setFilter((prev) => ({ ...prev, [name]: value }));
+  }
+};
+
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+
+  try {
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}sap-movimientos`,
+      {
+        params: {
+          zona: filter.zona || undefined,
+  ubicacion: filter.ubicacion || undefined,
+  ot: filter.ot || undefined,
+        },
+      }
+    );
+
+    let data = response.data;
+data = data.filter(
+  (item) => !excludedMaterials.includes(item.codigoMaterial?.toString())
+);
+    // 🔹 Filtro por nombre consumible
+    if (filter.consumible.trim() !== "") {
+      data = data.filter((item) =>
+        item.nombreMaterial
+          ?.toLowerCase()
+          .includes(filter.consumible.toLowerCase())
+      );
+    }
+
+    // 🔹 Filtro por código SAP
+    if (filter.sap.trim() !== "") {
+      data = data.filter((item) =>
+        item.codigoMaterial?.toString().includes(filter.sap)
+      );
+    }
+
+    // 🔹 Adaptamos estructura para que tu tabla no cambie
+    const materialesFormateados = data.map((item) => ({
+      id: item.id,
+      cantidad: item.cantidad,
+      reservaSap: item.reservaSAP,
+      comentarios: item.comentario,
+      unidadMedida: item.unidadMedida,
+      nombreConsumible: item.nombreMaterial,
+      consumibleSap: item.codigoMaterial,
+      ot: {
+        ottId: item.otNumero,
+        zonaName: item.zona,
+        ubicacionName: item.ubicacion,
+        otName: item.descripcionOT,
+      },
+    }));
+
+    setMateriales(materialesFormateados);
+  } catch (error) {
+    console.error("Error al obtener materiales SAP:", error);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="p-4 max-w-screen-xl mx-auto">
@@ -154,34 +175,7 @@ if (filter.sap.trim() !== "") {
         Consulta de Materiales
       </h1>
 
-      {/* FECHA DE CORTE */}
-      <div className="flex items-center gap-2">
-        {editando ? (
-          <input
-            type="text"
-            value={fechaCorte}
-            onChange={(e) => setFechaCorte(e.target.value)}
-            className="border p-1 rounded-md"
-          />
-        ) : (
-          <span className="text-lg text-gray-600">Al corte de: {fechaCorte}</span>
-        )}
-
-        {userId === "1" && (
-          <button
-            onClick={() => {
-              if (editando) {
-                guardarFecha();
-              } else {
-                setEditando(true);
-              }
-            }}
-            className="ml-2 bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition"
-          >
-            {editando ? "Guardar" : "Editar"}
-          </button>
-        )}
-      </div>
+     
 
       {/* FORM DE FILTRO */}
      <form
@@ -214,37 +208,39 @@ if (filter.sap.trim() !== "") {
 
         <div>
           <label className="block font-semibold text-gray-700 mb-2">Zona</label>
-          <select
-            name="zona"
-            value={filter.zona}
-            onChange={handleFilterChange}
-            className="w-full p-2 border border-gray-300 rounded-md"
-          >
-            <option value="">Todas las zonas</option>
-            {zonas.map((zona) => (
-              <option key={zona.id} value={zona.id}>
-                {zona.nombreMaximo}
-              </option>
-            ))}
-          </select>
+         <select
+  name="zona"
+  value={filter.zona}
+  onChange={handleFilterChange}
+  className="w-full p-2 border border-gray-300 rounded-md"
+>
+  <option value="">Todas las zonas</option>
+  {zonas.map((zona) => (
+    <option key={zona} value={zona}>
+      {zona}
+    </option>
+  ))}
+</select>
+
         </div>
 
         <div>
           <label className="block font-semibold text-gray-700 mb-2">Ubicación</label>
           <select
-            name="ubicacion"
-            value={filter.ubicacion}
-            onChange={handleFilterChange}
-            className="w-full p-2 border border-gray-300 rounded-md"
-            disabled={!filter.zona}
-          >
-            <option value="">Todas las ubicaciones</option>
-            {ubicaciones.map((ubi) => (
-              <option key={ubi.id} value={ubi.id}>
-                {ubi.name}
-              </option>
-            ))}
-          </select>
+  name="ubicacion"
+  value={filter.ubicacion}
+  onChange={handleFilterChange}
+  className="w-full p-2 border border-gray-300 rounded-md"
+>
+  <option value="">Todas las ubicaciones</option>
+  {ubicacionesFiltradas.map((ubi) => (
+    <option key={ubi} value={ubi}>
+      {ubi}
+    </option>
+  ))}
+</select>
+
+
         </div>
 
         <div className="col-span-3 flex justify-end mt-4">

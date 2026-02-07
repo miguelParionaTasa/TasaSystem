@@ -1,0 +1,1677 @@
+atc_codigo,atc_numero,atc_estado,atc_docorigen,sse_numero,atc_ssenromax,atc_otnum,atc_ot_tareanum,atc_otcerrado,atc_ot_tarearesu,atc_ot_tareaotnum,atc_grafonum,atc_grafoope,une_codigo,atc_unenombre,cen_codigo,atc_cennombre,atc_cenabrev,atc_lugaratencion,atc_resumen,atc_trabxrealizar,atc_descripcion,atc_liberobserv,atc_libercod1,atc_libernom1,atc_libercorreo1,atc_liberusumax1,atc_libercod2,atc_libernom2,atc_libercorreo2,atc_liberusumax2,atc_planercod,atc_planernom,atc_planercorreo,atc_planerusumax,atc_tieneprove,atc_provecodi,atc_provecodisap,atc_provenom,atc_provecorreo1,atc_provecorreo2,atc_proverespon,atc_provefechreg,atc_provenrotrab,atc_provehortrabdia,atc_provetipo,atc_fechainitrab,atc_fechafintrab,atc_etapatrab,atc_garantia,atc_archivoadjunto,atc_evalcalidad,atc_evalcumpli,atc_evalsegur,atc_ubinom_sist,atc_ubides_sist,atc_ubinombre,atc_ubidescrip,atc_equcodigo,atc_equdescrip,atc_tipotrabajo,atc_subtipotrabajo,atc_eliminado,atc_reqsolpedsap,atc_reqhesmax,atc_fechacreado,atc_creadoporusumax,atc_fechamodifi,atc_usuamodifi
+44833,44782,Vacío,SS,210719142301,,326470,10,false,,326471,,,2,PESCA,27,TASA 416,T416,CALLAO,Cambio de amperímetro inoperativo. - 210719142301/T416/SE,Cambio de amperímetro inoperativo. - 210719142301T416SE,CAMBIO DE AMPERIMETRO EN TABLERO PRINCIPAL DE 24 VDC,,1160,Moises Ccasa,mccasa@tasa.com.pe,MCCASA,1062,David Benavides,dbenavides@tasa.com.pe,DBENAVIDES,,,,,true,362,2011015409,SERVICIOS ELECTROM.-INDUSTRIALES S.R.L.,selin.ing@speedy.com.pe,,J MARTINEZ,2021-10-26T13:04:27.000Z,1,3,true,2021-08-11T09:00:00.000Z,2021-08-12T00:00:00.000Z,,false,false,,,,TF01416-04,SISTEMAS ELECTRICOS (POT: 44.4KW),TF01416-0404-01,Tableros de Distribución de 24VDC,300017693,Tablero 24VDC Distribución ppal. [10P],MC,MCP,false,false,true,2021-10-26T12:22:52.743Z,DBENAVIDES,2021-10-26T13:04:27.000Z,proveedortasa
+42565,42514,Pend.1ra.aprob.,SS,,,318808,10,false,,318809,,,2,PESCA,39,TASA 31,T031,CALLAO,T31 CA AD Conf. base botellas de gas propano de cocina. - 210812082840/T031/CA,"Cambio de base de botellas de gas propano de cocina. - 210812082840T031CA
+ 
+COT 1084 
+ 
+FABRICACION DE BASE PARA BALON DE GAS, SE RECOMIENDA CAMBIO DE BASE DE GAS POR UNA NUEVA PARA DOS BALOS DE GAS POR ENCONTRARSE EN MAL ESTADO , CORROIDO Y PICADO. ","FABRICACION DE BASE PARA BALON DE GAS, SE RECOMIENDA CAMBIO DE BASE DE GAS POR UNA NUEVA PARA DOS BALOS DE GAS POR ENCONTRARSE EN MAL ESTADO , CORROIDO Y PICADO. ",,1163,Nicolas Giron,ngiron@tasa.com.pe,NGIRON,1005,Jose Huaman,jhuaman@tasa.com.pe,JHUAMAN,,,,,true,970,2060567877,FREED CONSTRUCCIONES MANTENIMIENTO Y SOLDADURAS S.A.C,logistica.frecomsa@gmail.com,,MORENO,2021-10-26T12:55:42.000Z,3,18,false,2021-09-09T08:00:00.000Z,2021-09-11T17:00:00.000Z,,false,true,,,,TF0131-01,CASCO,TF0131-0103,Superestructura y Aditamentos,400002543,Castillo,MP,MPA,false,false,true,2021-09-12T23:50:29.000Z,FRUIZ,2021-10-26T12:55:42.000Z,proveedortasa
+42573,42522,Pend.1ra.aprob.,OT,,,318824,10,false,,318825,,,2,PESCA,39,TASA 31,T031,CALLAO,T31 CA AD Camb. ref escotilla,"T31 CA AD Camb. ref escotilla
+ 
+COT 1079
+ 
+CAMBIO DE REFUERZO EN MAL ESTADO EN BOCA DE ESCOTILLA DE BODEGA EN ANGULO DE 38 PLEGADO ",CAMBIO DE REFUERZO EN MAL ESTADO EN BOCA DE ESCOTILLA DE BODEGA EN ANGULO DE 3/8 PLEGADO ,,,,,,1005,Jose Huaman,jhuaman@tasa.com.pe,JHUAMAN,,,,,true,970,2060567877,FREED CONSTRUCCIONES MANTENIMIENTO Y SOLDADURAS S.A.C,logistica.frecomsa@gmail.com,,MORENO,2021-10-26T12:38:13.000Z,3,11,false,2021-08-26T08:00:00.000Z,2021-08-27T17:00:00.000Z,,false,true,,,,TF0131-01,CASCO,TF0131-0102,"Cubiertas,  equipos y aditamentos",400002538,Escotilla de carga,MP,MPA,false,false,true,2021-09-13T00:37:07.000Z,FRUIZ,2021-10-26T12:38:13.000Z,proveedortasa
+42405,42354,Pend.1ra.aprob.,OT,,,318286,10,false,,318287,,,1,PLANTA,3,Callao Norte,TCNO,CALLAO,AD Reparación platinas TDM #3C,"AD Reparación platinas TDM #3C
+COTIZACIÓN 6006 
+ 
+ REPARACION DE PLATINAS PARA TRANSPORTADOR DE MALLAS 3C
+                                                                
+TRABAJOS A REALIZAR:
+? MOVILIZACIÒN DE PLATINAS A TALLER FACTORIA TRUJILLO.
+? TRAZADO Y CORTE EN AMBOS EXTREMOS A PLATINAS DAÑADAS.
+? TRAZADO Y CORTE PLACAS NUEVAS DE 316 X 2” X 4”.
+? INSTALACION Y SOLDEO PLACAS NUEVAS EN AMBOS EXTREMOS A PLATINAS.
+? FABRICACION DE 04 PERFORACIONES LISAS DE 716 EN AMBOS EXTREMOS DE PLATINAS.
+? FABRICACION 02 PERFORACIONES LISAS DE 916 AMBOS EXTREMOS A PLATINAS.
+? NOTA: TECNOLOGICA DE ALIMENTOS SUMINISTRARA:
+? PLATINAS DE 316  X  4”  X  6.00 MTS.
+ 
+COSTO : S. 1,920.00 + IGV ","REPARACION DE PLATINAS PARA TRANSPORTADOR DE MALLAS 3C
+                                                                
+TRABAJOS A REALIZAR:
+? MOVILIZACIÒN DE PLATINAS A TALLER FACTORIA TRUJILLO.
+? TRAZADO Y CORTE EN AMBOS EXTREMOS A PLATINAS DAÑADAS.
+? TRAZADO Y CORTE PLACAS NUEVAS DE 3/16 X 2” X 4”.
+? INSTALACION Y SOLDEO PLACAS NUEVAS EN AMBOS EXTREMOS A PLATINAS.
+? FABRICACION DE 04 PERFORACIONES LISAS DE 7/16 EN AMBOS EXTREMOS DE PLATINAS.
+? FABRICACION 02 PERFORACIONES LISAS DE 9/16 AMBOS EXTREMOS A PLATINAS.
+? NOTA: TECNOLOGICA DE ALIMENTOS SUMINISTRARA:
+? PLATINAS DE 3/16  X  4”  X  6.00 MTS.
+",,1244,Edgar Rafael,erafael@tasa.com.pe,ERAFAEL,1562,Guillermo Orozco Sibille,gorozco@tasa.com.pe,GOROZCO,,,,,true,142,2057137657,FACTORIA TRUJILLO W. E.I.R.L.,factoriatrujillo@gmail.com,,E.FALVY,2021-10-26T12:19:55.000Z,3,16,true,2021-09-02T08:00:00.000Z,2021-09-04T01:00:00.000Z,,false,true,,,,TCNO0102,Recep. Pesaje Materia Prima,TCNO0102-0209,Transportador de Mallas #3C,300025285,TRANSPORTADOR DE MALLA 250TN/HR,MP,MPA,false,false,true,2021-09-08T12:25:38.936Z,FDELACRUZ,2021-10-26T12:19:55.000Z,proveedortasa
+42408,42357,Pend.1ra.aprob.,OT,,,318313,10,false,,318314,,,1,PLANTA,3,Callao Norte,TCNO,CALLAO,AD Reparación platinas TDM #4B,"AD Reparación platinas TDM #4B
+ 
+COTIZACIÓN 6005 
+ 
+REPARACION DE PLATINAS PARA TRANSPORTADOR DE MALLAS 4B
+                                                                
+TRABAJOS A REALIZAR:
+? MOVILIZACIÒN DE PLATINAS A TALLER FACTORIA TRUJILLO.
+? TRAZADO Y CORTE EN AMBOS EXTREMOS A PLATINAS DAÑADAS.
+? TRAZADO Y CORTE PLACAS NUEVAS DE 316 X 2” X 4”.
+? INSTALACION Y SOLDEO PLACAS NUEVAS EN AMBOS EXTREMOS A PLATINAS.
+? FABRICACION DE 04 PERFORACIONES LISAS DE 716 EN AMBOS EXTREMOS DE PLATINAS.
+? FABRICACION 02 PERFORACIONES LISAS DE 916 AMBOS EXTREMOS A PLATINAS.
+? NOTA: TECNOLOGICA DE ALIMENTOS SUMINISTRARA:
+? PLATINAS DE 316  X  4”  X  6.00 MTS.
+ 
+COSTO : S. 2,430.00 ","REPARACION DE PLATINAS PARA TRANSPORTADOR DE MALLAS 4B
+                                                                
+TRABAJOS A REALIZAR:
+? MOVILIZACIÒN DE PLATINAS A TALLER FACTORIA TRUJILLO.
+? TRAZADO Y CORTE EN AMBOS EXTREMOS A PLATINAS DAÑADAS.
+? TRAZADO Y CORTE PLACAS NUEVAS DE 3/16 X 2” X 4”.
+? INSTALACION Y SOLDEO PLACAS NUEVAS EN AMBOS EXTREMOS A PLATINAS.
+? FABRICACION DE 04 PERFORACIONES LISAS DE 7/16 EN AMBOS EXTREMOS DE PLATINAS.
+? FABRICACION 02 PERFORACIONES LISAS DE 9/16 AMBOS EXTREMOS A PLATINAS.
+? NOTA: TECNOLOGICA DE ALIMENTOS SUMINISTRARA:
+? PLATINAS DE 3/16  X  4”  X  6.00 MTS.",,1244,Edgar Rafael,erafael@tasa.com.pe,ERAFAEL,1562,Guillermo Orozco Sibille,gorozco@tasa.com.pe,GOROZCO,,,,,true,142,2057137657,FACTORIA TRUJILLO W. E.I.R.L.,factoriatrujillo@gmail.com,,E.FALVY,2021-10-26T12:16:53.000Z,3,24,true,2021-09-01T08:00:00.000Z,2021-09-03T05:00:00.000Z,,false,true,,,,TCNO0102,Recep. Pesaje Materia Prima,TCNO0102-0211,Transportador de Mallas #4B,300025289,TRANSPORTADOR DE MALLA 250TN/HR,MP,MPA,false,false,true,2021-09-08T13:45:32.550Z,FDELACRUZ,2021-10-26T12:16:53.000Z,proveedortasa
+6819,6772,Pend.1ra.aprob.,SS,191217151008,,137701,10,false,,137702,,,1,PLANTA,62,CHD,TCHD,Callao,liberación y sellado de tapas de concreto del sistema de trasvac - 191217151008/TCHD/,liberación y sellado de tapas de concreto del sistema de trasvac - 191217151008TCHD,Se realizó la liberacion y luego el sellado de las tapas de concreto del sistema trasvac.,,1258,Omar Montenegro,omontenegro@tasa.com.pe,OMONTENEGRO,1281,Carlos Torres,ctorres@tasa.com.pe,CTORRES,1213,Juan Cotera,jcotera@tasa.com.pe,JCOTERA,true,131,0000033837,ESCORPION CONTRATISTAS S.A.C.,wilderlopez07@hotmail.com,,Eloy Lopez,2021-10-26T12:13:22.000Z,2,32,true,2019-11-04T08:00:00.000Z,2019-11-05T17:00:00.000Z,,false,true,,,,TCHD0602,Sistema de Bombeo de Muelle CH,TCHD0602-01,Sistema de Bombeo TRANSVAC,,,MP,MP,false,false,true,2020-03-04T00:34:00.000Z,DROSALES,2021-10-26T12:13:22.000Z,proveedortasa
+44446,44395,Pend.1ra.aprob.,OT,,,325004,10,false,,325005,,,2,PESCA,55,TASA 55,T055,TCHI,T55_SH_REMOCION PERNOS BASES WINCHES," 
+T55SHREMOCION PERNOS BASES WINCHES
+ 
+PRESUPUESTO: N°2021-251 
+ 
+
+ 
+ 
+  1. REMOCIÓN
+  DE LOS PERNOS PARA DESMONTAJE DE EQUIPOS HIDRAULICOS 
+ 
+ 
+  Se realizó
+  la remoción de los pernos para el desmontaje del 2 winches (panga y tangón),
+  los
+ 
+ 
+  pernos se
+  encontraban deteriorados con oxido y yeso lo cual impedía proceder con el
+  retiro,
+ 
+ 
+  por lo que
+  fue necesario el uso del equipo oxicorte para poder calentar y retirar con
+  facilidad 
+ 
+ 
+  los 12  pernos, así mismo la maniobra (cargas
+  suspendidas) para poder proceder al desmontaje 
+ 
+ 
+  También se
+  realizó la remoción de los pernos para el l desmontaje del carrete enrollador
+  de
+ 
+ 
+  manguera. Se
+  hizo remoción de capa de pintura y 
+  retiró los  16 pernos
+  roscados  
+ 
+ 
+  Cabe señalar
+  que se perfilo el área de los trabajos para que quede listo para la
+  instalación de
+ 
+ 
+  los mismos .
+ 
+ 
+  2. Materiales
+ 
+ 
+  Discos de
+  corte
+ 
+ 
+  Discos de
+  desbaste 
+ 
+ 
+  Oxigeno 3 m3
+ 
+ 
+  Gas 
+ 
+ 
+ 
+PROVEEDOR: REPARACIONES NAVALES M. TEMOCHE 
+ 
+ ","REMOCIÓN DE LOS PERNOS PARA DESMONTAJE DE EQUIPOS HIDRAULICOS 
+Se realizó la remoción de los pernos para el desmontaje del 2 winches (panga y tangón), los
+pernos se encontraban deteriorados con oxido y yeso lo cual impedía proceder con el retiro,
+por lo que fue necesario el uso del equipo oxicorte para poder calentar y retirar con facilidad 
+los 12  pernos, así mismo la maniobra (cargas suspendidas) para poder proceder al desmontaje 
+También se realizó la remoción de los pernos para el l desmontaje del carrete enrollador de
+manguera. Se hizo remoción de capa de pintura y  retiró los  16 pernos roscados  
+Cabe señalar que se perfilo el área de los trabajos para que quede listo para la instalación de
+los mismos .
+",,1169,Palmer Estrada,pestrada@tasa.com.pe,PESTRADA,1063,Mark Bujaico,mbujaico@tasa.com.pe,MBUJAICO,1604,Javier Castro,javcastro@tasa.com.pe,JAVCASTRO,true,246,2060222640,M TEMOCHE S.A.C.,msacha@mtemochesac.com,,WILLY JUAR,2021-10-26T11:58:20.000Z,5,8,false,2021-07-24T08:00:00.000Z,2021-07-25T18:00:00.000Z,,false,true,,,,TF0155-06,SISTEMAS HIDRAULICOS,TF0155-06,SISTEMAS HIDRAULICOS,,,MP,MPA,false,false,true,2021-10-18T12:35:26.000Z,JAVCASTRO,2021-10-26T11:58:20.000Z,proveedortasa
+32861,32813,Pend.1ra.aprob.,OT,,,276215,10,false,,276216,,,3,ASTILLER,12,Astillero - Chimbote,TAST,Astillero,S - Cambio de Tuberias Hidraulicas de inoxidable,"DESCRIPCION DE ACTIVIDAD:
+ 
+1.- DESMONTAJE DE TUBERIAS INOX. DE 6,4 mm DE DIAMETRO POR DESGASTE EN ZONA DE CODOS. 
+ 
+2.- SUMINISTRO E INSTALACION DE (02) TRAMOS DE TUBERIAS NUEVAS DE INOX.  ","DESMONTAJE DE TUBERIAS INOX. DE 6,4 mm DE DIAMETRO POR DESGASTE EN ZONA DE CODOS,
+CONFECCION Y MONTAJE DE CAÑERÍAS. ",,1198,Eduardo Jimenez,ejimenez@tasa.com.pe,EJIMENEZ,0,,,,,,,,true,377,2044534398,SERV.TECNICOS MECANICOS CULQUI,culquisertemec@hotmail.com,,A. Culqui,2021-10-26T11:20:52.000Z,2,8,false,2021-06-09T08:00:00.000Z,2021-06-11T16:00:00.000Z,,false,true,,,,AS0102,Sistema de Aire Comprimido,AS0102-01,Compresoras,300022743,Compresor de 1440 cfm,MP,MP,false,false,true,2021-05-03T11:51:31.000Z,CBARRANTES,2021-10-26T11:20:52.000Z,proveedortasa
+44811,44760,Pend.1ra.aprob.,GRA,,,,,false,,,5002569,230,2,PESCA,60,TASA 61,T061,Chimbote,T61_AD_Modif-Inst.Tubo escape MAux 1,"MODIFICACION E INSTALACIÓN TUBO DE ESCAPE MOTOR AUXILIAR N 1
+El tubo de 4” del sistema de escape del motor auxiliar se llevó a arenar y se aplicó pintura de alto calor .
+Al instalar la tubería de escape no coincidía en lugar por qué no era el tamaño adecuado así que se tubo de modificar y poner un tramo de tubo de 4 con brida .
+Se colocó un codo de 4” para que quede instalado dándole la forma a la extructura.
+Para su instalación se uso pernos de 5/8 x 3” con tuerca ,huaccha plan y anillo de presión
+También se colocó empaquetadura de asbesto de ¼ en cada brida que se colocó para facilitar su instacion.
+La extructura del tubo de escape quedó fija en las abrazaderas anterior se cambió  pernos de 
+5/8” ½ x 3 ½ con tuerca encontrandose en mal estado 
+Dejando instalado la tubería y su silenciador para su funcionamiento.
+Trabajo de altura, usando tecles para maniobras.
+Materiales
+01 tramo de tubo de 4” 
+01 brida de 4”
+32 pernos de 5/8” x 3” con tuerca anillo plano anillo de presión de fierro negro.
+08 pernos de ½ x 3 ½ con tuerca inoxidable
+02 codo de 45° x 4”
+01 codo de 90° x 4”
+½ galón de pintura de alto calor
+01 Empaquetadura de asbesto
+04 kilos de soldadura 6011 1/8
+04 kilos de soldadura de 6013. 1/8
+03 disco de corte chico
+02 disco de debaste chico
+Oxígeno 4 M3
+Gas 
+Arenado pintado	
+","MODIFICACION E INSTALACIÓN TUBO DE ESCAPE MOTOR AUXILIAR N 1
+El tubo de 4” del sistema de escape del motor auxiliar se llevó a arenar y se aplicó pintura de
+ alto calor .
+Al instalar la tubería de escape no coincidía en lugar por qué no era el tamaño adecuado así que 
+se tubo de modificar y poner un tramo de tubo de 4 con brida .
+Se colocó un codo de 4” para que quede instalado dándole la forma a la extructura.
+Para su instalación se uso pernos de 5/8 x 3” con tuerca ,huaccha plan y anillo de presión
+También se colocó empaquetadura de asbesto de ¼ en cada brida que se colocó para facilitar su 
+instacion .
+La extructura del tubo de escape quedó fija en las abrazaderas anterior se cambió  pernos de 
+5/8” ½ x 3 ½ con tuerca encontrandose en mal estado 
+Dejando instalado la tubería y su silenciador para su funcionamiento.
+Trabajo de altura, usando tecles para maniobras.
+",,1116,Jesús Vilchez,jvilchez@tasa.com.pe,JVILCHEZ,1056,Nepthali Collazos,ncollazos@tasa.com.pe,NCOLLAZOS,,,,,true,246,2060222640,M TEMOCHE S.A.C.,msacha@mtemochesac.com,,LUIS ROSAL,2021-10-26T11:08:19.000Z,5,48,false,2021-09-13T08:00:00.000Z,2021-09-17T18:00:00.000Z,,false,true,,,,TF0161-01,CASCO,TF0161-0107,Sala de Máquinas y Aditamentos,,,,,false,true,false,2021-10-26T00:13:29.000Z,PFLORES,2021-10-26T11:08:19.000Z,proveedortasa
+43871,43820,Pend.2da.aprob.,OT,,,323134,10,false,,323135,,,1,PLANTA,5,Supe,TSUP,SUPE,Serv.alquiler compresor reactor celda flotacion,"Serv.alquiler compresor reactor celda flotacion
+COTIZACION NRO-00000001901 
+ SERVICIO ALQUILER 43.00 645.00
+DE COMPRESOR ATLAS COPCO GX11, CON MOTOR DE 15 HP 
+EN 230440VOLTIOS.
+MONTADO SOBRE TANQUE DE 270 LITROS.
+ARRANQUE DIRECTO.
+PRESION: 132 PSI
+VOLUMEN: 52.3 CFM
+PERIODO DE ALQUILER
+43 DÍAS
+DEL 130621 AL 260721 
+Valor Venta US$ 645.00
+SON: SETECIENTOS SESENTA Y UNO CON 10100DOLARES AMERICANOS I.G.V. 18 % US$ 116.10
+TOTAL US$ 761.10 ",Servicio de alquiler de compresor GX11,,1248,Carlos Rojas,crojas@tasa.com.pe,CROJAS,1268,Jorge Rivera,jrivera@tasa.com.pe,JRIVERA,,,,,true,141,2050356248,FACTORIA SANTA ISOLINA S.R.L.,vanesa.arcos@santaisolina.com,servicios@santaisolina.com,J. QUEVEDO,2021-10-26T11:00:15.000Z,1,5,true,2021-06-13T09:00:00.000Z,2021-07-26T17:00:00.000Z,Culminado,false,false,100,100,90,TSUP0103,Recup. Trat. Agua de Bombeo,TSUP0103-0402,Sistema Reactor Saturacion de Aire DAF#1,300039168,COMPRESOR DE TORNILLO 210CFM _KW,MC,EM,false,false,true,2021-10-07T13:15:06.976Z,CGOZAR,2021-10-26T11:00:15.000Z,proveedortasa
+41765,41714,Pend.1ra.aprob.,OT,,,313345,10,false,,313346,,,2,PESCA,34,TASA 426,T426,MALABRIGO,"T-426: Mano de Obra, cambio tubería gobierno.","T-426: Mano de Obra, cambio tubería gobierno.","TRAMO DE TUBERIA DEL SISTEMA DE GOBIERNO
+Por evaluacion de tramo de tuberia corroida de 1"" del sistema de gobierno.
+Por desmontaje de tramo corroido cortando con amoladora y drenaje de aceite hidraulico del sistema de gobierno.
+Por confeccion de tramo nuevo, utilizando codo de 1"" x 90° de alta, copla de 1"" x 3000 lb.
+Por instalacion de la misma aplicando electrodo 60/11  y 70/18 soldeo en pasamamparo.",,1146,Feliciano Santoyo,fsantoyo@tasa.com.pe,FSANTOYO,1064,Javier Paz,jpaz@tasa.com.pe,JPAZ,,,,,true,333,0000004852,REPARACIONES NAVALES EMANUEL EIRL,senemanuel14@hotmail.com,,CGARCIA,2021-10-26T09:45:23.000Z,2,4,true,2021-04-28T04:00:00.000Z,2021-04-28T08:00:00.000Z,,false,true,,,,TF01426-06,SISTEMAS HIDRAULICOS,TF01426-0613,Sistema de Gobierno Hidráulico,,,MC,MCP,false,false,true,2021-08-23T13:22:06.873Z,JPAZ,2021-10-26T09:45:23.000Z,proveedortasa
+44167,44116,Pend.1ra.aprob.,OT,,,324031,10,false,,324032,,,2,PESCA,24,TASA 413,T413,Chimbote,T413 MA1 Alineam. Servo Hidr. Vs TR-3,"T413 MA1 Alineam. Servo Hidr. Vs TR-3
+ 
+REGULARIZACION 
+PROVEEDOR: MARPERU 
+ 
+ALINEAMIENTO DE SERVO HIDRAULICO VS MA N°1
+
+- Posicionar Servo hidráulico en posición
+- Alineamiento de Servo hidráulico vs Tr3 - Polea
+- Ajuste de pernos de anclajes
+- Ajuste de corredera
+- Montaje y templado de fajas ","*ALINEAMIENTO DE SERVO HIDRAULICO VS MA1 - TR3 (FAJAS) 
+-Alineamiento de Servo hidraulico vs MA con poleas 
+-Ajuste de templadores
+-Ajuste de pernos de anclajes 
+-Montaje de fajas
+",,,,,,1056,Nepthali Collazos,ncollazos@tasa.com.pe,NCOLLAZOS,1036,Emiliano Almeyda,ealmeyda@tasa.com.pe,EALMEYDA,true,403,2060206775,SERVICIOS MARPERU E.I.R.L.,sermarperu@gmail.com,,Jhonatan P,2021-10-26T09:43:01.000Z,2,2,false,2021-10-04T15:00:00.000Z,2021-10-04T17:00:00.000Z,,false,true,,,,TF01413-10,MOTORES AUXILIARES,TF01413-1001,Motor Auxiliar 1,400027939,MOTOR DIESEL 27 HP 1800 RPM,MP,MPA,false,false,true,2021-10-13T20:36:44.000Z,LUSANCHEZ,2021-10-26T09:43:01.000Z,proveedortasa
+44093,44042,Pend.1ra.aprob.,OT,,,323683,10,false,,323684,,,2,PESCA,24,TASA 413,T413,chimbote,T413 SE Adic. Alin. transmotor,"T413 SE Adic. Alin. transmotor
+ 
+PRESUPUESTO SERVICIOS MARPERÚ N252 – 2021 
+ 
+ALINEAMIENTO DE TRANSMOTOR VS MA N°1
+? Posicionar Transmotor en posición
+? Alineamiento de Transmotor vs Tr3- Polea
+? Ajuste de pernos de anclajes
+? Ajuste de corredera
+? Montaje y templado de fajas ","*ALINEAMIENTO DE TRANSMOTOR VS MA1 - TR3 (FAJAS) 
+-Alineamiento de transmotor vs MA con poleas 
+-Ajuste de templadores
+-Ajuste de pernos de anclajes 
+-Montaje de fajas
+",,,,,,1056,Nepthali Collazos,ncollazos@tasa.com.pe,NCOLLAZOS,,,,,true,403,2060206775,SERVICIOS MARPERU E.I.R.L.,sermarperu@gmail.com,,Jhonatan P,2021-10-26T09:38:20.000Z,2,2,false,2021-10-04T14:00:00.000Z,2021-10-04T16:00:00.000Z,,false,true,,,,TF01413-04,SISTEMAS ELECTRICOS (POT: 50KW),TF01413-0401-01,Alternadores 24VDC,300011747,Alternador 24VDC 245A acop MP,MP,MPA,false,false,true,2021-10-12T16:39:49.000Z,TCURO,2021-10-26T09:38:20.000Z,proveedortasa
+44790,44739,Pend.1ra.aprob.,OT,,,326141,10,false,,326144,,,2,PESCA,43,TASA 36,T036,CHIMBOTE,T36 PG SENSR DESCANS (COT 297-2021),"T36 PG CAMBIO DE SENSORES DE DESCANSOS (COT 297-2021)
+Proveedor: INGENIERIA NAVAL E INDUSTRIAL EN ALINEAMIENTO Y REFRIGERACION EIRL (INIAR EIRL) 
+ 
+Inspección de tablero de temperaturas
+Conexión de sensor directo en modulo
+Apertura de línea de propulsión
+Inspección de sensores.
+Cambio de nuevos sensores 1, 2, 3, 4, 5
+Conexión a caja de nuevos sensores
+Conexión en modulo
+Calibración de sensores
+Lectura en pantalla
+ 
+
+ 
+ 
+ 
+ 
+ 
+  sonda
+  PT100 6mmx2m calibrada
+  PZ
+  5    
+ 
+ 
+  Manguera Neumatica
+   
+  m
+  2    
+ 
+ 
+  Conectores 14"" para manguera
+   
+  Pz
+  5   ","Inspección de tablero de temperaturas
+Conexión de sensor directo en modulo
+Apertura de línea de propulsión
+Inspección de sensores.
+Cambio de nuevos sensores 1, 2, 3, 4, 5
+Conexión a caja de nuevos sensores
+Conexión en modulo
+Calibración de sensores
+Lectura en pantalla",,1090,Carlos Ramirez G.,carramirez@tasa.com.pe,CARRAMIREZ,1024,Augusto Price,aprice@tasa.com.pe,APRICE,,,,,true,208,2060471752,INIAR E.I.R.L.,sec.iniar@gmail.com,,Julio Visi,2021-10-26T09:22:15.000Z,2,8,true,2021-10-26T00:00:00.000Z,2021-10-26T00:00:00.000Z,,false,true,,,,TF01036-02,PROPULSION Y GOBIERNO,TF01036-0201,Propulsion Principal,400004225,"DESCANSOS DE PROPULSION, 5.0, GRASA",MP,MPA,false,false,true,2021-10-25T15:42:38.000Z,RLUQUE,2021-10-26T09:24:05.000Z,Augusto Price
+44787,44736,Pend.1ra.aprob.,SS,211022100423,,325609,10,false,,325610,,,2,PESCA,51,TASA 51,T051,CALLAO,tubería de línea de agua de mar en mal estado-211022100423/T051,tubería de línea de agua de mar en mal estado-211022100423T051,"CAMBIO DE TRAMO DE TUBO DE 5” Y CODO EN LINEA DE TOMA DE FONDO POR ENCONTRARSE PICADO
+(CORRECTIVO – CALLAO)
+01 JGO: POR EL SERVICIO DE IR A BORDO A SE PROCEDE A DESMONTAR TRAMO DE TUBO DE 5” EN LINEA DE TOMA DE FONDO POR ENCONTRARSE PICADO. SE PROCEDE A BAJAR A TALLER PARA SU RESPECTIVO CAMBIO. POSTERIORMENTE, SE PROCEDE A CORTAR TRAMO DE TUBO NUEVO. LUEGO, SE HABILITA Y SE PREPARA UNA MACHINA. ADEMAS, SE FABRICA LINEA NUEVA RECUPERANDO LA NUEVA BRIDA, SE APUNTALA TODO Y SE PROCEDE A SU SOLDEO TOTAL DE DICHA LINEA, SE REALIZA LIMPIEZA MECANICA Y SE PINTA. LUEGO, SE PREPARAN EMPAQUES DE JEBE Y LANA 1/8 PARA BRIDA 5”. SE LLEVA A LA EMBARCACION PARA SU RESPECTIVO MONTAJE. EN LA EMBARCACION SE PROCEDE AL MONTAJE, COLOCANDO EMPAQUES NUEVOS, DESPUES, LOS PERNOS SE AJUSTAN. UNA VEZ CULMINADO SE VERIFICAR EL TRABAJO QUEDANDO OPERATIVO Y CONFORME.
+NOTA: TRABAJO SE REALIZA BAJO LA SUPERVICION DEL MOTORISTA DE TURNO.",,1111,Jaime Stigler,jstigler@tasa.com.pe,JSTIGLER,1055,Victor Rodriguez,vrodriguez@tasa.com.pe,VRODRIGUEZ,,,,,true,426,0000009158,SOLDADURAS Y REPARACIONES VICTOR SAC,solrevi0308@hotmail.com,,VERA,2021-10-26T09:13:24.000Z,3,10,true,2021-08-24T03:00:00.000Z,2021-08-25T05:00:00.000Z,,false,true,,,,TF0151-07,SISTEMAS AUXILIARES,TF0151-0708-01,Tuberias/Manifold y valvulas Agua salada,,,MC,MCP,false,false,true,2021-10-25T15:25:25.810Z,VRODRIGUEZ,2021-10-26T09:13:24.000Z,proveedortasa
+34626,34572,Pend.1ra.aprob.,OT,,,281633,2,false,,281635,,,2,PESCA,60,TASA 61,T061,Chimbote,T61 SE Alin Generador/Moto 65KW,"TXX SE PM1A Alineamiento GeneradorMoto
+
+,,Alineamiento de Generador versus Motor
+"",,Confección de lainas de fierro y de
+bronce de diferentes medidas.
+"",,Enlainado de soportes de Generador.
+"",,Alineamiento de Motor versus
+Generador.
+"",,Colocar y ajustar pernos de anclaje
+de Generador.
+"",,Ajustar pernos de anclaje de amarre
+de campana entre Motor y Generador.
+"",,Verificación de alineamiento entre
+Motor y Generador.
+"",,Chequeo y verificación de
+desplazamiento axial de cigüeñal o juego
+axial de cigüeñal.
+"",,Prueba de Operatividad.
+
+Nota: Debe incluir maniobras y traslado
+a taller.
+
+Solicitado por: Ing. Jorge Meza
+
+
+
+
+JMEZA","Se verifico las luces de la campana
+Se fabrico lainas segun el alineamiento del generador
+Se ajustaron los pernos de amarre del generador
+Se ajustaron los pernos de anclaje del conjunto motor Generador
+Se verifico el juego axial estando dentro de tolerancia
+Entrega",,1109,Harry Pelaez,embarcaciontasa61@tasa.com.pe,HPELAEZ,1056,Nepthali Collazos,ncollazos@tasa.com.pe,NCOLLAZOS,,,,,true,208,2060471752,INIAR E.I.R.L.,sec.iniar@gmail.com,,Joe Aguila,2021-10-26T00:03:09.000Z,3,9,true,2021-09-14T10:00:00.000Z,2021-09-14T14:00:00.000Z,,false,true,,,,TF0161-04,SISTEMAS ELECTRICOS (POT: 721.4KW),TF0161-0401-0202,Generador 440VAC Nro. 2,300030345,Generador 440VAC 65KW acop JD,MP,MP,false,false,true,2021-05-13T03:52:01.106Z,JMEZA,2021-10-26T00:03:09.000Z,proveedortasa
+42050,41999,Pend.1ra.aprob.,SS,210726182650,,307964,10,false,,307965,,,2,PESCA,38,TASA 23,T023,CALLAO,T23 SH Relleno de polines del winche principal - 210726182650/T023/SH,Polines del winche principal - 210726182650T023SH,"Relleno de 03 polines del winche principal 
+ *se inspecciona  tambores del winche principal 								
+* Se verifican que los polines tienen surcos 								
+* Se se realiza rellenado de polines con soldadura cintodurom 350 y se pasa disco de desbaste para que no quede rebarba y pueda dañar el 								
+cable acerado.								
+* El motorista el motorista aprueba la actividad .								
+",,1082,Alejandro Antaurco,aantaurco@tasa.com.pe,AANTAURCO,1043,Roger Rodriguez,rorodriguez@tasa.com.pe,RORODRIGUEZ,,,,,true,333,0000004852,REPARACIONES NAVALES EMANUEL EIRL,senemanuel14@hotmail.com,,BGARCIA,2021-10-26T00:02:49.000Z,3,8,true,2021-07-17T08:00:00.000Z,2021-07-17T15:00:00.000Z,Culminado,false,true,90,90,90,TF0123-06,SISTEMAS HIDRAULICOS,TF0123-0601,Winche Principal,300021540,Winche de Combinación IT-15,MC,MCP,false,false,true,2021-08-31T14:05:13.090Z,RORODRIGUEZ,2021-10-26T00:02:49.000Z,proveedortasa
+34622,34568,Pend.1ra.aprob.,OT,,,281627,2,false,,281629,,,2,PESCA,60,TASA 61,T061,Chimbote,T61 SE PM Ali Gener/Moto 565KW,"TXX SE PM1A Alineamiento GeneradorMoto
+
+,,Alineamiento de Generador versus Motor
+"",,Confección de lainas de fierro y de
+bronce de diferentes medidas.
+"",,Enlainado de soportes de Generador.
+"",,Alineamiento de Motor versus
+Generador.
+"",,Colocar y ajustar pernos de anclaje
+de Generador.
+"",,Ajustar pernos de anclaje de amarre
+de campana entre Motor y Generador.
+"",,Verificación de alineamiento entre
+Motor y Generador.
+"",,Chequeo y verificación de
+desplazamiento axial de cigüeñal o juego
+axial de cigüeñal.
+"",,Prueba de Operatividad.
+
+Nota: Debe incluir maniobras y traslado
+a taller.
+
+Solicitado por: Ing. Jorge Meza
+
+
+
+
+JMEZA","Se Verifico las luces del acoplamiento tipo campana
+Se enlaino las patas del generador para conseguir la altura de alineamiento
+Se ajusto los pernos de amarre
+Se ajusto los pernos de anclaje
+Se Verifico el juego axial estando correcto
+Entrega final",,1109,Harry Pelaez,embarcaciontasa61@tasa.com.pe,HPELAEZ,1056,Nepthali Collazos,ncollazos@tasa.com.pe,NCOLLAZOS,,,,,true,208,2060471752,INIAR E.I.R.L.,sec.iniar@gmail.com,,Joe Aguila,2021-10-25T23:48:21.000Z,2,8,true,2021-09-23T00:00:00.000Z,2021-09-23T00:00:00.000Z,,false,true,,,,TF0161-04,SISTEMAS ELECTRICOS (POT: 721.4KW),TF0161-0401-0203,Generador 440VAC Nro. 3,300040634,Generador 440VAC 565KW aco. Cummin QSK19,MP,MP,false,false,true,2021-05-13T03:43:16.940Z,JMEZA,2021-10-25T23:48:21.000Z,proveedortasa
+44132,44081,Vacío,OT,,,323931,10,false,,323934,,,2,PESCA,3,Callao Norte,TCNO,CALLAO,"HER IV AGUA DUL, TK (COT 439/21)","LINEA DE AGUA DULCE Y TANQUE DE AGUA , TK RESERVA (COT 43921)
+ 
+1. Se realiza inspeccion de linea de agua dulce 
+2. Se verifica que hay tramos en mal estado y valvulas , niples y universales. 
+3. Se utilizara niples,codo,valvulas tipo bola , tipo compuerta de bronce 
+4. Se realiza desmontaje de la obstruido y se cambia por nuevo con teflon y permatex 
+5. Se realiza prueba quedando en buenas condiciones. 
+ 
+
+ 
+ 
+ 
+ 
+ 
+  MATERIALES 
+   
+  CANT.
+ 
+ 
+  niples 12 "" x 2"" inox
+  pz
+  7
+ 
+ 
+  niples 12 "" x 3"" inox
+  pz
+  5
+ 
+ 
+   
+  niples 12 x 2 12
+  pz
+  3
+ 
+ 
+  valvulas de 12 inox
+  pz
+  8
+ 
+ 
+  valvulas de 34 inox
+  pz
+  4
+ 
+ 
+  universales de 34 inox
+  pz
+  2
+ 
+ 
+  niples de 34 x 2 12 inox
+  pz
+  4
+ 
+ 
+  niples de 34 x 3"" inox
+  pz
+  4
+ 
+ 
+   
+  niples de 34 x 1 12 inox
+  pz
+  1
+ 
+ 
+   
+  niples de 34 x 3 12 inox
+  pz
+  1
+ 
+ 
+  codo de 34 x 90 inox
+  pz
+  1
+ 
+ 
+  valvula de bola 38 inox
+  pz
+  1
+ 
+ 
+  vavula de bola de 14 inox 
+  pz
+  1
+ 
+ 
+  valvula tipo compuerta de bronce embridado de 1 12
+  pz
+  1
+ 
+ 
+  valvula tipo compuerta enroscable de bronce de 1 12""
+  pz
+  2
+ 
+ 
+  teflones
+  pz
+  12
+ 
+ 
+  permatex
+  pz
+  2","DESCRIPCIÓN DEL SERVICIO		LINEA DE AGUA DULCE Y TANQUE DE AGUA , TK RESERVA						
+								
+1. Se realiza inspeccion de linea de agua dulce								
+2. Se verifica que hay tramos en mal estado y valvulas , niples y universales.								
+3. Se utilizara niples,codo,valvulas tipo bola , tipo compuerta de bronce								
+4. Se realiza desmontaje de la obstruido y se cambia por nuevo con teflon y permatex								
+5. Se realiza prueba quedando en buenas condiciones.								
+",,,,,,1005,Jose Huaman,jhuaman@tasa.com.pe,JHUAMAN,,,,,true,333,0000004852,REPARACIONES NAVALES EMANUEL EIRL,senemanuel14@hotmail.com,,fidencio G,2021-10-25T23:44:45.000Z,3,12,false,2021-10-25T00:00:00.000Z,2021-10-25T00:00:00.000Z,,false,false,,,,TF0401-0407,SISTEMAS AUXILIARES,TF0401-0407-02,Sistema de agua dulce,,,MP,MPA,false,false,true,2021-10-13T10:25:26.000Z,RLUQUE,2021-10-25T23:44:45.000Z,proveedortasa
+35038,34984,Pend.1ra.aprob.,OT,,,282228,2,false,,282230,,,2,PESCA,60,TASA 61,T061,Chimbote,T61 SF Alinear Compresor Hall con Lasser,"TXX SF Alinear Compresor Hall con Lasser
+
+EQUIPO: Compresor Hall
+DETALLE: ALINEAR Compresor Hall rayo Con
+Lasser Vs el Motor electrico
+Tipo de Mtto: 1 Año (Alineamiento de
+Compresor de FRIO)
+
+1.- Verificar que no existe pie Cojo en
+las bases del compresor y el motor
+Eléctrico o Caja reductora o motor de
+combustión (alineamiento visual).
+2.- Enlainar la bomba hasta aproximar lo
+más cerca posible del elemento motriz.
+3.- Para el caso de bridas o
+acoplamiento Falk u Omega o una similar,
+proceder a alinear con rayo lasser
+debiendo quedar las medidas segun manual
+del fabricante.
+4.- Proceder a verificar que todos los
+pernos de anclaje estén correctamente
+ajustado y no exista pie cojo.
+5.- Preparar el Informe para proceder
+con la Entrega de la Hoja de Entrada la
+cual deberá contener: las medidas
+finales del axial y radial, las
+recomendaciones del caso, con sus fotos
+respectivas, etc.
+
+A TODO COSTO (SINO): SI
+PROVEEDOR SUGERIDO: Multiservicios Z&R, Condorman, etc
+MONTO SUGERIDO: $ + IGV
+DURACION ESTIMADA: 1 días
+SOLICITANTE: Ing. JAIME TOLEDO","Se instalo el quipo de alineamiento lasser
+Se alineo el motor electrico manipulando el vibracon del motor electrico
+Se verifico los laterales quedando correctamente
+Se ajusto los pernos de anclaje
+Se observo que las lainas del cople tenian rajadura
+Queda pendiente el cambio de laina",,1109,Harry Pelaez,embarcaciontasa61@tasa.com.pe,HPELAEZ,,,,,,,,,true,208,2060471752,INIAR E.I.R.L.,sec.iniar@gmail.com,,Joe Aguila,2021-10-25T23:21:25.000Z,2,8,true,2021-09-20T10:00:00.000Z,2021-09-20T14:00:00.000Z,,false,true,,,,TF0161-08,SISTEMA DE FRIO RSW,TF0161-0801,Compresor de frío,300040972,Compresor Monotornillo de frio,MP,MP,false,false,true,2021-05-17T10:22:31.413Z,JTOLEDO,2021-10-25T23:21:25.000Z,proveedortasa
+42199,42148,Pend.1ra.aprob.,OT,,,311143,10,false,,311144,,,1,PLANTA,13,Chimbote,TCHI,Centro de Servicios Lurin ,AD Inspección Separador de Sólidos #1,"AD Inspección Separador de Sólidos #1
+ 
+S ervicio de Mecanizado y cambio de rodajes a: 
+Equipo: Decanter 
+Modelo: 7241 
+SN: 5026489 
+Planta: Tasa Chimbote 
+Incluye: 
+Un Field Service Engineer por 8 horas para la ejecución 
+del servicio del equipo. 
+Alineamiento del tornillo trasportador, balanceo y reforzar 
+pesos. 
+Alineamiento del rotor y control de balanceo del rotor. 
+Ajuste a la brida con tapa y la caja de engranaje. 
+Ajuste a la polea con relación a la tapa chica
+ 
+Servicio de Mecanizado de 03 Agujeros al equipo a: 
+Equipo: Decanter 
+Modelo: 7241 
+SN: 5026489 
+Planta: Chimbote 
+ 
+ 
+TOTAL  3,908.00  ","S ervicio de Mecanizado y cambio de rodajes a: 
+Equipo: Decanter 
+Modelo: 7241 
+SN: 5026489 
+Planta: Tasa Chimbote 
+Incluye: 
+Un Field Service Engineer por 8 horas para la ejecución 
+del servicio del equipo. 
+Alineamiento del tornillo trasportador, balanceo y reforzar 
+pesos. 
+Alineamiento del rotor y control de balanceo del rotor. 
+Ajuste a la brida con tapa y la caja de engranaje. 
+Ajuste a la polea con relación a la tapa chica
+ 
+Servicio de Mecanizado de 03 Agujeros al equipo a: 
+Equipo: Decanter 
+Modelo: 7241 
+SN: 5026489 
+Planta: Chimbote ",,1236,David Lopez,dlopez@tasa.com.pe,DLOPEZ,1265,Eduardo Chunga,echunga@tasa.com.pe,ECHUNGA,,,,,true,11,2010008638,ALFA LAVAL S A,liliana.mogollon@alfalaval.com,,A.Carrasco,2021-10-25T22:30:45.000Z,1,40,true,2021-10-05T08:00:00.000Z,2021-10-18T08:00:00.000Z,,false,true,,,,TCHI0109,Planta de Aceite,TCHI0109-0201,Separador de Sólidos #1,300040630,SEPARADOR DE SOLIDOS 120000 LT/HR,MP,MP,false,false,true,2021-09-02T14:48:00.260Z,LINCISO,2021-10-25T22:30:45.000Z,proveedortasa
+41547,41496,Pend.1ra.aprob.,OT,,,312372,10,false,,312373,,,1,PLANTA,7,Malabrigo,TMSU,Centro de Servicios Lurin ,AD_TMSU_T3-21 MAYOR Centrífuga #3,"ADTMSUT3-21 MAYOR Centrífuga #3
+ 
+ADICIONAL DE LA OC 5010067185 
+ 
+SERVICIO DE MECANIZADO HSS517 N°3-SN 4127991 
+TASA MALABRIGO 
+Incluye: 
+Rectificar ajuste de parte inferior del bowl 
+Recuperación de ajuste del fondo deslizante 
+Recuperación de ajuste del soporte de resortes 
+Rectificado de paring disc y gravity disc 
+Cambio de pin guía roto de paring disc 
+Reparación de parte inferior de bowl zona de plug  
+ 
+Cotización No.: 0381920815 
+ALFA LAVAL 
+ 
+ ","ADTMSUT3-21 MAYOR Centrífuga #3
+ 
+ADICIONAL DE LA OC 5010067185 
+ 
+SERVICIO DE MECANIZADO HSS517 N°3-SN 4127991 
+TASA MALABRIGO 
+Incluye: 
+Rectificar ajuste de parte inferior del bowl 
+Recuperación de ajuste del fondo deslizante 
+Recuperación de ajuste del soporte de resortes 
+Rectificado de paring disc y gravity disc 
+Cambio de pin guía roto de paring disc 
+Reparación de parte inferior de bowl zona de plug  ",,1233,Agustín Risco,arisco@tasa.com.pe,ARISCO,1271,Nilton Huaman,nhuaman@tasa.com.pe,NHUAMAN,,,,,true,11,2010008638,ALFA LAVAL S A,liliana.mogollon@alfalaval.com,,A. Carrasc,2021-10-25T22:19:55.000Z,1,25,true,2021-10-05T08:00:00.000Z,2021-10-19T08:00:00.000Z,,false,true,,,,TMSU0109,Planta de Aceite,TMSU0109-0403,Centrífuga #3,300006446,CENTRIFUGA 30000LT/HR,MP,MP,false,false,true,2021-08-18T21:24:59.666Z,LINCISO,2021-10-25T22:19:55.000Z,proveedortasa
+42609,42558,Pend.1ra.aprob.,OT,,,318978,10,false,,318979,,,2,PESCA,42,TASA 35,T035,Callao,T35 SE Adic. Generador 220V 18KW,"T35 SE Adic. Generador 220V 18KW
+TASA 39-2021		
+		
+Fabeleg 
+ 
+""TRABAJOS ADICIONALES EN MANTENIMIENTO DE GENERADOR #1 - 18KW
+1. Se ha realizado el rebobinado del estator de excitatriz por encontrarse con bajo aislamiento.
+2. Se ha realizado el cambio del puente de diodos giratorio por encontrarse oxidado y en mal estado. Modelo MXG4012, MXY4012
+3. Se ha embocinado la tapa del generador por encontrarse fuera de medida.
+4. Se realizó la revisión de la tarjeta reguladora de voltaje (AVR), encontrándose que el selector de frecuencia se encontraba a 50 Hz, cuando la posición correcta es en 60 Hz. Por esta razón el generador dejó de funcionar y se dañó el estator de la excitatriz.
+5. Se cambió el rodamiento del generador, código 6306-2RS1C3.
+6. Después de los trabajos realizados se verificó el funcionamiento del generador, quedando en buen estado operativo, reparado después de la falla que tuvo.""						
+						
+						
+						
+						
+ ","TRABAJOS ADICIONALES DE MANTENIMIENTO DE GENERADOR #2 - 18 KW
+- Se realizó el rebobinado del estator de la excitatriz del generador por encontrarse en mal estado operativo. Se reportó que el generador no generaba voltaje a su salida debido a que el estator se encontraba dañado.
+- Se realizó el cambio de diodos rotativos del generador ya que se encontraban deteriorados, oxidados y en mal estado operativo.
+- Se realizó el embocinado de la tapa del generador ya que se encontraba fuera de medida, afectando al ajuste entre rodamiento y tapa. Se rectificó y se dejó dentro de los límites tolerables.
+- Se realizó la revisión de la tarjeta AVR del generador, la cual se encuentra en buen estado operativo. Se conectó el cable de frecuencia a la posición de 60 Hz, lo cual corresponde a la velocidad de 1800 RPM que tiene el motor de combustión.",,,,,,1210,Pedro Sanchez,psanchez@tasa.com.pe,PSANCHEZ,,,,,true,135,0000044815,FABELEG EIRL,fabeleg@fabeleg.com,,JJVC,2021-10-25T21:59:44.000Z,2,15,false,2021-10-25T00:00:00.000Z,2021-10-25T00:00:00.000Z,,false,true,,,,TF01035-04,SISTEMAS ELECTRICOS (POT: 56.4KW),TF01035-0401-0202,Generador 220VAC Nro. 2,300033959,Generador 220VAC 18KW acop. MA TR3,MP,MPA,false,false,true,2021-09-13T18:31:35.000Z,TCURO,2021-10-25T21:59:44.000Z,proveedortasa
+42610,42559,Pend.1ra.aprob.,OT,,,318981,10,false,,318982,,,2,PESCA,45,TASA 38,T038,Callao,T38 SE adic. Generador 220VAC 18KW,"T38 SE adic. Generador 220VAC 18KW
+ 
+TASA 40-2021		
+		
+Fabeleg 
+ 
+""TRABAJOS ADICIONALES EN MANTENIMIENTO DE GENERADOR #1 - 18KW
+1. Se ha realizado el cambio de diodos rectificadores rotativos del generador porque se encontraban oxidados y en mal estado. Modelo MXG4012 - MXY4012.
+2. Se ha realizado el embocinado de la tapa por encontrarse fuera de medida y presentaba gradas en la estructura.
+3. Se ha realizado el cambio de rodamiento del generador ya que el rodamiento antiguo se encontraba oxidado y en mal estado.""						
+						
+						
+						
+						
+ ","TRABAJOS ADICIONALES EN MANTENIMIENTO DE GENERADOR 18 KW:
+- Se realizó el cambio de diodos rectificadores giratorios debido a que se encontraban deteriorados y en mal estado. Los diodos son de código MXG4012 y MXY4012.
+- Se realizó el embocinado de la tapa del generador ya que presentaba gradas en su estructura, lo cual daña al rodamiento cuando el rotor gira. Se realizó el maquinado y se dejó dentro de los límites correctos de trabajo.
+- Se realizó el cambio de rodamiento del generador, en marca SKF código 6306-2RS1/C3.",,,,,,1210,Pedro Sanchez,psanchez@tasa.com.pe,PSANCHEZ,,,,,true,135,0000044815,FABELEG EIRL,fabeleg@fabeleg.com,,JJVC,2021-10-25T21:36:02.000Z,2,10,false,2021-08-11T10:00:00.000Z,2021-08-14T17:00:00.000Z,,false,true,,,,TF01038-04,SISTEMAS ELECTRICOS (POT: 44.4KW),TF01038-0401-0202,Generador 220VAC Nro. 2,300033960,Generador 220VAC 18KW acop. TR3,MP,MPA,false,false,true,2021-09-13T18:35:09.000Z,TCURO,2021-10-25T21:36:02.000Z,proveedortasa
+41181,41130,Pend.1ra.aprob.,OT,,,311534,10,false,,311535,,,2,PESCA,44,TASA 37,T037,Chimbote,T37 SE Levantamiento de líneas,"T37 SE Levantamiento de líneas
+ 
+TASA 26-2021		
+		
+FABRICACIONES ELÉCTRICAS GENERALES E.I.R.L 				
+				
+""1. Levantamiento de puntos de bajo aislamiento según cuadro de megado:
+- Alumbrado interior popa (tablero 220 vac - puente de mando)
+- Tomacorriente (tablero 220 vac - puente de mando)
+- Luz de estribor (tablero 24 vdc - luces de navegación)
+- Tablero de cubierta (tablero 220 vac - sala de máquinas)
+- Tablero de distribución puente cubierta (tablero 24 vdc - sala de máquinas)
+- Alumbrado sala de máquinas #2 (tablero 24 vdc - sala de máquinas)
+- Tablero de alarmas (tablero 24 vdc - sala de máquinas)
+- Reserva (tablero 24 vdc - sala de máquinas)
+
+
+2. Cambio y suministro de equipo fluorescente en sala de máquinas
+3. Cambio de tubo fluorescente de 36 W
+4. Cambio y suministro de tomacorriente doble - camarote cocinero
+5. Mantenimiento de 8 fanales - no realizados en varadero""						
+						
+						
+						
+						
+ ","LEVANTAMIENTO DE LINEAS DE BAJO AISLAMIENTO Y MEJORAS EN SISTEMA ELÉCTRICO
+1. Levantamiento de líneas de bajo aislamiento: Se levantaron los puntos de bajo aislamiento en las siguientes ubicaciones:
+- Alumbrado interior popa
+- Tomacorriente 220 VAC
+- Luz de estribor 
+- Tablero de cubierta - 220 VAC
+- Tablero de distribución puente cubierta - 24 VDC
+- Alumbrado de sala de máquinas - 24 VDC
+- Tablero de alarmas
+- Reserva - 24 VDC
+
+2. Mejoras en sistema eléctrico: 
+- Se realizó mantenimiento a 8 fanales de cubierta. Se realizó el retiro de óxido, se realizó pintado con color aluminio. Se realizó el cambio de sockets que se encontraban en mal estado.
+- Se realizó el cambio de 1 equipo fluorescente en sala de máquinas.",,1188,Victor Villanueva,embarcaciontasa37@tasa.com.pe,VVILLANUEVA,1024,Augusto Price,aprice@tasa.com.pe,APRICE,,,,,true,135,0000044815,FABELEG EIRL,fabeleg@fabeleg.com,,JJVC,2021-10-25T20:56:55.000Z,2,20,true,2021-08-16T10:00:00.000Z,2021-08-19T17:00:00.000Z,,false,true,,,,TF01037-04,SISTEMAS ELECTRICOS (POT: 91.4KW),TF01037-04,SISTEMAS ELECTRICOS (POT: 91.4KW),300025936,Sistema Eléctrico,MP,MPA,false,false,true,2021-08-14T22:27:35.486Z,TCURO,2021-10-25T20:56:55.000Z,proveedortasa
+38524,38470,Pend.1ra.aprob.,OT,,,293554,1,false,,293555,,,2,PESCA,37,TASA 22,T022,Callao,T22 SE 6M Megado Sist. Elec. (80-100KW),"TXX SE 6M Megado Sist. Elec. (80-100KW)
+ 
+MEGADO DEL SISTEMA ELECTRICO
+
+
+Nota: El área de calidad debe verificar que los instrumentos de medición estén debidamente calibrados, verificando el certificado. (Calidad)
+	
+1.-	Megado del sistema eléctrico de alumbrado, tableros de distribución, tableros arrancadores, electrobombas, Motores RSW (si es que cuentan) alimentaciones de equipos electrónicos (asegurar que estén desconectados: Sonares,radares,radios,pantallas), generadores aplicando una tensión de 500V.Para el caso de los generadores de 440V se debe aplicar 1000V
+2.- 	Inspección de los equipos eléctricos del sistema de alumbrado y fuerza y presentar informe con los trabajos de mantenimiento recomendados.
+3.- Verificar los cables debidamente peinados y que las platinas no se encuentren deteriorados.
+4.- Verificar las tuberías de murada estén en buen estado.
+5.- Verificar que las prensaestopas entre pasamamparos (salas y piques) estén en buen estado y con estanqueidad. Asimismo, debe verificarse que debe haber una prensaestopa por cable.
+6.- Verificar el estado físico de los reflectores de cubierta, salas de máquina, piques y habitabilidad estén en buen estado. Informar las inoperativas indicando modelos.
+4.- Verificar en la habitabilidad que los tomacorrientes y enchufes sean herméticos (Recomendación Hidrobox).
+7.- 	Revisión de los bancos de baterías (llenar informe)
+8.-	Presentar Cartilla de megado al Ing. de Planeamiento de Sistemas Eléctricos y Electrónicos.
+	
+Detalles a considerar:
+
+
+GENERADORES:
+1.-	Desconexión y desmontaje del generador.				
+2.-	Retirar todos los artefactos electrónicos (reguladores, diodos, protectores de sobretensión, capacitadores, salidas de protección, etc.) del circuito de embobinado.			
+3.-	Usar un megger y medir la resistencia del aislamiento poniendo 500 voltios(Generadores de 220v) y 1000 Voltios (Generadores 440V) entre los bobinados y la carcasa del generador (que debe tener contacto con el casco). Se deberá medir el estator principal, el rotor principal, el estator de la excitatriz y el rotor de la excitatriz.  La resistencia mínima es de 2 megaohmios.
+4.-	Verificar que la resistencia deshumedecedora esté operativa y debidamente conectada. Informar si se encuentra alguna anomalía o no cuenta.
+
+
+	
+
+
+MOTORES ELECTRICOS:	
+1.- 	Inspeccionar en busca de suciedad acumulada en la carcasa y por la rejilla de ingreso de aire del motor a fin de evitar recalentamiento. El calor reduce la vida útil del aislamiento y finalmente provoca el fallo del motor.
+2.- 	Verifique el flujo de aire que sale del motor sea constante. Si el flujo es débil o inestable, informar.
+3.- 	Realziar una inspección visual en busca de signos de corrosión. Si se aprecia un nivel de corrosión elevado, informar.
+4.- 	Revisar en busca de vibración excesiva, ruidos extraños o temperatura elevada. Informar.
+5.- 	Revisar tablero de arranque, verificando si cuenta con interruptor de alimentación, contactores en buen estado, ordenamiento de cable, tipo de conexión, estado del cableado, hermeticidad de los prensaestopas. Informar.
+4.-	Verificar que la resistencia deshumedecedora o reflector esté operativa y debidamente conectada. Informar si se encuentra alguna anomalía o no cuenta.
+
+
+
+
+	
+TABLEROS ELECTRICOS	
+1.- 	Realizar una inspección visual en busca de signos de corrosión (externa e interna). Si se aprecia un nivel de corrosión elevado, informar.
+2.- Verificar que todos los tableros se encuentren correctamente rotulados tanto en el exterior (cada tablero con un nombre único) como en el interior (cada llave termomagnética debe tener indicado el circuito al que alimenta). De no ser así, informar.
+3.- Verificar que las bisagras, chapas, prensaestopas, frisas, etc. se encuentren en buen estado.
+4. Verificar el estado de los interruptores (un interruptor por carga), verificar terminales de conexión, estado de platinas, instrumentos de medición eléctrica (voltímetro, amperímetro, vatímetro, frecuencímetro,meghometro) y leds indicadores.
+5. Verificar el estado de los prensaestopas (No deben ser de plástico) y un cable por prensaestopa.
+
+
+
+
+	
+SISTEMA DE ILUMINACION	
+1.- 	Inspeccionar en busca de luces de navegación en mal estado o que no usen focos P28S de 60W. Informar
+2.- 	Inspeccionar en busca de fanales, reflectores, tomacorrientes, interruptores, etc. en mal estado o conexiones clandestinas en cubierta, salas de maquina y habitabilidad. Informar.
+
+
+TABLERO DE ALARMAS	
+1.- 	verificar estado de sensor de sentina de las salas y piques. Informar (Crítico)
+
+
+	
+Informar sobre cualquier situación anormal que represente un riesgo a la seguridad o a la operación de la embarcación.	
+
+
+NOTA: Es necesario que la Cartilla de Megado esté debidamente firmada por la persona que la realiza, acompañada del Certificado de calibración del instrumento utilizado, asimismo es obligatorio presentar el diagrama unifilar en AC y DC.
+
+
+
+
+Solicitado por: Ing. Jorge Meza (994008224)
+ ","MEGADO DE SISTEMA ELÉCTRICO:
+Se realizó el megado del sistema eléctrico de la embarcación, incluyendo los siguiente puntos:
+
+1. Tableros eléctricos:
+- Tablero 220 VAC - Puente de mando
+- Tablero 24 VDC - Puente de mando
+- Tablero 24 VDC - Luces de navegación
+- Tablero 220 VAC - Sala de máquinas
+- Tablero 24 VDC - Sala de máquinas
+
+2. Motores eléctricos en sala de máquinas
+3. Generadores eléctricos en sala de máquinas",,1114,Javier Bardales,embarcaciontasa22@tasa.com.pe,JBARDALES,1005,Jose Huaman,jhuaman@tasa.com.pe,JHUAMAN,,,,,true,135,0000044815,FABELEG EIRL,fabeleg@fabeleg.com,,JJVC,2021-10-25T20:36:17.000Z,2,15,true,2021-08-17T08:00:00.000Z,2021-08-19T17:00:00.000Z,,false,true,,,,TF0122-04,SISTEMAS ELECTRICOS (POT: 93.4KW),TF0122-04,SISTEMAS ELECTRICOS (POT: 93.4KW),300026217,Sistema Eléctrico,MP,MP,false,false,true,2021-06-24T14:36:24.146Z,JMEZA,2021-10-25T20:36:17.000Z,proveedortasa
+35450,35396,Vacío,OT,,,283795,1,false,,283796,,,2,PESCA,19,TASA 310,T310,BAHÍA OQUENDO- CALLAO  ,T310 CA Filmación submarina,"T310 CA Filmación Submarina
+
+Se coordinara el dia de la inspección submarina con el perito del seguro. Durante la inspeccion submarina, el buzo deberá realizar las siguientes tareas:
+
+- Verificación del estado de los ánodos de zinc (porcentaje de desgaste aprox)
+- Verificación del estado de pintura.
+- Verificación del estado de los cordones de soldadura del casco
+- Verificación de las aspas de la hélice y pala del timón.
+- Inspección del estado de la cadena de fondeo.
+- Inspección visual de la obra viva (golpes considerables en OV).
+- Inspección del sistema de enfriamiento del motor principal
+- Inspección de los domos de los sonares, ecosondas y transducer.
+- INSPECCION Y LIMPIEZA DE TOMAS DE FONDO
+- Limpieza de incrustaciones marinas.
+-Incluye filmación submarina
+INFORME FOTOGRAFICO, MENCIONANDO EL ESTADO DE LAS ZONAS MENCIONADAS
+
+ PARA DAR COMO CONCLUIDO EL TRABAJO Y PROCEDER A LA GENERACIÓN DE LA HOJA DE ENTRADA SE DEBERÁ ENTREGAR 1 INFORME FOTOGRÁFICO Y FILMACION EN CD mas 02 copias  (1 COPIA PARA PLANEAMIENTO Y LA OTRA PARA BIBLIOTECA)
+
+SOLICITA:","COTIZACIÓN Nº 084 - 2021
+Callao, 16 de julio de 2021 
+Señores: TECNOLÓGICA DE ALIMENTOS S.A.
+Atención: Franky Ruíz 
+Ingeniero de Flota - Logística
+REFERENCIA
+COTIZACIÓN POR SERVICIOS SUBMARINOS
+•	Inspección fílmica submarina de la obra viva (ER-BR / Proa – Popa).
+•	Inspección fílmica submarina del sistema de propulsión (hélice, funda de guardacabos, pala de gobierno, zapata, tintero, etc.)
+•	Informe técnico.
+
+E/P TASA 310 – BAHÍA OQUENDO – CALLAO
+FECHA INICIO: 06/07/2021
+HORA INICIO: 11:17 A.M.
+FECHA TÉRMINO: 06/07/2021
+HORA TÉRMINO: 12:00 P.M.
+
+COTIZACIÓN POR SERVICIO SUBMARINOS
+Nuestros costos por los servicios submarinos, ascienden a la suma de:
+
+Valor					S/ 	 1,800.00
+IGV 18%				S/ 	    324.00
+TOTAL					S/            2,124.00
+
+Sin otro particular, quedamos de ustedes.
+",,1118,Jhonn Acosta,embarcaciontasa310@tasa.com.pe,JACOSTA,1043,Roger Rodriguez,rorodriguez@tasa.com.pe,RORODRIGUEZ,,,,,true,43,0000026193,BUZOS PROFESIONALES SRL,jtorero@buzosprofesionalesperu.com.pe,,D. MULLER,2021-10-25T20:10:20.000Z,4,2,true,2021-07-06T11:30:00.000Z,2021-07-06T12:00:00.000Z,,false,true,,,,TF01310-01,CASCO,TF01310-0101,Casco y Aditamentos,400002592,Obra Viva,MP,MP,false,false,true,2021-06-24T15:54:00.000Z,MAGOMEZ,2021-10-25T20:10:20.000Z,proveedortasa
+44753,44702,Vacío,OT,,,326067,10,false,,326068,,,2,PESCA,55,TASA 55,T055,CHIMBOTE,T55 PG Rep. Aspas de Helice,"T55 PG Rep. Aspas de Helice
+ 
+
+Ref. : MANTENIMIENTO DE 04 ASPAS
+DE PASO VARIABLE:( EP TASA 55).     
+
+          
+
+De nuestra consideración:
+
+ 
+
+            Nos es grato
+dirigirnos a su despacho para saludarlo y a la vez hacerle llegar nuestra
+
+Cotización técnica económica de acuerdo a vuestro requerimiento:
+
+ 
+
+
+MANTENIMIENTO:
+
+ 
+
+-               
+Soldar fisuras
+y áreas desgastadas.
+
+-               
+Darle
+medida de diámetro de acuerdo a medida original.
+
+-               
+Hacer
+prueba de líquido penetrante antes y después del mantenimiento.
+
+-               
+Plantillar
+aspas, e igualar aéreas. 
+
+-               
+Nivelar
+alturas (arriba- abajo)
+
+-               
+Esmerilado,
+balanceo, pulido y acabado.
+
+-               
+Tipo de
+soldadura, EXSAFIL 746.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-               
+Diámetro
+de EXSAFIL 1.2 mm. ","MANTENIMIENTO DE 04 ASPAS DE PASO VARIABLE 
+- SOLDAR FISURAS Y AREAS DESGASTADAS.
+- DARLE MEDIDA DE DIAMETRO DE ACUERDO A MEDIDA ORIGINAL.
+- PLANTILLAR ASPAS.
+-ESMERILADO, BALANCEO, PULIDO Y ACABADO.
+- TIPO DE SOLDADURA EXSAFIL 746
+- DIAMETRO DE EXSAFIL 1.2 mm",,,,,,1063,Mark Bujaico,mbujaico@tasa.com.pe,MBUJAICO,,,,,true,181,2044541963,HELICES PROPULSIONES MARINAS S.A.C.,hepromar@yahoo.com,,BUSTAMANTE,2021-10-25T19:56:12.000Z,5,80,false,2021-08-10T08:00:00.000Z,2021-08-20T05:00:00.000Z,,false,true,,,,TF0155-02,PROPULSION Y GOBIERNO,TF0155-0201,Propulsion Principal,300029089,PROPULSION VB640,MP,MPA,false,false,true,2021-10-25T09:47:33.000Z,JTOLEDO,2021-10-25T19:56:12.000Z,proveedortasa
+44754,44703,Vacío,OT,,,326070,10,false,,326071,,,2,PESCA,33,TASA 425,T425,CHIMBOTE,T425 PG Rep. de Helice,"T425 PG Rep. de Helice
+ 
+
+01 HELICE DE 04 ASPAS  83” ø X   DE PASO
+ROTACION DERECHA (RH)
+
+     
+
+MANTENIMIENTO:
+
+-               
+Enderezar
+aspas dobladas.
+
+-               
+Soldar
+áreas desgastadas.
+
+-               
+Esmerilar
+restos de soldadura sobrante.
+
+-               
+Plantillar
+aspas.
+
+-               
+Darle
+medidas de paso de acuerdo a paso original.
+
+-               
+Nivelar
+aturas (arriba y abajo) 
+
+-               
+Acabado
+de bordes aerodinámicos.
+
+-               
+Esmerilado,
+balanceo, pulido y acabado.
+
+-               
+Medidas
+finales: 83” ø x  ”.
+
+-               
+Tipo de
+soldadura EXSAFIL 746.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-               
+Diámetro
+de EXSAFIL 1.2 mm.","MANTENIMIENTO DE HELICEDE 04 ASPAS DE 83"" ROTACION DERECHA (RH):
+- ENDEREZAR ASPAS DOBLADAS
+- SOLDAR AREAS DESGASTADAS.
+- ESMERILAR RESTOS DE SOLDADURA.
+- PLANTILLAR ASPAS.
+- ESMERILADO, BALANCEO, PULIDO Y ACABADO.
+- TIPO DE SOLDADURA EXSAFIL 746
+- DIAMETRO DE ESXAFIL 1.2mm",,,,,,1060,David Serafin,dserafin@tasa.com.pe,DSERAFIN,,,,,true,181,2044541963,HELICES PROPULSIONES MARINAS S.A.C.,hepromar@yahoo.com,,BUSTAMANTE,2021-10-25T19:52:24.000Z,5,80,false,2021-08-14T08:00:00.000Z,2021-08-24T05:00:00.000Z,,false,true,,,,TF01425-02,PROPULSION Y GOBIERNO,TF01425-0201,Propulsion Principal,300013180,HÉLICE,MP,MPA,false,false,true,2021-10-25T09:51:36.000Z,JTOLEDO,2021-10-25T19:52:24.000Z,proveedortasa
+44752,44701,Vacío,OT,,,326061,10,false,,326062,,,2,PESCA,50,TASA 45,T045,CHIMBOTE,T45 PG Rep. Aspas de Helice,"T45 PG Rep. Aspas de Helice
+ 
+
+Ref. : MANTENIMIENTO DE 04 ASPAS
+DE PASO VARIABLE:( EP TASA 45).     
+
+
+
+          
+
+
+
+De nuestra consideración:
+
+
+
+ 
+
+
+
+            Nos es grato
+dirigirnos a su despacho para saludarlo y a la vez hacerle llegar nuestra
+
+
+
+Cotización técnica económica de acuerdo a vuestro requerimiento:
+
+
+
+ 
+
+
+
+
+MANTENIMIENTO:
+
+
+
+ 
+
+
+
+-               
+Soldar
+áreas desgastadas.
+
+
+
+-               
+Darle
+medida de diámetro de acuerdo a medida original.
+
+
+
+-               
+Hacer
+prueba de líquido penetrante antes y después del mantenimiento.
+
+
+
+-               
+Plantillar
+aspas, e igualar aéreas. 
+
+
+
+-               
+Nivelar
+alturas (arriba- abajo)
+
+
+
+-               
+Esmerilado,
+balanceo, pulido y acabado.
+
+
+
+-               
+Tipo de
+soldadura, EXSAFIL 746.
+
+
+
+-               
+Diámetro
+de EXSAFIL 1.2 mm. ","04 ASPAS DE PASO VARIABLE
+MANTENIMIENTO
+- SOLDAR AREAS DESGASTADAS
+- DARLE MEDIA DE DIAMETRO 
+- HACER PRUEBA DE LIQUIDO PENETRANTE
+- PLANTILLAR ASPAS
+- NIVELAR ALTURAS.
+- ESMERILADO, BALANCEO, PULIDO Y ACABADO.
+- TIPO DE SOLDADURA EXSAFIL 746
+- DIAMETRO DE EXSAFIL 1.2 mm.",,,,,,1060,David Serafin,dserafin@tasa.com.pe,DSERAFIN,,,,,true,181,2044541963,HELICES PROPULSIONES MARINAS S.A.C.,hepromar@yahoo.com,,BUSTAMANTE,2021-10-25T19:47:48.000Z,5,80,false,2021-08-06T08:00:00.000Z,2021-06-16T05:00:00.000Z,,false,true,,,,TF0145-02,PROPULSION Y GOBIERNO,TF0145-0201,Propulsion Principal,300026950,PROPULSION VB560,MP,MPA,false,false,true,2021-10-25T09:41:30.000Z,JTOLEDO,2021-10-25T19:47:48.000Z,proveedortasa
+31598,31550,Vacío,OT,,,269594,10,false,,269595,,,2,PESCA,29,TASA 418,T418,BAHÍA OQUENDO- CALLAO  ,T418 EE Adic. Servicios submarinos,"T418 EE Adic. Servicios submarinos
+ 
+ COTIZACIÓN Nº 043 - 2021
+buzos profesionales  
+ 
+
+·        
+Inspección y limpieza del tubo tanque de incrustaciones
+marinas.
+
+
+
+·        
+Toma de medida del tubo tanque de la cabeza
+del domo (2??).
+
+
+
+
+
+·        
+Informe técnico. ","COTIZACIÓN Nº 043 - 2021
+Callao, 9 de abril de 2021 
+Señores: TECNOLÓGICA DE ALIMENTOS S.A.
+Atención: José Huamán
+Ingeniera de Flota 
+REFERENCIA
+COTIZACIÓN POR SERVICIOS SUBMARINOS
+•	Inspección y limpieza del tubo tanque de incrustaciones marinas.
+•	Toma de medida del tubo tanque de la cabeza del domo (2??).
+•	Informe técnico.
+
+E/P TASA 418 - BAHÍA OQUENDO- CALLAO  
+FECHA INICIO: 07/04/2021
+HORA INICIO: 15:45 P.M.
+FECHA TÉRMINO: 07/04/2021
+HORA TÉRMINO: 16:30 P.M.
+
+COTIZACIÓN POR SERVICIO SUBMARINOS
+Nuestros costos por los servicios submarinos por inspección y limpieza del tubo tanque, así como de la toma de medida del tubo tanque de la cabeza del domo, ascienden a la suma de:
+
+Valor					S/ 	 1,500.00
+IGV 18%				S/ 	    270.00
+TOTAL					S/            1,770.00
+
+Sin otro particular, quedamos de ustedes.
+",,1157,Miguel Eugendio,embarcaciontasa418@tasa.com.pe,MEUGENDIO,1005,Jose Huaman,jhuaman@tasa.com.pe,JHUAMAN,,,,,true,43,0000026193,BUZOS PROFESIONALES SRL,jtorero@buzosprofesionalesperu.com.pe,,D. MULLER,2021-10-25T19:44:15.000Z,4,4,true,2021-04-07T15:45:00.000Z,2021-04-07T16:45:00.000Z,,false,true,,,,TF01418-05,EQUIPOS ELECTRONICOS,TF01418-0502,Equipos de detección,300013802,Sonar Sectorial - Display,MP,MPA,false,false,true,2021-04-10T22:34:23.016Z,TCURO,2021-10-25T19:44:15.000Z,proveedortasa
+42360,42309,Pend.1ra.aprob.,OT,,,318142,10,false,,318157,,,1,PLANTA,3,Callao Norte,TCNO,CALLAO,AD Fab base Motorreduct Desaguador #1,"AD Fabricación base metálica  Motorreductor Desaguador #1
+ 
+COTIZACIÓN 234-2021 
+ PROVEEDOR: ROAL 
+ 
+Servicio de fabricación de base metálica de motorreductor de transmisión de desaguador rotativo #2. 
+ 
+Desmontaje de base metálica existente, afectado por corrosión con equipo oxicorte 
+Fabricación de base metálica y desglose de elementos de fijación de dado de concreto. 
+Fabricación de base metálica de 525x450x100 fabricado con canal de 6"" x 5.4 lbs. 
+Fabricación de sobreplanchas para alineamiento y fijación del equipo motorreductor. 
+Fijación y anclaje de electrobomba con pernos de expansión. 
+Alineamiento de equipo MR. 
+Suministro, cambio e instalación de soportes yo brazos para sujetar guardas, fabricados con angulos de 2"" x 316"" 
+Limpieza mecánica y aplicación de pintura base y acabado epóxico segun estandar TASA 
+Reconectado de accesorios 
+Pruebas de funcionamiento 
+ 
+Costo de trabajo: S. 840.00 + IGV ","SERVICIO DE FABRICACION DE BASES PARA MOTEREDCUTOR  DE EQUIPÒ DESAGUADOR 001  CON CANAL C DE 6"" X5.4 lB e INSTALACION EN ZONA DE EQUIPO-DE PLANTA CALLAO",,1244,Edgar Rafael,erafael@tasa.com.pe,ERAFAEL,1562,Guillermo Orozco Sibille,gorozco@tasa.com.pe,GOROZCO,,,,,true,429,0000024391,SOLUCIONES TECNICAS ROAL S.A.C,solucionestecnicasroal@hotmail.com,,ALBERTO FE,2021-10-25T19:31:38.000Z,3,48,true,2021-10-25T00:00:00.000Z,2021-10-25T00:00:00.000Z,,false,true,,,,TCNO0102,Recep. Pesaje Materia Prima,TCNO0102-0101,Desaguador Rotativo #1,300000021,DESAGUADOR ROTATIVO 250TN/HR,MP,MPA,false,false,true,2021-09-07T17:00:03.636Z,FDELACRUZ,2021-10-25T19:31:38.000Z,proveedortasa
+42361,42310,Pend.1ra.aprob.,OT,,,318169,10,false,,318170,,,1,PLANTA,3,Callao Norte,TCNO,CALLAO,AD Fab base Motorreduct Desaguador #2,"AD Fabricación base metálica  Motorreductor Desaguador #2
+ 
+COTIZACIÓN 234-2021 
+ PROVEEDOR: ROAL 
+ 
+Servicio de fabricación de base metálica de motorreductor de transmisión de desaguador rotativo #2. 
+ 
+Desmontaje de base metálica existente, afectado por corrosión con equipo oxicorte 
+Fabricación de base metálica y desglose de elementos de fijación de dado de concreto. 
+Fabricación de base metálica de 525x450x100 fabricado con canal de 6"" x 5.4 lbs. 
+Fabricación de sobreplanchas para alineamiento y fijación del equipo motorreductor. 
+Fijación y anclaje de electrobomba con pernos de expansión. 
+Alineamiento de equipo MR. 
+Suministro, cambio e instalación de soportes yo brazos para sujetar guardas, fabricados con angulos de 2"" x 316"" 
+Limpieza mecánica y aplicación de pintura base y acabado epóxico segun estandar TASA 
+Reconectado de accesorios 
+Pruebas de funcionamiento 
+ 
+Costo de trabajo: S. 840.00 + IGV ","SERVICIO DE FABRICACION DE BASE PARA MOTOREDUCTOR DE DESAG 01  CON CANAL C DE 6"" X5.4 LB , INSTALACION DE EN EL EQUIPO CALLAO",,1244,Edgar Rafael,erafael@tasa.com.pe,ERAFAEL,1562,Guillermo Orozco Sibille,gorozco@tasa.com.pe,GOROZCO,,,,,true,429,0000024391,SOLUCIONES TECNICAS ROAL S.A.C,solucionestecnicasroal@hotmail.com,,ALBERTO FE,2021-10-25T19:28:25.000Z,3,44,true,2021-09-15T00:00:00.000Z,2021-09-18T00:00:00.000Z,,false,true,,,,TCNO0102,Recep. Pesaje Materia Prima,TCNO0102-0102,Desaguador Rotativo #2,300000023,DESAGUADOR ROTATIVO 250TN/HR,MP,MPA,false,false,true,2021-09-07T17:05:38.816Z,FDELACRUZ,2021-10-25T19:28:25.000Z,proveedortasa
+42393,42342,Pend.1ra.aprob.,OT,,,318253,10,false,,318254,,,1,PLANTA,3,Callao Norte,TCNO,Callao,AD Mantto cabezal Bba NT200 Pablo VI LS,"AD Mantto cabezal bridas Bba NT200 Pablo VI LS
+ 
+COTIZACIÓN 252-2021 
+ 
+Asunto: Mantenimiento de cabezal, bridas y suministro de sellos mecánicos bomba Netzsch NT200, Chata Pablo VI LS 
+ 
+Descripción Mantenimiento de cabezal, bridas y suministro de sellos mecánicos bomba netzsch NT200B, chata pablo VI LS
+ 
+Item1: Mantenimiento y recuperación de medidas de cabezal y bridas de soportes de sellos, se considera ensamble de partes y piezas 
+Item 3: Servicio de recuperación de sello mecánico alternativo, parte estacionaria modelo NT200.
+Item4: Kit de oring 3 piezas para soporte rotativo y sellos mecánicos
+Item 5: Kit de resortes (6 piezas para brida acero inox) 
+ 
+Costo negociado por el jefe de planta con el proveedor: USD 548.00 + IGV ",SERVICIO DE MANTENIMIENTO DE CABEZAL DE SELLO MECANICO Y SUMINISTRO DE SOPORTE ROTATIVO PATRA BBA DE PESCADO nT200B CHATA PABLO VI LS CALLAO,,1244,Edgar Rafael,erafael@tasa.com.pe,ERAFAEL,1562,Guillermo Orozco Sibille,gorozco@tasa.com.pe,GOROZCO,,,,,true,429,0000024391,SOLUCIONES TECNICAS ROAL S.A.C,solucionestecnicasroal@hotmail.com,,alberto fe,2021-10-25T19:22:54.000Z,2,36,true,2021-08-25T00:00:00.000Z,2021-08-31T00:00:00.000Z,,false,true,,,,TCNO0101,Chata de Descarga,TCNO0101-0401,Bomba de Cavidad Progesiva Chata CALLAO LS,300023429,"BOMBA CAVIDAD PROGRESIVA 14""X14"", _M3/HR",MP,MPA,false,false,true,2021-09-08T11:18:56.580Z,FDELACRUZ,2021-10-25T19:22:54.000Z,proveedortasa
+39857,39806,Vacío,SS,210416105145,,271276,10,false,,271277,,,2,PESCA,38,TASA 23,T023,BAHÍA OQUENDO- CALLAO  ,T23 CA La elice y pala de gobierno - 210416105145,La elice y pala de gobierno - 210416105145T023CA,"COTIZACIÓN Nº 067 - 2021
+Callao, 22 de abril de 2021 
+Señores: TECNOLÓGICA DE ALIMENTOS S.A.
+Atención: Juan Meléndez 
+Ingeniera de Flota 
+REFERENCIA
+COTIZACIÓN POR SERVICIOS SUBMARINOS
+•	Inspección y encementado de los pernos de la brida de la pala de gobierno del eje barón (por encontrarse expuesto sin cemento de protección).
+•	Encementado de los pernos de la tuerca nuez (pernos sin cemento y expuestos)
+•	Filmación submarina.
+
+E/P TASA 23 - BAHÍA OQUENDO- CALLAO  
+FECHA INICIO: 16/04/2021
+HORA INICIO: 11:41 A.M.
+FECHA TÉRMINO: 16/04/2021
+HORA TÉRMINO: 12:51 P.M.
+
+COTIZACIÓN POR SERVICIO SUBMARINOS
+Nuestros costos por los servicios submarinos por inspección y encementado de los pernos de la brida de la pala de gobierno del eje barón, encementado de los pernos de la rejilla y filmación submarina, ascienden a la suma de :
+
+Valor					S/ 	 1,500.00
+IGV 18%				S/ 	    270.00
+TOTAL					S/            1,770.00
+
+Sin otro particular, quedamos de ustedes.
+",,1082,Alejandro Antaurco,embarcaciontasa23@tasa.com.pe,AANTAURCO,1023,Juan Melendez,jmelendez@tasa.com.pe,JMELENDEZ,,,,,true,43,0000026193,BUZOS PROFESIONALES SRL,jtorero@buzosprofesionalesperu.com.pe,,D. MULLER,2021-10-25T18:28:26.000Z,4,4,true,2021-04-16T11:41:00.000Z,2021-04-16T12:51:00.000Z,,false,true,,,,TF0123-01,CASCO,TF0123-01,CASCO,,,MC,MCP,false,false,true,2021-07-18T10:41:32.700Z,APRICE,2021-10-25T18:28:26.000Z,proveedortasa
+44310,44259,Pend.1ra.aprob.,OT,,,324406,10,false,,324407,,,2,PESCA,27,TASA 416,T416,CALLAO,T416_SH_MTTO BOMBA ABSORBENTE," 
+T416SHMTTO BOMBA ABSORBENTE
+ 
+PRESUPUESTO: 000282
+ 
+ 
+1. IMPULSOR DE ABSORBENTE
+ 
+ 
+ <data:imagepng;base64,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1oNq16CuTuncR327tlDttGo6+9FPtZcmpciPerpVis54Yk2sorXOZ0AbQmCR3T27c1UtXZzdb28vqcd7Jq1emj6VtMZ2zRJ092UYNKtXVa50vU77LuantUBZVv0lejlu4wiZTR9tJq9bfndMVx9XRSlz66qENPPfUNDdqthU9209mXjNASq32ZN+89imzWB4M7qm7VhmrT43L1691JzapVUtP+E7Vqt0md0YbSZ9ytkbedoTr1m6tr394695gKKnvczZr9a3xmSF81Tfdfd03wFmneJH113PVsGSauk2OIilt+URPdmmgSrVPU+dL+umy7m11VIXyatJ3lDKbm4M6RH7VvIEd1bhuU53d43L173uBTq2RqiPaP6lFCck9Xetm3agTK1VW04691bfbmTqySkN1G3ClTirlrIElhZvBz5O19qZN+rkqtXU7Lw+uvySzjqlZhUd3We0lpt+ykc89iybpL9d219t6xyuCid211VXX61rrhuomT+kJx4ucZQimz+QIM71lXVhm3U4J+6t2pmapVaqr+E1cpOqS0Wxd1lBle0y1wIlo8weD1bFuVTVs00OX9+utTs2qqVLTpqYORit9P7QI1B0EEiewIr9WcXrd9eLRvulr9IzbcqodPlKqneEH25V3dG1oRBZWqqMMTGUaEFixYko5souGLtq6F52IfnvzKh1Z8jgN+GKvlrGIKsaXsM5n3JyVwNJXPqbmaa015IdMxb9r0297PYSIfp3eWzUqttHji7I7J09azX1knpKOX6AFhotEJB3MRUrVVcXjl7lWPFaHK3VP25Sj+9EVdpR7RxRhVrNlNY1ebTKXIr2oygbl1PbZ7eSc0Ybiv25uOpeOFxfm2rtFL3n5iiJvd87pSdWe3Yo3StfPYsVW56lz42PBz5VdN711DFNo8rtrlTdUm9FB0YOFepZeDOqRr7cnvKVV2zNLj2wYrwsrV1DPaZl9nXk14yjyM2mq6LyRK6OKdufKSbq8cQkdcrhNYMni5pYgpfwvDpUqKM+09ZnGj5fKNRN9ylqRgCBYGH4oQQE42fXGKIUTWjT03V7DZWmUMqolfuFINyrXVs9+b2ZKVwCIbZ6hPzZrqNnZ1FHweOPKBirX9llFb80KqzjEdjvEUiewEoeqRvetbSXIlo3pLWK1+yv2YaTguZu0ZjzU9XknoXRxgcEVrK+rptntPTe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EAMgS1btkyzZs1K+Fm0aFFcvCKRiD788MNAEd5yyy16+eWXtWtX4f+szcaNG3XHHXfoP5T9y6uhc++ugjPf744+7pfP17ty5KleuXL7kOWfOHJUvXz5f8iKTTZs26U9+pN++OGHfMuzKGV0zTXX6IorrohWOTdjKHqzc9Cf317t3bOZv3f5999lnNm2e9gSDvWfocPAJFCoEYArv33nv117+VUOHDg39PPTQQ+rXr1cBt5www2qXr26Bg0apGeeeUYtW7bUWWedFTd9QV344IMPdOihhwpCTlYefPBBVa1aNdnkuUrnCSxXsBXKTS6BLViwIMdjKKyiCxcuVJ06dfTf437HKezjVs2DAwFvOUibZI1CEEchCYF9++WXQnHXr1gUhlXfeeUeEQJANGzbEJbCvv5aJUqUiCGN9PT0fWYhLl++911mSXbO9u3bRZsLUjyBFSS6ecvbJbD+7U07HUFgN8JIIHReEMB9zEmUoiDr4PD0C+xKBUAKbP3++LrvsMj3PO65JJLdMIJJ2jz5s0JCWzcuHE6+uijk24LE+nn39OagIS3sqvtZlt27YF5ebEIjb3Pbbb0m3j4SEVGnjv97+C+RARmyti6dWtSZbghREJe4JRIuE59wtqeKIRIblv587oq7PjFkM+v76a9zrXKCN5BcvvIzBxPVffvklYT5cpE9IC345EQwW7vvjjz+C21wCyy4vsOD+RJjs2bMn6XbQJ+TnYmKwYizlRBgP5BdPDMakoZ5ePAJFEYFQAnMbctRRR2n48OEJCeztt98O1neyIxom6v33368jjjgiCDfyffnll2dRBGwoePTRRXYY4+pVq1aQXjvk08+UePGjcUGBleee+459ejRIzjNhGzQoEFMOibstddeGy3XhDqNYmAN7JRTTonJdvfu3brqqqui91SuXFmtW7dOyqLGemRokVQ7ypVqqhr164aPXp0ljUwyhg8eHC0DPBgvcQo1pgKWf8YAgOLdu3aqUaNGqKcc845J+gnK6nwjjt06KAjjzwyKAc82bRgSxiBEf46++yzVa9evSBv7nzzTft27R+foAa8K1F198cdBXaWlpQejYHQu0ibYRqgV6ky2fLGG28EBlO1atVUqVIlNWeXF988YWdJDhesWKFzjzzTNEn5AVuV199tcAzO5k0aZJq164d3Ec5hI9Z7LXwBgv7hhiAwZMiToRzChHXxmzpwZUySRh2HDhun4448PyihTpozOO+88QSq2kIY6vfee2rSpEkUE+YSHiBjn3qWLVtWrVq10k8WTfrrvvvltvfY859++23QVpwAb+TTjopyN9ONHbs2Gj7wY1QZEFtYLHL9ccegfxGICkCO3004MJmSiECGlAAG3atEkYesHSRcmuWbMmaMv333+vRo0a6fbbb49pG8qwadOmat++fUBuKFiUCgoVYnPF1JHzpGNDwuLFi6PJKBclYKxSwjrkjbJAvnPf6pChQrR9Bx0795d5557btQTwMrv1atXoKTZtRdPSIdyfuKJJwLrFisaRUOI1d3EceeddwaK2JAyYUzaDXEmEgisePHigeJ75ZVXhNLcsmVLgG3nzp1jboU88f4QCBvFiVIEUyNhBNapUyexnojQv+COUrTbzqYPsEYJjhw5MugrPKdTTz1VPXv2NNkH3126dFG3bt0Cr4kT33zzjU477TSZjUEffxx0AeQJAocY4fNQGBplwlpotiffvrpqOcFfqw1ZYcbIXH6GXJGIAXGBX1jExhE6I6h888PygDXFavXh1gwlpvyZIl9eOPPwb58YexdPPNN0fHGtjSTgjQloEDBwbEe+KJJ2rt2rXBpalTp6pUqVK66aabAoOMSAXjCbImGmILUZIbb7wxeopxBiGDC8YC3hzkSgTFCJES8Pzss8+CU4yHF154IWgDROrFI1CUEEhIYAxoNmSkpqYGYbBEBEajCR2htJjQ7LwivS1YoIcffngWgvv0009VunTpmPAJBFaxYsUsngiTDasSBWcEJUqZKDbEJTDOFytWLIslTzqjGF0Co+14NG64jXuwzPFI4wnrHniKpLWFDTI2geGhUO9etfdrKAeDmfaH3DEBheqS2mra61bqeB7FB0tucQRmD2PRzTHrwJe+ebITB2nNpCGjwxE9rDmKAPUPy2EIIzYTO8lHvuuce+HBAu3snEiROj51Hul156afRcwCOfnLX7J4KuY635DVXXfdZZ8KcEbJJ0NgeOCmviYTQudsfEokeDhgbgsEBukao8pcg5wx8mxvEnzxqmxxCezJJ5UMccckyUkCLEhhE3xVlkicAXCpUwvHoGihEBCAsNa5rklswidHYGZhhNbFCRIAAAS7klEQVSOY6Iz4caMGWNOB6EXFEiYQGwQmREIjF2NrqDUIVRjtXOdEBDWsREU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Vu7+++v0TMdU5TRMptePpa5rRP4d4PPPDAQso1wqRvHD3SKwVBPf888+3P5Xv2qitVSKB0TRgJmJ0Fc2+OOP7zh4EASK5Pbdd9+eEwc8dfg69IotU7POPNav5u2TyXLPPffsvzzzbn7vfffy++xySIQK77rrrus87wkZw6FgWddicegBnl88sknvSy9F9LVgc3bb7dmfOt7YCHtolg3MozzzxTBkTeA8LEbqC199579wYKBgTI1ECgRjfevn17d+KJJxZrRptnfk8EEoGlQWAigekonn766dKp0gAWq4GNI7CHHnqo1xqdj05Wh94KjaDVwiqBvfjii22yohXpkFtNJBKYc8RghN3K3XffXbS59rf6a+iqah1H+JOEocdhhh01KMnitEtj333fu45QEACzVJWlJDAaAy2pFcRkcNF6IW7evLmjMUVBQDr0H374IV4anV900UVzCPe5557rLr300lGa+GWIwGIamjCsP7449Gl++67b46m7zqNtmrOo8TNF45LBk1Vv333+6QQw7pPM9WeEWyCLTv1yOPPFI0uDad7z++GN5dnVwEKneSKQCOw4AhMJ7IYbbijaTJ3031kE9tFHHVaoENEYHHe68477+zuuuuuUdpKYEyIUW677bbOUSUSGAJgJovyzjvvdKecckr8uZybF2SGmiYIeEcJDPFGoT0wR7333nujS0tFYL++mshHxpplGhCdD6k9bmP9kKTGyeunXfeeb3LtBNLK8bJfAjMvQi4JbBt27aVQVc7P3f99deXd3lcWX57bXXegT27bffFqJSjyjRhOg8DgLqPZ6d9yolEUgElhaBqQTWvPOEoE9+uij3fr160doRQI7+eSTS+fE3NQeRtbtKLxmwBtTuiFPRh3djTfeOMrn0EMPXVICUwekyuxVZakIjElt33r9n2PiOB0cg+PDDXpp6woTItDhOmNWYgKt2aS5LubSccTJEYIj28ccf78zL1udmWUBLYLRqhPruu++WrJmWDzjggGIGbsvirHT11VeP8qFttce3JoyhiQS2D777NMxcwJkPY5lC5SwQSgYUhMJHAEO2JpfVRmDmh5jl4tGO3MFpXsU8XUsgFWZzdDq5l156qWN2k5fR9lJqYMqadQLTBvNXTz75ZIEOCUWHnoppYwExoxtnunee+tvvvuu9FziyZE9zNPcoghFs+fc845NdvyyexMA9yyZcsoH4OcJLAeTHmSCKxoBCYSGC3mjz+GDVglgjs2muv7Z566qlR3aMGNk1jGN3YdZ0F3JxKOA1Eueyyy0pn2f6+1CZE2gvnjta5ZJwGZtcNba0yzYkDKeyxxx6951zvjRrYJZdc0su7pvPJK7HVgtpr9TsiOe2004qzDbPatK2YIoEZQNCsokQTouvM0JxQeINqRztf5boBQTTrRRMi0zmtccjFPmpgiO111+PVSvntLOvv568Fr+mAgkAjuOwEQCM4pFWlVWKoGZq2vXcPF202l88803teql4229ELn060zrmqdRwvCFqz3zk8n4ITn99NO7l19+uXfpnnvumaOBMZUhk0nrljhxMIepWyvc9GmA7b2cTeKuJuYSd9tttx7JTCMw5SAFz7oVpsK99tqr58SBGHkntmZl90jLvNjWr82rfocBT0DOINrTavc1TfsZCYzH6Jlnntkm6b788svyrIfIk4OIQQyzcJzjUwbpVXxqxbt66ngfmN2zxiawWRIv2WFGmUSCy+T5YImNec1tY2yeCCQC80NgDoEZJZunGDo+fTTiWYfO3EgCeaZ9jDXQMZ5IS7WiUPHodzPPvusdGhr167tbr99h4CUQPTmV5wwQXFq05Hpr3u58Fmr8AqyPHcc8ttUfbqhu67+bTYCOPjRs3dhwGogmROZZjCtPXOEFg1iPJj5mMxmVUjxzqcoJ6L0JFrLzflMslXLtPPfXUBRMY5xDzUTrkmFfrhchVYwzzihr1MydSYu8raOLbuu1nvGT2dAcIa12mkQCYw0wT8VbUNnIQXut+xoiMO1RlrV8UR5++OGyRyQCtIcn8vLcWhOie5gYlUlbU+amTZu6s88+uxBwS2A0WeR+xRVXFG1LWoMC5UzWo11yNEIBGYHwI9ArP2yO7fk45JXmNG4kP3WvhJEFnULqy7sYlwK0bL8okjevnUvKSvXoi0JB0pLzdExuMtmvssCbAYuxVzW0bXzIBG9jofnU5dGySte4baZI0PsR5MedbKMVVZS6berbudMgJqcV6lUz+90cao3Xel7Q4dUKgiHVI4MlUKp31aZwV1Leuk3JP3I0eKWhPnOdDkMykNS8Er9OOu9HDzNoo6RwGLa2mO1TP9jfvGO24era21+J3Zalr6zijLESj7AcffLBg9eabb855h+TF9GqBPCebKJ7Ds88+WLx3A1irOWKXpae71tvvVUWbytT29XLwCKaQGHmOVRsLCqftLQg1inPE4FEYGEI9AhsYbcuf+pKYENu9Mtfu34NaC4IapJUApuUZtav0YQvvvjiWW9G1j8RSARWAAJJYLvgIZjDYlqcJqudwGg9zH3MrimJQCKQCCwWgSSwxSI4jvNh9j8dpqsdgJjTrNjx99z0NiryeCCQCicBUBGaawCxYNT9k7mc1CHft1Tzhby5rnDfnanh+2YZEIBHYtQjMNIHtWqiytEQgEUgEEoGVhEAS2Ep6GlmXRCARSAQSgXkj8BjbMOyNjvGRwAAAABJRU5ErkJggg==>
+ 
+  2. MATERIALES 
+ 
+RODAMIENTO 6314 SKF 
+SEAL KIT CHARLYN 10000 
+ 
+ 
+PROVEEDOR: BAMEC 
+ 
+ 
+ ","COT. 282 T416
+IMPULSOR DE ABSORBENTE
+ Limpieza
+? Extracción de bocina desgastada.
+? Fabricación y colocación de bocina nueva en acero inoxidable.
+? Calibración y rectificado de diámetro interior de impulsor; en zona de contra eje.
+? Servicio de balanceo dinámico.
+? Limpieza, pulido y lavado  
+MATERIALES:
+RODAMIENTO 6314 SKF 02 PZAS
+SEAL KIT CHARLYN 10000 01 PZA",,1160,Moises Ccasa,mccasa@tasa.com.pe,MCCASA,1062,David Benavides,dbenavides@tasa.com.pe,DBENAVIDES,1604,Javier Castro,javcastro@tasa.com.pe,JAVCASTRO,true,34,2056299793,BAMEC E.I.R.L.,bameceirl@hotmail.com,,O ANCAJIMA,2021-10-25T17:02:11.000Z,4,42,false,2021-08-04T10:00:00.000Z,2021-08-12T08:00:00.000Z,,false,true,,,,TF01416-06,SISTEMAS HIDRAULICOS,TF01416-0607,Absorbente de Pescado,400005782,Motor Hidraulico,MP,MPA,false,false,true,2021-10-15T13:26:47.000Z,JAVCASTRO,2021-10-25T17:02:11.000Z,proveedortasa
+44478,44427,Cancelado,GRA,,,,,false,,,5002569,230,2,PESCA,60,TASA 61,T061,Chimbote,T61_AD_Modif-Inst.Tubo escape MAux 1,"HABILITACIÓN DE TUBERIA PARA EL SISTEMA DE ENFRIAMIENTO  DEL MOTOR AUXILIAR N°1
+El tubo de 4” del sistema de escape del motor auxiliar se llevó a arenar y se aplicó pintura de alto calor .
+Al instalar la tubería de escape no coincidía en lugar por qué no era el tamaño adecuado así que se tubo de modificar y poner un tramo de tubo de 4 con brida .
+Se colocó un codo de 4” para que quede instalado dándole la forma a la extructura.
+Para su instalación se uso pernos de 5/8 x 3” con tuerca ,huaccha plan y anillo de presión
+También se colocó empaquetadura de asbesto de ¼ en cada brida que se colocó para facilitar su instacion .
+La extructura del tubo de escape quedó fija en las abrazaderas anterior se cambió  pernos de
+5/8” ½ x 3 ½ con tuerca encontrandose en mal estado
+Dejando instalado la tubería y su silenciador para su funcionamiento.
+Trabajo de altura, usando tecles para maniobras.
+","MODIFICACION E INSTALACIÓN TUBO DE ESCAPE MOTOR AUXILIAR N 1
+El tubo de 4” del sistema de escape del motor auxiliar se llevó a arenar y se aplicó pintura de
+ alto calor .
+Al instalar la tubería de escape no coincidía en lugar por qué no era el tamaño adecuado así que 
+se tubo de modificar y poner un tramo de tubo de 4 con brida .
+Se colocó un codo de 4” para que quede instalado dándole la forma a la extructura.
+Para su instalación se uso pernos de 5/8 x 3” con tuerca ,huaccha plan y anillo de presión
+También se colocó empaquetadura de asbesto de ¼ en cada brida que se colocó para facilitar su 
+instacion .
+La extructura del tubo de escape quedó fija en las abrazaderas anterior se cambió  pernos de 
+5/8” ½ x 3 ½ con tuerca encontrandose en mal estado 
+Dejando instalado la tubería y su silenciador para su funcionamiento.
+Trabajo de altura, usando tecles para maniobras.
+",,1116,Jesús Vilchez,jvilchez@tasa.com.pe,JVILCHEZ,1056,Nepthali Collazos,ncollazos@tasa.com.pe,NCOLLAZOS,,,,,true,246,2060222640,M TEMOCHE S.A.C.,msacha@mtemochesac.com,,LUIS ROSAL,2021-10-25T17:00:17.000Z,5,48,false,2021-09-13T08:00:00.000Z,2021-09-17T18:00:00.000Z,,false,true,,,,TF0161-01,CASCO,TF0161-0107,Sala de Máquinas y Aditamentos,,,,,false,true,false,2021-10-18T23:07:24.000Z,PFLORES,2021-10-25T23:51:03.000Z,Pedro Flores
+42208,42157,Pend.1ra.aprob.,SS,210709093433,,300190,10,false,,300191,,,1,PLANTA,3,Callao Norte,TCNO,CALLAO NORTE,CAL Instal bomba alimentación Caldero#7-Stand By,"CAL Instal.bomba alimentación Caldero #7-Stand By
+ 
+proveedores sugeridos: Roal y Predimant 
+ 
+ACTIVIDADES: 
+- INSTALACION DE BOMBA Y MOTOR ELECTRICO 
+- FABRICACION E INSTALACION DE ANCLAJE 
+- DESMONTAJE DE SOPORTE ANTIGUO 
+- INSTALACION DE TUBERIA DE SUCCION DE 4"", CON SUS REPSECTIVOS VALVULAS Y FILTROS DE 3"" 
+ - INSTALACION DE TUBERIA DESCARGA DE 4"", CON SUS REPSECTIVOS VALVULAS Y CHECK DE 3"" . ADEMAS DE MANIFOLD
+- CONEXIONADO A LAS TUBERIAS DE LAS BOMBAS PRINCIPALES DE CALDEROS 6 Y7 
+- PRUEBAS EN VACIO Y CARGA 
+ 
+COSTO SUGERIDO: S. 6000 
+ 
+TASA SUMINISTRA: 
+- 02 VALVUALS MARIPOSA DE 3"" X 150PSI 
+- 01 FILTRO TIPO Y DE 3"" 
+- 01 CHECK TIPO DISCO DE 3"" ","REUBICACION  DE  BOMBA  DE CALDEROS  / MONTAJE  DE BOMBA AUXILIAR  PARA CALDEROS N° 6,7                                                                                                                                                                      • desmontaje de estructuras  de soportes existentes
+• reubicacion  e nuevos soportes   para el amnhold  de  los calderos
+1.1.-ITEM N°1: REUBICACION   EN UNA  NUEVA POSICION LA  BOMBA  DE  CALDERO N°6  /                                                                                                                                                                                                                                          • desmontaje de la bomba  de caldero n°6 , desmontaje  de  tuberia  de  succion y descarga  de la bomba  con sus accesorios  valvulas  codos   check
+• reubicacion en una nueva  posicion bomba de caldero n°6 
+• montaje  de  tuberia  de alimentacion    ala bomba del caldero sera  de lado horizonatl  del manhold
+• instalacion  tuberia  de descarga  de  la bomba    con sus accesorios valvulas niples  check   reubicar  en su nueva posicion                                                                                                                                                                                                                                                                                                                                                                                                                                                          •                                                                                                                                                                                                                                                                                                                                                                                 1.2.-ITEM N°1:  MODIFICACION DE  TUBERIA  SUCCION DE LA  BOMBA  DE  CALDERO N°7                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+• desmontaje de   tuberias  de  succion   de la bomba  del caldero  desconexion del manhold
+• sellado manhold  luego de retira  de la tuberia  succion existente
+•  corte  del manhold  para instalacion de linea de succion  para l  bomba  la  cual  sera  lado horizontal del manhold  principal de  agua para los calderos           
+•  provision de  codos soldables  3"" sch40 ,   tubo de  3"", soldeo  de  tuberias  y  accesorios  bridas  y codos                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             •                                                                                                                                                                                                                                                                                                                                                                                   2.-  MONTAJE DE BOMBA AUXILIAR  DE CALDEROS 
+• habilitado  de base  para el bastidor  dela bomba auxiliar  y  reubicar  la bomba  para  su fijacion
+• montaje  de bomba auxiliar  habilitado  de  tuberia  de succion de 3"" sch40 la cual sera intercionectar  del manhold principal  del lado horizontal
+• instalacion de  accesorios  codos niples  valvula de compuerta   y filtro  ""Y"" en la linea  de succion de la bomba
+• en la descarag  se confeccionara  un manhold  de tubo de 6""  x  400mm  con dos  salidas   con niples y valvulas  de 3""                                                                                                                                                                                                                                                                                                                                                     • 1ra  salida    con valvula de compuerta direccionandolo e interconectar  con  la tuberia  de alimentacion al caldero n°6
+• 2da  salida    con valvula de compuerta direccionandolo e interconectar  con  la tuberia  de alimentacion al caldero n°7
+• las tuberias  neuvas y accesorios  codos, bridas  seran arenadas a metal blanco pintadas  primer pase con pintura base JET 62ZP ROJO OXIDO, segunda  capa  con JET 70MP  tercera  capa  color  distintivo de planta                                                                                                                                              ",,1244,Edgar Rafael,erafael@tasa.com.pe,ERAFAEL,1562,Guillermo Orozco Sibille,gorozco@tasa.com.pe,GOROZCO,,,,,true,310,2057147369,PREDIMANT EIRL,jbroncano1974@gmail.com,,BRONCANO,2021-10-25T16:45:44.000Z,5,450,true,2021-10-01T00:00:00.000Z,2021-10-12T00:00:00.000Z,,false,true,,,,TCNO0201,Planta de Vapor,TCNO0201-0118,Bomba de Agua de Caldero #7,300034247,"BOMBA MULTIETAPICA VERT 2""X2"", 20.5M3/HR",MP,MP,false,false,true,2021-09-02T17:27:50.833Z,FDELACRUZ,2021-10-25T16:45:44.000Z,proveedortasa
+39526,39472,Pend.1ra.aprob.,OT,,,302181,10,false,,302186,,,1,PLANTA,7,Malabrigo,TMSU,MALABRIGO,TMSU TH COLECTOR A TOLVIN BBA LAMELLA DE POZAS 5-6-7.,"TMSUT3-21 MP TH COLECTOR A TOLVIN BBA LAMELLA DE POZAS 5-6-7.
+ 
+DESMONTAJE DE 06 DESCANSOS Y BOCINAS INTERMEDIOS TORNILLO.
+? Desmontaje descansos acero en su totalidad, inspección, restaurar si presenta fisuras.
+? Desmontaje de bocinas partidas en su totalidad.
+
+? DESMONTAJE SISTEMA DE TRANSMISON CHUMACERA Y BOCINA LADO POSTERIOR.
+? Desmontaje de guarda, cadena transmisión, extracción de chumacera F-318 para su mantenimiento.
+? Desmontaje de bocina cerrada lado posterior para su mantenimiento.
+
+? FABRICACION DE BOCINAS PARTIDAS BRONCE SAE 64.
+? 04 bocinas de 6” diámetro exterior x 3.5” diámetro interior x 150 mm longitud.
+? 01 bocina entera de 5” diámetro exterior x 3.5” diámetro interior x 120 mm longitud.
+? 01 chumacera de pared F-318.
+
+? INSTALACION DE CHUMACERA-SISTEMA DE TRANSMISON-BOCINAS-DESCANSOS.
+? Realizar limpieza mecánica en superficies a trabajar.
+? Alinear, instalar bocinas, descansos, colocar pernos de fijación.
+? Alinear, colocar chumacera, bocina cerrada, pernos de fijación.
+? Realizar prueba dejar operativo.
+
+? MATERIAL:
+? Bocinas partidas:                               06 Piezas.
+? Bocina cerrada:                                  01 pieza.
+? Cumacera de pared NTN.                 01 Pieza.
+? Pernos acero de ½”x 1. ½”.              32 Piezas","COLECTOR  DISTRIBUIDO( TH COLECTOR DE POZAS 5, 6, 7 )
+ MANTENIMIENTO DE  DESCANSOS BOCINAS  SISTEMA DE TRANSMISION
+                                                                                                                                                                                                                                                                                                                                                            1.1.- DESMONTAJE DE 06 DESCANSOS Y BOCINAS INTERMEDIOS 
+•  Desmontaje descansos acero en su totalidad, inspección, restaurar si presenta fisuras.
+• Desmontaje de bocinas partidas en su totalidad.
+
+1.2.- DESMONTAJE  SISTEMA DE TRANSMISON CHUMACERA Y BOCINA LADO COLA
+•  Desmontaje de guarda, cadena transmisión, extracción de chumacera F-318 para su mantenimiento.
+•  Desmontaje de bocina cerrada lado posterior para su mantenimiento.
+
+1.3.- INSTALACION DE CHUMACERA-SISTEMA DE TRANSMISON-BOCINAS-DESCANSOS.
+•   Realizar limpieza mecánica en superficies a trabajar.
+•    Realizar limpieza mecánica en superficies a trabaja                                                                                                                                                                                                                                                                                                                    •  LAVADO DE  CADENAS DE TRANSMISION
+•   Alinear, colocar chumacera, bocina cerrada, pernos de fijación.
+•   Realizar prueba dejar operativo.
+ COSTO  POR EL SERVICIO DE MANTENIMIENTO  DE  TH  S/.  1,930.00
+                                                                                                                                                                                                                                                                                                                                                                                                  2.- FABRICACION DE BOCINAS PARTIDAS BRONCE SAE 64.
+•   04 bocinas de 6” diámetro exterior x 3.5” diámetro interior x 150 mm longitud.
+•   01 bocina entera de 5” diámetro exterior x 3.5” diámetro interior x 120 mm longitud.",,1233,Agustín Risco,arisco@tasa.com.pe,ARISCO,1271,Nilton Huaman,nhuaman@tasa.com.pe,NHUAMAN,,,,,true,310,2057147369,PREDIMANT EIRL,jbroncano1974@gmail.com,,ROMAN,2021-10-25T16:29:41.000Z,7,300,true,2021-09-23T00:00:00.000Z,2021-09-28T00:00:00.000Z,,false,true,,,,TMSU0102,Recep. Pesaje Materia Prima,TMSU0102-0511,"Trasportador Colector de Poza #5,#6,#7",300002990,"TRANSP.HELIC. Ø19""X16""PASOX11000LG SS",MP,MP,false,false,true,2021-07-13T12:00:18.886Z,FHUERE,2021-10-25T16:29:41.000Z,proveedortasa
+42560,42509,Pend.1ra.aprob.,SS,,,318798,10,false,,318799,,,2,PESCA,39,TASA 31,T031,CALLAO,T31 CA AD Cambio de 05 barraganetes deteriorados. - 210812075626/T031/CA,"Cambio de 05 barraganetes deteriorados. - 210812075626T031CA
+ 
+COT 1077 
+ 
+POR CAMBIO DE 5 BARRAGANETES POR ENCONTRARSE EN MAL ESTADO UBICADOS EN LABABOR - POPA - SOBRE CUBIERTA ",POR CAMBIO DE 5 BARRAGANETES POR ENCONTRARSE EN MAL ESTADO UBICADOS EN LABABOR - POPA - SOBRE CUBIERTA,,1163,Nicolas Giron,ngiron@tasa.com.pe,NGIRON,1005,Jose Huaman,jhuaman@tasa.com.pe,JHUAMAN,,,,,true,970,2060567877,FREED CONSTRUCCIONES MANTENIMIENTO Y SOLDADURAS S.A.C,logistica.frecomsa@gmail.com,,MORENO,2021-10-25T16:27:10.000Z,3,150,false,2021-08-23T05:00:00.000Z,2021-09-12T17:00:00.000Z,,false,true,,,,TF0131-01,CASCO,TF0131-0102,"Cubiertas,  equipos y aditamentos",400002522,Barraganetes,MP,MPA,false,false,true,2021-09-12T23:08:31.000Z,FRUIZ,2021-10-25T16:27:10.000Z,proveedortasa
+39712,39658,Pend.1ra.aprob.,OT,,,303370,10,false,,303371,,,1,PLANTA,7,Malabrigo,TMSU,MALABRIGO,MAL Mantto Transportador distribuidor rotadiscos,"MAL Mantto Transportador distribuidor rotadiscos
+ 
+ 
+? MANTENIMIENTO DE TH DISTRIBUIDOR ALIMENTADOR A ROTADISCO 1-2-3.
+
+
+? DESMONTAJE DE 03 DESCANSOS Y BOCINAS INTERMEDIOS TORNILLO.
+? Desmontaje descansos acero en su totalidad, inspección, restaurar si presenta fisuras.
+? Desmontaje de bocinas partidas en su totalidad.
+
+
+? DESMONTAJE SISTEMA DE TRANSMISON CHUMACERA Y BOCINA LADO POSTERIOR.
+? Desmontaje de guarda, cadena transmisión, extracción de chumacera F-318 para su mantenimiento.
+? Desmontaje de bocina cerrada lado posterior para su mantenimiento.
+
+
+? FABRICACION DE BOCINAS PARTIDAS BRONCE SAE 64.
+? 03 bocinas de 6” diámetro exterior x 3.5” diámetro interior x 150 mm longitud.
+? 01 bocina entera de 5” diámetro exterior x 3.5” diámetro interior x 120 mm longitud.
+? 01 chumacera de pared F-318.
+
+
+? INSTALACION DE CHUMACERA-SISTEMA DE TRANSMISON-BOCINAS-DESCANSOS.
+? Realizar limpieza mecánica en superficies a trabajar.
+? Alinear, instalar bocinas, descansos, colocar pernos de fijación.
+? Alinear, colocar chumacera, bocina cerrada, pernos de fijación.
+? Realizar prueba dejar operativo.
+
+
+? MATERIAL:
+? Bocinas partidas:                               03 Piezas.
+? Bocina cerrada:                                  01 pieza.
+? Cumacera de pared NTN.                 01 Pieza.
+? Pernos acero de ½”x 1. ½”.              24 Piezas ","MATENIMIENTO DE TRANSPORTADOR HELICOIDAL  DISTRIBUIDOR  SRTD  N°1, 2, 3
+ 
+•   Desmonyaje  de 03 pzs  de  descansos y bocinas  intermedios  de tronillo helicoidal 
+•   Desmontaje de  01  descanzo  lado  cola  del tornillo helicoidal  
+•   inspeccion de  pernos  union de  puños  centraales y tubos.
+•   Desmontaje descansos(brazos ) de  acero en su totalidad, inspección, restaurar si presenta fisuras.
+•   Desmontaje de bocinas partidas en su totalidad
+2.- DESMONTAJE SISTEMA DE TRANSMISON CHUMACERA Y BOCINA LADO POSTERIOR.
+•  Desmontaje de guarda, cadena transmisión, extracción de chumacera F-318 para su mantenimiento.                                                                                                                                                                                     • Desmontaje de bocina cerrada lado cola para su mantenimiento.
+3.- INSTALACION DE CHUMACERA-SISTEMA DE TRANSMISION-BOCINAS-DESCANSOS.
+•   Realizar limpieza mecánica en superficies a trabajar.
+•  Alinear, instalar bocinas, descansos, colocar pernos de fijación.
+•   Alinear, colocar chumacera, bocina cerrada, pernosde fijación.
+•   Realizar prueba dejar operativo.",,1233,Agustín Risco,arisco@tasa.com.pe,ARISCO,1271,Nilton Huaman,nhuaman@tasa.com.pe,NHUAMAN,,,,,true,310,2057147369,PREDIMANT EIRL,jbroncano1974@gmail.com,,ROMAN,2021-10-25T16:23:46.000Z,7,600,true,2021-08-20T00:00:00.000Z,2021-08-29T00:00:00.000Z,,false,true,,,,TMSU0105,Secado,TMSU0105-0607,Transp. Colector de Rotadisco,300024486,"TRANSP.HELIC. Ø25""X18""PASOX14350LG SS",MP,MP,false,false,true,2021-07-15T10:26:34.376Z,SDELACRUZ,2021-10-25T16:23:46.000Z,proveedortasa
+43163,43112,Pend.1ra.aprob.,OT,,,321075,10,false,,321076,,,2,PESCA,55,TASA 55,T055,Chimbote,T55 EE Adic. Radio HF: cable,"T55 EE Adic. Radio HF: cable
+ 
+PROPUESTA N° 0436-21  ECH.
+Soluciones pesqueras 
+ 
+Tendido de cable y conexión para parlante de cubierta - Mastil.
+Tendido de cable para parlante externo de Radio HF.
+ 
+Materiales: 
+30 MTS CABLE FLEXIBLE AWG 2 X 14. 
+10 MTS CABLE FLEXIBLE AWG 3 X 16. 
+ Kit de instalación ( cintas, conectores, cintillos, pernos, autorroscantes, etc).
+NOTA: El monto señalado podría variar de requerirse materiales no considerados en este
+ítem. ","Tendido de cable y conexión para parlante de cubierta - Mastil.
+Tendido de cable para parlante externo de Radio HF.
+30 MTS CABLE FLEXIBLE AWG 2 X 14
+10 MTS CABLE FLEXIBLE AWG 3 X 16",,,,,,1063,Mark Bujaico,mbujaico@tasa.com.pe,MBUJAICO,,,,,true,924,2060497611,SOLUCIONES PESQUERAS S.A.C.,dsandoval@marco.com.pe,mtorres@marco.com.pe,L MARTINEZ,2021-10-25T16:16:02.000Z,2,32,false,2021-09-22T08:00:00.000Z,2021-09-30T18:00:00.000Z,,false,true,,,,TF0155-05,EQUIPOS ELECTRONICOS,TF0155-0503,Equipos de comunicación,300039718,Radio HF Nro. 1,MP,MPA,false,false,true,2021-09-24T13:30:00.000Z,TCURO,2021-10-25T16:16:02.000Z,proveedortasa
+42509,42458,Pend.1ra.aprob.,OT,,,318411,10,false,,318412,,,1,PLANTA,7,Malabrigo,TMSU,Centro de Sevicios ,AD T3 Separador de Sólidos #4 - Mayor,"AD T3 Separador de Sólidos #4 - Mayor
+ 
+Servicio de reparación y mantenimiento mayor en el 
+Centro de Servicio Alfa Laval – Lurín 
+Equipo: Decanter N°4 
+Modelo: NX 934 
+SN: 5019300 
+Se considera: 
+Conveyor: 
+- Reparación y cromado de tubo protector. 
+Bowl: 
+- Recuperación de ajustes de tapa grande. 
+- Reparación de tapa chica zona de bushing. 
+Equipo completo: 
+- Servicio mayor + intermedio. 
+- Servicio de caja de engranaje 2.5 KN. 
+- Alineamiento y balanceo del Conveyor. 
+- Alineamiento y balanceo del Bowl. 
+- Informe.  
+ 
+Servicio Adicional de Mecanizado a: 
+Equipo: Decanter N°4 
+Modelo: NX 934 
+SN: 5019300 
+Se considera: 
+TORNILLO TRANSPORTADOR 
+- Reparación mayor del tornillo transportador 
+- Metalizado del tornillo transportador lado cilíndrico 
+BOWL: 
+- Recuperacion de tapa grande zona de rodajes y reten 
+- Dar ajuste a tapas extremas con relacion al bowl 
+- Rectificado de asientos de chumaceras con relacion al 
+frame 
+- Recuperacion de 5 agujeros roscado de chumacera con 
+relacion a menzula 
+- Rectificado de espaciadores afectados 
+- Embocinado de polea de bowl y maquinado de canal 
+- Rectificado de polea de motor 
+- Dar ajuste a la brida con relacion a tapa grande y el 
+gearbox 
+- Juego de pines guia 
+GEARBOX 
+- Alineamiento de eje solar 
+- Dar ajuste a las tapas laterales con relacion al cuerpo y a 
+la brida 
+- Establizador de reten, espaciadores y prisioneros
+FRAME Y OTROS: 
+- Rectificado de frame en zona de apoyo de la brida del 
+motor principal y rectificado de la brida de motor 
+- Reparacion de zonas afectadas del frame y reparar el 
+asiento de los 4 amortiguadore 
+MOTOR: 
+-Mantenimiento integral 
+ 
+ 
+TOTAL:  $20,293.7 
+PROVEEDOR:  ALFA LAVAL 
+COTIZACIÓN Cotización No.: 0381930364  ","AD T3 Separador de Sólidos #4 - Mayor
+ 
+Servicio de reparación y mantenimiento mayor en el 
+Centro de Servicio Alfa Laval – Lurín 
+Equipo: Decanter N°4 
+Modelo: NX 934 
+SN: 5019300 
+Se considera: 
+Conveyor: 
+- Reparación y cromado de tubo protector. 
+Bowl: 
+- Recuperación de ajustes de tapa grande. 
+- Reparación de tapa chica zona de bushing. 
+Equipo completo: 
+- Servicio mayor + intermedio. 
+- Servicio de caja de engranaje 2.5 KN. 
+- Alineamiento y balanceo del Conveyor. 
+- Alineamiento y balanceo del Bowl. 
+- Informe.  
+ 
+Servicio Adicional de Mecanizado a: 
+Equipo: Decanter N°4 
+Modelo: NX 934 
+SN: 5019300 
+Se considera: 
+TORNILLO TRANSPORTADOR 
+- Reparación mayor del tornillo transportador 
+- Metalizado del tornillo transportador lado cilíndrico 
+BOWL: 
+- Recuperacion de tapa grande zona de rodajes y reten 
+- Dar ajuste a tapas extremas con relacion al bowl 
+- Rectificado de asientos de chumaceras con relacion al 
+frame 
+- Recuperacion de 5 agujeros roscado de chumacera con 
+relacion a menzula 
+- Rectificado de espaciadores afectados 
+- Embocinado de polea de bowl y maquinado de canal 
+- Rectificado de polea de motor 
+- Dar ajuste a la brida con relacion a tapa grande y el 
+gearbox 
+- Juego de pines guia 
+GEARBOX 
+- Alineamiento de eje solar 
+- Dar ajuste a las tapas laterales con relacion al cuerpo y a 
+la brida 
+- Establizador de reten, espaciadores y prisioneros
+FRAME Y OTROS: 
+- Rectificado de frame en zona de apoyo de la brida del 
+motor principal y rectificado de la brida de motor 
+- Reparacion de zonas afectadas del frame y reparar el 
+asiento de los 4 amortiguadore 
+MOTOR: 
+-Mantenimiento integral ",,1233,Agustín Risco,arisco@tasa.com.pe,ARISCO,1271,Nilton Huaman,nhuaman@tasa.com.pe,NHUAMAN,,,,,true,11,2010008638,ALFA LAVAL S A,liliana.mogollon@alfalaval.com,,Alberto Ca,2021-10-25T16:13:03.000Z,1,80,true,2021-10-25T00:00:00.000Z,2021-10-25T00:00:00.000Z,,false,true,,,,TMSU0109,Planta de Aceite,TMSU0109-0207,Separador de Sólidos #4,300017511,SEPARADOR DE SOLIDOS 40000LT/HR,MP,MP,false,false,true,2021-09-10T12:32:45.050Z,LINCISO,2021-10-25T16:13:03.000Z,proveedortasa
+42671,42620,Aprobado,OT,,,319183,10,false,,319187,,,1,PLANTA,5,Supe,TSUP,TASA SUPE,TSUP T3 Reparación de Tanque R500,TSUP T3 Reparación de Tanque R500,"REPARACION DE TANQUE   DE PETROLEO  R500  DIAMETRO D E TK 5720MM
+1.1 LA REPARACION DEL TK  E INSTALACION DE  SOBRE PLANCHAS  SOLO SERAN  POR TRAMOS SEGUN LO SOLICITADO                                                                                                                                                                                                       • La  reparacion  sera realizado segun  la sugerencia    contenido del informe  
+• INSTALACION  DE  SOBRE PLANCHA JUNTA PERIMEDAL INTERNO DEL TANQUE   POR TRAMOS  SEGUN LO REQUERIDO    mediante plancha  de  3/8"" x  150mm de alto   de  fondo  de  200mm  segun el diametro del tanque
+• INSTALACION  DE  SOBRE PLANCHA   EN EL FONDO DEL TK   POR TRAMOS(  por presencia  de  picaduras las cuales  se  inslataran segun las dimensiones que  cubran todo el area  planchas picadas 
+•  INSTALACION  DE  SOBRE PLANCHA  en base  de la columna  la cual sera    fijada  en el fondo y  columna  en plancha  de  3/8""                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              • EL PROCESO DE  SOLDADURA  SERA  REALIZADO  EN (  PROCESO MIG/MAG)
+• SE  REALIZARAN PRUEBA  DE LIQUIDOS  PENETRANTES  A  CORDONES DE SOLDADURA                                                                                                                                                                                                                                                                                                                      • plancaha  instalar  sera  en  A-36                                                                                                                                                                                                                                                                                                      • las planchas nuevas  ainstalar  seran arenadas   a metal blanco  pintadas  en base  y acabado                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+3.- PREDIMANT EIRL PROVEERA                                                                                                                                                                                                                                                                                                                                                             
+• Plancha  de  3/8""  A-36                                                                                                                                                                                                                                                                                                                   • Mano de  obra  calificada                                                                                                                                                                                                                                                                                                                                                                                      • gases  consumibles 
+• Movilidad traslado / Insumos y consumibles y gases
+• NO  INCLUYE   PINTADO  TOTAL   CUERPO INTERNO DEL TK                                                                                                                                                                                                                                                                                                                     • NO INCLUYE  CAMBIO TOTAL  DEL FONDO DEL TK                                                                           ",,1248,Carlos Rojas,crojas@tasa.com.pe,CROJAS,1268,Jorge Rivera,jrivera@tasa.com.pe,JRIVERA,,,,,true,310,2057147369,PREDIMANT EIRL,jbroncano1974@gmail.com,,Broncano,2021-10-25T16:09:52.000Z,3,300,true,2021-09-21T00:00:00.000Z,2021-09-30T00:00:00.000Z,Culminado,false,false,100,100,90,TSUP0204,Tanques de Almacenamiento,TSUP0204-0602,Tanque de Almacenamiento R-500,300003941,TANQUE DE COMBUSTIBLE RESIDUAL 52365GAL,MP,MPA,false,false,true,2021-09-15T10:19:33.000Z,CGOZAR,2021-10-25T16:09:52.000Z,proveedortasa
+40987,40936,Pend.1ra.aprob.,SS,210626041821,,310504,30,false,,310572,,,2,PESCA,58,TASA 58,T058,Callao,T58 PA MANTENIMIENTO DE TURBOCOMPRESOR,"T58 PA MANTENIMIENTO DE TURBOCOMPRESOR
+ 
+Se realizó la evaluación del turbocompresor donde se observa el eje
+turbina con alojamiento con desgaste y ralladuras debido al trabajo
+con aceite contaminado. Alojamiento se encuentran en su última
+medida lo cual no es posible reutilizar.
+o Kit repair con desgaste por trabajo con aceite contaminado.
+o Por lo tanto, para el mantenimiento es necesario realizar las siguientes
+actividades:
+Desarmado
+Limpieza para evaluación
+Cambio de componentes desgastados.
+Balanceo dinámico
+Calibración y ajuste de juego axial y radial
+Pintado
+Embalaje. ",Se realiza servicio en turbocompresor con cambio de repuestos y mano de obra como se detalla en informe adjunto 173-2021.,,1147,Luis Sarrin,embarcaciontasa58@tasa.com.pe,LSARRIN,1064,Javier Paz,jpaz@tasa.com.pe,JPAZ,,,,,true,343,0000014010,RETYG SAC,gaston@retygsac.pe,carlacamargo@retygsac.pe,Galicia C.,2021-10-25T16:06:22.000Z,2,10,true,2021-08-19T11:00:00.000Z,2021-09-07T17:00:00.000Z,,false,true,,,,TF01058-09,PANGA,TF01058-0903,Motor y caja panga,300031457,MOTOR DIESEL 190 HP 2000 RPM,MP,MPA,false,false,true,2021-08-11T16:35:10.736Z,EALMEYDA,2021-10-25T16:06:22.000Z,proveedortasa
+41984,41933,Aprobado,OT,,,314076,10,false,,314077,,,1,PLANTA,9,Vegueta,TVEG,VEGUETA,TVEG AD REPARACION DE ROTOR DEL MOLINO SEMI HUMEDO N°1,"1.-ITEM N°1:  REPARACION DE ROTOR DEL MOLINO SEMI HUMEDO N°1
+                                                                                                                                                                                                                                                                    1.1.-ITEM N°1:  ROTOR DE MOLINO                                                                                                                                                                                                • El rotor será reparado en plancha anti desgaste de ACERO CRONIT T1 500
+• Diámetro de rotor de 850mm 
+• Eje central de diámetro 150mm x 1500 mm de longitud será confeccionado en material VCN Acero BHOLER, llevar hilo   de 2hilos x mm a ambos extremos del eje                                                                                                                                                                                                                  • chaveta de fijación de discos de 25mm x 530mm de longitud para fijación de discos centrales                                                                                • escudos laterales  en plancha  CRONIT T1 500  de 58""  x  850mm de    diámetro (estado natural)                                                                        • llevara 5pzs  de  placas intermedias  en ACERO CRONIT T1 500m 9.5mm de espesor por 850mm de diámetro (estado natural)                  • llevara   6 pzs de   espaciadores  fabricado en  barra perforada  de  300mm de  exterior  x 150mm diámetro interior x 70mm  de  longitud  cada  uno
+ • llevara   dos pzs de  tuercas, ambos extremos del eje confeccionado de  plancha  de  1""x  300mm de diámetro
+• Chaveta de fijación de discos de 25mm x 530mm de longitud para fijación de discos centrales
+  COSTO  POR EL SERVICIO  S.  31,510.70   + IGV                                                                                                                                                                                                                                                                                                                                                                                                                                        1. 2.-POLEA  DE  8 CANALES
+• Sera fabricado en  fierro modular  de 270mm de  diámetro x 210  mmm de longitud                                                                                                    • confección de  8 canales  tipo C                                                                                                                                                                                                    • La polea llevara buje desmonrtaje
+• la polea será balanceada a 1700 rpm
+  COSTO  POR EL SERVICIO  S.   3,410.40                                                                                                                                                                                    
+ 
+ 1.3 DESMONTAJE  MONTAJE  DE ROTOR                                                                                                                                                                                      • Desmontaje   y montaje  del rotor en su base instalación  de  chumaceras y rodamientos  según su designación
+• alineamiento  de poleas  y templado adecuado 
+• Ajuste  de    rodamientos e instalación
+• Desmontaje y montaje DEL ROTOR  SERA  MEDINATE UN  CAMION HIAB
+    COSTO POR EL SERVICIO   S.  5,750.00 + IGV                                                                                                                                                                                                                                                                                                                                                                                                                            
+
+
+COSTO TOTAL POR  EL SERVICIO    S.   40,670.00 + IGV    DSCTO   670.00                        
+2. – COSTO FINAL POR  EL SERVICIO    S.   40,000.00 + IGV 
+                                                                                                                                                                                                                                                                    • NO INCLUYE  CHUMACERAS  RODAMIENTOS
+• NO INLCUYE  FAJAS DE TRANSMISION                                                                                                                                                                                      • NO INLCUYE  MARTILLOS
+3.- CONDICIONES COMERCIALES
+• Se entiende el valor de venta  SOLES  y no incluye el IGV
+• Tiempo de entrega del servicio   30 días 
+• Garantía calidad del ROTOR (1 AÑO)
+• movilidad de traslado de personal
+• Validez de la oferta 3 días
+ 
+PROVEEDOR: PREDIMANT 
+
+ 
+ ","ITEM N°1:  REPARACION DE ROTOR DEL MOLINO SEMI HUMEDO N°1
+                                                                                                                                                                                                                                                                                                                                                                                                1.1.-ITEM N°1:  ROTOR DE MOLINO                                                                                                                                                                                                                                                                                                                                  • El rotor será reparado en plancha anti desgaste de ACERO CRONIT T1 500
+• Diámetro de rotor de 850mm 
+• Eje central de diámetro 150mm x 1500 mm de longitud será confeccionado en material VCN Acero BHOLER, llevar hilo   de 2hilos x mm a ambos extremos del eje                                                                                                                                                                                                                                                                                                                                                         • chaveta de fijación de discos de 25mm x 530mm de longitud para fijación de discos centrales                                                                                                                                                                                         • escudos laterales  en plancha  CRONIT T1 500  de 5/8""  x  850mm de    diametro (estado natural)                                                                                                                                                                                                      • llevara 5pzs  de  placas intermedias  en ACERO CRONIT T1 500m 9.5mm de espesor por 850mm de diametro (estado natural)                                                                                                                              • llevara   6 pzs de   espaciadores  fabricado en  barra perforada  de  300mm de  exterior  x 150mm diametro interior x 70mm  de  longitud  cada  uno                                                                                                                                 • llevara   dos pzs de  tuercas, ambos extremos del eje confeccionado de  plancha  de  1""x  300mm de diametro
+• Chaveta de fijación de discos de 25mm x 530mm de longitud para fijación de discos centrales
+  COSTO  POR EL SERVICIO  S/.  31,510.70   + IGV                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1. 2.-POLEA  DE  8 CANALES
+• Sera fabricado en  fierro modular  de 270mm de  diametro x 210  mmm de longitud                                                                                                                                                                                               • confecion de  8 canales  tipo C                                                                                                                                                                                                                                                                                                     • La polea llevara buje desmonrtaje
+• la polea será balanceada a 1700 rpm
+  COSTO  POR EL SERVICIO  S/.   3,410.40                                                                                                                                                                                                                                                                                                                                           1.3 DESMONTAJE  MONTAJE  DE ROTOR                                                                                                                                                                                                                                                                  • Desmontaje   y montaje  del rotor en su base instalación  de  chumaceras y rodamientos  segun su designacion
+• alineamiento  de poleas  y templado adecuado 
+• Ajuste  de    rodamientos e instalacion
+• Desmontaje y montaje DEL ROTOR  SERA  MEDINATE UN  CAMION HIAB",,1242,Paul Colonna,pcolonna@tasa.com.pe,PCOLONNA,1268,Jorge Rivera,jrivera@tasa.com.pe,JRIVERA,,,,,true,310,2057147369,PREDIMANT EIRL,jbroncano1974@gmail.com,,BRONCANO,2021-10-25T15:59:26.000Z,4,1000,true,2021-10-25T08:00:00.000Z,2021-10-25T00:00:00.000Z,Culminado,false,false,90,90,90,TVEG0105,Secado,TVEG0105-0401,Molino Semihúmedo # 1,300000768,MOLINO DE MARTILLO __TN/HR,MP,MPA,false,false,true,2021-08-27T12:03:31.286Z,RRAMIREZ,2021-10-25T15:59:26.000Z,proveedortasa
+44788,44737,Pend.1ra.aprob.,SS,211016215904,,324746,10,false,,324747,,,2,PESCA,46,TASA 41,T041,callao,mando control presenta inconvenientes.-211016215904/T041,mando control presenta inconvenientes.-211016215904T041,"•	Se realiza desmontaje de mangueras hidráulicas de líneas de trabajo. 
+•	Se realiza desmontaje de pernos de anclaje de mando hidráulico PW-4.
+•	Se realiza desmontaje de mando PW-4 del winche de ancla.
+•	Se realiza desmontaje de todos los componentes del mando hidráulico.
+•	Desacoplamiento de pernos de amarre de la palanca del mando.
+•	Desmontaje de spool para su mantenimiento.
+•	inspección de cámara de alojamiento de spool 
+•	se realiza pulido de SPOOL.
+•	Se realiza limpieza fina de todos los componentes. 
+•	Cambio de kit de sellos y orines.
+•	Montaje de palanca de mando. 
+•	Montaje de spool y ajuste de pernos.
+•	Se realiza montaje de mando hidráulico en su base.
+•	Se realiza montaje y ajuste de pernos de anclaje de mando.
+•	Se realiza montaje de mangueras hidráulicas de líneas de trabajo.
+•	Se realiza prueba de operación del equipo.
+•	Se entrega el equipo operativo y hermético. 
+",,1190,Walter Quiroga,wquiroga@tasa.com.pe,WQUIROGA,1055,Victor Rodriguez,vrodriguez@tasa.com.pe,VRODRIGUEZ,,,,,true,383,2052479380,SOLUCIONES TÉCNICAS H&R S.A.C.,carebebe_walter@hotmail.com,,anthony pa,2021-10-25T15:55:19.000Z,2,6,true,2021-10-19T09:00:00.000Z,2021-10-21T17:00:00.000Z,,false,true,,,,TF0141-06,SISTEMAS HIDRAULICOS,TF0141-0608,Winche de Ancla,,,MC,MCP,false,false,true,2021-10-25T15:29:00.816Z,VRODRIGUEZ,2021-10-25T15:55:19.000Z,proveedortasa
+41945,41894,Pend.1ra.aprob.,OT,,,313973,10,false,,313974,,,1,PLANTA,2,Pucusana Planta Omeg,TPUC,Pucusana,OMEG MP PET-BO-02 Mantenimiento bomba,"OMEG MP PET-BO-02 Mantenimiento bomba
+ 
+Instalación de electrobomba en planta 
+Desmontaje e inspección del equipo.  
+Limpieza de partes y componentes internos de la 
+bomba. 
+Montaje de la unidad según ajuste de fábrica, 
+regulación del impulsor y sello mecánico. 
+Mantenimiento de motor; Lavado con solvente 
+dieléctrico y cambio de los rodamientos del motor.
+Aplicación de grasa para alta temperatura, tratamiento
+térmico.
+ Balanceo dinámico de elementos giratorios
+Acoplamiento bomba a motor, verificación de ajustes y 
+regulación del acople. 
+Análisis de severidad de vibración. 
+Puesta en servicio en el sistema y entrega de reporte 
+de servicio técnico externo, con los datos de 
+funcionamiento de los equipos. 
+Emisión de informe detallado. 
+Servicio de embocinado de tapas de motor. 
+Recuperación de eje en la zona de trabajo del sello 
+mecánico.
+ Sello mecánico
+? Rodamientos de moto ","Manteniento de mesclador, se realizo mantenimiento preventivo y correctivo en el eje, recuperacion en la zona de trabajo del sello mecanico.",,1255,Wilmer Alba,walba@tasa.com.pe,WALBA,1294,Miguel Carrillo,mcarrillo@tasa.com.pe,MCARRILLO,,,,,true,329,2051267125,REMAVISA S.A.,soporte@remavisa.com,,John,2021-10-25T15:53:08.000Z,2,14,true,2021-08-17T00:00:00.000Z,2021-08-20T00:00:00.000Z,,false,true,,,,TPUC02,Proceso de Aceite Concentrado,TPUC0201-0201,Homogenización de Etil Ester,300036342,"MEZCLADOR HOMOGENIZADOR __""X__"", __M3/H",MP,MP,false,false,true,2021-08-26T11:03:07.213Z,JCOTERA,2021-10-25T15:53:08.000Z,proveedortasa
+44185,44134,Pend.1ra.aprob.,OT,,,324076,10,false,,324077,,,2,PESCA,17,TASA 218,T218,CHIMBOTE,T218 SE Alin. generador TR3 MA,"T218 SE Alin. generador TR3 MA
+ 4612021		
+		
+Z &R
+ 
+""MOTOR AUXILIAR #2 LISTER TR3 - ALINEAMIENTO DE GENERADOR.
+•   Alineamiento de Generador versus Motor Auxiliar.
+•   Confección de lainas de bronce de diferentes medidas.                                 
+•   Enlainado de soportes o de Generador.                                                                                                                                                                                                                                                    •   Alineamiento de Generador versus Motor Auxiliar.
+•   Colocar y ajustar pernos de anclaje de Gaenerador.                                                                                                                                                                                                                                        •   Ajuste de pernos de amarre de campana entre Motor y Generador.                                                                                                                                                                                                                            •   Verificación de alineamiento enntre Generador y Motor en presencia del encargado de la embarcación.
+•   Verificación de juego, carrera o desplazamiento axial de cigueñal en presencia del encargado de la embarcación.                                                                                                                                                                                                                                                                               •   Prueba de operatividad.                                                                                           ""						
+						
+						
+						
+						
+ ","MOTOR AUXILIAR #2 LISTER TR3 - ALINEAMIENTO DE GENERADOR.
+•   Alineamiento de Generador versus Motor Auxiliar.
+•   Confección de lainas de bronce de diferentes medidas.                                 
+•   Enlainado de soportes o de Generador.                                                                                                                                                                                                                                                    •   Alineamiento de Generador versus Motor Auxiliar.
+•   Colocar y ajustar pernos de anclaje de Gaenerador.                                                                                                                                                                                                                                        •   Ajuste de pernos de amarre de campana entre Motor y Generador.                                                                                                                                                                                                                            •   Verificación de alineamiento enntre Generador y Motor en presencia del encargado de la embarcación.
+•   Verificación de juego, carrera o desplazamiento axial de cigueñal en presencia del encargado de la embarcación.                                                                                                                                                                                                                                                                               •   Prueba de operatividad.                  ",,,,,,1024,Augusto Price,aprice@tasa.com.pe,APRICE,,,,,true,280,2044543222,MULTISERVICIOS Z & R E.I.R.L.,lh_ramirez@msn.com,,OSCAR ESPI,2021-10-25T15:51:31.000Z,2,6,false,2021-08-27T15:00:00.000Z,2021-08-27T18:00:00.000Z,,false,true,,,,TF01218-04,SISTEMAS ELECTRICOS (POT: 91.4KW),TF01218-0401-0202,Generador 220VAC Nro. 2,300028983,Generador 220VAC 16KW acop TR3,MP,MPA,false,false,true,2021-10-14T09:21:45.000Z,TCURO,2021-10-25T15:51:31.000Z,proveedortasa
+43283,43232,Aprobado,OT,,,320885,10,false,,320886,,,1,PLANTA,9,Vegueta,TVEG,VEGUETA,TVEG AD Serv Desm/Mont Polines radiales SRTB#2,"Serv DesmMont Polines radiales SRTB#2
+ 
+
+
+ 1 MANTENIMIENTO DE 1 PZS DE BUGGIS  SECADOR ROTARUBO POSTERIOR
+ 
+• Se realiza las maniobras respectivas con gatos hidráulicos de 50 tn cu para desmontaje de  bugis suspensión mediante tubos de 4”
+•  traslado a nuestras instalaciones los bugis con pesos aproximados de cada uno de unos 2.5TN
+• Se realiza las maniobras para realizar el despiece de los bugís de sus placas y Desmontaje de ejes centrales y rodamientos de cada bugis, calibración de ajuste de rodamientos                                                                                                                                                                                          • calibración de alojamiento de rodamientos y el ajuste adecuado (SE  EMITIRA  LOS INFORMES TECNICOS MEDIANTE  EL ACORREO A LA JEFATURA CORRESPONDIENTE)
+• Instalación de rodamientos en los bugis con sus respectivos ejes , armado de placas de los bugis pintado de placas y  polines                                                                                                                                                   
+• Se realiza el traslado de los bugis a planta  se realiza el montaje de las placas de bugis                                                                                                      • se realiza el alineamiento de polines desmontados, se realiza la limpieza superficial de bases deteriorado yo quemadas por el trabajo realizado ,  se realiza la prueba respectiva.
+ 
+ 
+Rodamientos serán suministrados por TASA ","MANTENIMIENTO DE   1 PZ DE PLACAS DE BUGI  DE SECADOR ROTATUBO  LADO DESCARGA
+• Se realiza las maniobras respectivas con gatos hidráulicos de 50 tn c/u para desmontaje de  1 placas  de bugis  lado descarga
+•  traslado a nuestras instalaciones los bugis con pesos aproximados de cada uno de unos 2.5TN a nuestras instalaciones.
+• Se realiza las maniobras para realizar el despiece de los bugís de sus placas
+• Desmontaje de ejes centrales y rodamientos de cada bugis, calibración de ajuste de rodamientos                                                                                                                                                                                          • calibración de alojamiento de rodamientos y el ajuste adecuado(SE  EMITIRA  LOS INFORMES TECNICOS MEDIANTE  CORREO  A LA  JEFATURA CORRESPONDIENTE)
+• Instalación de rodamientos en los bugis con sus respectivos ejes                                                                                                                                                                                                                                                                 • armado de placas de los bugis / pintado de placas y  polines                                                                                                                                                                                                                                                                                                                             
+• Se realiza el traslado de los bugis a planta /  se realiza el montaje de las placas de bugis                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            • se realiza el alineamiento de polines y templado respectivo de las bases, se realiza la limpieza superficial de bases deteriorado y/o quemadas por el trabajo realizado    
+ se realiza la prueba respectiva.   
+
+ADICIONAL  DE  RECUPERACION DE MEDIDA  2 PZS  DE POLIN  RADIAL  DE SECADOR RTTB N1
+
+• La recuperación de medidas de alojamiento de rodamientos de bugis para el número de rodamiento de 22226 EK
+• Rellenado boca masa con electrodo 7018, diámetro interior alojamiento de rodamientos a ambos extremos de los polines (bugis) 
+• Calibración de medidas de alojamientos de rodamientos y ajuste adecuado entre ellos
+• Maquinado de diámetro interior de bugis
+• Maquinado diámetro exterior de bugis de las 2 pzs de bugis con diámetros de 550mm x 350mm de longitud
+MAQUINADO DE DIAMETRO EXTERIOR 8 PZS DE POLINES  RADIALES
+• Calibración de medidas de alojamientos de rodamientos y ajuste adecuado entre ellos
+• Mecanizado  de pista  externa  de polines  radiales de  800mm de diametro externo                  ",,1242,Paul Colonna,pcolonna@tasa.com.pe,PCOLONNA,1268,Jorge Rivera,jrivera@tasa.com.pe,JRIVERA,,,,,true,310,2057147369,PREDIMANT EIRL,jbroncano1974@gmail.com,,BRONCANO,2021-10-25T15:50:22.000Z,4,500,true,2021-09-15T00:00:00.000Z,2021-09-30T00:00:00.000Z,Culminado,false,false,90,90,90,TVEG0105,Secado,TVEG0105-0301,Secador Rotatubo #1,300026293,SECADOR ROTATUBOS 8000KG/HR,MP,MPA,false,false,true,2021-09-27T11:59:24.546Z,RRAMIREZ,2021-10-25T15:50:22.000Z,proveedortasa

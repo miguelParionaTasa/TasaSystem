@@ -2,14 +2,16 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const General = () => {
-  const [filter, setFilter] = useState({
-    startDate: "",
-    endDate: "",
-    scope: "miGrupo",
-    zona: "",
-    ubicacion: "",
-    ottId: "", 
-  });
+const [filter, setFilter] = useState({
+  startDate: "",
+  endDate: "",
+  scope: "miGrupo",
+  zona: "",
+  ubicacion: "",
+  ottId: "",
+  fuente: "interna", // 👈 NUEVO
+});
+
 
   const [zonas, setZonas] = useState([]);
   const [ubicaciones, setUbicaciones] = useState([]);
@@ -21,36 +23,74 @@ const General = () => {
 const [otsDisponibles, setOtsDisponibles] = useState([]);
 
 useEffect(() => {
-  const fetchOts = async () => {
-    try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}ots`);
+ const fetchOts = async () => {
+  try {
+    let response;
 
-      // Filtrar OTs con OTbasico y OTmaximo definido
-      const rawOts = response.data
-        .filter((ot) => ot.OTbasico && ot.OTbasico.OTmaximo)
-        .map((ot) => ({
-          id: ot.id,
-          ottId: ot.OTbasico.OTmaximo,
-          descripcion: ot.OTbasico.name,
-        }));
+    if (filter.scope === "sap") {
+      response = await axios.get(
+        `${process.env.REACT_APP_API_URL}sap-movimientos`
+      );
 
-      // Eliminar duplicados por ottId usando Map
-      const uniqueOtsMap = new Map();
-      rawOts.forEach((ot) => {
-        if (!uniqueOtsMap.has(ot.ottId)) {
-          uniqueOtsMap.set(ot.ottId, ot);
+      const excludedMaterials = [
+        '31013855','31013867','31013865','31013863','31013875','31013874','31013866','31009821','31009837','31009820','31026229','31009836','31009823','31009838','31010184','31010191','31015361','31015363','31015445','31015346','30000506','31015349','31010296','31003986','31015444','31015419','31015427','31015439','31009310','31029768','31029557','31029214','31015365','31009813','31013843','32005548','32001606','31015423','32005531','20000627','31013880','31032187','31032194','31008885','31009898','31015425','32004042','32005402','31015347','31010996',
+
+      ];
+
+      // 🔥 Agrupar por OT (porque SAP trae una fila por material)
+      const grouped = {};
+
+     response.data
+  .filter(item => !excludedMaterials.includes(item.codigoMaterial))
+  .forEach((item) => {
+
+        if (!grouped[item.otNumero]) {
+          grouped[item.otNumero] = {
+            id: item.id,
+            ottId: item.otNumero,
+            OTbasico: { name: item.descripcionOT },
+            zona: { name: item.zona },
+            ubicacion: { name: item.ubicacion },
+            descripcionEquipo: item.comentarioOT,
+            otConsumibles: [],
+          };
         }
+
+        grouped[item.otNumero].otConsumibles.push({
+          id: item.id,
+          nombreConsumible: item.nombreMaterial,
+          unidadMedida: item.unidadMedida,
+          cantidad: item.cantidad,
+          reservaSap: item.reservaSAP,
+          comentarios: item.comentario,
+          consumibleSap: item.codigoMaterial,
+          fechaCreacion: item.fechaPedido,
+          estado: "SAP",
+        });
       });
 
-      const uniqueOts = Array.from(uniqueOtsMap.values());
-      setOtsDisponibles(uniqueOts);
-    } catch (error) {
-      console.error("Error al obtener las OTs disponibles:", error);
-    }
-  };
+      const formattedOts = Object.values(grouped);
 
-  fetchOts();
-}, []);
+      setOts(formattedOts);
+      return;
+    }
+
+    // 🔹 CASO NORMAL (NO SAP)
+    response = await axios.get(
+      `${process.env.REACT_APP_API_URL}ots`
+    );
+
+    setOts(response.data);
+
+  } catch (error) {
+    console.error("Error al obtener OTs:", error);
+  }
+};
+
+
+
+ fetchOts();
+}, [filter.scope]);
 
 
   // Obtener las zonas
@@ -350,18 +390,20 @@ const DetallesConsumibles = ({ consumibles, userId }) => {
         </div>
 
         {/* Filtro Por */}
-        <div>
-          <label className="block font-semibold text-gray-700 mb-2">Por:</label>
-          <select
-            name="scope"
-            value={filter.scope}
-            onChange={handleFilterChange}
-            className="w-full p-2 border border-gray-300 rounded-md"
-          > 
-            <option value="miGrupo">Mi grupo</option>
-            <option value="misMovimientos">Mis movimientos</option>
-          </select>
-        </div>
+       <div>
+  <label className="block font-semibold text-gray-700 mb-2">Por:</label>
+  <select
+    name="scope"
+    value={filter.scope}
+    onChange={handleFilterChange}
+    className="w-full p-2 border border-gray-300 rounded-md"
+  > 
+    <option value="miGrupo">Mi grupo</option>
+    <option value="misMovimientos">Mis movimientos</option>
+    <option value="sap">SAP</option> {/* NUEVA OPCIÓN */}
+  </select>
+</div>
+
 
         {/* Filtro Zona */}
         <div>

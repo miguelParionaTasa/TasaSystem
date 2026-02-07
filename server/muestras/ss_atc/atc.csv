@@ -1,0 +1,663 @@
+atc_codigo,atc_numero,atc_estado,atc_docorigen,sse_numero,atc_ssenromax,atc_otnum,atc_ot_tareanum,atc_otcerrado,atc_ot_tarearesu,atc_ot_tareaotnum,atc_grafonum,atc_grafoope,une_codigo,atc_unenombre,cen_codigo,atc_cennombre,atc_cenabrev,atc_lugaratencion,atc_resumen,atc_trabxrealizar,atc_descripcion,atc_liberobserv,atc_libercod1,atc_libernom1,atc_libercorreo1,atc_liberusumax1,atc_libercod2,atc_libernom2,atc_libercorreo2,atc_liberusumax2,atc_planercod,atc_planernom,atc_planercorreo,atc_planerusumax,atc_tieneprove,atc_provecodi,atc_provecodisap,atc_provenom,atc_provecorreo1,atc_provecorreo2,atc_proverespon,atc_provefechreg,atc_provenrotrab,atc_provehortrabdia,atc_provetipo,atc_fechainitrab,atc_fechafintrab,atc_etapatrab,atc_garantia,atc_archivoadjunto,atc_evalcalidad,atc_evalcumpli,atc_evalsegur,atc_ubinom_sist,atc_ubides_sist,atc_ubinombre,atc_ubidescrip,atc_equcodigo,atc_equdescrip,atc_tipotrabajo,atc_subtipotrabajo,atc_eliminado,atc_reqsolpedsap,atc_reqhesmax,atc_fechacreado,atc_creadoporusumax,atc_fechamodifi,atc_usuamodifi
+123035,1057996,Aprobado,SS,251229075106,,650754,10,false,,650755,,,2,PESCA,16,TASA 210,T210,SAMANCO,T210 Baja presión de aceite,presión de aceite bajo a 20Psi .... chequear motor auxiliar #2-251229075106T210,"Motor Lister Petter TR3, presenta baja presion de aceite,20 psi,se realizo desmontaje de los 03 inyectores para realizar inpeccion pulverizado, se detecta inyector n#2, defectuoso,requiere programar mantenimiento de los inyectores en laboratorio,posible ingreso de combustible no quemado al carter y/o contaminacion del aceite,se realizo desmontaje tapa de  inspeccion de los 03 bombantes de inyeccion,para descartar posible ingreso de combustible, estado operativo,se realizo montaje tapas de inyeccion,se realizo montaje de los inyectores,lineas de combustible,se realizo verificacion calibracion de valvulas estado operativo,se realizo encendido del motor con cargas manteniendo presion de aceite 30 psi,se recomienda seguir monitoreo de la presion de aceite ",,1145,Luis Quilcat,lquilcat@tasa.com.pe,LQUILCAT,1532,Victor Huaman Mego,vihuaman@tasa.com.pe,VIHUAMAN,,,,,true,414,2060303029,SERVIMAR DIESEL MG S.A.C.,gallozo1@hotmail.com,,MGALLOZO,2025-12-31T18:45:47.000Z,1,3,true,2025-12-29T15:00:00.000Z,2025-12-29T18:00:00.000Z,Culminado,false,false,90,90,90,TF01210-10,MOTORES AUXILIARES,TF01210-1002,Motor Auxiliar 2,,,MC,MCP,false,false,true,2024-12-31T17:52:29.080Z,VIHUAMAN,2025-01-11T02:57:36.560Z,ADMINAPP
+122987,1057948,Aprobado,SS,251229085648,,650756,10,false,,650757,,,2,PESCA,47,TASA 42,T042,CHIMBOTE,Gambuza: solicita recarga de Refrigerante -251229085648/T042,Gambuza: solicita recarga de Refrigerante -251229085648T042,"GAMBUZA
+* Vacío del sistema, para limpiar de la humedad generada en auscencia de refrigerante.
+* Instalación de válvula de servicio y recarga de refrigerante R404.
+
+Se recomienda, no quitar la válvula de servicio, ya que ello genera la fuga del refrigerante.
+ATENCIÓN DOMINGO 29/12 DE 03:00PM A 06:00PM",,1184,Saul Fernandez,sfernandez@tasa.com.pe,SFERNANDEZ,1623,David Delgado Gonzales ,ddelgado@tasa.com.pe,DDELGADO,,,,,true,400,2044552612,SERVICIOS INDUSTRIALES HALAVISI S.A,halavisi_gf@hotmail.com,vanessa.fernandez@halavisi.com,FIDEL MONT,2025-12-31T15:43:05.000Z,1,3,true,2025-12-29T15:00:00.000Z,2025-12-29T18:00:00.000Z,Culminado,false,false,80,80,80,TF0142-12,HABITABILIDAD,TF0142-1201-01,Gambuza y cocina,300030648,Gambuza - 2 puertas,MC,MCP,false,false,true,2024-12-31T10:26:08.160Z,DDELGADO,2025-01-11T02:56:37.017Z,ADMINAPP
+122610,1057571,Aprobado,SS,241218202021,,647891,30,false,,650147,,,1,PLANTA,3,Callao Norte,TCNO,callao,"CAMBIO DE BRIDA DETERIORADA DE 8"" DE LINEA SALIDA DE FLUCOLADOR","CAMBIO DE BRIDA DETERIORADA DE 8"" DE LINEA SALIDA DE FLUCOLADOR
+- ITEM 1.  CAMBIO DE BRIDA  DETERIORADA  DE  8""  LINEA   SALIDA  DE FLUCOLADOR  CLARIFICADOR  ejecución   26 112024
+• corte con equipo de oxicorte  de  brida  deteriorada
+•  limpieza mecánica  de  tubo  de 8""  área  instalación de brida nueva
+• confecciona de nueva empaquetadura 
+• cambio de  esparragos  para  fijación de  tuberia  8 de HDP  con la linea  de salida  del clarificador
+• apuntalado de brida nueva,  centrado  con la tuberia  HDP 
+•  soldeo uniforme  de la  brida   con la linea  de  descarga  del calificador  
+•  ajuste  de  esparragos  de las  brida
+•  se  realizan prieba  no presenta ninguna observación       
+2.- ITEM 2 .- TDM #1A,2Ay3A TEMPLADO DE CADENAS Y ENDEREZADO DE PALETAS DOBALADOS
+• Precalentamiento de  tueras  de pernos de  chumaceras  de los TDMS
+•  desempernado de pernos  de base  de chumaceras
+•  precalentamiento  de  nuez  y esparrago del  templados
+• templado  de  cadenas  verificando ningun rozamiento cuando las paletas  de TDM  den la vuelta  1
+• ajuste  de pernos de chumaceras  y fijación
+enderezado de paletas de tdm 1b
+•  precalentamiento de  paletas  doblados 
+•  enderezado de paletas  doblados     
+3.- ITEM 3 FAJA TRANSPORTADOR LADO NORTE; CAMBIO RODAMIENTOS A CHUMACERAS LADO COLA CERCA POZA N°1
+•  extracción de tapa  de chumaceras
+•  extraccion de tuerca  de fijacion y manguito 
+•  desmontaje  de chumacera  
+• limpieza  de chumaceras  extracción de lubricantes contaminados
+• montaje  de  rodamiento nuevo
+•  montaje  de  chumacera.  ajuste  de manguito de  fijación 
+•  Lubricación  de  elementos  rodantes  y chumaceras  
+•  instalación de tapa d e chumacerta y ajuste  de  opernos   
+•  templado de  fajas  de transmision          
+4.- ITEM 4 CORTE Y SOLDEO DE TUBERÍA DE CONDENSADO CON FUGA EN RTB 6
+• corte   de tuberia  deteriorado  linea  de purga
+•  habilitado  de  tramo de  tubo   armado en forma  de ""L""     tuboi de m1""  x 1.5 mts con sus codos  respectivos
+• apuntalado y soldeo de tubo
+• prueba de operatividad
+•  trabajo  realizado en altura   
+5.-ITEM 5 CORTE TAPA CIEGA A DUCTO DE EFECTA PAC
+corte  de tapa  en ducto  del efecto  zona PAC
+•  uso  de amoladora eléctrica  para  realizar el corte 
+•  limpieza mecánica  esmerilado  de areas soldadas  
+•  instalación de  empaquetadora fajas  (flexible)  de  que  une  a los ductos
+• ajuste  de pernos   
+• uso de consumibles  discos de corte y discos de desbaste
+ 
+COTIZACION: # 487 
+ 
+COSTO SUGERIDO: S 2185.00 SOLES MAS IGV 
+ 
+PROVEEDOR: PREDIMANT ","CAMBIO DE BRIDA DETERIORADA DE 8"" LINEA SALIDA DE FLUCOLADOR CLARIFICADOR ejecucion 26 /11/2024
+• corte con equipo de oxicorte de brida deteriorada
+• limpieza mecanica de tubo de 8"" area instalacion de brida nueva
+• confeccion de nueva empaquetadura
+• cambio de esparragos para fijacion de tuberia 8 de HDP con la linea de salida del clarificador
+• apuntalado de brida nueva, centrado con la tuberia HDP
+• soldeo uniforme de la brida con la linea de descarga del calrificador
+• ajuste de esparragos de las brida
+• se realizan prieba no presenta ninguna observacion
+TDM #1A,2Ay",,1244,Edgar Rafael,erafael@tasa.com.pe,ERAFAEL,1562,Guillermo Orozco Sibille,gorozco@tasa.com.pe,GOROZCO,,,,,true,310,2057147369,PREDIMANT EIRL,jbroncano1974@gmail.com,,broncano,2025-12-31T15:17:41.000Z,5,150,true,2024-11-26T08:00:00.000Z,2024-11-27T18:00:00.000Z,Culminado,false,false,70,80,80,TCNO0103,Recup. Trat. Agua de Bombeo,TCNO0103-0503,Bomba #1 de DAF #2 a Tanque Ecualizador,300033909,"BOMBA CENTRIFUGA 10""X10"", _M3/HR",MC,EM,false,false,true,2024-12-27T12:00:32.623Z,AOCROSPOMA,2025-01-16T15:21:10.090Z,ADMINAPP
+122986,1057947,Aprobado,SS,251229090205,,650760,10,false,,650761,,,2,PESCA,103,Panga T042,P042,CHIMBOTE,Panga : solicita cambio de enjaretado y durmiente ( rotos )-251229090205/P042,Panga : solicita cambio de enjaretado y durmiente ( rotos )-251229090205P042,"'ENJARETADO NUEVO EN ZONAS PUNTUALES
+- Desmontaje de paneles en diversas zonas, para cambio de durmientes y tablas.
+- Suministto e instalación de madera tornillo:
+   * 02 tablas de 10 pies
+   * 03 durmientes de 4 pies
+   * 03 kg de clavos",,1184,Saul Fernandez,sfernandez@tasa.com.pe,SFERNANDEZ,1623,David Delgado Gonzales ,ddelgado@tasa.com.pe,DDELGADO,,,,,true,400,2044552612,SERVICIOS INDUSTRIALES HALAVISI S.A,halavisi_gf@hotmail.com,vanessa.fernandez@halavisi.com,SANTOS H.,2025-12-31T13:37:55.000Z,2,8,true,2025-12-29T14:00:00.000Z,2025-12-29T18:00:00.000Z,Culminado,false,false,80,80,80,,,TF05042-07,SISTEMAS AUXILIARES,,,MC,MCP,false,false,true,2024-12-31T10:23:35.670Z,DDELGADO,2025-01-11T02:56:40.000Z,ADMINAPP
+121732,1056672,Aprobado,SS,241216202059,,647069,10,false,,647070,,,2,PESCA,31,TASA 420,T420,CHIMBOTE,T420 Suministro de visagras para gambuza,se. solicita para. cambio de visagras por. tiempo de uso-241216202059T420,"SUM DE CHAPA DE GAMBUZA			
+Suministro de chapas tipo cerrojo para gambuza cromada.
+Incluye: tornillos de acero inox.			
+",,1177,Robinson Aguilar,raguilar@tasa.com.pe,RAGUILAR,1532,Victor Huaman Mego,vihuaman@tasa.com.pe,VIHUAMAN,,,,,true,400,2044552612,SERVICIOS INDUSTRIALES HALAVISI S.A,halavisi_gf@hotmail.com,vanessa.fernandez@halavisi.com,ELVIS G.,2025-12-31T13:00:05.000Z,1,1,true,2024-12-17T10:00:00.000Z,2024-12-17T11:00:00.000Z,Culminado,false,false,90,90,90,TF01420-12,HABITABILIDAD,TF01420-1201-01,Gambuza y cocina,,,MC,MCP,false,false,true,2024-12-19T11:08:57.863Z,VIHUAMAN,2025-02-04T02:24:11.573Z,ADMINAPP
+122667,1057628,Aprobado,SS,241227115806,,650178,10,false,,650179,,,1,PLANTA,8,Pisco Sur,TPSU,PISCO,Reparacion de fondo Tk aceite #4-241227115806/TPSU,Reparacion de fondo Tk aceite #4-241227115806TPSU,"?	Limpieza mecánica de asiento de tanque de aceite grupo de pescado.
+?	Pintado con pintura base epoxica verde para enfibrado.
+Medidas 
+-	9.40 mts Ø.
+?	Culminado la limpieza mecánica se aplicará desengrasante espuma para desengrasante el asiento d tanque y socoló.
+?	Enfibrado con 02 capas de fibra mat 450 bañado con resina poliéster color blanco.
+Nota: 
+-	Pesquera Tasa tendrá que entregar el tanque sin residuos de aceite para proceder con el pintado y el enfibrado.
+DAVIMAR suministrará la pintura.
+",,1250,Boris Fernandez,bfernandez@tasa.com.pe,BFERNANDEZ,1268,Jorge Rivera,jrivera@tasa.com.pe,JRIVERA,,,,,true,1229,2056915346,MULTISERVICIOS DAVIMAR E.I.R.L.,edavimar@gmail.com,doc.davimar@gmail.com,HEBER,2025-12-31T12:46:54.000Z,7,40,true,2024-12-15T08:00:00.000Z,2024-12-20T05:00:00.000Z,Culminado,false,false,100,100,100,TPSU0204,Tanques de Almacenamiento,TPSU0204-0214,Tanque de Aceite Consumo Humano #4,300018172,TANQUE ACEITE CONSUMO HUMANO 763M3 #4,MC,MCP,false,false,true,2024-12-27T14:09:03.153Z,JGUERRERO,2025-01-20T15:33:00.897Z,ADMINAPP
+122989,1057950,Aprobado,SS,251229091558,,650762,10,false,,650763,,,2,PESCA,30,TASA 419,T419,CHIMBOTE,TOMA DE FONDO OBSTRUIDA-251229091558/T419,TOMA DE FONDO OBSTRUIDA-251229091558T419,"RETIRO REJILLAS
+LIMPIEZA INTERIOR TOMA DE FONDO
+INSTALACION REJILLAS
+ENCEMENTADOPERNOS",,1103,Ernan Poma,epoma@tasa.com.pe,EPOMA,1623,David Delgado Gonzales ,ddelgado@tasa.com.pe,DDELGADO,,,,,true,283,2038944282,NAUTILIUS SERVICE E.I.R.L.,nautiliusservice@yahoo.com,,NAUTILIUS,2025-12-31T12:45:12.000Z,2,2,true,2025-12-29T13:00:00.000Z,2025-12-29T15:00:00.000Z,Culminado,false,false,90,90,90,TF01419-01,CASCO,TF01419-0101,Casco y Aditamentos,300029208,"CASCO DOÑA BEILA-EL: 42.69, MG: 9.09, PT",MC,MCP,false,false,true,2024-12-31T11:18:16.950Z,DDELGADO,2025-01-11T02:56:42.923Z,ADMINAPP
+122046,1056987,Aprobado,SS,241219114308,,648004,10,false,,648005,,,2,PESCA,59,TASA 59,T059,CALLAO,T59 SA cambio de sello mecanico por fuga de agua  en bomba de achique-241219114308,cambio de sello mecanico por fuga de agua  en bomba de achique-241219114308T059,"REPARACION DE CABEZAL DE BOMBA DE ACHIQUE DE SALA MAQUINAS Y BODEGAS
+DESMI 4”
+Incluye: 
+* Traslado de personal a la embarcación
+* Desacoplado de bomba y motor
+* Desmontaje de cabezal y espejo
+* Inspección de partes de bomba
+* Maniobra / Traslado de equipo de sala maquina a cubierta
+* Recojo de almacén/ Traslado al taller VRACSI
+* Desarmado de partes
+* Verificación en torno de alineamiento eje-impulsor
+* Reparación de eje en parte roscado (lado impulsor)
+* Cambio de 01 sello mecánico 1 3/8""
+* Cambio de 02 rodaje 6308 
+* Cambio de impulsor
+* Cambio de espejo
+* Balanceo dinámico eje-impulsor
+* Armado de cabezal de bomba
+* Traslado de equipo al almacén del cliente
+* Colocación de espejo y cabezal en carcaza
+* Acoplado de bomba y motor
+* Pruebas respectivas
+
+REPUESTOS:
+*Espejo se bronce para bomba desmi (confeccionado por VRACSI) 
+*Impulsor de bronce para bomba desmi (confeccionado por VRACSI) ",,1083,Alexander De la Cruz,adelacruz@tasa.com.pe,ADELACRUZ,1024,Augusto Price,aprice@tasa.com.pe,APRICE,,,,,true,464,2050786099,VENTAS REPARACIONES ADMINISTRACION,vracsi_eirl@hotmail.com,,DEL AGUILA,2025-12-31T11:42:49.000Z,3,26,true,2024-12-19T16:00:00.000Z,2024-12-23T13:00:00.000Z,Culminado,false,false,90,90,90,TF01059-07,SISTEMAS AUXILIARES,TF01059-0701-02,Bombas/electrobombas De Sistema De Achique,300011190,"Bomba Centrífuga 4"" x 4""  350GPM achique acoplada BR",MC,MCP,false,false,true,2024-12-21T11:05:23.193Z,APRICE,2025-02-06T15:25:10.047Z,ADMINAPP
+122095,1057036,Aprobado,OT,,,649094,10,false,,649095,,,1,PLANTA,11,Matarani - Mollendo,TMAT,LIMA,ADICIONAL CAMBIO RETENES SEPARADORA 934 N°03,ADICIONAL CAMBIO RETENES SEPARADORA 934 N°03,CAMBIO DE RETENES SEPARADORA NX-934.,,1615,YONEL RONAL SAMBRANO PILCO,YSAMBRANO@tasa.com.pe,YSAMBRANO,1288,Eduardo Marengo,emarengo@tasa.com.pe,EMARENGO,,,,,true,448,0000038907,TECNOLOGIAS DE SEPARACION SAC,rrivera@tecnoseparacion.com,,R.RIVERA,2025-12-31T11:25:15.000Z,1,8,true,2024-12-17T07:00:00.000Z,2024-12-18T08:00:00.000Z,Culminado,false,false,90,90,90,TMAT0109,Planta de Aceite,TMAT0109-0203,Separador de Sólidos #3,300009607,SEPARADOR DE SOLIDOS 40000LT/HR,MP,COND,false,false,true,2024-12-23T10:37:35.393Z,WILTORRES,2025-01-10T14:11:52.357Z,ADMINAPP
+120832,1055771,Aprobado,OT,,,645731,10,false,,645732,,,1,PLANTA,11,Matarani - Mollendo,TMAT,LIMA,TMAT Adic.Reemplazo rodamientos tornillo Sep.,"TMAT Adic.Reemplazo rodamientos tornillo Sep.
+- Reemplazo de rodamientos extremo cilíndrico.
+- Reemplazo de rodamiento en extremo cónico.
+- Desmontaje de tubo protector.
+- Verificar estado de bocina de bronce.
+- Desmontaje y montaje de repuestos mencionados. ",REEMPLAZO DE RODAMIENTOS DE TORNILLO DE SEPARADORA FPNX-934 ,,1615,YONEL RONAL SAMBRANO PILCO,YSAMBRANO@tasa.com.pe,YSAMBRANO,1288,Eduardo Marengo,emarengo@tasa.com.pe,EMARENGO,,,,,true,448,0000038907,TECNOLOGIAS DE SEPARACION SAC,rrivera@tecnoseparacion.com,,R.RIVERA,2025-12-31T11:18:50.000Z,1,8,true,2024-12-17T07:00:00.000Z,2024-12-18T09:00:00.000Z,Culminado,false,false,90,100,90,TMAT0109,Planta de Aceite,TMAT0109-0201,Separador de Sólidos #1,300009599,SEPARADOR DE SOLIDOS 40000LT/HR,MP,COND,false,false,true,2024-12-12T08:38:34.690Z,RVIDAL,2025-01-10T13:57:29.450Z,ADMINAPP
+120831,1055770,Aprobado,OT,,,645727,10,false,,645729,,,1,PLANTA,11,Matarani - Mollendo,TMAT,LIMA.,TMAT Adic.Reemplazo casquillo bowl FPNX-934,"TMAT Adic.Reemplazo casquillo bowl FPNX-934
+Reemplazo de dos (2) casquillos de protección de salida de sólidos de fabricación
+local en acero inoxidable AISI 304.",REEMPLAZO DE CASQUILLO BOWL FPNX-934 ,,1615,YONEL RONAL SAMBRANO PILCO,YSAMBRANO@tasa.com.pe,YSAMBRANO,1288,Eduardo Marengo,emarengo@tasa.com.pe,EMARENGO,,,,,true,448,0000038907,TECNOLOGIAS DE SEPARACION SAC,rrivera@tecnoseparacion.com,,R.RIVERA,2025-12-31T11:12:37.000Z,1,7,true,2024-12-17T07:00:00.000Z,2025-12-18T10:00:00.000Z,Culminado,false,false,90,100,90,TMAT0109,Planta de Aceite,TMAT0109-0302,Centrífuga #2,300009620,"CENTRIFUGA 30,000 LT/HR",MP,COND,false,false,true,2024-12-12T08:35:59.110Z,RVIDAL,2025-01-10T13:57:26.667Z,ADMINAPP
+122740,1057701,Aprobado,SS,241227174202,,650475,10,false,,650476,,,1,PLANTA,13,Chimbote,TCHI,Chimbote,RECALIENTAMIENTO EN RODAMIENTOS DE TRICANTER Z8E-241227174202/TCHI,"CAMBIO DE RODAMIENTOS INTERNOS DE TRICANTER DE LODOS Z8E
+ 
+SEGUN COTIZACIÓN N° F0198 v.2 
+ 
+PRECIO SIN IGV: $ 9 768.08 ","Servicio de mantenimiento correctivo de emergencia para Z8E N°019.019.20 (26,27,28 Nov. 24)",,1236,David Lopez,dlopez@tasa.com.pe,DLOPEZ,1265,Eduardo Chunga,echunga@tasa.com.pe,ECHUNGA,,,,,true,157,2060032222,FLOTTWEG PERU SAC,luis.pachecog2015@gmail.com,,Carlos,2025-12-31T09:59:12.000Z,2,32,true,2024-11-26T08:00:00.000Z,2024-11-28T17:00:00.000Z,Culminado,false,false,90,90,90,TCHI0103,Recup. Trat. Agua de Bombeo,TCHI0103-2202,Tricanter de Lodos #1 (Z8E),,,MC,EM,false,false,true,2024-12-27T18:03:24.790Z,GROBLES,2025-01-11T20:52:13.750Z,ADMINAPP
+122445,1057401,Aprobado,OT,,,649594,10,false,,649595,,,1,PLANTA,6,Samanco,TSAM,SAMANCO,TSAM Serv Desmontaje/Montaje de buggie de rotatubo 1,"TSAM Serv DesmontajeMontaje de buggie de rotatubo 1
+  
+S.G. SAMANCO 101 E.I.R.L.
+INDUSTRIAL
+R.U.C 20609759543
+ 
+COTIZACIÓN N° SGS101-
+00089 
+POR CAMBIO DE BUGUIS DE SECADOR ROTATUBO #1 
+ 
+1. Se realizará bloque de equipo en coordinación con electricista, operario, jefe de turno y mantenimiento.
+
+2. Se realizará armado de maniobras para izamiento del equipo con gata hidráulica para liberar los buguis.
+
+3. Se realizará el izamiento del equipocon toda la precaución adecuada para liberarlos buguis.
+
+4. Se realizará la verificación de los buguis ya liberados, para la colocación de soportes.
+
+5. Se realizará el trazado y corte de tubos de 4” sch40, para la colocación de soportes.
+
+6. Se realizará colocación de tubos, para elsoporte y soldeo con soldadura 60-11 y 70-18 de 18” en el proceso STICK
+
+7. Se realizará el desajuste de los pernos de la base del bugui en ambos lados.
+
+8. Se realizará el armado de maniobras para desmontaje del bugui existente.
+
+9. Se realizará el desmontaje de bugui con toda la precaución correspondiente y trasladado al taller de mantenimiento.
+
+10. Se realizará trasladó de bugui, para montaje en lugar existente.
+11. Se realizará montaje de bugui con maniobra y con todas las precauciones correspondientes durante el trabajó.
+
+12. Se realizará alineamiento de bugui en su lugar correspondiente.
+
+13. Se realizará el ajuste adecuado a pernos de ambos lados de bases de buguis.
+
+14. Se realizará el retiro de maniobras y tubos de lugar existen.
+
+15. Se realizará desbloqueo de equipo en coordinación de electricista, operario, jefe de turno y mantenimiento.
+16. Se realizará la prueba del equipo con corriente en coordinación de electricista, operario, jefe de turno y mantenimiento.
+
+17. Se realizará lubricación de pista en coordinación con operario de equipo.
+
+18. Se realizará orden y limpieza del área de trabajo para evitar alguna contaminación con el producto a elaborar 
+ 
+Costo: 4900 Soles ",POR CAMBIO DE BUGUIS DE SECADOR ROTATUBO #1,,1246,Over Manrique,omanrique@tasa.com.pe,OMANRIQUE,1288,Eduardo Marengo,emarengo@tasa.com.pe,EMARENGO,,,,,true,1203,2060975954,SERVICIOS GENERALES SAMANCO 101 E.I,freyrifernandez@gmail.com,,FREYRI FER,2025-12-31T09:31:13.000Z,4,8,true,2024-12-23T11:00:00.000Z,2024-12-23T19:00:00.000Z,Culminado,false,false,90,90,90,TSAM0105,Secado,TSAM0105-0301,Secador Rotatubo #1,,,MC,MCP,false,false,true,2024-12-26T11:53:14.713Z,PLENTI,2025-01-21T14:36:33.017Z,ADMINAPP
+122977,1057938,Aprobado,SS,251230175144,,651329,10,false,,651330,,,2,PESCA,29,TASA 418,T418,CHIMBOTE,T418 Revisión de electrobomba de achique,la electrobomba de achique lado Er no tiene presión en la descarga -251230175144T418,"DESMONTAJE DE BOMBA
+Se hizo la desconexión de motor eléctrico.
+Desembridado de línea de succión y descarga.
+Se realizó maniobra para retirar bomba de su posición de trabajo a cubierta.
+REPARACION DE LA BOMBA
+Se verifico que los elementos internos de la bomba estaban en su medida sin embargo se procedio a dejar a las medidas de Fabrica para ello se desarmo la bomba, se Cambio el Impulsor y se injerto el espejo para conseguir las medidas de Fabrica. Se probo en tierra quedando lista para su montaje
+MONTAJE Y PRUEBA
+Se realizó maniobra de electrobomba de cubierta a su posición de trabajo.
+Se realizó conexión eléctrica de motor.
+Se embridó línea de succión y descarga.
+En prueba de operatividad se observó que no achica la bomba por ello se procedió a abrir con autorización del motorista la válvula de paso para verificar el pase de la descarga.
+Al abrirse se encontró que la pepa del vástago quedó pegado por ello se encuentra cerrado la válvula.",,1157,Miguel Eugendio,meugendio@tasa.com.pe,MEUGENDIO,1532,Victor Huaman Mego,vihuaman@tasa.com.pe,VIHUAMAN,,,,,true,208,2060471752,INIAR E.I.R.L.,sec.iniar@gmail.com,,Renato Agu,2025-12-31T09:13:49.000Z,3,21,true,2024-12-24T09:00:00.000Z,2024-12-26T16:00:00.000Z,Culminado,false,false,90,90,90,TF01418-07,SISTEMAS AUXILIARES,TF01418-0701-02,Bombas/electrobombas De Sistema De Achique,400036086,"Electrobomba de achique 4"" X 4"" ER 8.6 Hp",MC,EM,false,false,true,2024-12-30T18:29:34.180Z,VIHUAMAN,2025-02-03T15:25:56.500Z,ADMINAPP
+121547,1056487,Aprobado,OT,,,636933,10,false,,636934,,,2,PESCA,30,TASA 419,T419,CALLAO,T419 EE CO  diagrama Ordenamiento de cables,"14332DRE24
+ 
+ 
+Servicio de levantamiento de información y elaboración de un diagrama de las
+conexiones del cableado
+Incluye:
+- Rotulado de equipos electrónicos y periféricos
+- Esquematización de lo conexionado en el diagrama
+Tiempo: 4-6 horas levantamiento a bordo, 8-12 horas elaboración de
+diagramas en VISIO.
+Nota: Se entregará diagramas en formato digital, con envío al supervisor y
+planner de la embarcación. ","Servicio de levantamiento de información y elaboración de un diagrama de las conexiones del cableado
+se realizaron las siguientes actividades:
+
+Inspección del Sitio: Se realizó un recorrido exhaustivo por la embarcación para identificar la ubicación de todos los puntos de conexión y las rutas de cableado existentes. Este paso permitió conocer en detalle la disposición y el estado de los cables, equipos de red y paneles de conexión instalados a bordo.
+
+Recopilación de Datos: Se recopilaron los datos necesarios sobre cada componente del sistema de cableado, como el tipo de cables utilizados, los equipos conectados y las configuraciones de red implementadas. Además, se documentaron las condiciones de los cables y posibles áreas que requerían atención o mantenimiento.
+
+Elaboración del Diagrama: Con la información obtenida durante la inspección y la recopilación de datos, se elaboró un diagrama detallado que refleja la distribución de los cables, los dispositivos conectados y los puntos de acceso en la embarcación. Este diagrama proporciona una representación visual clara y precisa de la infraestructura de cableado a bordo.
+
+Análisis y Recomendaciones: Tras el levantamiento de información, se realizó un análisis del estado del cableado, identificando posibles áreas de mejora. Se sugirieron recomendaciones para optimizar la organización del cableado y mejorar la eficiencia de la red a bordo.",,1103,Ernan Poma,epoma@tasa.com.pe,EPOMA,1062,David Benavides,dbenavides@tasa.com.pe,DBENAVIDES,,,,,true,341,2050923908,RESET - ELECTRONICA Y SISTEMAS,accounts@resetnaval.com,,ADRIAN LAN,2025-12-31T08:55:00.000Z,2,16,true,2024-09-19T09:00:00.000Z,2024-10-10T16:00:00.000Z,Culminado,false,false,90,90,90,TF01419-05,EQUIPOS ELECTRONICOS,TF01419-05,EQUIPOS ELECTRONICOS,,,MP,COND,false,false,true,2024-12-17T17:04:34.527Z,JMEZA,2025-01-10T20:41:38.120Z,ADMINAPP
+118342,1053283,Aprobado,OT,,,637740,10,false,,637741,,,1,PLANTA,11,Matarani - Mollendo,TMAT,LUZGARDO,Mantenimiento y calibrar Caldera Vapor#3,"I. MANTENIMIENTO AL QUEMADOR.
+PRIMERA VISITA.
+ 
+a) Verificar cabezal de combustión.
+b) Revisión y limpieza de difusores de aire.
+c) Limpieza de filtro de gas.
+d) Limpieza y regulación del quemador.
+e) Limpieza y calibración del electrodo de encendido.
+f) Limpieza y revisión del electrodo de ionizaciónfotocelda.
+g) Inspección y limpieza exterior del motor ventilador.
+h) Inspección y limpieza externa del tren de válvulas.
+i) Limpieza exterior del quemador.
+j) Desmontaje y limpieza del control de nivel MDM. (principal y auxiliar)
+k) Cambio de tubo de nivel y empaquetaduras.
+l) Desmontaje y limpieza de transmisor de presión.
+m) Desmontaje y mantenimiento de presostatos.
+n) Limpieza y revisión de manómetros y termómetros.
+o) Revisión, limpieza y cambio de terminal del control de nivel warrick.
+p) Encendido, regulación y medición de la eficiencia del quemador con equipo
+electrónico marca TESTO.
+q) Los valores de los parámetros de combustión estarán dentro de los rangos
+permisibles de acuerdo con la norma ISO 14001.
+r) Pruebas de correcto funcionamiento de la caldera.
+ 
+Mano de Obra.
+a) tres técnicos calificados en el servicio de mantenimiento de calderas. 
+b) Informe detallado del servicio. ","Se realizó el mantenimiento al quemador y sus accesorios, se inspeccionó, limpió y calibró el electrodo de encendido, fotocelda. También se verifico la integridad de la línea de gas y sus conexiones. A su vez, se revisaron y limpiaron los siguientes elementos: difusor de aire, solenoide de gas de la entrada del piloto, paletas de aire, electroválvulas y ventilador, transformador de ignición, etc. Se encontró abundante tierra y polvo en los ventiladores.",,1615,YONEL RONAL SAMBRANO PILCO,YSAMBRANO@tasa.com.pe,YSAMBRANO,1288,Eduardo Marengo,emarengo@tasa.com.pe,EMARENGO,,,,,true,1379,2061042382,EQUIPOS INDUSTRIALES & CALDERAS S.A,informes@equiposycalderas.com,cobranza@equiposycalderas.com,LUZGARDO,2025-12-30T21:01:54.000Z,5,280,true,2024-12-16T08:00:00.000Z,2024-12-23T06:00:00.000Z,Culminado,false,false,90,100,90,TMAT0201,Planta de Vapor,TMAT0201-0107,Caldero #3,300020747,CALDERA DE VAPOR 1000BHP,MP,MP,false,false,true,2024-11-18T10:43:15.987Z,AORTIZ,2025-01-10T13:37:44.057Z,ADMINAPP
+122953,1057914,Aprobado,SS,240802174207,,649970,10,false,,649971,,,2,PESCA,55,TASA 55,T055,CHIMBOTE,T55 CA ADM limpieza de tanque hidráulico para incrementar en 500gl  198,limpieza de tanque hidráulico -240802174207T055,limpieza de tanque hidráulico,,1169,Palmer Estrada,pestrada@tasa.com.pe,PESTRADA,1056,Nepthali Collazos,ncollazos@tasa.com.pe,NCOLLAZOS,,,,,true,336,2053206778,REPRESENTACIONES E INVERSIONES,iris.balladares@hotmail.com,,RICARDO J,2025-12-30T18:00:25.000Z,4,24,true,2024-08-05T08:00:00.000Z,2024-08-10T17:00:00.000Z,Culminado,false,false,80,80,90,TF0155-01,CASCO,TF0155-0101,Casco y Aditamentos,,,MP,COND,false,false,true,2024-12-30T17:24:20.743Z,MMANYAHUILLCA,2025-01-17T15:50:28.593Z,ADMINAPP
+122938,1057899,Aprobado,SS,,,649980,10,false,,649981,,,2,PESCA,55,TASA 55,T055,CHIMBOTE,ADM protección de quenas en bodegas -240802101107/T055 / Cot. 182,protección de quenas en bodegas -240802101107T055,protección de quenas en bodegas,,1169,Palmer Estrada,pestrada@tasa.com.pe,PESTRADA,1056,Nepthali Collazos,ncollazos@tasa.com.pe,NCOLLAZOS,,,,,true,336,2053206778,REPRESENTACIONES E INVERSIONES,iris.balladares@hotmail.com,,RICARDO,2025-12-30T17:40:46.000Z,5,40,true,2024-07-20T08:00:00.000Z,2024-07-26T17:00:00.000Z,Culminado,false,false,70,80,90,TF0155-01,CASCO,TF0155-0106,Bodegas y Aditamentos,,,MP,COND,false,false,true,2024-12-30T17:14:55.000Z,MMANYAHUILLCA,2025-01-17T15:50:36.703Z,ADMINAPP
+122936,1057897,Aprobado,SS,,,650430,10,false,,650431,,,2,PESCA,55,TASA 55,T055,CHIMBOTE,"T55 CA Limpieza de Dinos y adic. 191,295","T55 CA Limpieza de Dinos y adic. 191,295",Limpieza de Dinos y adic. ,,1169,Palmer Estrada,pestrada@tasa.com.pe,PESTRADA,1056,Nepthali Collazos,ncollazos@tasa.com.pe,NCOLLAZOS,,,,,true,336,2053206778,REPRESENTACIONES E INVERSIONES,iris.balladares@hotmail.com,,RICARDO J,2025-12-30T17:33:48.000Z,5,16,true,2024-07-30T08:00:00.000Z,2024-08-02T17:00:00.000Z,Culminado,false,false,80,80,90,TF0155-01,CASCO,TF0155-0101,Casco y Aditamentos,,,MP,COND,false,false,true,2024-12-30T17:09:59.000Z,MMANYAHUILLCA,2025-01-17T15:50:48.033Z,ADMINAPP
+118260,1053201,Aprobado,SS,241116165657,,637456,10,false,,637457,,,1,PLANTA,13,Chimbote,TCHI,CHIMBOTE,FALLO DE POLIN AXIAL EN RTB #5-241116165657/TCHI,"FALLO DE POLIN AXIAL EN RTB #5-241116165657TCHI
+ 
+COTIZACIÓN: F1537-24  
+ 
+Servicio Desmontaje Conjunto Polín Axial SRTB # 5 
+ Lado Alimentación parte externa. 
+ La Placa base de este conjunto se encontró soldada a la estructura. 
+ Por Motivo que el Secador se había desplazado de su posición original y 
+ los pernos de fijación de la Base no coincidían. 
+ Corte de cordones de soldadura para liberar conjunto. 
+ Mantenimiento nos indica instalar este polín axial en el SRTB # 3. 
+ Maniobras para Desmontaje. 
+ 
+ 
+Servicio Montaje Conjunto Polín Axial SRTB # 3 
+ Polín desmontado de SRTB # 5, se instala en este secador, fijación con pernos 
+ base metálica, verificar distancia axial con pista de rodadura. 
+ 
+Servicio Montaje Conjunto Polín Axial SRTB # 5 
+ Conjunto Polín Axial, llega a planta luego de realizar el mantenimiento 
+ respectivo. 
+ Se instala en este secador, fijación con pernos 
+ En base metálica, verificar distancia axial con pista de rodadura. 
+ Previamente se realiza Maniobras para desplazar el secador a su posición original 
+ Unos 40 mm y permita coincidir los agujeros de la placa base del polín axial.  
+ 
+ 
+COSTO SIN IGV: $1985.00 ","REF: Presupuesto N° F1537-24
+Sr(es):
+TECNOLOGICA DE ALIMENTOS S.A.
+Atención:  Ing. David López / Ing. Marcelo Lezama
+Jefe de Mantenimiento / Supervisor
+Planta Chimbote
+Trabajos Realizados:
+Ítem # 1:
+*Servicio Desmontaje Conjunto Polín Axial SRTB # 5 
+  Lado Alimentación parte externa.
+  La Placa base de este conjunto se encontró soldada a la estructura.
+  Por Motivo que el Secador se había desplazado de su posición original y 
+  los pernos de fijación de la Base no coincidían.
+  Corte de cordones de soldadura para liberar conjunto.
+  Mantenimiento nos indica instalar este polín axial en el SRTB # 3.
+  Maniobras para Desmontaje.
+
+Ítem # 2:
+*Servicio Montaje Conjunto Polín Axial SRTB # 3 
+  Polín desmontado de SRTB # 5, se instala en este secador, fijación con pernos 
+  base metálica, verificar distancia axial con pista de rodadura.
+
+Ítem # 3:
+*Servicio Montaje Conjunto Polín Axial SRTB # 5 
+  Conjunto Polín Axial, llega a planta luego de realizar el mantenimiento
+  respectivo.
+  Se instala en este secador, fijación con pernos 
+  En base metálica, verificar distancia axial con pista de rodadura.
+  Previamente se realiza Maniobras para desplazar el secador a su posición original 
+  Unos 40 mm y permita coincidir los agujeros de la placa base del polín axial.
+
+Ítem # 4:
+*Servicio Cambio de Pernos de Conjunto Polín Axial de SRTB # 2 
+  Se nos solicita suministrar los pernos y realizar el cambio respectivo.
+
+Servicio Realizado a conformidad
+NOTAS:
+Presupuesto por Mano de Obra y Consumibles.
+Personal a disposición en horas extendidas de servicio fuera de las horas normales.
+
+Sin otro particular y esperando pronta respuesta quedo de Ud.
+
+Ing. Jorge Andrade Chávez
+Gerente General
+FMS Armijo SAC 
+",,1236,David Lopez,dlopez@tasa.com.pe,DLOPEZ,1265,Eduardo Chunga,echunga@tasa.com.pe,ECHUNGA,,,,,true,159,0000017133,FMS ARMIJO S.A.C,marckandrade@gmail.com,,J. ANDRADE,2025-12-30T17:29:20.000Z,4,80,true,2024-11-03T08:00:00.000Z,2025-11-04T19:00:00.000Z,Culminado,false,true,90,90,90,TCHI0105,Secado,TCHI0105-0309,Secador Rotatubo #5,,,MC,EM,false,false,true,2024-11-16T17:54:59.450Z,MLEZAMA,2025-01-10T19:44:41.010Z,ADMINAPP
+122280,1057225,Aprobado,SS,241223171018,,649480,10,false,,649481,,,1,PLANTA,13,Chimbote,TCHI,PLANTA CHIMBOTE,"Cambio de polín en Rotatubo #1, lado de descarga-241223171018/TCHI","Cambio de polín en Rotatubo #1, lado de descarga-241223171018TCHI
+ 
+SEGUN COTIZACIÓN  F1557-24 
+ 
+DESMONTAJE Y MONTAJE DE BUGUI DE RTB #1 
+ 
+PRECIO SIN IGV: $ 1150.00 ","Presupuesto N° F1557-24
+Sr(es):
+TECNOLÓGICA DE ALIMENTOS S.A.
+Atención:  Ing. David López / Ing. Marcelo Lezama
+ Jefe de Mantenimiento / Supervisor de Mantenimiento
+ Planta Chimbote
+Se detalla Presupuesto por lo siguiente:
+Ítem # 1:
+*Servicio de Cambio de Conjunto polín Radial:
+  01 juego Polín Radial SRTB # 1-ALIMENTACION-ENERCOM–LD IZQUIERDO-ESTE  
+  Desmontaje y Montaje.
+  Planta Chimbote
+  Trabajo de Desmontaje MIERCOLES 27/11/2024 
+  Se colocó en su lugar el conjunto reparado por nosotros del SRTB # 3 en su lugar.
+Ítem # 2:
+*Servicio de Cambio de Conjunto polín Radial:
+  01 juego Polín Radial SRTB # 1-DESCARGA-ENERCOM -LD IZQUIERDO-ESTE
+  Desmontaje y Montaje.
+  Planta Chimbote
+  Trabajo de Desmontaje DOMINGO 01/12/2024 
+  Se colocó en su lugar un Conjunto de STOCK del Cliente.
+Consideraciones:
+-	Se considera solo presupuesto por la actividad realizada.
+Trabajos desmontaje y montaje de polines:
+* Personal asignado con Documentación completa, coordinaciones con mantenimiento, 
+   Permisos respectivos, Bloqueo del Equipo.
+* Maniobras para suspender el Tambor y facilitar el desmontaje. Uso de Equipos,
+   herramientas y maniobras realizadas con seguridad.
+* Desmontaje Conjunto Polín, (Planta se encarga de su atención en taller local), 
+   El equipo queda con otro conjunto similar propiedad del cliente.
+* Montaje Conjunto Polín sobre Base Metálica, maniobras para bajar tambor
+   y posicionarlo correctamente.  
+
+   Servicio realizado  CONFORME
+
+NOTAS:
+Presupuesto por Mano de Obra y Consumibles.
+Transporte de maniobras necesarias para este trabajo.
+
+Sin otro particular y esperando pronta respuesta quedo de Ud.
+
+
+Ing. Jorge Andrade Chávez
+Gerente General
+FMS Armijo SAC 
+",,1236,David Lopez,dlopez@tasa.com.pe,DLOPEZ,1265,Eduardo Chunga,echunga@tasa.com.pe,ECHUNGA,,,,,true,159,0000017133,FMS ARMIJO S.A.C,marckandrade@gmail.com,,J. ANDRADE,2025-12-30T17:16:46.000Z,4,64,true,2024-11-27T08:00:00.000Z,2024-12-01T18:00:00.000Z,Culminado,false,false,90,90,90,TCHI0105,Secado,TCHI0105-0301,Secador Rotatubo #1,,,MC,MCP,false,false,true,2024-12-23T18:16:13.380Z,GROBLES,2025-01-13T20:25:23.320Z,ADMINAPP
+122725,1057686,Aprobado,SS,241227160231,,650450,10,false,,650451,,,1,PLANTA,13,Chimbote,TCHI,Chimbote,SUMINISTRO DE PERNOS PRUEBA HIDROSTATICA CALDERO N° 07.-241227160231/TCHI,"SUMINISTRO DE PERNOS PRUEBA HIDROSTATICA CALDERO N° 07.
+ 
+SEGUN COTIZACIÓN N° CP446-24-CAL-07
+ 
+PRECIO SIN IGV: S. 350.00 "," 	SUMINISTRO DE PERNOS PH CALDERO N° 07.
+
+?	MATERIALES QUE PROPORCIONA EL CONTARTISTA.
+?	12 Pza pernos de 1” x 6” GR-8 completos.
+?	01 Pza esparrago de 1”x 6 metros GR.8.
+
+?	PRECIO:S/350.00",,1236,David Lopez,dlopez@tasa.com.pe,DLOPEZ,1265,Eduardo Chunga,echunga@tasa.com.pe,ECHUNGA,,,,,true,67,2052649480,CONTRATISTA PERALTA E.I.R.L.,jj_peralta_@hotmail.com,,Luia busta,2025-12-30T17:09:17.000Z,2,1,true,2024-10-21T11:00:00.000Z,2024-10-21T12:00:00.000Z,Culminado,false,false,90,90,90,TCHI0201,Planta de Vapor,TCHI0201-0120,Caldero #7,,,MC,MCP,false,false,true,2024-12-27T16:24:06.313Z,GROBLES,2025-01-11T20:52:03.127Z,ADMINAPP
+122751,1057712,Aprobado,SS,241228085355,,650580,10,false,,650581,,,1,PLANTA,13,Chimbote,TCHI,Chimbote,TUBERIA PICADA EN CALDERA #7-241228085355/TCHI,"PRUEBA HIDROSTATICA EN CALDERA #7
+ 
+SEGUN COTIZACIÓN N° CP445-24-CAL-07 
+ 
+PRECIO SIN IGV: S. 3 230.00 ","  PRUEBA HIDROSTATICA DE CALDERO # 07 TASA CHIMBOTE.
+El método utilizado es de caída o pérdida de presión, el cual consiste en realizar prueba hidrostática del caldero aumentando gradualmente la presión hasta llegar a una presión equivalente a 1.5 veces la presión de trabajo.
+
+El tiempo de prueba será de 3 horas como mínimo.
+
+1.Antes de iniciar la prueba 
+-Desenergizar y bloquear equipo. Asimismo, realizar una inspección visual al equipo.
+
+2.Habilitación de Caldero
+-Desmontaje y hermetizado de conexiones bridadas y roscadas  haciendo uso de herramientas manuales.
+-Desmontaje de accesorios como válvula principal de vapor, válvula de purga de fondo, válvulas de seguridad, columnas de nivel de agua,  purgas de superficie, linea de pre-calentamiento de petróleo (si fuera  el caso).
+-Colocación de disco ciego con empaquetadura de jebe y lona en el lugar de los accesorios desmontados.
+-Se deberá realizar las aperturas de las tapas posterior y delantera.
+
+3.Llenado de agua
+-Realizar llenado de agua del equipo, haciendo uso de la bomba de alimentación del caldero, al mismo tiempo que se evacua todo el aire por la línea de purga.
+-Realizar la instalación del balde de pruebas en una de las conexiones roscadas de la parte superior, junto con un manómetro de escala 0-300 psi (calibrado).
+
+4.Prueba Hidrostática
+-Una vez lleno el caldero, inyectar agua hasta alcanzar la presión de 100 psi (de forma manual o con bomba). 
+-Realizar inspección visual de los accesorios y conexiones. Luego en forma gradual incrementar la presión y mantener en ese valor al
+  menos 30 minutos en cada valor medido, hasta llegar a la presión máxima equivalente a 1.5 veces la presión de trabajo.
+-En caso de existir fuga de agua, se debe vaciar el líquido hasta que permita realizar la reparación correspondiente.
+-Se repite el llenado del equipo y la prueba hidrostática comienza desde el valor de presión donde se presentó la fuga.
+-Luego cerrar la válvula de control del sistema de pruebas, y observar la presión por un periodo no menor de 30 minutos.
+-Para validar la prueba, no deben existir fugas visibles y la presión no bajará en un lapso de 1 hora.
+
+5.Reposición de conexiones de Caldero
+-Haciendo uso de herramientas manuales, despresurizar el caldero,  evacuar el agua para realizar la reposición de todas las conexiones (roscadas y bridadas) con su respectivo empaque.
+  
+6. ELABORACIÓN Y ENTREGA DE INFORME DE TRABAJO.		
+
+				
+PRECIO TOTAL $ = 850.00 dolares  	 	
+                                                                                                                                                                                                                                                                                                                                                                                                                                                         ",,1236,David Lopez,dlopez@tasa.com.pe,DLOPEZ,1265,Eduardo Chunga,echunga@tasa.com.pe,ECHUNGA,,,,,true,67,2052649480,CONTRATISTA PERALTA E.I.R.L.,jj_peralta_@hotmail.com,,Cruz chave,2025-12-30T17:00:37.000Z,3,16,true,2024-10-21T09:00:00.000Z,2024-10-22T18:00:00.000Z,Culminado,false,false,90,90,90,TCHI0201,Planta de Vapor,TCHI0201-0120,Caldero #7,,,MC,MCP,false,false,true,2024-12-28T09:11:06.307Z,GROBLES,2025-01-11T20:52:41.047Z,ADMINAPP
+122781,1057742,Aprobado,SS,241228172727,,650744,10,false,,650745,,,1,PLANTA,13,Chimbote,TCHI,Chimbote,SEPARADORA DE AGUA DE LIMPIEZA #2 ATORADA -241228172727/TCHI,"FABRICACIÓN DE BY PASS DE LÍNEA DE AGUA DE CANALETA A TK DE ESPUMA.
+ 
+SEGUN COTIZACIÓN N° CP479-24 
+ 
+PRECIO SIN IGV:  S. 1 640.00"," 	TRABAJO EN ZONA DE TRAMPAS DE GRASA.
+
+?	TRABAJO DE EMERGENCIA DIA MARTES 12 (PRODUCCION NOCHE)
+
+ 	MATERIALES PROPORCIONADOS POR TASA:
+?	01 válvulas mariposa de 4”.
+?	01 válvula mariposa de 3”. 
+?	02 bridas de 4” en FE-NE.
+
+ 	MATERIALES PROPORCIONADO POR CONTRATISTA:
+?	02 bridas de 3” en FE-NE.
+?	01 codo de 3” x 45° en SCH40 FE-NE.
+?	01 tubo de 3” x  2000mm en SCH40 FE-NE.
+?	08 pernos de 5/8” x 5” en FE-NE, completos.
+
+ 	CONSUMIBLES:
+?	01 kg de soldadura 6011 de 1/8”.
+?	02 discos de corte de 7”.
+?	03 discos de corte de 4”.
+?	01 disco de desbaste de 4”.
+?	 Equipo oxicorte oxígeno y gas. 
+
+?	PROCEDIMIENTO DE TRABAJO.
+
+ 	FABRICACIÓN DE BY PASS DE LÍNEA DE AGUA DE CANALETA A TK DE ESPUMA.
+?	Instalar una válvula de 4” Ø en línea de agua de canaleta.
+?	Realizar proceso de corte con equipo oxicorte en línea de 4” Ø FE-NE.
+?	Cortar 80mm de tubo de 4” Ø en línea existente, e instalar dos bridas de 4” Ø en FE-NE.
+?	Habilitar un tubo de 3” Ø x 300mm e instalar en un lado una brida de 3” Ø y el otro extremo hacer una boca de pescado para tubo de 4” Ø en FE-NE.
+?	Habilitar un tubo de 3” x 400mm e instalar en un lado una brida de 3” Ø y el otro extremo instalar un codo de 3” Ø x 45°en FE-NE.
+?	Armar Carreto de 3” Ø con válvula mariposa de 3” Ø, instalar pernos.
+?	Habilitar un tubo de 3” Ø x 1100mm y hacer un zapatito para instalas en tubo de 3” Ø en FE-NE.
+?	Realizar proceso de soldadura por arco 6011.
+?	Dejar operativa línea de by pass de línea de canaleta.
+
+?	PRECIO:S/1,640.00
+",,1236,David Lopez,dlopez@tasa.com.pe,DLOPEZ,1265,Eduardo Chunga,echunga@tasa.com.pe,ECHUNGA,,,,,true,67,2052649480,CONTRATISTA PERALTA E.I.R.L.,jj_peralta_@hotmail.com,,Luis busta,2025-12-30T16:49:40.000Z,3,5,true,2024-11-12T17:00:00.000Z,2024-11-12T22:00:00.000Z,Culminado,false,false,90,90,90,TCHI0205,Tratamiento de Efluentes,TCHI0205-0105,Separadora de Agua de Limpieza #2,,,MC,MCP,false,false,true,2024-12-28T19:13:43.333Z,GROBLES,2025-01-11T20:52:53.047Z,ADMINAPP
+121989,1056930,Aprobado,OT,,,648521,10,false,,648522,,,2,PESCA,60,TASA 61,T061,CHIMBOTE,T61 CA Ppto 402 Lineas desc. y succ. Tk AA.SS. sala frío,T61 PPTO 402 CONFECCIÓN DE LINEAS DE DESCARGA Y SUCCION DE TK DE AGUAS SERVIDAS SALA DE FRIO," CONFECCIÓN DE LINEAS DE DESCARGA Y SUCCION DE TK DE AGUAS SERVIDAS SALA DE FRIO
+por fabricacion de tanque  se confeccionara lineas en tuberia de 2"" 
+soldeo en el sitio , habilitado de lineas tuberia 2"" sch40
+servicio de arenado y pintado de las tuberias 
+",,1109,Harry Pelaez,hpelaez@tasa.com.pe,HPELAEZ,1056,Nepthali Collazos,ncollazos@tasa.com.pe,NCOLLAZOS,,,,,true,246,2060222640,M TEMOCHE S.A.C.,msacha@mtemochesac.com,,BRYAN DULC,2025-12-30T16:44:08.000Z,3,24,true,2024-09-29T08:00:00.000Z,2024-10-03T18:00:00.000Z,Culminado,false,false,90,90,90,TF0161-01,CASCO,TF0161-0107,Sala de Máquinas y Aditamentos,300028237,CASCO,MP,COND,false,false,true,2024-12-20T16:10:31.000Z,DPALOMINO (A323E7C2),2025-03-12T15:23:37.310Z,ADMINAPP
+122468,1057424,Aprobado,SS,241217145324,,647262,10,false,,647263,,,2,PESCA,35,TASA 427,T427,CHIMBOTE,Gambuza: Se rompió la bisagra de la puerta. Se solicita cambio-241217145324/T427,Gambuza: Se rompió la bisagra de la puerta. Se solicita cambio-241217145324T427,"* Desmontaje de puerta de gambuza para cambio de 01 bisagras cromadas, aseguradas con pernos pasantes en acero inox.
+
+ATENCIÓN 18/12 11:00PM HASTA 19/12 01:00AM",,1112,Jamer Lopez,jlopez@tasa.com.pe,JLOPEZ,1064,Javier Paz,jpaz@tasa.com.pe,JPAZ,,,,,true,400,2044552612,SERVICIOS INDUSTRIALES HALAVISI S.A,halavisi_gf@hotmail.com,vanessa.fernandez@halavisi.com,FIDEL M.,2025-12-30T16:38:18.000Z,1,1,true,2024-12-18T23:00:00.000Z,2024-12-19T01:00:00.000Z,Culminado,false,false,80,80,80,TF01427-12,HABITABILIDAD,TF01427-1201-01,Gambuza y cocina,,,MC,MCP,false,false,true,2024-12-26T13:15:04.380Z,JPAZ,2025-02-04T16:20:15.603Z,ADMINAPP
+122577,1057536,Aprobado,SS,241222131016,,648878,10,false,,648879,,,2,PESCA,27,TASA 416,T416,CHIMBOTE,Se ha descolgado puerta de la Gambuza. -241222131016/T416,Se ha descolgado puerta de la Gambuza. -241222131016T416,"* Desmontaje de puerta de gambuza para cambio de 01 bisagra cromada, aseguradas con pernos pasantes en acero inox.
+Suministro adicional de bisagra de acero inox.
+
+ATENCIÓN DOMINGO 22/12 08PM - 10PM",,1160,Moises Ccasa,mccasa@tasa.com.pe,MCCASA,1064,Javier Paz,jpaz@tasa.com.pe,JPAZ,,,,,true,400,2044552612,SERVICIOS INDUSTRIALES HALAVISI S.A,halavisi_gf@hotmail.com,vanessa.fernandez@halavisi.com,ELVIS G.,2025-12-30T16:23:12.000Z,2,4,true,2024-12-22T20:00:00.000Z,2025-12-30T22:00:00.000Z,Culminado,false,false,90,90,90,TF01416-12,HABITABILIDAD,TF01416-1201-01,Gambuza y cocina,300029196,Gambuza - 2 puertas,MC,MCP,false,false,true,2024-12-27T10:02:14.410Z,JPAZ,2025-02-04T16:26:03.563Z,ADMINAPP
+122543,1057501,Aprobado,SS,241220135059,,648519,10,false,,648520,,,2,PESCA,16,TASA 210,T210,CHIMBOTE,rotura de las dos griferías cuello ganzo flexible de base-241220135059/T210,rotura de las dos griferías cuello ganzo flexible de base-241220135059T210,"Suministro e instalación de 02 caños tipo cuello de ganso flexible, línea pesada.
+
+ATENCIÓN viernes 20/12/24 04PM A 07PM",,1145,Luis Quilcat,lquilcat@tasa.com.pe,LQUILCAT,1064,Javier Paz,jpaz@tasa.com.pe,JPAZ,,,,,true,400,2044552612,SERVICIOS INDUSTRIALES HALAVISI S.A,halavisi_gf@hotmail.com,vanessa.fernandez@halavisi.com,ELVIS. G,2025-12-30T16:13:42.000Z,1,3,true,2024-12-20T16:00:00.000Z,2024-12-20T19:00:00.000Z,Culminado,false,false,90,90,90,TF01210-12,HABITABILIDAD,TF01210-1201,Cocina,,,MC,MCP,false,false,true,2024-12-26T17:29:34.077Z,JPAZ,2025-02-04T16:25:32.313Z,ADMINAPP
+122800,1057761,Aprobado,SS,241226171234,,649989,10,false,,649990,,,2,PESCA,68,REM Delfin 6,RMD6,CHIMBOTE,fuga excesivo de humo dioxido de carbono (co2)-241226171234/RMD6,fuga excesivo de humo dioxido de carbono (co2)-241226171234RMD6,"TUBERIA DE ESCAPE MOTOR PRINCIPAL                                                                                                                                                                                                                                                                                                                                         - Desmontaje de la tuberia de escape del motor que se ubica en la cubierta, tubo de 4"" x 4,000.                                                                                                                                                                                                                                                                - Se desmonta para que facilite el cambio de empaquetadura de la brida del carrete que sale por cubierta.                                                                                                                                                                                                                                                                                      - Montaje de la tuberia, se procede a realizar la prueba quedando la linea operativa.						
+						
+						
+						
+",,1417,Maria Moya,mmoya@tasa.com.pe,MMOYA,1623,David Delgado Gonzales ,ddelgado@tasa.com.pe,DDELGADO,,,,,true,344,2053192351,RICARDO ORDINOLA CARMEN E.I.R.L.,riorcan_17@hotmail.com,,RORDINOLA,2025-12-30T14:03:53.000Z,3,3,true,2024-12-27T08:00:00.000Z,2024-12-27T11:00:00.000Z,Culminado,false,false,90,90,90,TF0401-0201,CASCO,TF0401-0201-03,Superestructura,,,MC,MCP,false,false,true,2024-12-29T23:57:30.750Z,DDELGADO,2025-01-05T02:43:12.857Z,ADMINAPP
+122742,1057703,Aprobado,SS,241227182051,,650479,10,false,,650480,,,1,PLANTA,13,Chimbote,TCHI,Chimbote,TEMPERATURA ELEVADA EN RODAMIENTOS DE TRICANTER Z8E-241227182051/TCHI,"Evaluación e inspección Tricanter Z8E
+ 
+SEGUN COTIZACIÓN N° 20241124-CTF01 
+ 
+PRECIO SIN IGV: $ 1 486.00 ","El equipo se encontró parcialmente desarmado, se realizó una inspección de la zona y los avances en el desmontaje.
+Observaciones:
+Los rodamientos de contacto angular se encuentran con abundante grasa y esta se nota en buen estado por lo cual se descarta como origen de la falla.
+El rodamiento de la punta del tonillo también se encuentra con una generosa cantidad de grasa y en buen estado.
+Las chumaceras por su tamaño y peso no se pueden girar libremente y emitir una opinión con la maquina semi desarmada.
+Luego de esto y de escuchar el reporte de la falla según el operador de turno se revisó la base del equipo y los accesorios periféricos, de esta revisión se pudo desprender lo siguiente:
+El Túnel de descarga de aceite usado de la chumacera motriz presenta una acumulación baja de aceite, pero al muestrear la calidad del aceite usado este se presenta cristalino y bien conservado.
+Al repetir el muestreo en la zona de alimentación el aceite sale de fuerte color marrón y del fondo del depósito se puede extraer un lodo negro y espeso que debería ser una mezcla muy fina de partículas de acero y latón arrastradas por el sistema de lubricación Aire/Aceite.
+De esto se deduce que el rodamiento de la zona de alimentación está al borde del fallo fatal, pero esto aún no ha ocurrido.
+Al no llegar a la causa del humo y la temperatura medida por planta de 110 grados durante la falla se volvió a revisar el equipo y se pudo notar acumulaciones excesivas de borra de aceite endurecida hasta llegar a la carbonización. La acumulación ha sido excesiva y al momento de la falla y probable desplazamiento de un pedazo de carbón ha generado un freno contra el cuerpo del bowl, este presenta gruesas rayaduras y acanalamientos que reflejan lo grave de la acumulación y el atoro de esta zona.
+Felizmente este daño al equipo no afectara la operación futura de la maquina después de una profunda limpieza.
+Analizando la falla se resalta que esta zona no tiene capacidad de acceso ni modo de limpieza por el personal operador a no ser que se baje el bowl al piso y las chumaceras se pongan de cabeza.
+Se colaboró con el correcto desmontaje de la chumacera de alimentación y se dejó recomendaciones para mejorar el lavado del equipo para evitar la vibración excesiva.
+Me retiré de planta dejando en proceso el desmontaje total de la chumacera.
+Para mayor referencai consultar informe 20241128 ITF – 01 adjunto.",,1236,David Lopez,dlopez@tasa.com.pe,DLOPEZ,1265,Eduardo Chunga,echunga@tasa.com.pe,ECHUNGA,,,,,true,1052,2060832031,DECANDRIVE S.A.C.,rivera@decandrive.com,,V Echev,2025-12-30T13:23:21.000Z,1,8,true,2024-11-25T08:00:00.000Z,2024-11-25T17:00:00.000Z,Culminado,false,false,90,90,90,TCHI0103,Recup. Trat. Agua de Bombeo,TCHI0103-2202,Tricanter de Lodos #1 (Z8E),,,MC,MCP,false,false,true,2024-12-27T18:38:54.217Z,GROBLES,2025-01-10T21:04:47.667Z,ADMINAPP
+122741,1057702,Aprobado,OT,,,588434,10,false,,588435,,,1,PLANTA,13,Chimbote,TCHI,Chimbote,TCHI.Tricanter#3.Falla.rodamiento,"CAMBIO DE EN TRICANTER #3 POR TEMPERATURA
+ 
+SEGUN COTIZACIÓN N° 20241117-CTF 
+ 
+ PRECIO SIN IGV: $ 5 887.55 ","Se procede con el desarmado siguiendo el protocolo estándar del fabricante, se encontró dentro del bowl sólido seco por falta de limpieza, se recomienda realizar el lavado de la máquina en próxima miniparada.
+Se encontraron ciertos daños por corrosión en las pistas de los rodamientos propias del tiempo y uso de la máquina, no se encontraron daños considerables en los asientos que requiriesen reparación por lo que se pudo proceder con el reemplazo de los rodamientos.
+Una vez finalizado el servicio se procede con el lanzamiento del equipo encontrándose los siguientes valores de vibración en ambos lados, motriz y alimentación:
+Alimentación (mm/s)
+Motriz (mm/s)
+Horizontal
+4.4
+3.5
+Vertical
+3.6
+2.1
+Para mayor referencia, revisar informe 20241210 ITF - 02",,1236,David Lopez,dlopez@tasa.com.pe,DLOPEZ,1265,Eduardo Chunga,echunga@tasa.com.pe,ECHUNGA,,,,,true,1052,2060832031,DECANDRIVE S.A.C.,rivera@decandrive.com,,V Echev,2025-12-30T13:15:22.000Z,2,16,true,2024-11-18T08:00:00.000Z,2024-11-19T17:00:00.000Z,Culminado,false,false,90,90,90,TCHI0103,Recup. Trat. Agua de Bombeo,TCHI0103-1003,Tricanter de Espuma #3 (Z4D),300034970,"TRICANTER 15,000LT/HR",MC,MCP,false,false,true,2024-12-27T18:15:38.953Z,GROBLES,2025-01-10T21:03:51.370Z,ADMINAPP
+111332,1046273,Aprobado,OT,,,611226,50,false,,611231,,,2,PESCA,27,TASA 416,T416,CHIMBOTE,T416 Limpieza de Tk agua servidas / lazareto y petroleo / Cot. 280,T416 Limpieza de Tk agua servidas / lazareto y petroleo / Cot. 280,Limpieza de Tk agua servidas / lazareto y petroleo ,,1160,Moises Ccasa,mccasa@tasa.com.pe,MCCASA,1210,Pedro Sanchez,psanchez@tasa.com.pe,PSANCHEZ,,,,,true,336,2053206778,REPRESENTACIONES E INVERSIONES,iris.balladares@hotmail.com,,RICARDO J,2025-12-30T11:41:18.000Z,5,54,true,2024-09-23T08:00:00.000Z,2024-10-03T17:00:00.000Z,Culminado,false,false,90,90,90,TF01416-01,CASCO,TF01416-0107,Lazareto y Tanques,,,ING,MEJ,false,false,true,2024-07-13T13:05:43.000Z,MAGOMEZ,2025-01-17T13:32:55.967Z,ADMINAPP
+122758,1057719,Aprobado,OT,,,650656,10,false,,650657,,,1,PLANTA,5,Supe,TSUP,TALLER TECNOMETALES,Reparación de bomba de petróleo de caldero Konus,"Reparación de bomba de petróleo de caldero Konus
+ 
+Cotización: N° TEC24.TSP.084 
+ 
+ • Por traslado equipo desde sus instalaciones hacia las nuestras y viceversa.
+ • Por desarmado total de bomba.
+ • Por confeccionar el eje central de la bomba según muestra y realizar tratamiento térmico de
+ cementación.
+ • Por confeccionar una chaveta de acero en media luna (Woodruff).
+ • Por embocinado de tapa frontal de alojamiento del rodamiento y alojamiento del eje con bronce
+ grafitado.
+ • Por extraer y confeccionar bocina nueva de la tapa posterior de la bomba en material de bronce
+ grafitado.
+ • Rectificado de (02) tapas laterales de bomba.
+ • Por suminsitro y cambio de rodamiento 6200-C4 SKF.
+ • Por cambio de sello mecánico suminsitrado por TASA.
+ • Por armado completo de bomba completo, con o´rings nuevos 3mm x 63mm diámetro interior de
+ vitón y calibración de la misma.
+ Uso: BOMBA SUNTEC (CALDERO KONUS) ","Se realizo la Reparación de bomba de petróleo de caldero Konus de manera satisfactoria.
+",,1248,Carlos Rojas,crojas@tasa.com.pe,CROJAS,1844,Miguel Angel Retuerto Huerta,mretuerto@tasa.com.pe,MRETUERTO,,,,,true,450,0000038534,TECNOMETALES PERU EIRL,tecnometales_peru@hotmail.com,,J. CABRERA,2025-12-30T11:23:16.000Z,3,48,true,2024-11-25T15:07:00.000Z,2024-11-27T20:05:00.000Z,Culminado,false,false,90,90,90,TSUP0105,Secado,TSUP0105-0503,Caldero Termico,400033414,QUEMADOR A PETROLEO R-500 5240W,MC,EM,false,false,true,2024-12-28T11:05:26.450Z,JULCONTRERAS,2025-02-11T15:00:01.453Z,ADMINAPP
+120612,1055551,Aprobado,GRA,,,,,false,,,5013665,30,2,PESCA,66,QUIMERA II,RMQU,Callao,Q2_Fabric-Inst. base p/Antena Satelital,"MONTAJE DE BASE PARA ANTENA DE INTERNET
+Se corto base existente a la medida solicitada de 400mm de altura
+Se realizo el soldeo de base a altura solicitada y se agrego dos cartelas de
+4"" x 6"" como refuerzo
+Se dejo base correctamente instalada y pintada en base epoxica.
+MATERIALES
+1 Plancha de 1/4"" x 300 mm x 100 mm fierro negro
+1 kg de soldadura 6011
+2 discos de desbaste de 4 1/2""
+Servicio de arenado y pintado en base (plancha de 1/4"" x 300mm x 100mm)
+Grupo electrogeno (Alquiler)
+Puerto de ejecución: Callao
+","MONTAJE DE BASE PARA ANTENA DE INTERNET 
+Se corto base existente a la medida solicitada de 400mm de altura
+Se realizo el soldeo de base a altura solicitada y se agrego dos cartelas de 4"" x 6"" como refuerzo
+Se dejo base correctamente instalada y pintada en base epoxica.
+",,1417,Maria Moya,mmoya@tasa.com.pe,MMOYA,1534,Felipe Jaimes,fjaimes@tasa.com.pe,FJAIMES,,,,,true,246,2060222640,M TEMOCHE S.A.C.,msacha@mtemochesac.com,,JAVIER HUA,2025-12-30T11:08:56.000Z,3,8,true,2024-11-30T08:00:00.000Z,2024-11-30T18:00:00.000Z,Culminado,false,false,90,90,90,,,TF0302-0,RMQU SISTEMAS,,,,,false,true,false,2024-12-10T15:08:12.000Z,PFLORES,2025-12-30T11:08:56.000Z,proveedortasa
+122774,1057735,Aprobado,OT,,,650703,10,false,,650704,,,1,PLANTA,78,Chata Tasa Pisco - Malabrigo,SPIS,TALLER TECNOMETALES,Camb abrazad/ tee en tuberias Ch. Pisco,"TECNOMETALES
+COT: N° TEC24.TMA.141
+VALOR:  1000 SOLES
+ 
+SUMINISTRO DE ABRAZADERAS Y MANGUERA DE SILICONA 
+ 
+• Por suministro (04) abrazaderas reforzadas con pernos. • Por suministro (01) manguera con silicona y revestimiento de viton de 3"" x 10"". • Por suministro de tee especial de acero inoxidable calidad 316 de 14"" a 18"" NPT USO: Sisterna de refrigeración principal de Chata Pisco ","Se realizo el servicio de Camb abrazad/ tee en tuberias Ch. Pisco de manera satisfactoria.
+
+Trabajo solicitado de suma urgencia por el Ing. EYNER el día 07-12-2024
+  
+Temporada de producción II – 2024",,1242,Paul Colonna,pcolonna@tasa.com.pe,PCOLONNA,1242,Paul Colonna,pcolonna@tasa.com.pe,PCOLONNA,,,,,true,450,0000038534,TECNOMETALES PERU EIRL,tecnometales_peru@hotmail.com,,E. CORTEZ,2025-12-30T10:30:38.000Z,2,8,true,2024-12-01T10:00:00.000Z,2024-12-02T17:35:00.000Z,Culminado,false,false,90,90,90,,,SPIS-0702,Tuberías,,,MC,MCP,false,false,true,2024-12-28T15:38:19.117Z,FRAVARGAS,2025-01-10T21:05:25.810Z,ADMINAPP
+122492,1057450,Aprobado,SS,241218115852,,649882,10,false,,649883,,,2,PESCA,93,Panga T022,P022,CALLAO,"T22 PA Lineas de combustible con fuga,cambio de niples",Luz roja de PANGA rota-241218115852P022,"(422-24)
+Lineas de combustible con fuga,cambio de niples													
+1. Por desmontaje de un tramo de tubo 1/2"" x 1.10mt para cambio de niples.								
+2. Se reajusta 3 niples por estar flojos.								
+3. Montaje de un tramo de tubo con sus union universal.															
+OBS: TRABAJO DE EMERGENCIA						
+",,1114,Javier Bardales,jbardales@tasa.com.pe,JBARDALES,1024,Augusto Price,aprice@tasa.com.pe,APRICE,,,,,true,333,0000004852,REPARACIONES NAVALES EMANUEL EIRL,senemanuel14@hotmail.com,,MILACHAY,2025-12-30T09:32:33.000Z,2,3,true,2024-12-26T10:00:00.000Z,2024-12-26T13:00:00.000Z,Culminado,false,false,80,80,80,,,TF0522-07,SISTEMAS AUXILIARES,,,MC,MCP,false,false,true,2024-12-26T15:27:59.853Z,APRICE,2025-01-04T14:23:17.637Z,ADMINAPP
+122784,1057745,Aprobado,SS,241222102229,,648847,10,false,,648848,,,2,PESCA,59,TASA 59,T059,CALLAO,T59 SF Parchar tuberia RSW a la descarga bba centro picado-241222102229,Parchar tuberia RSW a la descarga bba centro picado-241222102229T059,"(421-24)
+PARCHAR TUBERIA RSW A LA DESCARGA DE LA BOMBA DE CENTRO														
+1. Se realiza desmontaje de tuberia 1"" inox para facilitar el ingreso a soldar.								
+2. Se realizo limpieza mecánica y rellenado de hueco en el codo para luego poner un parche de 3"" x 5"" en tubo de 6"" RSW recubriendo la parte afectada.								
+3. Se suelda, esmerila y se pinta parche.								
+4. Montaje de linea de 1"", se realizo prueba quedando opertivo.								
+",,1083,Alexander De la Cruz,adelacruz@tasa.com.pe,ADELACRUZ,1210,Pedro Sanchez,psanchez@tasa.com.pe,PSANCHEZ,,,,,true,333,0000004852,REPARACIONES NAVALES EMANUEL EIRL,senemanuel14@hotmail.com,,ELIAS,2025-12-30T09:15:43.000Z,2,4,true,2024-12-23T14:30:00.000Z,2024-12-23T18:30:00.000Z,Culminado,false,false,90,90,90,TF01059-08,SISTEMA DE FRIO RSW,TF01059-0815,Líneas  de  agua,,,MC,MCP,false,false,true,2024-12-29T09:22:58.577Z,APRICE,2025-01-02T20:36:49.857Z,ADMINAPP
+111275,1046216,Aprobado,OT,,,611216,10,false,,611217,,,2,PESCA,24,TASA 413,T413,CHIMBOTE,T413_Limp/Desmo/ Mont. De Tk Aguas servidas.,"T413LimpDesmo Mont. De Tk Aguas servidas. 
+LIMPIEZA, DESMONTAJE Y MONTAJE DE TANQUE",LIMPIEZA DE TK DE AGUAS SERVIDAS ,,1138,Juan Walhoff,jwalhoff@tasa.com.pe,JWALHOFF,1534,Felipe Jaimes,fjaimes@tasa.com.pe,FJAIMES,,,,,true,252,2051778677,MANNA S.A.C.,mannasac@hotmail.com,,WRAMIREZ,2025-12-30T09:07:24.000Z,2,7,true,2024-09-16T09:00:00.000Z,2024-09-16T17:00:00.000Z,Culminado,false,false,100,100,100,TF01413-01,CASCO,TF01413-0107,Lazareto y Tanques,,,ING,MEJ,false,false,true,2024-07-13T12:37:01.340Z,MAGOMEZ,2025-01-13T19:31:17.073Z,ADMINAPP
+121754,1056694,Aprobado,OT,,,648048,10,false,,648049,,,1,PLANTA,7,Malabrigo,TMSU,Malabrigo,Asist Tec Tolva 4 x error no envia info a Produce,"TECNIPESA
+COT: 2024-0012-000845
+VALOR:  280 DOLARES
+ 
+SERVICIO DE ASISTENCIA TÉCNICA TOLVA DE PESCADO N°04
+“No envía información a Produce”
+Consta de:
+?Se encontró indicador de peso sin el Tx.
+?Se procedió a abrir el tablero de control encontrando los 6 led encendidos en el Robustel.
+?Se procedió a revisar las conexiones encontrando todo conforme.
+?Se reiniciO el Robustel e indicador de peso.
+?Se procedió a reemplazar el zócalo, se inserta el SIM en otra ranura y se enciende el Robustel.
+?Al realizar ticket de prueba, no llega a enviar a Produce.
+?Se reinicia indicador de peso y al encender nuevamente se enciende los 6 LED.
+?Se observa que se debe reemplazar el Robustel con cable de red 3mts. ","SERVICIO DE ASISTENCIA TÉCNICA TOLVA DE PESCADO N°04
+“No envía información a Produce”",,1242,Paul Colonna,pcolonna@tasa.com.pe,PCOLONNA,1242,Paul Colonna,pcolonna@tasa.com.pe,PCOLONNA,,,,,true,1053,2054427069,TECNOLOGIA INTEGRAL DE PESAJE PERU,operaciones@tecnipesa.com.pe,rverastegui@tecnipesa.com.pe,Antonino,2025-12-30T09:02:04.000Z,1,5,true,2024-12-02T09:30:00.000Z,2024-12-02T14:00:00.000Z,Culminado,false,false,90,90,90,TMSU0102,Recep. Pesaje Materia Prima,TMSU0102-0304,Tolva de Pesaje #4,,,MC,MCP,false,false,true,2024-12-19T12:44:06.323Z,FRAVARGAS,2025-01-08T14:25:50.477Z,ADMINAPP
+122566,1057525,Aprobado,SS,241225072918,,649669,10,false,,649670,,,2,PESCA,60,TASA 61,T061,CHIMBOTE,Polin del carro guiador del cable con desgaste-241225072918/T061,Polin del carro guiador del cable con desgaste-241225072918T061,"(418-24)
+RELLENADO DE POLIN GUIADOR GARETA DE WINCHE PRINCIPAL								
+1. Se rellena polin guiador vertical por presentar canales por friccion de gareta.								
+2. Se escobilla y luego se suelda con CITODURO 350 para rellenar canales, se pasa esmeril y polifan, quedando operativo.								
+3. Luego se rellena vita de proa de maniobra con CITODURO 350, por presentar canal.								
+4. Se suelda y se esmerila, quedando operativo.								
+",,1782,JOSE ALFREDO SANCHEZ RAMOS ,jsanchez@tasa.com.pe,JOSANCHEZRA,1064,Javier Paz,jpaz@tasa.com.pe,JPAZ,,,,,true,333,0000004852,REPARACIONES NAVALES EMANUEL EIRL,senemanuel14@hotmail.com,,YUCRA,2025-12-30T09:00:47.000Z,2,3,true,2024-12-24T11:00:00.000Z,2024-12-24T14:30:00.000Z,Culminado,false,false,90,90,90,TF0161-06,SISTEMAS HIDRAULICOS,TF0161-0601,Winche Principal,300001860,Winche de Combinación IT-35,MC,MCP,false,false,true,2024-12-26T19:54:30.600Z,JPAZ,2025-01-07T14:31:48.417Z,ADMINAPP
+111106,1046047,Aprobado,OT,,,611206,10,false,,611207,,,2,PESCA,41,TASA 34,T034,CHIMBOTE,T034_Limp/Desmo/ Mont. De Tk Aguas servidas.,"T034LimpDesmo Mont. De Tk Aguas servidas. 
+LIMPIEZA, DESMONTAJE Y MONTAJE DE TANQUE",LIMPIEZA DE TK DE AGUAS SERVIDAS ,,1110,Hector Agurto,hagurto@tasa.com.pe,HAGURTO,1210,Pedro Sanchez,psanchez@tasa.com.pe,PSANCHEZ,,,,,true,252,2051778677,MANNA S.A.C.,mannasac@hotmail.com,,WRAMIREZ,2025-12-30T09:00:09.000Z,2,7,true,2024-09-16T09:00:00.000Z,2024-09-16T17:00:00.000Z,Culminado,false,false,90,90,90,TF01034-01,CASCO,TF01034-0107,Lazareto y Tanques,,,ING,MEJ,false,false,true,2024-07-10T17:17:17.000Z,MAGOMEZ,2025-01-13T19:30:48.883Z,ADMINAPP
+111330,1046271,Aprobado,OT,,,611226,30,false,,611229,,,2,PESCA,27,TASA 416,T416,CHIMBOTE,T416  Limpieza de Tk de aguas servidas ,T416  Limpieza de Tk de aguas servidas ,LIMPIEZA DE TK DE AGUAS SERVIDAS,,1160,Moises Ccasa,mccasa@tasa.com.pe,MCCASA,1210,Pedro Sanchez,psanchez@tasa.com.pe,PSANCHEZ,,,,,true,252,2051778677,MANNA S.A.C.,mannasac@hotmail.com,,WRAMIREZ,2025-12-30T08:57:01.000Z,2,7,true,2024-09-16T09:00:00.000Z,2024-09-16T17:00:00.000Z,Culminado,false,false,90,90,90,TF01416-01,CASCO,TF01416-0107,Lazareto y Tanques,,,ING,MEJ,false,false,true,2024-07-13T13:05:41.000Z,MAGOMEZ,2025-12-30T08:57:01.000Z,proveedortasa
+111518,1046459,Aprobado,OT,,,611180,10,false,,611181,,,2,PESCA,16,TASA 210,T210,CHIMBOTE,T210_Limp/Desmo/ Mont. De Tk Aguas servidas.,"T210LimpDesmo Mont. De Tk Aguas servidas. 
+LIMPIEZA, DESMONTAJE Y MONTAJE DE TANQUE",LIMPIEZA DE TK DE AGUAS SERVIDAS ,,1145,Luis Quilcat,lquilcat@tasa.com.pe,LQUILCAT,1534,Felipe Jaimes,fjaimes@tasa.com.pe,FJAIMES,,,,,true,252,2051778677,MANNA S.A.C.,mannasac@hotmail.com,,WRAMIREZ,2025-12-30T08:54:12.000Z,2,7,true,2024-09-24T09:00:00.000Z,2024-09-24T17:00:00.000Z,Culminado,false,false,90,90,90,TF01210-01,CASCO,TF01210-0107,Lazareto y Tanques,,,ING,MEJ,false,false,true,2024-07-16T17:33:56.000Z,MMANYAHUILLCA,2025-01-13T19:31:50.883Z,ADMINAPP
+121733,1056673,Aprobado,OT,,,647980,10,false,,647981,,,1,PLANTA,7,Malabrigo,TMSU,Malabrigo,Asist. Tec. Tolva 4 x error de impresion ticket,"TECNIPESA
+COT: 2024-0012-000846
+VALOR:  280 DOLARES
+ 
+SERVICIO DE ASISTENCIA TÉCNICA TOLVA DE PESCADO N°04
+“Error de impresión de ticket 200kg. +- 5kg.”
+Consta de:
+?Servicio de asistencia técnica en tolva de pescado.
+?Revisión de configuración de smartbox.
+?Revisión de valores.
+?Revisión mecánica y electrónica de las celdas de carga (templadores, espárragos, tuercas y arandelas)
+?Ajustes mecánicos y electrónicos.
+?Pruebas con pesas 300kg. ","SERVICIO DE ASISTENCIA TÉCNICA TOLVA DE PESCADO N°04
+“Error de impresión de ticket 200kg. +- 5kg.”",,1242,Paul Colonna,pcolonna@tasa.com.pe,PCOLONNA,1242,Paul Colonna,pcolonna@tasa.com.pe,PCOLONNA,,,,,true,1053,2054427069,TECNOLOGIA INTEGRAL DE PESAJE PERU,operaciones@tecnipesa.com.pe,rverastegui@tecnipesa.com.pe,Antonino,2025-12-30T08:53:00.000Z,1,6,true,2024-11-29T08:00:00.000Z,2024-11-29T14:00:00.000Z,Culminado,false,false,90,90,90,TMSU0102,Recep. Pesaje Materia Prima,TMSU0102-0304,Tolva de Pesaje #4,,,MC,MCP,false,false,true,2024-12-19T11:10:29.067Z,FRAVARGAS,2025-01-08T14:25:23.850Z,ADMINAPP
+122580,1057539,Aprobado,SS,241224112530,,649612,10,false,,649613,,,2,PESCA,61,TASA 71,T071,CHIMBOTE,"Bodega centro proa , injertar plancha agujereada por ingreso pescado-241224112530/T071","Bodega centro proa , injertar plancha agujereada por ingreso pescado-241224112530T071","(417-24)
+BODEGA CENTRO PROA 														
+1. Se retira tramo de platina de 1/4 x 2"" x 20cm con esmeril en bodega centro proa, para poder colocar otra platina de 1/4 x 2"" x 60cm inox y poder 								
+tapar abertura ya que por ahí pasaba pescado (desaguador vertical).								
+2. Se esmerila y luego se coloca platina inox habilitada.								
+3. Se suelda con soldadura inox, quedando operativo.								
+								
+OBS: PARA ESTA ACTIVIDAD SE USO ESCALERA 	
+",,1168,Pablo Jimenez,pjimenez@tasa.com.pe,PJIMENEZ,1064,Javier Paz,jpaz@tasa.com.pe,JPAZ,,,,,true,333,0000004852,REPARACIONES NAVALES EMANUEL EIRL,senemanuel14@hotmail.com,,YUCRA,2025-12-30T08:52:39.000Z,2,1,true,2024-12-24T12:30:00.000Z,2024-12-24T13:30:00.000Z,Culminado,false,false,80,80,80,TF01071-01,CASCO,TF01071-0106-04,Bodega Proa Estribor - No Usar,,,MC,MCP,false,false,true,2024-12-27T10:05:09.527Z,JPAZ,2025-01-07T14:32:58.727Z,ADMINAPP
+120371,1055310,Aprobado,OT,,,644005,10,false,,644006,,,2,PESCA,20,TASA 314,T314,CHIMBOTE,T314 CA AD Ppto 58 Limp. tks agua servidas,TUBO REGALADOR DE PESCADO -240613233206T314,LIMPIEZA DE TANQUES DE AGUAS SERVIDAS ,,1084,Alexis Castro,acastro@tasa.com.pe,ACASTRO,1210,Pedro Sanchez,psanchez@tasa.com.pe,PSANCHEZ,,,,,true,252,2051778677,MANNA S.A.C.,mannasac@hotmail.com,,WRAMIREZ,2025-12-30T08:51:14.000Z,2,7,true,2024-10-25T09:00:00.000Z,2024-10-25T17:00:00.000Z,Culminado,false,false,90,90,90,TF01314-01,CASCO,TF01314-0107,Sala de Maquinas en Popa y Aditamentos,,,MP,COND,false,false,true,2024-12-05T16:48:41.523Z,JHUAMAN,2025-03-12T19:50:26.550Z,ADMINAPP
+121755,1056695,Aprobado,OT,,,648050,10,false,,648051,,,1,PLANTA,7,Malabrigo,TMSU,Malabrigo,Asist Tec Tolva 2 x error de impresion ticket,"TECNIPESA
+COT: 2024-0012-000844
+VALOR:  280 DOLARES
+ SERVICIO DE ASISTENCIA TÉCNICA TOLVA DE PESCADO N°02
+“Error de impresión de ticket 200kg +- 5kg”
+Consta de:
+?Servicio de asistencia técnica.
+?Revisión de configuración de smartbox.
+?Revisión de valores.
+?Revisión mecánica y electrónica de las celdas de carga (templadores, espárragos, tuercas y arandelas).
+?Ajustes mecánicos y electrónicos.
+?Pruebas con pesas 300 kg."," SERVICIO DE ASISTENCIA TÉCNICA TOLVA DE PESCADO N°02
+“Error de impresión de ticket 200kg +- 5kg”",,1242,Paul Colonna,pcolonna@tasa.com.pe,PCOLONNA,1242,Paul Colonna,pcolonna@tasa.com.pe,PCOLONNA,,,,,true,1053,2054427069,TECNOLOGIA INTEGRAL DE PESAJE PERU,operaciones@tecnipesa.com.pe,rverastegui@tecnipesa.com.pe,Antonino,2025-12-30T08:49:52.000Z,1,4,true,2024-11-29T08:50:00.000Z,2024-11-29T13:00:00.000Z,Culminado,false,false,90,90,90,TMSU0102,Recep. Pesaje Materia Prima,TMSU0102-0302,Tolva de Pesaje #2,,,MC,MCP,false,false,true,2024-12-19T12:48:15.803Z,FRAVARGAS,2025-01-08T14:25:52.900Z,ADMINAPP
+120546,1055485,Aprobado,SS,241205155506,,643988,10,false,,643989,,,2,PESCA,54,TASA 54,T054,CHIMBOTE,T54 TRIPLEX NK 6000 motoreductor giro de cabezal flojo,TRIPLEX NK 6000: Fijar pernos de amarre de motoreductor giro de cabezal -241205155506T054,"TRABAJO REDUCTOR NK 6000
+LOS PERNOS NO AJUSTAN
+SE REALIZO EL AJUSTE DE PERNOS
+SE PUSO PUNTOS DE SOLDADURA 6011 EN LOS 6 PERNOS SE RECOMIENDA BAJARLO EN LA VEDA PARA CORREGIR
+LA ROSCA.
+SE PROBO Y QUEDO",,1195,Afrodico Wilson Pereda,afpereda@tasa.com.pe,AFPEREDA,1532,Victor Huaman Mego,vihuaman@tasa.com.pe,VIHUAMAN,,,,,true,194,0000024424,IMPORT 360 SAC,htamay@import360peru.com,,M. GARCIA,2025-12-30T08:08:00.000Z,2,4,true,2024-12-05T10:00:00.000Z,2024-12-05T14:00:00.000Z,Culminado,false,false,90,90,100,TF0154-06,SISTEMAS HIDRAULICOS,TF0154-0606,Sistema de Izaje de Red,300040981,Ordenador de Red TRIPEX NK-6000,MC,MCP,false,false,true,2024-12-09T14:20:41.940Z,VIHUAMAN,2025-02-04T02:01:46.680Z,ADMINAPP
+121312,1056252,Aprobado,SS,,,640205,10,false,,640206,,,2,PESCA,56,TASA 56,T056,SAMANCO,requiere cambio de rodillo y corchero de proa del jumbo-241126140757/T056,requiere cambio de rodillo y corchero de proa del jumbo-241126140757T056,"CAMBIO DE CORCHERO PROA ,RODILLO PROA A POPA INTERCAMBIO
+Instalacion de maniobra para facilitar desmont de tapas Aflojar y desmontaje de pernos
+Desmontaje de rodillo y corchero de proa Instalacion de corchero nuevo de proa Desmontaje de rodillo popa
+Instalacion de rodillo que salio de proa a popa Montaje de tapa superior
+Instalacion de tapa lateral
+Instalacion de pernos y ajuste con torquimetro Prueba y entrega",,1119,Jhonny Vasquez,jhvasquez@tasa.com.pe,JHVASQUEZ,1623,David Delgado Gonzales ,ddelgado@tasa.com.pe,DDELGADO,,,,,true,194,0000024424,IMPORT 360 SAC,htamay@import360peru.com,,M. GARCIA,2025-12-30T05:58:20.000Z,2,2,true,2024-11-26T23:17:00.000Z,2024-11-27T12:50:00.000Z,Culminado,false,false,80,80,80,TF0156-11,REDES,TF0156-11,REDES,,,MP,MP,false,false,true,2024-12-16T11:14:54.000Z,DDELGADO,2025-03-06T20:31:47.310Z,ADMINAPP
+122567,1057526,Pend.2da.aprob.,SS,241117172950,,637610,10,false,,637611,,,2,PESCA,56,TASA 56,T056,CALLAO,requiere cambio de 02 rodillos de.proa y centro del equipo jumbo-241117172950/T056,requiere cambio de 02 rodillos de.proa y centro del equipo jumbo-241117172950T056,"CAMBIO DE CORCHERO RODILLO PROA Y CENTRO 
+POR DESGASTE
+Instalacion de maniobra para facilitar desmont de tapas
+Aflojar y desmontaje de pernos
+Desmontaje de corchero y rodillo proa
+Instalacion de corchero y rodillos nuevo de proa
+Desmontaje de corchero y rodillo centro
+Instalacion de corchero y rodillos nuevo de centro
+Montaje de tapa superior
+Instalacion de tapa lateral
+Instalacion de pernos y ajuste con torquimetro
+Prueba y entrega",,1119,Jhonny Vasquez,jhvasquez@tasa.com.pe,JHVASQUEZ,1072,Mery Gomez,mgomez@tasa.com.pe,MGOMEZ,,,,,true,194,0000024424,IMPORT 360 SAC,htamay@import360peru.com,,M. GARCIA,2025-12-30T04:55:45.000Z,2,2,true,2024-11-17T17:29:00.000Z,2024-11-17T19:30:00.000Z,Culminado,false,false,80,80,80,TF0156-06,SISTEMAS HIDRAULICOS,TF0156-0606,Sistema de Izaje de Red,300003483,Halador de Red TRIPEX JUMBO 740-425,MC,MCP,false,false,true,2024-12-27T08:49:30.450Z,MGOMEZ,2025-12-30T04:55:45.000Z,proveedortasa

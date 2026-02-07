@@ -1,25 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import Home from "./pages/Home";
 import MovimientosPage from "./pages/Movimientos";
 import Login from "./pages/Login";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Inventario from "./pages/Inventario";
+import Importar from "./pages/MovimientosSap";
 import Lubricante from "./pages/LubricacionesPage";
 import Reportes from "./components/Reportes";
 import General from "./pages/General";
 import Historico from "./pages/Historico";
 import Clinica from "./pages/Clinica";
 import TarjetaRoja from "./pages/TarjetaRoja";
-import Materiales from "./pages/Materiales"; // Nueva página
+import Materiales from "./pages/Materiales";
 import useAuth from "./hooks/useAuth";
 import Atributo from "./pages/Atributo";
 import Activo from "./pages/Activo";
 import Proceso from "./pages/Proceso";
-import Predictivo from "./pages/Predictivo"; // 👈 Import nuevo
+import Predictivo from "./pages/Predictivo";
 
-// Componente para proteger rutas
 const PrivateRoute = ({ element, authenticated }) => {
   return authenticated ? element : <Navigate to="/login" />;
 };
@@ -28,10 +31,8 @@ const App = () => {
   const [authenticated, setAuthenticated] = useState(false);
   const [userName, setUserName] = useState("");
 
-  // Manejo de expiración de token
   useAuth(setAuthenticated);
 
-  // Verificar usuario al cargar la app
   useEffect(() => {
     const storedUserName = localStorage.getItem("userName");
     const storedToken = localStorage.getItem("token");
@@ -41,22 +42,21 @@ const App = () => {
     }
   }, []);
 
-  // Rutas protegidas
   const protectedRoutes = [
     { path: "/movimientos", element: <MovimientosPage /> },
     { path: "/reporte", element: <Reportes /> },
     { path: "/general", element: <General /> },
     { path: "/historico", element: <Historico /> },
-        { path: "/activo", element: <Activo /> },
-                { path: "/clinica", element: <Clinica /> },
-    
-                { path: "/tarjetaroja", element: <TarjetaRoja /> },
+    { path: "/activo", element: <Activo /> },
+    { path: "/clinica", element: <Clinica /> },
+    { path: "/tarjetaroja", element: <TarjetaRoja /> },
     { path: "/inventario", element: <Inventario /> },
+    { path: "/importar", element: <Importar /> },
     { path: "/lubricante", element: <Lubricante /> },
     { path: "/materiales", element: <Materiales /> },
-    { path: "/atributo", element: <Atributo /> },  // Añadida
+    { path: "/atributo", element: <Atributo /> },
     { path: "/proceso", element: <Proceso /> },
-        { path: "/predictivo", element: <Predictivo /> }, // 👈 Añadida
+    { path: "/predictivo", element: <Predictivo /> },
   ];
 
   return (
@@ -66,11 +66,10 @@ const App = () => {
         setUserName={setUserName}
         userName={userName}
       />
+
       <Routes>
-        {/* Ruta pública */}
         <Route path="/" element={<Home />} />
 
-        {/* Login */}
         <Route
           path="/login"
           element={
@@ -85,7 +84,6 @@ const App = () => {
           }
         />
 
-        {/* Rutas protegidas */}
         {protectedRoutes.map((route) => (
           <Route
             key={route.path}
@@ -101,6 +99,16 @@ const App = () => {
       </Routes>
 
       <Footer />
+
+      {/* 🔥 AQUI VA EL CONTENEDOR */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        newestOnTop
+        closeOnClick
+        pauseOnHover
+        draggable
+      />
     </div>
   );
 };

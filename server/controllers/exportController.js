@@ -15,39 +15,12 @@ async function exportDatabase(req, res) {
       Atributos: await prisma.atributo.findMany({
         include: { images: true }  // Incluir imágenes asociadas
       }),
-      AtributoHistorial: await prisma.atributoHistorial.findMany(),
-      Clinicas: await prisma.clinica.findMany({
-        include: { images: true }  // Incluir imágenes asociadas
-      }),
-      ClinicaHistorial: await prisma.clinicaHistorial.findMany(),
-      Componentes: await prisma.componente.findMany({
-        include: { images: true }  // Incluir imágenes asociadas
-      }),
-      Configuracion: await prisma.configuracion.findMany(),
-      Consumibles: await prisma.consumible.findMany(),
-      Equipos: await prisma.equipo.findMany({
-        include: { images: true }  // Incluir imágenes asociadas
-      }),
       HistorialItems: await prisma.historialItem.findMany(),
       Historico: await prisma.historico.findMany(),
       Images: await prisma.image.findMany(),
-      InventarioItems: await prisma.inventarioItem.findMany(),
-      Lubricaciones: await prisma.lubricacion.findMany({
-        include: { images: true }  // Incluir imágenes asociadas
-      }),
       OTbasico: await prisma.oTbasico.findMany(),
       OTConsumibles: await prisma.oTConsumible.findMany(),
       Ots: await prisma.ots.findMany(),
-      Predictivos: await prisma.predictivo.findMany({
-        include: { images: true }  // Incluir imágenes asociadas
-      }),
-      Procesos: await prisma.procesos.findMany({
-        include: { images: true }  // Incluir imágenes asociadas
-      }),
-      ProcesosHistorial: await prisma.procesosHistorial.findMany(),
-      Repuestos: await prisma.repuesto.findMany({
-        include: { images: true }  // Incluir imágenes asociadas
-      }),
       Users: await prisma.user.findMany(),
       Ubicaciones: await prisma.ubicacion.findMany(),
       Zonas: await prisma.zona.findMany(),

@@ -9,6 +9,7 @@ const userRoutes = require("./routes/routes");
 const variosRoutes = require("./routes/variosroutes");
 const consumibleRoutes = require("./routes/consumibleRoutes");
 const exportRoutes = require('./routes/export');
+const otMovimientoSapRoutes = require("./routes/otMovimientoSapRoutes");
 const equipoRoutes = require("./routes/equipoRoutes");
 const componenteRoutes = require("./routes/componenteRoutes");
 const atributoRoutes = require("./routes/atributoRoutes");
@@ -57,6 +58,8 @@ app.use('/export', exportRoutes);
 app.use("/predictivos", predictivoRoutes);
 app.use("/activos", activoRoutes);
 app.use("/clinicas", clinicaRoutes);
+app.use("/sap-movimientos", otMovimientoSapRoutes);
+
 
 // Aplicar el middleware de Prisma
 prisma.$use(prismaMiddleware); // Aplica el middleware aquí

@@ -1,0 +1,51 @@
+MANDT,NOMBRE,DESCRIPCION
+600,.31EQCHUNGAR                  ,EQUIPOS EN CHUNGAR
+600,.31EQCLINDO                   ,EQUIPOS EN CERRO LINDO
+600,.31EQLIMA                     ,AESA Equipos Lima
+600,.31EQRAURA                    ,EQUIPOS EN RAURA
+600,.31EQSANCRIST                 ,EQUIPOS EN SAN CRISTOBAL
+600,.31EQSANRAFAEL                ,EQUIPOS EN SAN RAFAEL
+600,.31EQYANACOCHA                ,EQUIPOS EN YANACOCHA
+600,0017_1                        ,INVERSIONES
+600,0017_2                        ,GASTOS ADMINISTRATIVOS
+600,0017_3                        ,SOFTWARE PMS
+600,0017_4                        ,GASTOS DIRECTORIO
+600,0017_5                        ,GASTOS FAMILIA
+600,0017_6                        ,GASTOS DE PROYECTOS
+600,0017_7                        ,DONACIONES
+600,0017_8                        ,OTROS
+600,0017_BRECA                    ,TOTAL GRUPO CENTROS DE COSTO
+600,0021                          ,Inmuebles Limatambo
+600,0022                          ,Urbanizadora Jardin
+600,0023                          ,Urbanización Santa Marina
+600,0024                          ,Montevideo
+600,0025                          ,San Borja
+600,0026                          ,Naranjal
+600,0028                          ,Futura
+600,0029                          ,Inmobiliaria Vencedor
+600,0CE003                        ,
+600,0CE003-01E                    ,
+600,0CE003-02E                    ,
+600,0CE003-03E                    ,
+600,0CE003-04E                    ,
+600,0CE003-05E                    ,
+600,0CE003-06E                    ,
+600,0CE003-07E                    ,
+600,0CE003-08E                    ,
+600,0CE003-09E                    ,
+600,0CE003-10E                    ,
+600,0CE003-11E                    ,
+600,0CE004                        ,
+600,0CE004-01E                    ,
+600,0CE004-02E                    ,
+600,0CE004-03E                    ,
+600,0CE005                        ,
+600,0CE005-01E                    ,
+600,0CE005-02E                    ,
+600,0CE005-03E                    ,
+600,0CE006                        ,
+600,0CE007                        ,
+600,0CE008                        ,
+600,11                            ,CENTRIA
+600,11_01                         ,Gerencia General
+600,11_02                         ,Auditoria

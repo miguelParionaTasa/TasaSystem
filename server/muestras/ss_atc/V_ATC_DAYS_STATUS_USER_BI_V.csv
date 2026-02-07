@@ -1,0 +1,51 @@
+atc_numero,atclog_usuario,atclog_motivo,atclog_fec_ini,atclog_fecha,atclog_dif_dias,atc_unenombre,atc_estado,atclog_estado
+1057950,epoma,Primera aprobación,2025-12-31T12:45:12.000Z,2025-12-31T20:43:17.000Z,0,PESCA,Aprobado,Pend.2da.aprob.
+1076968,,Llenado de ATC,2025-09-08T12:34:34.480Z,2025-09-08T13:31:52.000Z,0,PESCA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076960,,Llenado de ATC,2025-09-08T11:56:18.436Z,2025-09-08T12:05:07.000Z,0,PESCA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076902,pcolonna,Primera aprobación,2025-09-04T16:04:22.000Z,2025-09-04T16:18:37.000Z,0,PLANTA,Pend.2da.aprob.,Pend.2da.aprob.
+1076902,,Llenado de ATC,2025-09-04T15:42:03.000Z,2025-09-04T16:04:22.000Z,0,PLANTA,Pend.2da.aprob.,Pend.1ra.aprob.
+1076887,,Llenado de ATC,2025-09-04T12:17:54.000Z,2025-09-04T12:40:26.000Z,0,PLANTA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076876,anapuri,Primera aprobación,2025-09-04T11:39:59.000Z,2025-09-04T12:57:39.000Z,0,PESCA,Pend.2da.aprob.,Pend.2da.aprob.
+1076877,,Llenado de ATC,2025-09-04T11:28:21.956Z,2025-09-04T11:47:47.000Z,0,PESCA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076876,,Llenado de ATC,2025-09-04T11:23:28.456Z,2025-09-04T11:39:59.000Z,0,PESCA,Pend.2da.aprob.,Pend.1ra.aprob.
+1076865,,Llenado de ATC,2025-09-04T10:42:54.000Z,2025-09-04T13:04:46.000Z,0,PLANTA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076829,,Llenado de ATC,2025-09-03T00:37:01.093Z,2025-09-03T09:18:00.000Z,0,PESCA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076828,,Llenado de ATC,2025-09-03T00:37:00.593Z,2025-09-03T11:49:02.000Z,0,PESCA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076809,,Llenado de ATC,2025-09-02T15:58:35.000Z,2025-09-02T23:24:42.000Z,0,PESCA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076797,,Llenado de ATC,2025-09-02T15:04:13.713Z,2025-09-05T10:26:22.000Z,3,PESCA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076797,,Llenado de ATC,2025-09-02T15:04:13.713Z,2025-09-02T23:28:09.000Z,0,PESCA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076718,,Llenado de ATC,2025-08-28T12:42:26.000Z,2025-08-28T17:05:03.000Z,0,PLANTA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076704,,Llenado de ATC,2025-08-27T23:18:25.100Z,2025-08-28T03:56:37.000Z,1,PESCA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076663,,Llenado de ATC,2025-08-27T03:02:36.730Z,2025-08-27T11:26:15.000Z,0,PLANTA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076601,,Llenado de ATC,2025-08-26T16:00:03.000Z,2025-08-26T22:50:54.000Z,0,PLANTA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076600,,Llenado de ATC,2025-08-26T15:53:24.000Z,2025-08-26T22:59:46.000Z,0,PLANTA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076533,jstigler,Primera aprobación,2025-08-25T17:31:45.000Z,2025-08-25T19:51:32.000Z,0,PESCA,Pend.1ra.aprob.,Pend.2da.aprob.
+1076533,,Llenado de ATC,2025-08-25T17:06:36.216Z,2025-08-25T17:31:45.000Z,0,PESCA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076500,mmoya,Primera aprobación,2025-08-25T16:36:51.000Z,2025-08-25T16:55:20.000Z,0,PESCA,Pend.2da.aprob.,Pend.2da.aprob.
+1076500,,Llenado de ATC,2025-08-25T12:46:53.630Z,2025-08-25T16:36:51.000Z,0,PESCA,Pend.2da.aprob.,Pend.1ra.aprob.
+1076487,,Llenado de ATC,2025-08-25T11:02:25.646Z,2025-08-25T15:26:42.000Z,0,PLANTA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076486,,Llenado de ATC,2025-08-25T10:55:38.283Z,2025-08-25T14:20:52.000Z,0,PESCA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076449,,Llenado de ATC,2025-08-22T16:35:30.000Z,2025-08-22T23:52:25.000Z,0,PESCA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076442,,Llenado de ATC,2025-08-22T15:59:48.210Z,2025-08-22T16:12:42.000Z,0,PESCA,Aprobado,Pend.1ra.aprob.
+1076406,walba,Primera aprobación,2025-08-22T12:35:03.000Z,2025-08-22T14:25:51.000Z,0,PLANTA,Pend.2da.aprob.,Pend.2da.aprob.
+1076406,,Llenado de ATC,2025-08-22T11:05:06.000Z,2025-08-22T12:35:03.000Z,0,PLANTA,Pend.2da.aprob.,Pend.1ra.aprob.
+1076403,ncollazos,Aprobación aceptada,2025-08-22T10:47:38.000Z,2025-08-22T17:07:48.000Z,0,PESCA,Aprobado,Aprobado
+1076403,raguilar,Primera aprobación,2025-08-22T10:46:20.000Z,2025-08-22T10:47:38.000Z,0,PESCA,Aprobado,Pend.2da.aprob.
+1076403,,Llenado de ATC,2025-08-22T10:23:49.696Z,2025-08-22T10:46:20.000Z,0,PESCA,Aprobado,Pend.1ra.aprob.
+1076270,jsenmache,Primera aprobación,2025-08-21T10:34:25.000Z,2025-08-21T22:37:46.000Z,0,PESCA,Pend.1ra.aprob.,Pend.2da.aprob.
+1076260,jsenmache,Primera aprobación,2025-08-21T08:57:43.000Z,2025-08-21T22:39:15.000Z,0,PESCA,Pend.1ra.aprob.,Pend.2da.aprob.
+1076256,jsenmache,Primera aprobación,2025-08-21T08:48:28.000Z,2025-08-21T22:40:08.000Z,0,PESCA,Pend.1ra.aprob.,Pend.2da.aprob.
+1076272,,Llenado de ATC,2025-08-21T07:27:09.280Z,2025-08-21T10:07:59.000Z,0,PESCA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076271,,Llenado de ATC,2025-08-21T07:27:03.296Z,2025-08-21T10:18:15.000Z,0,PESCA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076270,,Llenado de ATC,2025-08-21T07:26:58.343Z,2025-08-21T10:34:25.000Z,0,PESCA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076263,,Llenado de ATC,2025-08-21T01:31:39.510Z,2025-08-21T08:38:25.000Z,0,PESCA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076260,,Llenado de ATC,2025-08-21T01:12:04.080Z,2025-08-21T08:57:43.000Z,0,PESCA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076256,,Llenado de ATC,2025-08-21T00:48:58.786Z,2025-08-21T08:48:28.000Z,0,PESCA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076198,lsarrin,Primera aprobación,2025-08-20T11:02:29.000Z,2025-08-20T13:08:32.000Z,0,PESCA,Pend.1ra.aprob.,Pend.2da.aprob.
+1076198,,Llenado de ATC,2025-08-20T06:55:13.513Z,2025-08-20T11:02:29.000Z,0,PESCA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076197,,Llenado de ATC,2025-08-20T06:52:31.853Z,2025-08-20T09:26:21.000Z,0,PESCA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076196,,Llenado de ATC,2025-08-20T06:49:55.823Z,2025-08-20T09:54:51.000Z,0,PESCA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076195,,Llenado de ATC,2025-08-20T06:34:37.343Z,2025-08-20T08:46:28.000Z,0,PESCA,Pend.1ra.aprob.,Pend.1ra.aprob.
+1076194,,Llenado de ATC,2025-08-20T04:13:40.113Z,2025-08-20T11:44:18.000Z,0,PLANTA,Aprobado,Pend.1ra.aprob.
+1076193,,Llenado de ATC,2025-08-20T04:05:41.110Z,2025-08-20T11:49:08.000Z,0,PLANTA,Aprobado,Pend.1ra.aprob.
+1076192,,Llenado de ATC,2025-08-20T03:59:07.606Z,2025-08-20T11:53:21.000Z,0,PLANTA,Aprobado,Pend.1ra.aprob.
