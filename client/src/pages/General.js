@@ -22,76 +22,6 @@ const [filter, setFilter] = useState({
   const [consumibles, setConsumibles] = useState([]);
 const [otsDisponibles, setOtsDisponibles] = useState([]);
 
-useEffect(() => {
- const fetchOts = async () => {
-  try {
-    let response;
-
-    if (filter.scope === "sap") {
-      response = await axios.get(
-        `${process.env.REACT_APP_API_URL}sap-movimientos`
-      );
-
-      const excludedMaterials = [
-        '31013855','31013867','31013865','31013863','31013875','31013874','31013866','31009821','31009837','31009820','31026229','31009836','31009823','31009838','31010184','31010191','31015361','31015363','31015445','31015346','30000506','31015349','31010296','31003986','31015444','31015419','31015427','31015439','31009310','31029768','31029557','31029214','31015365','31009813','31013843','32005548','32001606','31015423','32005531','20000627','31013880','31032187','31032194','31008885','31009898','31015425','32004042','32005402','31015347','31010996',
-
-      ];
-
-      // 🔥 Agrupar por OT (porque SAP trae una fila por material)
-      const grouped = {};
-
-     response.data
-  .filter(item => !excludedMaterials.includes(item.codigoMaterial))
-  .forEach((item) => {
-
-        if (!grouped[item.otNumero]) {
-          grouped[item.otNumero] = {
-            id: item.id,
-            ottId: item.otNumero,
-            OTbasico: { name: item.descripcionOT },
-            zona: { name: item.zona },
-            ubicacion: { name: item.ubicacion },
-            descripcionEquipo: item.comentarioOT,
-            otConsumibles: [],
-          };
-        }
-
-        grouped[item.otNumero].otConsumibles.push({
-          id: item.id,
-          nombreConsumible: item.nombreMaterial,
-          unidadMedida: item.unidadMedida,
-          cantidad: item.cantidad,
-          reservaSap: item.reservaSAP,
-          comentarios: item.comentario,
-          consumibleSap: item.codigoMaterial,
-          fechaCreacion: item.fechaPedido,
-          estado: "SAP",
-        });
-      });
-
-      const formattedOts = Object.values(grouped);
-
-      setOts(formattedOts);
-      return;
-    }
-
-    // 🔹 CASO NORMAL (NO SAP)
-    response = await axios.get(
-      `${process.env.REACT_APP_API_URL}ots`
-    );
-
-    setOts(response.data);
-
-  } catch (error) {
-    console.error("Error al obtener OTs:", error);
-  }
-};
-
-
-
- fetchOts();
-}, [filter.scope]);
-
 
   // Obtener las zonas
   useEffect(() => {
@@ -198,44 +128,94 @@ useEffect(() => {
   };
 const handleSubmit = async (e) => {
   e.preventDefault();
-  setLoading(true); // Iniciar carga
+  setLoading(true);
 
-  // Obtener el userId del localStorage
-  const userId = localStorage.getItem("userId"); // Asegúrate de que el userId esté almacenado como string
-
-  // Construir la URL de la solicitud
-  const url = `${process.env.REACT_APP_API_URL}ots/search`;
-
-  // Mostrar el request body y la URL en la consola
-  console.log("Request Body:", {
-    startDate: filter.startDate,
-    endDate: filter.endDate,
-    zona: filter.zona,
-    ubicacion: filter.ubicacion,
-    equipo: filter.equipo,
-    scope: filter.scope,
-    userId: userId, // Agregar el userId aquí
-  });
-
-  console.log("URL de la solicitud:", url); // Mostrar la URL de la solicitud
+  const userId = localStorage.getItem("userId");
 
   try {
-    const response = await axios.get(url, {
-      params: {
-        startDate: filter.startDate,
-        endDate: filter.endDate,
-        zona: filter.zona,
-        ubicacion: filter.ubicacion,
-        ottId: filter.ottId, 
-        scope: filter.scope,
-        userId: userId, // Incluir el userId en los parámetros
-      },
-    });
-    setOts(response.data); // Almacenar las órdenes de trabajo encontradas
+    // ===============================
+    // 🔹 CASO SAP
+    // ===============================
+    if (filter.scope === "sap") {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}sap-movimientos`,
+        {
+          params: {
+            zona: filter.zona || undefined,
+            ubicacion: filter.ubicacion || undefined,
+            ot: filter.ottId || undefined,
+          },
+        }
+      );
+
+      const excludedMaterials = [
+        '31013855','31013867','31013865','31013863','31013875','31013874',
+        '31013866','31009821','31009837','31009820','31026229','31009836'
+      ];
+
+      const grouped = {};
+
+      response.data
+        .filter(item => 
+          !excludedMaterials.includes(
+            item.codigoMaterial?.toString()
+          )
+        )
+        .forEach((item) => {
+
+          if (!grouped[item.otNumero]) {
+            grouped[item.otNumero] = {
+              id: item.id,
+              ottId: item.otNumero,
+              OTbasico: { name: item.descripcionOT },
+              zona: { name: item.zona },
+              ubicacion: { name: item.ubicacion },
+              descripcionEquipo: item.comentarioOT,
+              otConsumibles: [],
+            };
+          }
+
+          grouped[item.otNumero].otConsumibles.push({
+            id: item.id,
+            nombreConsumible: item.nombreMaterial,
+            unidadMedida: item.unidadMedida,
+            cantidad: item.cantidad,
+            reservaSap: item.reservaSAP,
+            comentarios: item.comentario,
+            consumibleSap: item.codigoMaterial,
+            fechaCreacion: item.fechaPedido,
+            estado: "SAP",
+          });
+        });
+
+      setOts(Object.values(grouped));
+      return;
+    }
+
+    // ===============================
+    // 🔹 CASO NORMAL (NO SAP)
+    // ===============================
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}ots/search`,
+      {
+        params: {
+          startDate: filter.startDate || undefined,
+          endDate: filter.endDate || undefined,
+          zona: filter.zona || undefined,
+          ubicacion: filter.ubicacion || undefined,
+          ottId: filter.ottId || undefined,
+          scope: filter.scope,
+          userId: userId,
+        },
+      }
+    );
+
+    setOts(response.data);
+
   } catch (error) {
     console.error("Error al buscar órdenes de trabajo:", error);
   } finally {
-    setLoading(false); // Finalizar carga
+    setLoading(false);
   }
 };
 const DetallesConsumibles = ({ consumibles, userId }) => {

@@ -141,11 +141,41 @@ const importExcel = async (req, res) => {
 // ===============================
 const getAllMovimientos = async (req, res) => {
   try {
+    const { zona, ubicacion, ot } = req.query;
+
+    const where = {};
+
+    // 🔹 Filtro por zona
+    if (zona) {
+      where.zona = {
+        equals: zona,
+        mode: "insensitive"
+      };
+    }
+
+    // 🔹 Filtro por ubicación
+    if (ubicacion) {
+      where.ubicacion = {
+        equals: ubicacion,
+        mode: "insensitive"
+      };
+    }
+
+    // 🔹 Filtro por OT
+    if (ot) {
+      where.otNumero = {
+        equals: String(ot),
+        mode: "insensitive"
+      };
+    }
+
     const movimientos = await prisma.oTMovimientoSAP.findMany({
+      where,
       orderBy: { id: "desc" }
     });
 
     res.json(movimientos);
+
   } catch (error) {
     console.error("Error obteniendo movimientos:", error);
     res.status(500).json({ error: "Error interno del servidor" });
