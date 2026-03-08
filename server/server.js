@@ -1,5 +1,6 @@
 const express = require("express");
 const prisma = require("./controllers/prisma"); // Importa la instancia centralizada de Prisma
+const iniciarTelegramBot = require("./services/telegramBot");
 const authController = require("./controllers/authController");
 const upload = require("./config/multer"); // Importa el middleware multer configurado
 const cors = require("cors");
@@ -149,4 +150,6 @@ process.on('SIGTERM', async () => {
 // Iniciar servidor
 app.listen(3001, () => {
   console.log("Servidor corriendo en el puerto 3001");
+    // iniciar bot de telegram
+  iniciarTelegramBot();
 });
