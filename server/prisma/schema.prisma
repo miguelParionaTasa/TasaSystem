@@ -109,6 +109,7 @@ model Consumible {
   precio        Float?         
   otConsumibles OTConsumible[]
   historico Historico[]
+  OTConsumibleBot OTConsumibleBot[]
 
 }
 
@@ -464,4 +465,60 @@ model TarjetaRojaHistorial {
 
   tarjeta        TarjetaRoja @relation(fields: [tarjetaId], references: [id])
   user           User         @relation(fields: [userId], references: [id])
+}
+model TelegramUser {
+  id             BigInt       @id @default(autoincrement())
+  telegramId     String   @unique
+  nombre         String?
+  username       String?
+
+  activo         Boolean  @default(true)
+
+  fechaRegistro  DateTime @default(now())
+
+  otsBot         OTBot[]
+}
+model OTBot {
+  id              Int      @id @default(autoincrement())
+
+  otNumero String @unique
+  descripcionOT   String?
+
+  zona            String?
+  ubicacion       String?
+
+  avance          Float?
+  responsable     String?
+
+  estado          String?  @default("BORRADOR")
+
+  telegramUserId BigInt?
+  telegramUser    TelegramUser? @relation(fields: [telegramUserId], references: [id])
+
+  fechaCreacion   DateTime @default(now())
+  fechaActualiza  DateTime @updatedAt
+
+  consumibles     OTConsumibleBot[]
+}
+model OTConsumibleBot {
+  id               Int       @id @default(autoincrement())
+
+  otBotId          Int
+  consumibleId     Int?
+
+  consumibleSap    String?
+
+  nombreConsumible String?
+  unidadMedida     String?
+  cantidad         Float?
+
+  comentarios      String?
+  estado           String?
+
+  reservaSap       String?
+
+  fechaCreacion    DateTime  @default(now())
+
+  otBot            OTBot     @relation(fields: [otBotId], references: [id])
+  consumible       Consumible? @relation(fields: [consumibleId], references: [id])
 }

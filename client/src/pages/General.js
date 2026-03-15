@@ -133,16 +133,38 @@ const handleSubmit = async (e) => {
   const userId = localStorage.getItem("userId");
 
   try {
+    
+const resolveZonaForSap = (zonas, selectedZona) => {
+  if (!selectedZona) return undefined;
+
+  // Si ya viene como "NN. NOMBRE", úsalo tal cual
+  if (/^\d{2}\.\s/.test(String(selectedZona))) {
+    return String(selectedZona).trim();
+  }
+
+  // Si viene como id (o string de id), mapear a nombreMaximo
+  const z = zonas.find(z => String(z.id) === String(selectedZona) || z.name === selectedZona);
+  return z?.nombreMaximo?.trim() || undefined;
+};
+
     // ===============================
     // 🔹 CASO SAP
     // ===============================
-    if (filter.scope === "sap") {
+    
+if (filter.scope === "sap") {
+  const zonaParam = resolveZonaForSap(zonas, filter.zona);
+  
+const ubicacionSeleccionada = filter.ubicacion
+    ? ubicaciones.find(u => String(u.id) === String(filter.ubicacion))?.name
+    : undefined;
+
+
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}sap-movimientos`,
         {
           params: {
-            zona: filter.zona || undefined,
-            ubicacion: filter.ubicacion || undefined,
+            zona: zonaParam,
+            ubicacion: ubicacionSeleccionada,
             ot: filter.ottId || undefined,
           },
         }

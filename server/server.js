@@ -8,6 +8,7 @@ const cloudinary = require("./config/cloudinary"); // Importa Cloudinary configu
 const { prismaMiddleware } = require("./middlewares/prismaMiddleware"); // Importa el middleware
 const userRoutes = require("./routes/routes");
 const variosRoutes = require("./routes/variosroutes");
+const otBotRoutes = require("./routes/otBotRoutes");
 const consumibleRoutes = require("./routes/consumibleRoutes");
 const exportRoutes = require('./routes/export');
 const otMovimientoSapRoutes = require("./routes/otMovimientoSapRoutes");
@@ -25,7 +26,9 @@ const debugRoutes = require('./routes/debugRoutes');
 const predictivoRoutes = require("./routes/predictivoRoutes");
 const activoRoutes = require("./routes/activoRoutes");
 const clinicaRoutes = require("./routes/clinicaRoutes");
+const otConsumiblesRoutes = require("./routes/otConsumiblesRoutes");
 const tarjetaRojaRoutes = require("./routes/tarjetaRojaRoutes");
+const telegramUsersRouter = require("./routes/telegramUsers");
 
 // Configuración de la aplicación
 const app = express();
@@ -60,7 +63,9 @@ app.use("/predictivos", predictivoRoutes);
 app.use("/activos", activoRoutes);
 app.use("/clinicas", clinicaRoutes);
 app.use("/sap-movimientos", otMovimientoSapRoutes);
-
+app.use("/otbot", otBotRoutes);
+app.use("/ot-consumibles", otConsumiblesRoutes);
+app.use("/telegram-users", telegramUsersRouter);
 
 // Aplicar el middleware de Prisma
 prisma.$use(prismaMiddleware); // Aplica el middleware aquí

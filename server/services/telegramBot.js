@@ -1,6 +1,7 @@
 const TelegramBot = require("node-telegram-bot-api");
 const consultasBot = require("./bot/modulos/consultas");
 const pedidosBot = require("./bot/modulos/pedidos");
+const materialBot  = require("./bot/modulos/material"); // 👈 NUEVO
 const token = process.env.TELEGRAM_BOT_TOKEN;
 
 const estados = {};
@@ -22,6 +23,7 @@ function iniciarTelegramBot(){
             reply_markup:{
                 inline_keyboard:[
                     [{text:"🔎 Consultar pedidos",callback_data:"consultar"}],
+                    [{text:"🧰 Consulta material",callback_data:"material"}],
                     [{text:"📦 Pedir material",callback_data:"pedir"}],
                     [{text:"❌ Cancelar",callback_data:"cancelar"}]
                 ]
@@ -69,6 +71,7 @@ function iniciarTelegramBot(){
     // cargar módulo consultas
     consultasBot(bot, estados, menuPrincipal);
     pedidosBot(bot, estados, menuPrincipal);
+      materialBot(bot, estados, menuPrincipal); 
 
 }
 
