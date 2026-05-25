@@ -8,32 +8,31 @@ datasource db {
 }
 
 model User {
-  id                Int                 @id @default(autoincrement())
-  firstName         String
-  lastName          String
-  areaId            Int
-  password          String
-  username          String              @unique
-  isAdmin           Boolean             @default(false)
-  isDeleted         Boolean             @default(false)
-  componentes       Componente[]
-  otConsumibles     OTConsumible[]
-  ots               Ots[]
-  repuestos         Repuesto[]
-  area              Area                @relation(fields: [areaId], references: [id])
-  Atributo          Atributo[]
-  AtributoHistorial AtributoHistorial[]
-   procesos          Procesos[]
-   procesosHistorial ProcesosHistorial[]
-   activo          Activo[]
-   activoHistorial ActivoHistorial[]
-   clinica          Clinica[]
-   clinicaHistorial ClinicaHistorial[]
-  // Relación inversa (opcional si quieres ver quiénes han sido responsables)
-  inventarioItems   InventarioItem[]   @relation("ResponsableInventario")
-    tarjetasRojas        TarjetaRoja[]
+  id                     Int                    @id @default(autoincrement())
+  firstName              String
+  lastName               String
+  areaId                 Int
+  password               String
+  username               String                 @unique
+  isAdmin                Boolean                @default(false)
+  isDeleted              Boolean                @default(false)
+  activo                 Activo[]
+  activoHistorial        ActivoHistorial[]
+  Atributo               Atributo[]
+  AtributoHistorial      AtributoHistorial[]
+  clinica                Clinica[]
+  clinicaHistorial       ClinicaHistorial[]
+  componentes            Componente[]
+  inventarioItems        InventarioItem[]       @relation("ResponsableInventario")
+  otConsumibles          OTConsumible[]
+  ots                    Ots[]
+  procesos               Procesos[]
+  procesosHistorial      ProcesosHistorial[]
+  repuestos              Repuesto[]
+  tarjetasRojas          TarjetaRoja[]
   tarjetasRojasHistorial TarjetaRojaHistorial[]
-
+  area                   Area                   @relation(fields: [areaId], references: [id])
+  zonas                  Zona[]                 @relation("UserToZona")
 }
 
 model Area {
@@ -72,8 +71,8 @@ model OTConsumible {
   comentarios      String?
   estado           String?
   reservaSap       String?
-  consumibleSap    String?     // ✅ nuevo campo
   fechaCreacion    DateTime    @default(now())
+  consumibleSap    String?
   consumible       Consumible? @relation(fields: [consumibleId], references: [id])
   ot               Ots         @relation(fields: [otId], references: [id])
   user             User        @relation(fields: [userId], references: [id])
@@ -81,48 +80,44 @@ model OTConsumible {
 }
 
 model OTMovimientoSAP {
-  id               Int      @id @default(autoincrement())
-
-  // Datos OT (cabecera SAP)
-  otNumero         String
-  descripcionOT    String?
-  zona             String?
-  ubicacion        String?
-  comentarioOT     String?
-
-  // Datos material
-  codigoMaterial   String
-  nombreMaterial   String?
-  unidadMedida     String?
-  cantidad         Float
-  reservaSAP       String?
-  comentario       String?
-  fechaPedido      DateTime?
+  id             Int       @id @default(autoincrement())
+  otNumero       String
+  descripcionOT  String?
+  zona           String?
+  ubicacion      String?
+  comentarioOT   String?
+  codigoMaterial String
+  nombreMaterial String?
+  unidadMedida   String?
+  cantidad       Float
+  reservaSAP     String?
+  comentario     String?
+  fechaPedido    DateTime?
 }
 
 model Consumible {
-  id            Int            @id @default(autoincrement())
-  name          String
-  unidadMedida  String
-  codMaximo     String
-  nombreMaximo  String
-  precio        Float?         
-  otConsumibles OTConsumible[]
-  historico Historico[]
+  id              Int               @id @default(autoincrement())
+  name            String
+  unidadMedida    String
+  codMaximo       String
+  nombreMaximo    String
+  precio          Float?
+  historico       Historico[]
+  otConsumibles   OTConsumible[]
   OTConsumibleBot OTConsumibleBot[]
-
 }
 
 model Zona {
-  id           Int         @id @default(autoincrement())
+  id           Int          @id @default(autoincrement())
   name         String
   nombreMaximo String
   equipos      Equipo[]
+  historico    Historico[]
   OTbasico     OTbasico[]
   ots          Ots[]
+  predictivos  Predictivo[]
   ubicaciones  Ubicacion[]
-  historico Historico[]
-  predictivos  Predictivo[]   // 👈 inversa aquí
+  usuarios     User[]       @relation("UserToZona")
 }
 
 model Ubicacion {
@@ -130,21 +125,20 @@ model Ubicacion {
   name          String
   nombreMaximo  String
   zonaId        Int
+  clinicas      Clinica[]
   equipos       Equipo[]
-  OTbasico      OTbasico[]
-  ots           Ots[]
-  zona          Zona          @relation(fields: [zonaId], references: [id])
   historico     Historico[]
   lubricaciones Lubricacion[]
+  OTbasico      OTbasico[]
+  ots           Ots[]
   predictivos   Predictivo[]
-  procesos      Procesos[]     // 🔹 inversa nueva
+  procesos      Procesos[]
+  zona          Zona          @relation(fields: [zonaId], references: [id])
 }
 
-
-
 model Lubricacion {
-  id             Int      @id @default(autoincrement())
-  zona           String   // "2", "3.1", etc.
+  id             Int        @id @default(autoincrement())
+  zona           String
   equipo         String
   item           Int
   componente     String
@@ -153,31 +147,24 @@ model Lubricacion {
   lubricante     String
   frecuencia     String
   actividad      String
-
-  // Campo editable libre en el front
-  ubicacionTexto String?  
-
-  // Relación opcional con Ubicacion existente
+  ubicacionTexto String?
   ubicacionId    Int?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
   ubicacion      Ubicacion? @relation(fields: [ubicacionId], references: [id])
-
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-
-  // Relación con imágenes
-  images         Image[] @relation("LubricacionImage")
+  images         Image[]    @relation("LubricacionImage")
 }
 
 model Componente {
-  id          Int          @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   equipoId    Int
   parteEquipo String
   imageUrl    String?
   userId      Int
-  equipo      Equipo       @relation(fields: [equipoId], references: [id])
-  user        User         @relation(fields: [userId], references: [id])
+  equipo      Equipo     @relation(fields: [equipoId], references: [id])
+  user        User       @relation(fields: [userId], references: [id])
   repuestos   Repuesto[]
-  images      Image[]      @relation("ComponenteImage")
+  images      Image[]    @relation("ComponenteImage")
 }
 
 model Atributo {
@@ -185,33 +172,35 @@ model Atributo {
   nombre            String
   valor             String?
   userId            Int?
-  equipoId          Int                 // ✅ ahora depende de componente
+  equipoId          Int
+  equipo            Equipo              @relation(fields: [equipoId], references: [id])
   user              User?               @relation(fields: [userId], references: [id])
-  equipo            Equipo          @relation(fields: [equipoId], references: [id])
   AtributoHistorial AtributoHistorial[]
   images            Image[]             @relation("AtributoImage")
 }
 
 model Clinica {
-  id                Int                 @id @default(autoincrement())
-  nombre            String
-  valor             String?
-  userId            Int?
-  equipoId          Int                 // ✅ ahora depende de componente
-  user              User?               @relation(fields: [userId], references: [id])
-  equipo            Equipo          @relation(fields: [equipoId], references: [id])
+  id               Int                @id @default(autoincrement())
+  nombre           String
+  valor            String?
+  userId           Int?
+  ubicacionId      Int
+  ot    String?   
+  fecha DateTime  @default(now())
+  ubicacion        Ubicacion          @relation(fields: [ubicacionId], references: [id])
+  user             User?              @relation(fields: [userId], references: [id])
   ClinicaHistorial ClinicaHistorial[]
-  images            Image[]             @relation("ClinicaImage")
+  images           Image[]            @relation("ClinicaImage")
 }
 
 model ClinicaHistorial {
   id            Int      @id @default(autoincrement())
-  clinicaId    Int
+  clinicaId     Int
   valorAnterior String?
   valorNuevo    String?
   userId        Int
   fechaCambio   DateTime @default(now())
-  clinica      Clinica @relation(fields: [clinicaId], references: [id])
+  clinica       Clinica  @relation(fields: [clinicaId], references: [id])
   user          User     @relation(fields: [userId], references: [id])
 }
 
@@ -219,34 +208,29 @@ model Activo {
   id              Int               @id @default(autoincrement())
   nombre          String
   valor           String?
-  valor2          String?           // 💡 segundo valor adicional
-  marca           String?           // 💡 marca del activo
-  modelo          String?           // 💡 modelo del activo
-  serie           String?           // 💡 número de serie
-  zona            String?           // 💡 texto libre (no relacionado a tabla)
-  ubicacion       String?           // 💡 texto libre (no relacionado a tabla)
-  
-  historial       String?           // 💡 nuevo campo editable para intervenciones/mantenimientos
-
   userId          Int?
-  equipoId        Int?              // ⚙️ ahora es opcional, ya no es restrictivo
-
-  user            User?             @relation(fields: [userId], references: [id])
+  equipoId        Int?
+  marca           String?
+  modelo          String?
+  serie           String?
+  ubicacion       String?
+  valor2          String?
+  zona            String?
+  historial       String?
   equipo          Equipo?           @relation(fields: [equipoId], references: [id])
-
+  user            User?             @relation(fields: [userId], references: [id])
   activoHistorial ActivoHistorial[]
   images          Image[]           @relation("ActivoImage")
 }
 
-
 model ActivoHistorial {
   id            Int      @id @default(autoincrement())
-  activoId    Int
+  activoId      Int
   valorAnterior String?
   valorNuevo    String?
   userId        Int
   fechaCambio   DateTime @default(now())
-  activo      Activo @relation(fields: [activoId], references: [id])
+  activo        Activo   @relation(fields: [activoId], references: [id])
   user          User     @relation(fields: [userId], references: [id])
 }
 
@@ -281,36 +265,33 @@ model Equipo {
   ubicacionId    Int
   imageUrl       String?
   ubicacionSinId String?
+  activo         Activo[]
+  atributos      Atributo[]
   componentes    Componente[]
-  atributos      Atributo[]   // 👈 Relación con Atributo
   ubicacion      Ubicacion    @relation(fields: [ubicacionId], references: [id])
   zona           Zona         @relation(fields: [zonaId], references: [id])
   OTbasico       OTbasico[]
   ots            Ots[]
+  predictivos    Predictivo[]
   images         Image[]      @relation("EquipoImage")
-    predictivos  Predictivo[]   // 👈 inversa aquí
-    activo  Activo[] 
-    clinica  Clinica[] 
 }
 
 model Image {
-  id            Int              @id @default(autoincrement())
+  id            Int            @id @default(autoincrement())
   url           String
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
-
-  componentess  Componente[]     @relation("ComponenteImage")
-  consumibless  OTConsumible[]   @relation("ConsumibleImage")
-  equiposs      Equipo[]         @relation("EquipoImage")
-  repuestoss    Repuesto[]       @relation("RepuestoImage")
-  atributos     Atributo[]       @relation("AtributoImage")
-  clinica       Clinica[]        @relation("ClinicaImage")
-  activo        Activo[]         @relation("ActivoImage")
-  lubricaciones Lubricacion[]    @relation("LubricacionImage")
-  predictivos   Predictivo[]     @relation("PredictivoImage")
-  procesos      Procesos[]       @relation("ProcesosImage")
-
-  tarjetasRojas TarjetaRoja[]    @relation("TarjetaRojaImage") // 👈 nuevo
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  activo        Activo[]       @relation("ActivoImage")
+  atributos     Atributo[]     @relation("AtributoImage")
+  clinica       Clinica[]      @relation("ClinicaImage")
+  componentess  Componente[]   @relation("ComponenteImage")
+  consumibless  OTConsumible[] @relation("ConsumibleImage")
+  equiposs      Equipo[]       @relation("EquipoImage")
+  lubricaciones Lubricacion[]  @relation("LubricacionImage")
+  predictivos   Predictivo[]   @relation("PredictivoImage")
+  procesos      Procesos[]     @relation("ProcesosImage")
+  repuestoss    Repuesto[]     @relation("RepuestoImage")
+  tarjetasRojas TarjetaRoja[]  @relation("TarjetaRojaImage")
 }
 
 model OTbasico {
@@ -322,9 +303,8 @@ model OTbasico {
   zonaId      Int?
   ubicacionId Int?
   equipoId    Int?
-  tecnico1    String?    // ← nuevo campo
-  tecnico2    String?    // ← nuevo campo
-
+  tecnico1    String?
+  tecnico2    String?
   Equipo      Equipo?    @relation(fields: [equipoId], references: [id])
   Ubicacion   Ubicacion? @relation(fields: [ubicacionId], references: [id])
   Zona        Zona?      @relation(fields: [zonaId], references: [id])
@@ -332,45 +312,39 @@ model OTbasico {
 }
 
 model Historico {
-  id           Int         @id @default(autoincrement())
+  id           Int        @id @default(autoincrement())
   zonaId       Int
   ubicacionId  Int
   consumibleId Int
   trabajo      String
   fecha        DateTime
-  ot           String       // Puede ser Int si siempre es número
+  ot           String
   cantidad     Float
-
-  zona         Zona         @relation(fields: [zonaId], references: [id])
-  ubicacion    Ubicacion    @relation(fields: [ubicacionId], references: [id])
-  consumible   Consumible   @relation(fields: [consumibleId], references: [id])
+  consumible   Consumible @relation(fields: [consumibleId], references: [id])
+  ubicacion    Ubicacion  @relation(fields: [ubicacionId], references: [id])
+  zona         Zona       @relation(fields: [zonaId], references: [id])
 }
 
 model InventarioItem {
-  id             Int       @id @default(autoincrement())
-  descripcion    String
-  cantidad       Int
-  estado         String
-  ubicacion      String
-  nivel          String
-  fechaIngreso   DateTime
-  fechaSalida    DateTime?
-  destino        String?
-
-  responsableId  Int
-  responsable    User      @relation("ResponsableInventario", fields: [responsableId], references: [id])
-
-  historial      HistorialItem[]
-
-  imageUrl       String?   // ← Cambiamos imageId/image por imageUrl
-
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  id            Int             @id @default(autoincrement())
+  descripcion   String
+  cantidad      Int
+  estado        String
+  ubicacion     String
+  nivel         String
+  fechaIngreso  DateTime
+  fechaSalida   DateTime?
+  destino       String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  responsableId Int
+  imageUrl      String?
+  historial     HistorialItem[]
+  responsable   User            @relation("ResponsableInventario", fields: [responsableId], references: [id])
 }
 
-
 model HistorialItem {
-  id             Int      @id @default(autoincrement())
+  id             Int            @id @default(autoincrement())
   inventarioId   Int
   fechaUso       DateTime
   cantidadUsada  Float
@@ -381,28 +355,26 @@ model HistorialItem {
 }
 
 model Configuracion {
-  id        Int      @id @default(1) // solo habrá un registro
+  id         Int     @id @default(1)
   fechaCorte String?
 }
 
 model Predictivo {
-  id                    Int        @id @default(autoincrement())
-  zonaId                Int
-  ubicacionId           Int
-  equipoId              Int
-  fecha                 DateTime   @default(now())
-  tecnica               String
-  recomendacionProveedor String?
+  id                      Int       @id @default(autoincrement())
+  zonaId                  Int
+  ubicacionId             Int
+  equipoId                Int
+  fecha                   DateTime  @default(now())
+  tecnica                 String
+  recomendacionProveedor  String?
   recomendacionPredictivo String?
-  otGenerado            String?
-  comentario            String?
-  otRelacionada         String?
-
-  // Relaciones
-  zona       Zona      @relation(fields: [zonaId], references: [id])
-  ubicacion  Ubicacion @relation(fields: [ubicacionId], references: [id])
-  equipo     Equipo    @relation(fields: [equipoId], references: [id])
-  images     Image[]   @relation("PredictivoImage")
+  otGenerado              String?
+  comentario              String?
+  otRelacionada           String?
+  equipo                  Equipo    @relation(fields: [equipoId], references: [id])
+  ubicacion               Ubicacion @relation(fields: [ubicacionId], references: [id])
+  zona                    Zona      @relation(fields: [zonaId], references: [id])
+  images                  Image[]   @relation("PredictivoImage")
 }
 
 model Procesos {
@@ -410,115 +382,95 @@ model Procesos {
   nombre            String
   valor             String?
   userId            Int?
-  ubicacionId       Int?                // 🔹 ahora depende de ubicación
-  user              User?               @relation(fields: [userId], references: [id])
+  ubicacionId       Int?
   ubicacion         Ubicacion?          @relation(fields: [ubicacionId], references: [id])
+  user              User?               @relation(fields: [userId], references: [id])
   ProcesosHistorial ProcesosHistorial[]
   images            Image[]             @relation("ProcesosImage")
 }
 
-
-
 model ProcesosHistorial {
-  id              Int       @id @default(autoincrement())
-  procesoId       Int
-  valorAnterior   String?
-  valorNuevo      String?
-  userId          Int
-  fechaCambio     DateTime  @default(now())
-  proceso         Procesos  @relation(fields: [procesoId], references: [id])
-  user            User      @relation(fields: [userId], references: [id])
+  id            Int      @id @default(autoincrement())
+  procesoId     Int
+  valorAnterior String?
+  valorNuevo    String?
+  userId        Int
+  fechaCambio   DateTime @default(now())
+  proceso       Procesos @relation(fields: [procesoId], references: [id])
+  user          User     @relation(fields: [userId], references: [id])
 }
 
 model TarjetaRoja {
-  id              Int       @id @default(autoincrement())
-  reporta         String
-  dniReporta      String
-  fecha           DateTime   @default(now())
-  pet             String?
-  zona            String?
-  equipo          String?
-  componente      String?
-  descripcion     String?
-  tipoDeteccion   String?
-  comentario1     String?
-  comentario2     String?
-
-  userId          Int?       // quién registró
-  user            User?      @relation(fields: [userId], references: [id])
-
-  images          Image[]    @relation("TarjetaRojaImage")
-
-  historial       TarjetaRojaHistorial[]
-
-  createdAt       DateTime   @default(now())
-  updatedAt       DateTime   @updatedAt
+  id            Int                    @id @default(autoincrement())
+  reporta       String
+  dniReporta    String
+  fecha         DateTime               @default(now())
+  pet           String?
+  zona          String?
+  equipo        String?
+  componente    String?
+  descripcion   String?
+  tipoDeteccion String?
+  comentario1   String?
+  comentario2   String?
+  userId        Int?
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
+  user          User?                  @relation(fields: [userId], references: [id])
+  historial     TarjetaRojaHistorial[]
+  images        Image[]                @relation("TarjetaRojaImage")
 }
+
 model TarjetaRojaHistorial {
-  id             Int       @id @default(autoincrement())
-  tarjetaId      Int
-  campo          String     // ej: "zona", "descripcion", etc.
-  valorAnterior  String?
-  valorNuevo     String?
-  userId         Int
-  fechaCambio    DateTime   @default(now())
-
-  tarjeta        TarjetaRoja @relation(fields: [tarjetaId], references: [id])
-  user           User         @relation(fields: [userId], references: [id])
+  id            Int         @id @default(autoincrement())
+  tarjetaId     Int
+  campo         String
+  valorAnterior String?
+  valorNuevo    String?
+  userId        Int
+  fechaCambio   DateTime    @default(now())
+  tarjeta       TarjetaRoja @relation(fields: [tarjetaId], references: [id])
+  user          User        @relation(fields: [userId], references: [id])
 }
+
 model TelegramUser {
-  id             BigInt       @id @default(autoincrement())
-  telegramId     String   @unique
-  nombre         String?
-  username       String?
-
-  activo         Boolean  @default(true)
-
-  fechaRegistro  DateTime @default(now())
-
-  otsBot         OTBot[]
+  id            BigInt   @id
+  telegramId    String   @unique
+  nombre        String?
+  username      String?
+  activo        Boolean  @default(true)
+  fechaRegistro DateTime @default(now())
+  otsBot        OTBot[]
 }
+
 model OTBot {
-  id              Int      @id @default(autoincrement())
-
-  otNumero String @unique
-  descripcionOT   String?
-
-  zona            String?
-  ubicacion       String?
-
-  avance          Float?
-  responsable     String?
-
-  estado          String?  @default("BORRADOR")
-
+  id             Int               @id @default(autoincrement())
+  otNumero       String            @unique
+  descripcionOT  String?
+  zona           String?
+  ubicacion      String?
+  avance         Float?
+  responsable    String?
+  estado         String?           @default("BORRADOR")
   telegramUserId BigInt?
-  telegramUser    TelegramUser? @relation(fields: [telegramUserId], references: [id])
-
-  fechaCreacion   DateTime @default(now())
-  fechaActualiza  DateTime @updatedAt
-
-  consumibles     OTConsumibleBot[]
+  fechaCreacion  DateTime          @default(now())
+  fechaActualiza DateTime          @updatedAt
+  telegramUser   TelegramUser?     @relation(fields: [telegramUserId], references: [id])
+  consumibles    OTConsumibleBot[]
 }
-model OTConsumibleBot {
-  id               Int       @id @default(autoincrement())
 
+model OTConsumibleBot {
+  id               Int         @id @default(autoincrement())
   otBotId          Int
   consumibleId     Int?
-
   consumibleSap    String?
-
   nombreConsumible String?
   unidadMedida     String?
   cantidad         Float?
-
   comentarios      String?
   estado           String?
-
   reservaSap       String?
-
-  fechaCreacion    DateTime  @default(now())
-
-  otBot            OTBot     @relation(fields: [otBotId], references: [id])
+  fechaCreacion    DateTime    @default(now())
   consumible       Consumible? @relation(fields: [consumibleId], references: [id])
+  otBot            OTBot       @relation(fields: [otBotId], references: [id])
 }
