@@ -95,7 +95,7 @@ useEffect(() => {
     });
   };
 
-  // === Buscar Activos ===
+    // === Buscar Activos ===
   const handleSubmit = async (e) => {
     e?.preventDefault();
     setLoading(true);
@@ -109,13 +109,24 @@ useEffect(() => {
           valor: filter.valor || undefined,
         },
       });
-      setActivos(response.data || []);
+      
+      // Mapeo preventivo en el frontend por si el endpoint /search no tiene la bandera aún
+      const datosConBandera = (response.data || []).map(activo => ({
+        ...activo,
+        // Si el backend ya trae 'debeResaltarse', usa ese. Si no, evalúa si el creador no eres tú (userId != 1)
+        debeResaltarse: activo.debeResaltarse !== undefined 
+          ? activo.debeResaltarse 
+          : (activo.userId !== null && activo.userId !== 1)
+      }));
+
+      setActivos(datosConBandera);
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
     }
   };
+
 
   // === Guardar nuevo activo ===
   const handleSaveNew = async () => {
@@ -213,46 +224,79 @@ const handleEditActivo = async (activo) => {
     .join("");
 
   const { value: formValues } = await Swal.fire({
-    title: `Editar activo ${activo.nombre}`,
-    html: `
-      <div class="flex flex-col gap-3" style="max-height: 60vh; overflow-y:auto;">
-        <input id="nombre" class="swal2-input border rounded p-2" placeholder="Nombre" value="${activo.nombre || ""}">
-        <input id="valor" class="swal2-input border rounded p-2" placeholder="Placa" value="${activo.valor || ""}">
-        <input id="valor2" class="swal2-input border rounded p-2" placeholder="Descripción" value="${activo.valor2 || ""}">
-        <input id="marca" class="swal2-input border rounded p-2" placeholder="Marca" value="${activo.marca || ""}">
-        <input id="modelo" class="swal2-input border rounded p-2" placeholder="Modelo" value="${activo.modelo || ""}">
-        <input id="serie" class="swal2-input border rounded p-2" placeholder="Serie" value="${activo.serie || ""}">
-        <select id="zona" class="swal2-input border rounded p-2 bg-white">
+  title: `Editar activo ${activo.nombre}`,
+  html: `
+    <div class="flex flex-col gap-4 text-left px-2" style="max-height: 60vh; overflow-y:auto;">
+      
+      <div class="flex flex-col gap-1">
+        <label for="nombre" class="text-xs font-semibold text-gray-600">Nombre del Activo</label>
+        <input id="nombre" class="w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Nombre" value="${activo.nombre || ""}">
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label for="valor" class="text-xs font-semibold text-gray-600">Placa</label>
+        <input id="valor" class="w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Placa" value="${activo.valor || ""}">
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label for="valor2" class="text-xs font-semibold text-gray-600">Descripción</label>
+        <input id="valor2" class="w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Descripción" value="${activo.valor2 || ""}">
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label for="marca" class="text-xs font-semibold text-gray-600">Marca</label>
+        <input id="marca" class="w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Marca" value="${activo.marca || ""}">
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label for="modelo" class="text-xs font-semibold text-gray-600">Modelo</label>
+        <input id="modelo" class="w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Modelo" value="${activo.modelo || ""}">
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label for="serie" class="text-xs font-semibold text-gray-600">Número de Serie</label>
+        <input id="serie" class="w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Serie" value="${activo.serie || ""}">
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label for="zona" class="text-xs font-semibold text-gray-600">Zona Requerida</label>
+        <select id="zona" class="w-full border rounded p-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500">
           <option value="">Seleccionar zona</option>
           ${zonasOptions}
         </select>
-        <input id="ubicacion" class="swal2-input border rounded p-2" placeholder="Ubicación" value="${activo.ubicacion || ""}">
       </div>
-    `,
-    focusConfirm: false,
-    showCancelButton: true,
-    showCloseButton: true,
-    closeButtonHtml: "✕",
-    allowEscapeKey: true,
-    confirmButtonText: "Guardar cambios",
-    preConfirm: () => {
-      const zona = document.getElementById("zona").value;
-      if (!zona) {
-        Swal.showValidationMessage("Debe seleccionar una zona");
-        return false;
-      }
-      return {
-        nombre: document.getElementById("nombre").value,
-        valor: document.getElementById("valor").value,
-        valor2: document.getElementById("valor2").value,
-        marca: document.getElementById("marca").value,
-        modelo: document.getElementById("modelo").value,
-        serie: document.getElementById("serie").value,
-        zona,
-        ubicacion: document.getElementById("ubicacion").value,
-      };
-    },
-  });
+
+      <div class="flex flex-col gap-1">
+        <label for="ubicacion" class="text-xs font-semibold text-gray-600">Ubicación Específica</label>
+        <input id="ubicacion" class="w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Ubicación" value="${activo.ubicacion || ""}">
+      </div>
+
+    </div>
+  `,
+  focusConfirm: false,
+  showCancelButton: true,
+  showCloseButton: true,
+  closeButtonHtml: "✕",
+  allowEscapeKey: true,
+  confirmButtonText: "Guardar cambios",
+  preConfirm: () => {
+    const zona = document.getElementById("zona").value;
+    if (!zona) {
+      Swal.showValidationMessage("Debe seleccionar una zona");
+      return false;
+    }
+    return {
+      nombre: document.getElementById("nombre").value,
+      valor: document.getElementById("valor").value,
+      valor2: document.getElementById("valor2").value,
+      marca: document.getElementById("marca").value,
+      modelo: document.getElementById("modelo").value,
+      serie: document.getElementById("serie").value,
+      zona,
+      ubicacion: document.getElementById("ubicacion").value,
+    };
+  },
+});
 
   if (!formValues) return;
 
@@ -445,11 +489,17 @@ const handleSelectNewImage = (e) => {
       </tr>
     </thead>
 
-   <tbody>
+  <tbody>
   {activos.map((a) => (
-    <tr key={a.id} className="border border-gray-400 hover:bg-gray-100 transition">
+    <tr 
+  key={a.id} 
+  className="border border-gray-400 transition hover:bg-gray-100"
+  // 🔹 Si es true inyecta el fondo verde directamente, si no lo deja vacío
+  style={a.debeResaltarse ? { backgroundColor: "#d1fae5" } : {}}
+>
+
       
-      <td className="px-2 break-words whitespace-normal">{a.nombre}</td>
+      <td className="px-2 break-words whitespace-normal font-medium">{a.nombre}</td>
       <td className="px-2 break-words whitespace-normal">{a.valor || "-"}</td>
       <td className="px-2 break-words whitespace-normal">{a.valor2 || "-"}</td>
       <td className="px-2 break-words whitespace-normal">{a.marca || "-"}</td>
@@ -464,7 +514,7 @@ const handleSelectNewImage = (e) => {
         {a.ubicacion || a.equipo?.ubicacion?.name || "-"}
       </td>
 
-      <td className="px-2 flex justify-center gap-2">
+      <td className="px-2 flex justify-center gap-2 py-1">
 
         {a.images?.[0]?.url ? (
           <button
@@ -547,6 +597,7 @@ const handleSelectNewImage = (e) => {
     </tr>
   ))}
 </tbody>
+
 
 
   </table>

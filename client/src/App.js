@@ -17,30 +17,38 @@ import Historico from "./pages/Historico";
 import Clinica from "./pages/Clinica";
 import TarjetaRoja from "./pages/TarjetaRoja";
 import Materiales from "./pages/Materiales";
-import useAuth from "./hooks/useAuth";
 import Atributo from "./pages/Atributo";
 import Activo from "./pages/Activo";
 import Proceso from "./pages/Proceso";
 import Predictivo from "./pages/Predictivo";
+// 🔹 REINTEGRADO: Importación del hook de autenticación corregido
+import useAuth from "./hooks/useAuth";
 
 const PrivateRoute = ({ element, authenticated }) => {
-  return authenticated ? element : <Navigate to="/login" />;
+  return authenticated ? element : <Navigate to="/login" replace />;
 };
 
 const App = () => {
-  const [authenticated, setAuthenticated] = useState(false);
-  const [userName, setUserName] = useState("");
+  // Inicialización limpia: Consulta directa al almacenamiento local antes del renderizado
+  const [authenticated, setAuthenticated] = useState(() => {
+    const storedToken = localStorage.getItem("token");
+    const storedUserName = localStorage.getItem("userName");
+    return !!(storedToken && storedUserName);
+  });
 
+  const [userName, setUserName] = useState(() => {
+    return localStorage.getItem("userName") || "";
+  });
+
+  // 🔹 REINTEGRADO: Activación segura de useAuth sin generar bucles en WebKit
   useAuth(setAuthenticated);
 
   useEffect(() => {
     const storedUserName = localStorage.getItem("userName");
-    const storedToken = localStorage.getItem("token");
-    if (storedUserName && storedToken) {
-      setAuthenticated(true);
+    if (storedUserName && storedUserName !== userName) {
       setUserName(storedUserName);
     }
-  }, []);
+  }, [userName]);
 
   const protectedRoutes = [
     { path: "/movimientos", element: <MovimientosPage /> },
@@ -74,7 +82,7 @@ const App = () => {
           path="/login"
           element={
             authenticated ? (
-              <Navigate to="/movimientos" />
+              <Navigate to="/movimientos" replace />
             ) : (
               <Login
                 setAuthenticated={setAuthenticated}
@@ -100,7 +108,6 @@ const App = () => {
 
       <Footer />
 
-      {/* 🔥 AQUI VA EL CONTENEDOR */}
       <ToastContainer
         position="top-right"
         autoClose={3000}

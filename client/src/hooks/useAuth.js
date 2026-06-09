@@ -1,31 +1,30 @@
 import { useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { jwtDecode } from "jwt-decode"; // Asegúrate de usar la importación correcta
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const useAuth = (setAuthenticated) => {
   const navigate = useNavigate();
-  const location = useLocation(); // Obtiene la ruta actual
 
   useEffect(() => {
     const checkTokenExpiration = () => {
       const token = localStorage.getItem("token");
+      const currentPath = window.location.pathname; 
 
       if (!token) {
         setAuthenticated(false);
-
-        // Solo redirigir a login si la ruta NO es pública
-        if (location.pathname !== "/") {
-          navigate("/login");
+        // Evita re-redirecciones infinitas si ya está en login o en la raíz pública
+        if (currentPath !== "/" && currentPath !== "/login") {
+          navigate("/login", { replace: true });
         }
         return;
       }
 
       try {
-        const decoded = jwtDecode(token); // Decodificamos el token JWT
-        const expirationTime = decoded.exp * 1000; // Tiempo de expiración en milisegundos
+        const decoded = jwtDecode(token);
+        const expirationTime = decoded.exp * 1000;
 
         if (expirationTime < Date.now()) {
-          // Si el token ya expiró
+          // Limpieza profunda al expirar el token JWT
           setAuthenticated(false);
           localStorage.removeItem("isAdmin");
           localStorage.removeItem("periodoFin");
@@ -33,27 +32,30 @@ const useAuth = (setAuthenticated) => {
           localStorage.removeItem("token");
           localStorage.removeItem("userName");
 
-          if (location.pathname !== "/") {
-            navigate("/login");
+          if (currentPath !== "/" && currentPath !== "/login") {
+            navigate("/login", { replace: true });
           }
         } else {
           setAuthenticated(true);
         }
       } catch {
         setAuthenticated(false);
-        if (location.pathname !== "/") {
-          navigate("/login");
+        if (currentPath !== "/" && currentPath !== "/login") {
+          navigate("/login", { replace: true });
         }
       }
     };
 
+    // Ejecuta la validación inicial
     checkTokenExpiration();
 
-    // Verificamos la expiración cada 30 minutos
+    // Re-verifica pasivamente cada 30 minutos
     const intervalId = setInterval(checkTokenExpiration, 30 * 60 * 1000);
 
     return () => clearInterval(intervalId);
-  }, [navigate, location, setAuthenticated]); // Se ejecuta cuando cambia la ruta
+    
+    // Al dejar solo [setAuthenticated], el efecto corre una sola vez al montar la App
+  }, [navigate, setAuthenticated]); 
 };
 
 export default useAuth;

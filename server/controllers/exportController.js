@@ -5,15 +5,16 @@ async function exportDatabase(req, res) {
   try {
     const workbook = new ExcelJS.Workbook();
 
-    // Listado de todos los modelos que deseas exportar
+    // Listado de todos los modelos que deseas exportar (Incluye Clinica)
     const models = {
+      Clinica: await prisma.clinica.findMany(), // 👈 Agregado el modelo clinica
       Activos: await prisma.activo.findMany({
-        include: { images: true }  // Incluir imágenes asociadas
+        include: { images: true }
       }),
       ActivoHistorial: await prisma.activoHistorial.findMany(),
       Areas: await prisma.area.findMany(),
       Atributos: await prisma.atributo.findMany({
-        include: { images: true }  // Incluir imágenes asociadas
+        include: { images: true }
       }),
       HistorialItems: await prisma.historialItem.findMany(),
       Historico: await prisma.historico.findMany(),
@@ -31,7 +32,6 @@ async function exportDatabase(req, res) {
       const worksheet = workbook.addWorksheet(modelName);
 
       if (data.length > 0) {
-        // Para cada modelo, agregamos las columnas, incluyendo las imágenes si existen
         const sampleRow = data[0];
         worksheet.columns = Object.keys(sampleRow).map((key) => ({
           header: key,
@@ -39,17 +39,46 @@ async function exportDatabase(req, res) {
           width: 20,
         }));
 
-        // Si hay imágenes, agregar una columna para la URL de la imagen
-        data.forEach(row => {
-          // Incluir las URLs de las imágenes asociadas si existen
-          if (row.images && row.images.length > 0) {
-            row.images = row.images.map(image => image.url).join(', '); // Concatenar las URLs
-          } else {
-            row.images = '(Sin imagen)';
+        // Procesar y limpiar los datos antes de insertarlos en Excel
+        const processedRows = data.map(row => {
+          // Clonamos la fila para no mutar directamente la respuesta de Prisma
+          const newRow = { ...row };
+
+          // 1. Manejo de imágenes (Tu lógica original)
+          if (newRow.images && Array.isArray(newRow.images)) {
+            newRow.images = newRow.images.length > 0 
+              ? newRow.images.map(image => image.url).join(', ') 
+              : '(Sin imagen)';
           }
+
+          // 2. SOLUCIÓN AL ERROR DE FECHAS: 
+          // Recorremos cada columna de la fila buscando objetos tipo Date de JS/Prisma
+          Object.keys(newRow).forEach(key => {
+            if (newRow[key] instanceof Date) {
+              // Validamos que sea una fecha válida
+              if (!isNaN(newRow[key].getTime())) {
+                // Opción A: Guardarla como String formateado localmente (Evita distorsiones al 100%)
+                // Produce un texto limpio: "23/01/2026 06:36:22" en la zona horaria del servidor
+                const date = newRow[key];
+                const pad = (n) => String(n).padStart(2, '0');
+                
+                const day = pad(date.getDate());
+                const month = pad(date.getMonth() + 1);
+                const year = date.getFullYear();
+                const hours = pad(date.getHours());
+                const minutes = pad(date.getMinutes());
+                const seconds = pad(date.getSeconds());
+
+                newRow[key] = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+              }
+            }
+          });
+
+          return newRow;
         });
 
-        worksheet.addRows(data);
+        // Insertamos los datos procesados en la hoja
+        worksheet.addRows(processedRows);
       } else {
         worksheet.addRow(['(Sin datos)']);
       }
@@ -69,5 +98,6 @@ async function exportDatabase(req, res) {
     res.status(500).json({ message: 'Error al exportar' });
   }
 }
+
 
 module.exports = { exportDatabase };

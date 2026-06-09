@@ -17,7 +17,8 @@ const Reportes = () => {
 
   const [zonas, setZonas] = useState([]);
   const [ubicaciones, setUbicaciones] = useState([]);
-  const [ setEquipos] = useState([]);
+ const [equipos, setEquipos] = useState([]);
+
 
   // Cargar OTs
   useEffect(() => {
@@ -52,6 +53,7 @@ const Reportes = () => {
   }, []);
 
   // Cargar ubicaciones por zona
+    // Cargar ubicaciones por zona (Ordenadas de la A a la Z)
   useEffect(() => {
     const fetchUbicacionesPorZona = async () => {
       if (!filters.zonaId) return;
@@ -59,7 +61,15 @@ const Reportes = () => {
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}varios/ubicaciones/por-zona?zonaId=${filters.zonaId}`
         );
-        setUbicaciones(response.data);
+        
+        // 🔹 CORREGIDO: Ahora usa 'name', igual que en tu interfaz gráfica (JSX)
+      const ubicacionesOrdenadas = response.data.sort((a, b) => {
+        const textoA = a.name || ''; 
+        const textoB = b.name || '';
+        return textoA.localeCompare(textoB, 'es', { sensitivity: 'base' });
+      });
+
+        setUbicaciones(ubicacionesOrdenadas);
       } catch (error) {
         setError("Error al cargar las ubicaciones de esta zona.");
         console.error("Error al cargar ubicaciones:", error);

@@ -105,20 +105,45 @@ const createActivo = async (req, res) => {
 // 📋 Obtener todos los activos
 const getAllActivos = async (_, res) => {
   try {
+    const miUserId = 1; // Tu ID base referencial
+
     const activos = await prisma.activo.findMany({
       include: {
         equipo: { include: { ubicacion: { include: { zona: true } } } },
         user: true,
         images: true,
+        // 🔹 Traemos ÚNICAMENTE el último cambio registrado para optimizar memoria
+        activoHistorial: {
+          orderBy: { fechaCambio: "desc" },
+          take: 1,
+        }
       },
       orderBy: { id: "desc" },
     });
-    res.status(200).json(activos);
+
+    // Mapeamos para inyectar la bandera que leerá el frontend sin romper tus datos actuales
+    const activosConResaltado = activos.map((activo) => {
+      // Condición A: El activo fue creado por alguien diferente a tu ID (1)
+      const creadoPorOtros = activo.userId !== null && activo.userId !== miUserId;
+
+      // Condición B: El último cambio en el historial fue hecho por alguien diferente a tu ID (1)
+      const ultimoHistorial = activo.activoHistorial?.[0]; // Tomamos el primer elemento del take: 1
+      const modificadoPorOtros = ultimoHistorial && ultimoHistorial.userId !== miUserId;
+
+      return {
+        ...activo,
+        // Conserva todo lo que ya tenías y añade esta propiedad booleana
+        debeResaltarse: creadoPorOtros || modificadoPorOtros,
+      };
+    });
+
+    res.status(200).json(activosConResaltado);
   } catch (error) {
     console.error("❌ Error al obtener activos:", error);
     res.status(500).json({ message: "Error al obtener activos" });
   }
 };
+
 
 // 🔍 Obtener un activo por ID
 const getActivoById = async (req, res) => {
@@ -167,11 +192,11 @@ const updateActivo = async (req, res) => {
       data,
     });
 
-    // 3️⃣ Registrar historial del cambio
+    // 3️⃣ Registrar historial del cambio con respaldo de seguridad para userId
     await prisma.activoHistorial.create({
       data: {
         activoId: parseInt(id),
-        userId: parseInt(userId),
+        userId: parseInt(userId) || 1, // 🔹 Si no viene en el body, se le asigna tu ID (1) por seguridad
         valorAnterior: JSON.stringify(activoAnterior), // guarda snapshot previo
         valorNuevo: JSON.stringify(activoActualizado), // guarda snapshot nuevo
       },
@@ -266,9 +291,7 @@ const searchActivos = async (req, res) => {
     if (zonaId) {
       filtros.push({
         OR: [
-          // Caso 1: texto libre en el campo 'zona' del activo
           { zona: { contains: String(zonaId), mode: "insensitive" } },
-          // Caso 2: zona relacionada a través del equipo → ubicacion → zona
           { equipo: { ubicacion: { zona: { nombreMaximo: { contains: String(zonaId), mode: "insensitive" } } } } },
         ],
       });
@@ -280,8 +303,8 @@ const searchActivos = async (req, res) => {
     if (ubicacionId) {
       filtros.push({
         OR: [
-          { ubicacion: { contains: String(ubicacionId), mode: "insensitive" } }, // si activo lo tiene como texto
-          { equipo: { ubicacionId: Number(ubicacionId) } }, // si viene de equipo
+          { ubicacion: { contains: String(ubicacionId), mode: "insensitive" } },
+          { equipo: { ubicacionId: Number(ubicacionId) } },
         ],
       });
     }
@@ -324,7 +347,7 @@ const searchActivos = async (req, res) => {
     // Consulta principal
     // =========================
     const activos = await prisma.activo.findMany({
-      where: filtros.length ? { AND: filtros } : {}, // si no hay filtros, trae todos
+      where: filtros.length ? { AND: filtros } : {},
       include: {
         equipo: {
           include: {
@@ -335,6 +358,11 @@ const searchActivos = async (req, res) => {
         },
         user: true,
         images: true,
+        // 🔹 INYECTADO: Traemos el último cambio del historial para el buscador
+        activoHistorial: {
+          orderBy: { fechaCambio: "desc" },
+          take: 1,
+        }
       },
       orderBy: { nombre: "asc" },
     });
@@ -343,7 +371,28 @@ const searchActivos = async (req, res) => {
       return res.status(404).json({ message: "No se encontraron activos con los filtros aplicados." });
     }
 
-    res.status(200).json(activos);
+    // =========================
+    // 🔹 INYECTADO: Mapeo de Auditoría de usuarios para colorear
+    // =========================
+    const miUserId = 1; // Tu ID referencial (Miguel Pariona)
+
+    const activosConMarcado = activos.map((activo) => {
+      // Condición A: Creado por un ID diferente a 1
+      const creadoPorOtros = activo.userId !== null && activo.userId !== miUserId;
+
+      // Condición B: Modificado por un ID diferente a 1 en el historial
+      const ultimoHistorial = activo.activoHistorial?.[0]; // Tomamos el elemento del take: 1
+      const modificadoPorOtros = ultimoHistorial && ultimoHistorial.userId !== miUserId;
+
+      return {
+        ...activo,
+        debeResaltarse: creadoPorOtros || modificadoPorOtros, // Genera el booleano true/false
+      };
+    });
+
+    // Enviamos los activos procesados con la bandera inyectada al frontend
+    res.status(200).json(activosConMarcado);
+
   } catch (error) {
     console.error("❌ Error al buscar activos:", error);
     res.status(500).json({
@@ -352,6 +401,7 @@ const searchActivos = async (req, res) => {
     });
   }
 };
+
 
 
 
