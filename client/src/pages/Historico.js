@@ -9,6 +9,7 @@ const Historico = () => {
   const [ubicacionId, setUbicacionId] = useState("");
   const [datosFiltrados, setDatosFiltrados] = useState([]);
   const [cargando, setCargando] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(""); // Nuevo estado para el término de búsqueda
 
   useEffect(() => {
     const obtenerZonas = async () => {
@@ -36,7 +37,19 @@ const Historico = () => {
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}varios/ubicaciones/por-zona?zonaId=${zonaId}`
         );
-        setUbicaciones(response.data);
+
+        // Verificamos que response.data sea un array y luego creamos una copia para ordenar.
+        if (Array.isArray(response.data)) {
+          const ubicacionesOrdenadas = [...response.data].sort((a, b) =>
+            a.name.localeCompare(b.name, 'es', { sensitivity: 'base' })
+            // 'es' para especificar el idioma español.
+            // 'sensitivity: 'base'' para ignorar diferencias de mayúsculas/minúsculas y acentos al ordenar.
+          );
+          setUbicaciones(ubicacionesOrdenadas);
+        } else {
+          console.warn("La respuesta de la API para ubicaciones no es un array:", response.data);
+          setUbicaciones([]); // Aseguramos que el estado sea un array vacío si la respuesta es inesperada
+        }
       } catch (error) {
         toast.error("Error al cargar las ubicaciones.");
         console.error("Error al obtener ubicaciones por zona:", error);
@@ -58,6 +71,7 @@ const Historico = () => {
         `${process.env.REACT_APP_API_URL}historico/filtrar?${query.toString()}`
       );
       setDatosFiltrados(response.data);
+      setSearchTerm(""); // Resetea el término de búsqueda al obtener nuevos datos
 
       setTimeout(() => {
         document
@@ -79,6 +93,22 @@ const Historico = () => {
     return fecha.toISOString().split("T")[0]; // yyyy-mm-dd
   };
 
+  // Lógica de filtrado en el front-end
+  // Lógica de filtrado en el front-end
+  const filteredTableData = datosFiltrados.filter((item) => {
+    if (!searchTerm) return true; // Si no hay término de búsqueda, muestra todo
+
+    const lowerCaseSearchTerm = searchTerm.toLowerCase();
+
+    // Comprueba si el término de búsqueda está presente SOLAMENTE en los campos de Consumible o Código SAP
+    return (
+      (item.consumibleCodMax &&
+        item.consumibleCodMax.toLowerCase().includes(lowerCaseSearchTerm)) ||
+      (item.consumible &&
+        item.consumible.toLowerCase().includes(lowerCaseSearchTerm))
+    );
+  });
+
   return (
     <div className="p-4 sm:p-6">
       <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-gray-800">
@@ -93,6 +123,7 @@ const Historico = () => {
             setZonaId(e.target.value);
             setUbicacionId("");
             setDatosFiltrados([]);
+            setSearchTerm(""); // También resetea el término de búsqueda al cambiar la zona
           }}
           className="border p-2 rounded w-full sm:w-1/4"
         >
@@ -124,6 +155,15 @@ const Historico = () => {
         >
           FILTRAR
         </button>
+
+        {/* Nuevo campo de búsqueda de texto */}
+        <input
+          type="text"
+          placeholder="Buscar en la tabla..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="border p-2 rounded w-full sm:w-1/4"
+        />
       </div>
 
       {cargando && (
@@ -134,7 +174,7 @@ const Historico = () => {
 
       {/* Tabla */}
       <div className="overflow-x-auto" id="tabla-historico">
-        {datosFiltrados.length > 0 ? (
+        {filteredTableData.length > 0 ? ( // Usamos filteredTableData aquí
           <table className="min-w-[950px] w-full border text-sm text-left">
             <thead>
               <tr className="bg-gray-200">
@@ -150,7 +190,7 @@ const Historico = () => {
               </tr>
             </thead>
             <tbody>
-              {datosFiltrados.map((h) => (
+              {filteredTableData.map((h) => ( // Mapeamos filteredTableData
                 <tr key={h.id} className="hover:bg-gray-50">
                   <td className="border px-2 py-1">{h.zona}</td>
                   <td className="border px-2 py-1">
@@ -185,5 +225,6 @@ const Historico = () => {
     </div>
   );
 };
+
 
 export default Historico;

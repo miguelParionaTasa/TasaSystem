@@ -42,6 +42,9 @@ const Clinica = () => {
   const token = localStorage.getItem("token");
   const userId = parseInt(localStorage.getItem("userId"));
 
+  // Define el ID del usuario "administrador" o el que NO quieres resaltar (Miguel Pariona)
+  const ADMIN_USER_ID = 1;
+
   // =========================
   // ORDENAR
   // =========================
@@ -52,7 +55,7 @@ const Clinica = () => {
       const fechaB = b.fecha ? new Date(b.fecha).getTime() : 0;
 
       if (fechaB !== fechaA) {
-        return fechaB - fechaA; 
+        return fechaB - fechaA;
       }
 
       // 2️⃣ ORDENAR POR ZONA (Secundario)
@@ -131,7 +134,18 @@ const Clinica = () => {
       .get(
         `${process.env.REACT_APP_API_URL}varios/ubicaciones/por-zona?zonaId=${filter.zona}`
       )
-      .then((res) => setUbicaciones(res.data))
+      .then((res) => {
+        // Ordenar las ubicaciones por el nombre (propiedad 'name') con localeCompare para español
+        if (Array.isArray(res.data)) {
+          const ubicacionesOrdenadas = [...res.data].sort((a, b) =>
+            a.name.localeCompare(b.name, 'es', { sensitivity: 'base' })
+          );
+          setUbicaciones(ubicacionesOrdenadas);
+        } else {
+          console.warn("La respuesta de la API para ubicaciones no es un array:", res.data);
+          setUbicaciones([]);
+        }
+      })
       .catch((err) => console.error(err));
   }, [filter.zona]);
 
@@ -204,7 +218,7 @@ const Clinica = () => {
     if (!newRow.nombre.trim()) {
       return Swal.fire(
         "Error",
-        "Debe ingresar nombre",
+        "Debe ingresar el nombre del activo", // Mensaje más descriptivo
         "error"
       );
     }
@@ -212,9 +226,18 @@ const Clinica = () => {
     if (!newRow.valor.trim()) {
       return Swal.fire(
         "Error",
-        "Debe ingresar valor",
+        "Debe ingresar el título del trabajo", // Mensaje más descriptivo
         "error"
       );
+    }
+
+    // NUEVA VALIDACIÓN: La fecha es obligatoria
+    if (!newRow.fecha) {
+        return Swal.fire(
+            "Error",
+            "Debe ingresar una fecha",
+            "error"
+        );
     }
 
     if (saving) return;
@@ -228,7 +251,8 @@ const Clinica = () => {
       formData.append("valor", newRow.valor.trim());
 
       formData.append("ot", newRow.ot || "");
-      formData.append("fecha", newRow.fecha || "");
+      // Envía la fecha directamente en formato YYYY-MM-DD para compatibilidad con backend/Prisma
+      formData.append("fecha", newRow.fecha);
 
       formData.append("ubicacionId", filter.ubicacion);
 
@@ -298,8 +322,12 @@ const Clinica = () => {
         cambios.ot = editedData.ot;
       }
 
-      if (item.fecha !== editedData.fecha) {
-        cambios.fecha = editedData.fecha;
+      // Validación y conversión de fecha al editar (formato YYYY-MM-DD)
+      const newEditedDateString = editedData.fecha ? editedData.fecha : ""; // YYYY-MM-DD o cadena vacía
+      const originalDateString = item.fecha ? item.fecha.slice(0, 10) : ""; // Asegura formato YYYY-MM-DD
+
+      if (newEditedDateString !== originalDateString) {
+          cambios.fecha = newEditedDateString; // Envía directamente la cadena YYYY-MM-DD
       }
 
       if (Object.keys(cambios).length === 0) {
@@ -483,6 +511,7 @@ const Clinica = () => {
     (u) => u.id === Number(filter.ubicacion)
   );
 
+
   return (
     <div className="p-4 max-w-screen-2xl mx-auto">
 
@@ -539,7 +568,7 @@ const Clinica = () => {
 
             {[...ubicaciones]
               .sort((a, b) =>
-                a.name.localeCompare(b.name)
+                a.name.localeCompare(b.name, 'es', { sensitivity: 'base' }) // Orden alfabético para ubicaciones
               )
               .map((u) => (
                 <option key={u.id} value={u.id}>
@@ -617,7 +646,7 @@ const Clinica = () => {
 
               <input
                 type="text"
-                placeholder="Nombre"
+                placeholder="Nombre del Activo" // Etiqueta más descriptiva
                 value={newRow.nombre}
                 onChange={(e) =>
                   setNewRow((prev) => ({
@@ -630,7 +659,7 @@ const Clinica = () => {
 
               <input
                 type="text"
-                placeholder="Valor"
+                placeholder="Título del trabajo" // Etiqueta más descriptiva
                 value={newRow.valor}
                 onChange={(e) =>
                   setNewRow((prev) => ({
@@ -643,7 +672,7 @@ const Clinica = () => {
 
               <input
                 type="text"
-                placeholder="OT"
+                placeholder="Descripción del trabajo (Opcional)" // Ahora OT es opcional
                 value={newRow.ot}
                 onChange={(e) =>
                   setNewRow((prev) => ({
@@ -749,13 +778,13 @@ const Clinica = () => {
                   Trabajo
                 </th>
 
-
+                <th className="border px-3 py-2 text-left">
+                  OT
+                </th> {/* Nueva columna para OT */}
 
                 <th className="border px-3 py-2 text-left">
                   Fecha
                 </th>
-
-
 
                 <th className="border px-3 py-2 text-center">
                   Imágenes
@@ -774,7 +803,8 @@ const Clinica = () => {
 
                 <tr
                   key={item.id}
-                  className="hover:bg-gray-50"
+                  // Añadimos una clase condicional: si el userId del item no es el ADMIN_USER_ID (Miguel), lo resalta en verde
+                  className={`hover:bg-gray-50 ${item.userId !== ADMIN_USER_ID ? 'bg-green-100' : ''}`}
                 >
 
                   {/* ZONA */}
@@ -788,7 +818,7 @@ const Clinica = () => {
                     {item.ubicacion?.name || "N/A"}
                   </td>
 
-                  {/* NOMBRE */}
+                  {/* NOMBRE (Activo) */}
                   <td className="border px-3 py-2 font-semibold">
 
                     {editingId === item.id ? (
@@ -809,7 +839,7 @@ const Clinica = () => {
 
                   </td>
 
-                  {/* VALOR */}
+                  {/* VALOR (Título del trabajo) */}
                   <td className="border px-3 py-2">
 
                     {editingId === item.id ? (
@@ -825,6 +855,27 @@ const Clinica = () => {
                       />
                     ) : (
                       item.valor
+                    )}
+
+                  </td>
+
+                  {/* OT */}
+                  <td className="border px-3 py-2">
+
+                    {editingId === item.id ? (
+                      <input
+                        type="text"
+                        value={editedData.ot || ""}
+                        onChange={(e) =>
+                          setEditedData((prev) => ({
+                            ...prev,
+                            ot: e.target.value,
+                          }))
+                        }
+                        className="border p-1 rounded w-full"
+                      />
+                    ) : (
+                      item.ot || "-" // Muestra "-" si no hay OT
                     )}
 
                   </td>
@@ -959,7 +1010,8 @@ const Clinica = () => {
                               nombre: item.nombre || "",
                               valor: item.valor || "",
                               ot: item.ot || "",
-                              fecha: item.fecha || "",
+                              // Formatea la fecha para el input type="date"
+                              fecha: item.fecha ? item.fecha.slice(0, 10) : "",
                             });
                           }}
                           className="text-blue-600 hover:underline"
