@@ -11,6 +11,7 @@ const Activo = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [loading, setLoading] = useState(false);
 const [ubicacionesModal, setUbicacionesModal] = useState([]);
+const [showOperadorCreations, setShowOperadorCreations] = useState(false);
 
   const [modalAddVisible, setModalAddVisible] = useState(false);
   const [newActivo, setNewActivo] = useState({
@@ -95,7 +96,7 @@ useEffect(() => {
     });
   };
 
-    // === Buscar Activos ===
+  // === Buscar Activos ===
   const handleSubmit = async (e) => {
     e?.preventDefault();
     setLoading(true);
@@ -126,6 +127,7 @@ useEffect(() => {
       setLoading(false);
     }
   };
+
 
 
   // === Guardar nuevo activo ===
@@ -315,6 +317,42 @@ const handleEditActivo = async (activo) => {
   }
 };
 
+const handleDeleteActivo = async (activoId, activoNombre) => {
+    if (userId !== 1) { // Solo permite borrar al userId 1 (administrador)
+      Swal.fire({
+        icon: "error",
+        title: "Permiso denegado",
+        text: "Solo el administrador (ID 1) puede eliminar activos.",
+      });
+      return;
+    }
+
+    const result = await Swal.fire({
+      title: `¿Estás seguro de eliminar el activo "${activoNombre}"?`,
+      text: "¡Esta acción no se puede revertir!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await axios.delete(`${process.env.REACT_APP_API_URL}activos/${activoId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        Swal.fire("Eliminado", "El activo ha sido eliminado correctamente.", "success");
+        handleSubmit(); // Refrescar la lista de activos después de eliminar
+      } catch (err) {
+        console.error("Error al eliminar el activo:", err);
+        Swal.fire("Error", "No se pudo eliminar el activo.", "error");
+      }
+    }
+  };
 
   
 useEffect(() => {
@@ -365,47 +403,50 @@ const handleSelectNewImage = (e) => {
   reader.readAsDataURL(file);
 };
 
+  // Lógica para filtrar activos mostrados en la tabla
+  const displayedActivos = showOperadorCreations
+    ? activos.filter(a => a.debeResaltarse)
+    : activos;
+
   return (
     <div className="p-4 max-w-screen-xl mx-auto">
       <h1 className="text-2xl font-bold text-gray-800 mb-4">Gestión de Activos</h1>
 
       {/* === FILTROS === */}
-      <form onSubmit={handleSubmit} className="flex flex-wrap items-end gap-4 bg-gray-50 p-4 rounded-md shadow-md mb-6">
+     <form onSubmit={handleSubmit} className="flex flex-wrap items-end gap-4 bg-gray-50 p-4 rounded-md shadow-md mb-6">
         <div>
-  <label className="block font-semibold text-gray-700 mb-2">Zona</label>
-  <select
-    name="zona"
-    value={filter.zona}
-    onChange={handleFilterChange}
-    className="p-2 border rounded"
-  >
-    <option value="">Todas</option>
-    {zonas.map((z, i) => (
-      <option key={i} value={z}>
-        {z}
-      </option>
-    ))}
-  </select>
-</div>
-
+          <label className="block font-semibold text-gray-700 mb-2">Zona</label>
+          <select
+            name="zona"
+            value={filter.zona}
+            onChange={handleFilterChange}
+            className="p-2 border rounded"
+          >
+            <option value="">Todas</option>
+            {zonas.map((z, i) => (
+              <option key={i} value={z}>
+                {z}
+              </option>
+            ))}
+          </select>
+        </div>
 
         <div>
           <label className="block font-semibold text-gray-700 mb-2">Ubicación</label>
           <select
-  name="ubicacion"
-  value={filter.ubicacion}
-  onChange={handleFilterChange}
-  disabled={!filter.zona}
-  className="p-2 border rounded"
->
-  <option value="">Todas</option>
-  {ubicaciones.map((u) => (
-    <option key={u.id} value={u.id}>
-      {u.name}
-    </option>
-  ))}
-</select>
-
+            name="ubicacion"
+            value={filter.ubicacion}
+            onChange={handleFilterChange}
+            disabled={!filter.zona}
+            className="p-2 border rounded"
+          >
+            <option value="">Todas</option>
+            {ubicaciones.map((u) => (
+              <option key={u.id} value={u.id}>
+                {u.name}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div>
@@ -453,6 +494,21 @@ const handleSelectNewImage = (e) => {
         <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition">
           Filtrar
         </button>
+
+        {/* Nuevo filtro de Operador */}
+        <div className="flex items-center mt-2 sm:mt-0">
+          <input
+            type="checkbox"
+            id="showOperadorCreations"
+            checked={showOperadorCreations}
+            onChange={(e) => setShowOperadorCreations(e.target.checked)}
+            className="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500"
+          />
+          <label htmlFor="showOperadorCreations" className="ml-2 block text-sm font-semibold text-gray-700">
+            Operador
+          </label>
+        </div>
+
       </form>
 
       {/* === BOTÓN NUEVO === */}
@@ -465,150 +521,143 @@ const handleSelectNewImage = (e) => {
         </button>
       </div>
 
-      {/* === TABLA === */}
+   {/* === TABLA === */}
       {loading ? (
         <p className="text-center">Cargando...</p>
       ) : (
         <div className="overflow-x-auto">
           <div className="overflow-x-auto">
-<div className="w-full overflow-x-auto md:overflow-visible">
-   <table className="min-w-[950px] w-full border text-sm text-left">
+            <div className="w-full overflow-x-auto md:overflow-visible">
+              <table className="min-w-[950px] w-full border text-sm text-left">
+                <thead>
+                  <tr className="bg-gray-300 border border-gray-400">
+                    <th className="px-2 min-w-[80px]  max-w-[120px] md:min-w-0">N° Activo</th>
+                    <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Placa</th>
+                    <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Descripción</th>
+                    <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Marca</th>
+                    <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Modelo</th>
+                    <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Serie</th>
+                    <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Zona</th>
+                    <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Ubicación</th>
+                    <th className="px-2 min-w-[120px] max-w-[180px] md:min-w-[120px]">Acción</th> {/* Aumenta el ancho de la columna Acción */}
+                  </tr>
+                </thead>
 
+                <tbody>
+                  {displayedActivos.map((a) => (
+                    <tr 
+                      key={a.id} 
+                      className="border border-gray-400 transition hover:bg-gray-100"
+                      style={a.debeResaltarse ? { backgroundColor: "#d1fae5" } : {}}
+                    >
+                      <td className="px-2 break-words whitespace-normal font-medium">{a.nombre}</td>
+                      <td className="px-2 break-words whitespace-normal">{a.valor || "-"}</td>
+                      <td className="px-2 break-words whitespace-normal">{a.valor2 || "-"}</td>
+                      <td className="px-2 break-words whitespace-normal">{a.marca || "-"}</td>
+                      <td className="px-2 break-words whitespace-normal">{a.modelo || "-"}</td>
+                      <td className="px-2 break-words whitespace-normal">{a.serie || "-"}</td>
+                      <td className="px-2 break-words whitespace-normal">
+                        {a.zona || a.equipo?.ubicacion?.zona?.nombreMaximo || "-"}
+                      </td>
+                      <td className="px-2 break-words whitespace-normal">
+                        {a.ubicacion || a.equipo?.ubicacion?.name || "-"}
+                      </td>
+                      <td className="px-2 flex justify-center gap-2 py-1">
+                        {a.images?.[0]?.url ? (
+                          <button
+                            className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+                            onClick={() => setModalImage(a.images[0].url)}
+                          >
+                            Ver
+                          </button>
+                        ) : (
+                          <>
+                            <button
+                              disabled={isUploading}
+                              className={`px-3 py-1 rounded text-white ${
+                                isUploading ? "bg-gray-400 cursor-not-allowed" : "bg-orange-600 hover:bg-orange-700"
+                              }`}
+                              onClick={() => {
+                                if (isUploading) return;
 
-    <thead>
-      <tr className="bg-gray-300 border border-gray-400">
-        <th className="px-2 min-w-[80px]  max-w-[120px] md:min-w-0">N° Activo</th>
-        <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Placa</th>
-        <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Descripción</th>
-        <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Marca</th>
-        <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Modelo</th>
-        <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Serie</th>
-        <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Zona</th>
-        <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Ubicación</th>
-        <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Acción</th>
-      </tr>
-    </thead>
+                                Swal.fire({
+                                  title: "Seleccionar opción",
+                                  text: "¿Cómo deseas subir la imagen?",
+                                  showDenyButton: true,
+                                  showCancelButton: true,
+                                  confirmButtonText: "Tomar foto",
+                                  denyButtonText: "Desde galería",
+                                  cancelButtonText: "Cancelar",
+                                }).then((result) => {
+                                  if (result.isConfirmed) {
+                                    cameraInputRef.current.click();
+                                  } else if (result.isDenied) {
+                                    galleryInputRef.current.click();
+                                  }
+                                });
+                              }}
+                            >
+                              {isUploading ? "Subiendo..." : "Subir"}
+                            </button>
 
-  <tbody>
-  {activos.map((a) => (
-    <tr 
-  key={a.id} 
-  className="border border-gray-400 transition hover:bg-gray-100"
-  // 🔹 Si es true inyecta el fondo verde directamente, si no lo deja vacío
-  style={a.debeResaltarse ? { backgroundColor: "#d1fae5" } : {}}
->
+                            {/* INPUT GALERÍA OCULTO */}
+                            <input
+                              type="file"
+                              accept="image/*"
+                              ref={galleryInputRef}
+                              style={{ display: "none" }}
+                              onChange={(e) => {
+                                if (!e.target.files.length) return;
+                                setIsUploading(true);
+                                handleUploadImage(a, e.target.files[0]).finally(() =>
+                                  setIsUploading(false)
+                                );
+                              }}
+                            />
 
-      
-      <td className="px-2 break-words whitespace-normal font-medium">{a.nombre}</td>
-      <td className="px-2 break-words whitespace-normal">{a.valor || "-"}</td>
-      <td className="px-2 break-words whitespace-normal">{a.valor2 || "-"}</td>
-      <td className="px-2 break-words whitespace-normal">{a.marca || "-"}</td>
-      <td className="px-2 break-words whitespace-normal">{a.modelo || "-"}</td>
-      <td className="px-2 break-words whitespace-normal">{a.serie || "-"}</td>
+                            {/* INPUT CÁMARA OCULTO */}
+                            <input
+                              type="file"
+                              accept="image/*"
+                              capture="environment"
+                              ref={cameraInputRef}
+                              style={{ display: "none" }}
+                              onChange={(e) => {
+                                if (!e.target.files.length) return;
+                                setIsUploading(true);
+                                handleUploadImage(a, e.target.files[0]).finally(() =>
+                                  setIsUploading(false)
+                                );
+                              }}
+                            />
+                          </>
+                        )}
 
-      <td className="px-2 break-words whitespace-normal">
-        {a.zona || a.equipo?.ubicacion?.zona?.nombreMaximo || "-"}
-      </td>
+                        <button
+                          className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
+                          onClick={() => handleEditActivo(a)}
+                        >
+                          Editar
+                        </button>
 
-      <td className="px-2 break-words whitespace-normal">
-        {a.ubicacion || a.equipo?.ubicacion?.name || "-"}
-      </td>
-
-      <td className="px-2 flex justify-center gap-2 py-1">
-
-        {a.images?.[0]?.url ? (
-          <button
-            className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
-            onClick={() => setModalImage(a.images[0].url)}
-          >
-            Ver
-          </button>
-        ) : (
-          <>
-            <button
-              disabled={isUploading}
-              className={`px-3 py-1 rounded text-white ${
-                isUploading ? "bg-gray-400 cursor-not-allowed" : "bg-orange-600 hover:bg-orange-700"
-              }`}
-              onClick={() => {
-                if (isUploading) return;
-
-                Swal.fire({
-                  title: "Seleccionar opción",
-                  text: "¿Cómo deseas subir la imagen?",
-                  showDenyButton: true,
-                  showCancelButton: true,
-                  confirmButtonText: "Tomar foto",
-                  denyButtonText: "Desde galería",
-                  cancelButtonText: "Cancelar",
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    cameraInputRef.current.click();
-                  } else if (result.isDenied) {
-                    galleryInputRef.current.click();
-                  }
-                });
-              }}
-            >
-              {isUploading ? "Subiendo..." : "Subir"}
-            </button>
-
-            {/* INPUT GALERÍA OCULTO */}
-            <input
-              type="file"
-              accept="image/*"
-              ref={galleryInputRef}
-              style={{ display: "none" }}
-              onChange={(e) => {
-                if (!e.target.files.length) return;
-                setIsUploading(true);
-                handleUploadImage(a, e.target.files[0]).finally(() =>
-                  setIsUploading(false)
-                );
-              }}
-            />
-
-            {/* INPUT CÁMARA OCULTO */}
-            <input
-              type="file"
-              accept="image/*"
-              capture="environment"
-              ref={cameraInputRef}
-              style={{ display: "none" }}
-              onChange={(e) => {
-                if (!e.target.files.length) return;
-                setIsUploading(true);
-                handleUploadImage(a, e.target.files[0]).finally(() =>
-                  setIsUploading(false)
-                );
-              }}
-            />
-          </>
-        )}
-
-        <button
-          className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
-          onClick={() => handleEditActivo(a)}
-        >
-          Editar
-        </button>
-
-      </td>
-    </tr>
-  ))}
-</tbody>
-
-
-
-  </table>
-</div>
-
-
-</div>
-
+                        {/* Botón de Eliminar */}
+                        <button
+                          className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
+                          onClick={() => handleDeleteActivo(a.id, a.nombre)}
+                          // Puedes deshabilitarlo visualmente si no es userId 1
+                          // disabled={userId !== 1} 
+                        >
+                          🗑️ {/* Ícono de tachito */}
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       )}
-
 
       {/* === MODAL NUEVO === */}
 

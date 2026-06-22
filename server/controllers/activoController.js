@@ -224,6 +224,7 @@ const deleteImageFromUrl = async (url) => {
   }
 };
 
+
 // 🗑️ Eliminar activo (con imágenes e historial)
 const deleteActivo = async (req, res) => {
   const { id } = req.params;
@@ -232,14 +233,37 @@ const deleteActivo = async (req, res) => {
   try {
     const activo = await prisma.activo.findUnique({
       where: { id: Number(id) },
-      include: { images: true },
+      include: { images: true }, // Asegúrate de que images se incluya para el bucle for
     });
 
     if (!activo) return res.status(404).json({ message: "Activo no encontrado" });
 
-    // Eliminar imágenes de Cloudinary y BD
-    for (const img of activo.images) await deleteImageFromUrl(img.url);
-    await prisma.image.deleteMany({ where: { activos: { some: { id: activo.id } } } });
+    // Eliminar imágenes de Cloudinary
+    for (const img of activo.images) {
+      if (img.url) { // Asegurarse de que la URL existe antes de intentar eliminar
+        await deleteImageFromUrl(img.url);
+      }
+    }
+
+    // ✅ CORRECCIÓN DEFINITIVA: Eliminar imágenes de la base de datos
+    // Ahora que sabemos que 'activo' en Image es un array de Activos,
+    // necesitamos eliminar solo las imágenes que ya NO están conectadas a otros activos
+    // o que estaban conectadas EXCLUSIVAMENTE a este activo.
+    // La forma más directa es eliminar las imágenes que tienen una conexión con este 'activo'.
+
+    // OJO: Si una imagen puede estar enlazada a MÚLTIPLES activos,
+    // esta operación la eliminaría de la BD. Si solo debe desvincularse, la lógica es diferente.
+    // Asumo que si se elimina el activo, sus imágenes relacionadas deben desaparecer.
+    await prisma.image.deleteMany({
+      where: {
+        activo: { // Esto es un filtro en la relación many-to-many.
+          some: {  // <--- CAMBIO CLAVE: Usa 'some' para indicar que "alguno" de los activos relacionados
+            id: activo.id // <--- tenga el ID del activo que estamos eliminando.
+          }
+        }
+      }
+    });
+
 
     // Eliminar historial
     await prisma.activoHistorial.deleteMany({ where: { activoId: activo.id } });
@@ -250,9 +274,10 @@ const deleteActivo = async (req, res) => {
     res.status(204).send();
   } catch (error) {
     console.error("❌ Error al eliminar activo:", error);
-    res.status(500).json({ message: "Error al eliminar activo" });
+    res.status(500).json({ message: "Error al eliminar activo", error: error.message });
   }
 };
+
 
 // 📜 Obtener historial de un activo
 const getActivoHistorial = async (req, res) => {

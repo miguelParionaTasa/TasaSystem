@@ -10,6 +10,19 @@ const Historico = () => {
   const [datosFiltrados, setDatosFiltrados] = useState([]);
   const [cargando, setCargando] = useState(false);
   const [searchTerm, setSearchTerm] = useState(""); // Nuevo estado para el término de búsqueda
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(""); // Nuevo estado para el término de búsqueda con debounce
+
+  // Efecto para aplicar debouncing al término de búsqueda
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300); // Retrasa la actualización por 300ms
+
+    // Limpia el temporizador si el usuario sigue escribiendo o el componente se desmonta
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchTerm]); // Este efecto se ejecuta cada vez que searchTerm cambia
 
   useEffect(() => {
     const obtenerZonas = async () => {
@@ -72,6 +85,7 @@ const Historico = () => {
       );
       setDatosFiltrados(response.data);
       setSearchTerm(""); // Resetea el término de búsqueda al obtener nuevos datos
+      setDebouncedSearchTerm(""); // Resetea el término debounced también
 
       setTimeout(() => {
         document
@@ -88,17 +102,17 @@ const Historico = () => {
     }
   };
 
+
   const formatearFecha = (fechaISO) => {
     const fecha = new Date(fechaISO);
     return fecha.toISOString().split("T")[0]; // yyyy-mm-dd
   };
 
-  // Lógica de filtrado en el front-end
-  // Lógica de filtrado en el front-end
+    // Lógica de filtrado en el front-end
   const filteredTableData = datosFiltrados.filter((item) => {
-    if (!searchTerm) return true; // Si no hay término de búsqueda, muestra todo
+    if (!debouncedSearchTerm) return true; // Usa el término de búsqueda debounced
 
-    const lowerCaseSearchTerm = searchTerm.toLowerCase();
+    const lowerCaseSearchTerm = debouncedSearchTerm.toLowerCase(); // Usa el término de búsqueda debounced
 
     // Comprueba si el término de búsqueda está presente SOLAMENTE en los campos de Consumible o Código SAP
     return (
@@ -108,6 +122,7 @@ const Historico = () => {
         item.consumible.toLowerCase().includes(lowerCaseSearchTerm))
     );
   });
+
 
   return (
     <div className="p-4 sm:p-6">
@@ -124,6 +139,7 @@ const Historico = () => {
             setUbicacionId("");
             setDatosFiltrados([]);
             setSearchTerm(""); // También resetea el término de búsqueda al cambiar la zona
+            setDebouncedSearchTerm(""); // Resetea el término debounced
           }}
           className="border p-2 rounded w-full sm:w-1/4"
         >
@@ -160,8 +176,8 @@ const Historico = () => {
         <input
           type="text"
           placeholder="Buscar en la tabla..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          value={searchTerm} // El input siempre muestra el searchTerm inmediato
+          onChange={(e) => setSearchTerm(e.target.value)} // Actualiza searchTerm inmediatamente
           className="border p-2 rounded w-full sm:w-1/4"
         />
       </div>
