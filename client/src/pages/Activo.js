@@ -3,15 +3,16 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 const Activo = () => {
-  const [filter, setFilter] = useState({ zona: "", ubicacion: "", equipo: "", nombre: "", valor: "" });
+  // 🔹 Integrar showOperadorCreations en el objeto filter
+  const [filter, setFilter] = useState({ zona: "", ubicacion: "", equipo: "", nombre: "", valor: "", showOperadorCreations: false });
   const [zonas, setZonas] = useState([]);
   const [ubicaciones, setUbicaciones] = useState([]);
   const [equipos, setEquipos] = useState([]);
   const [activos, setActivos] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const [loading, setLoading] = useState(false);
-const [ubicacionesModal, setUbicacionesModal] = useState([]);
-const [showOperadorCreations, setShowOperadorCreations] = useState(false);
+  const [ubicacionesModal, setUbicacionesModal] = useState([]);
+  // const [showOperadorCreations, setShowOperadorCreations] = useState(false); // ❌ Este estado ya no es necesario, se mueve a 'filter'
 
   const [modalAddVisible, setModalAddVisible] = useState(false);
   const [newActivo, setNewActivo] = useState({
@@ -34,44 +35,44 @@ const [showOperadorCreations, setShowOperadorCreations] = useState(false);
 
   // === Cargar Zonas ===
   useEffect(() => {
-  const fetchZonas = async () => {
-    try {
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}activos`);
-      const zonasUnicas = Array.from(
-        new Set(res.data.map((a) => a.zona).filter(Boolean))
-      );
-      setZonas(zonasUnicas.sort());
-    } catch (err) {
-      console.error("Error al cargar zonas desde activos:", err);
-    }
+    const fetchZonas = async () => {
+      try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}activos`);
+        const zonasUnicas = Array.from(
+          new Set(res.data.map((a) => a.zona).filter(Boolean))
+        );
+        setZonas(zonasUnicas.sort());
+      } catch (err) {
+        console.error("Error al cargar zonas desde activos:", err);
+      }
+    };
+    fetchZonas();
+  }, []);
+
+
+
+  // Función utilitaria
+  const getZonaIdFromText = (zonaText) => {
+    if (!zonaText) return null;
+    const match = zonaText.match(/^\d+/); // toma todos los dígitos al inicio
+    return match ? Number(match[0]) : null;
   };
-  fetchZonas();
-}, []);
 
-
-
-// Función utilitaria
-const getZonaIdFromText = (zonaText) => {
-  if (!zonaText) return null;
-  const match = zonaText.match(/^\d+/); // toma todos los dígitos al inicio
-  return match ? Number(match[0]) : null;
-};
-
-const newActivoZonaId = getZonaIdFromText(newActivo.zona);
+  const newActivoZonaId = getZonaIdFromText(newActivo.zona);
   // === Cargar Ubicaciones según zona seleccionada ===
-useEffect(() => {
-  if (!filter.zona) return setUbicaciones([]);
+  useEffect(() => {
+    if (!filter.zona) return setUbicaciones([]);
 
-  const zonaIdNumerica = getZonaIdFromText(filter.zona);
-  if (!zonaIdNumerica) return setUbicaciones([]);
+    const zonaIdNumerica = getZonaIdFromText(filter.zona);
+    if (!zonaIdNumerica) return setUbicaciones([]);
 
-  axios
-    .get(`${process.env.REACT_APP_API_URL}varios/ubicaciones/por-zona?zonaId=${zonaIdNumerica}`)
-    .then((res) =>
-      setUbicaciones(res.data.sort((a, b) => a.name.localeCompare(b.name)))
-    )
-    .catch((err) => console.error("Error cargando ubicaciones filtro:", err));
-}, [filter.zona]);
+    axios
+      .get(`${process.env.REACT_APP_API_URL}varios/ubicaciones/por-zona?zonaId=${zonaIdNumerica}`)
+      .then((res) =>
+        setUbicaciones(res.data.sort((a, b) => a.name.localeCompare(b.name)))
+      )
+      .catch((err) => console.error("Error cargando ubicaciones filtro:", err));
+  }, [filter.zona]);
 
 
 
@@ -88,10 +89,12 @@ useEffect(() => {
 
   // === Cambiar Filtro ===
   const handleFilterChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target; // 🔹 Captura type y checked
     setFilter((prev) => {
-      if (name === "zona") return { zona: value, ubicacion: "", equipo: "", nombre: "", valor: "" };
+      if (name === "zona") return { zona: value, ubicacion: "", equipo: "", nombre: "", valor: "", showOperadorCreations: false };
       if (name === "ubicacion") return { ...prev, ubicacion: value, equipo: "", nombre: "", valor: "" };
+      // 🔹 Manejar el checkbox específicamente
+      if (name === "showOperadorCreations") return { ...prev, [name]: checked };
       return { ...prev, [name]: value };
     });
   };
@@ -123,6 +126,7 @@ useEffect(() => {
       setActivos(datosConBandera);
     } catch (error) {
       console.error(error);
+      setActivos([]); // Asegúrate de vaciar la tabla si hay un error
     } finally {
       setLoading(false);
     }
@@ -132,192 +136,192 @@ useEffect(() => {
 
   // === Guardar nuevo activo ===
   const handleSaveNew = async () => {
-  if (!newActivo.nombre?.trim()) {
-    Swal.fire("Error", "Falta ingresar el nombre del activo", "error");
-    return;
-  }
+    if (!newActivo.nombre?.trim()) {
+      Swal.fire("Error", "Falta ingresar el nombre del activo", "error");
+      return;
+    }
 
-  const formData = new FormData();
+    const formData = new FormData();
 
-  Object.entries(newActivo).forEach(([k, v]) => {
-    if (!v) return;
-    if (k === "image") return;     // archivo aparte
-    if (k === "preview") return;   // NO ENVIAR BASE64
-    formData.append(k, v);
-  });
-
-  if (newActivo.image) {
-    formData.append("image", newActivo.image);
-  }
-
-  formData.append("userId", userId);
-  if (filter.equipo) formData.append("equipoId", filter.equipo);
-
-  try {
-    await axios.post(`${process.env.REACT_APP_API_URL}activos`, formData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
-      },
+    Object.entries(newActivo).forEach(([k, v]) => {
+      if (!v) return;
+      if (k === "image") return;     // archivo aparte
+      if (k === "preview") return;   // NO ENVIAR BASE64
+      formData.append(k, v);
     });
 
-    Swal.fire("Éxito", "Activo registrado correctamente", "success");
-    setModalAddVisible(false);
-    handleSubmit();
-  } catch (err) {
-    console.error(err);
-    Swal.fire("Error", "No se pudo registrar el activo", "error");
-  }
-};
+    if (newActivo.image) {
+      formData.append("image", newActivo.image);
+    }
 
-const zonaId = getZonaIdFromText(filter.zona);
-  // === Subir imagen ===
- const handleUploadImage = async (activo, file) => {
-  if (!file) return;
+    formData.append("userId", userId);
+    if (filter.equipo) formData.append("equipoId", filter.equipo);
 
-  const maxSizeMB = 6;
-  const fileSizeMB = file.size / (1024 * 1024);
-
-  if (fileSizeMB >= maxSizeMB) {
-    Swal.fire(
-      "Archivo demasiado grande",
-      `El archivo pesa ${fileSizeMB.toFixed(2)} MB. El máximo permitido es 6 MB.`,
-      "warning"
-    );
-    return;
-  }
-
-  const formData = new FormData();
-  formData.append("image", file);
-
-  try {
-    const res = await axios.post(
-      `${process.env.REACT_APP_API_URL}activos/${activo.id}/upload-image`,
-      formData,
-      {
+    try {
+      await axios.post(`${process.env.REACT_APP_API_URL}activos`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
-      }
-    );
+      });
 
-    Swal.fire("Actualizado", "Imagen subida correctamente", "success");
-    setActivos((prev) =>
-      prev.map((a) =>
-        a.id === activo.id
-          ? { ...a, images: [...(a.images || []), res.data] }
-          : a
-      )
-    );
-  } catch (error) {
-    console.error(error);
-    Swal.fire("Error", "No se pudo subir la imagen", "error");
-  }
-};
-
-const handleEditActivo = async (activo) => {
-  // Crear opciones de zona dinámicas
-  const zonasOptions = zonas
-    .map(
-      (z) =>
-        `<option value="${z}" ${activo.zona === z ? "selected" : ""}>${z}</option>`
-    )
-    .join("");
-
-  const { value: formValues } = await Swal.fire({
-  title: `Editar activo ${activo.nombre}`,
-  html: `
-    <div class="flex flex-col gap-4 text-left px-2" style="max-height: 60vh; overflow-y:auto;">
-      
-      <div class="flex flex-col gap-1">
-        <label for="nombre" class="text-xs font-semibold text-gray-600">Nombre del Activo</label>
-        <input id="nombre" class="w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Nombre" value="${activo.nombre || ""}">
-      </div>
-
-      <div class="flex flex-col gap-1">
-        <label for="valor" class="text-xs font-semibold text-gray-600">Placa</label>
-        <input id="valor" class="w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Placa" value="${activo.valor || ""}">
-      </div>
-
-      <div class="flex flex-col gap-1">
-        <label for="valor2" class="text-xs font-semibold text-gray-600">Descripción</label>
-        <input id="valor2" class="w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Descripción" value="${activo.valor2 || ""}">
-      </div>
-
-      <div class="flex flex-col gap-1">
-        <label for="marca" class="text-xs font-semibold text-gray-600">Marca</label>
-        <input id="marca" class="w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Marca" value="${activo.marca || ""}">
-      </div>
-
-      <div class="flex flex-col gap-1">
-        <label for="modelo" class="text-xs font-semibold text-gray-600">Modelo</label>
-        <input id="modelo" class="w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Modelo" value="${activo.modelo || ""}">
-      </div>
-
-      <div class="flex flex-col gap-1">
-        <label for="serie" class="text-xs font-semibold text-gray-600">Número de Serie</label>
-        <input id="serie" class="w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Serie" value="${activo.serie || ""}">
-      </div>
-
-      <div class="flex flex-col gap-1">
-        <label for="zona" class="text-xs font-semibold text-gray-600">Zona Requerida</label>
-        <select id="zona" class="w-full border rounded p-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500">
-          <option value="">Seleccionar zona</option>
-          ${zonasOptions}
-        </select>
-      </div>
-
-      <div class="flex flex-col gap-1">
-        <label for="ubicacion" class="text-xs font-semibold text-gray-600">Ubicación Específica</label>
-        <input id="ubicacion" class="w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Ubicación" value="${activo.ubicacion || ""}">
-      </div>
-
-    </div>
-  `,
-  focusConfirm: false,
-  showCancelButton: true,
-  showCloseButton: true,
-  closeButtonHtml: "✕",
-  allowEscapeKey: true,
-  confirmButtonText: "Guardar cambios",
-  preConfirm: () => {
-    const zona = document.getElementById("zona").value;
-    if (!zona) {
-      Swal.showValidationMessage("Debe seleccionar una zona");
-      return false;
+      Swal.fire("Éxito", "Activo registrado correctamente", "success");
+      setModalAddVisible(false);
+      handleSubmit();
+    } catch (err) {
+      console.error(err);
+      Swal.fire("Error", "No se pudo registrar el activo", "error");
     }
-    return {
-      nombre: document.getElementById("nombre").value,
-      valor: document.getElementById("valor").value,
-      valor2: document.getElementById("valor2").value,
-      marca: document.getElementById("marca").value,
-      modelo: document.getElementById("modelo").value,
-      serie: document.getElementById("serie").value,
-      zona,
-      ubicacion: document.getElementById("ubicacion").value,
-    };
-  },
-});
+  };
 
-  if (!formValues) return;
+  const zonaId = getZonaIdFromText(filter.zona);
+  // === Subir imagen ===
+  const handleUploadImage = async (activo, file) => {
+    if (!file) return;
 
-  try {
-    await axios.put(
-      `${process.env.REACT_APP_API_URL}activos/${activo.id}`,
-      { ...formValues, userId },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    const maxSizeMB = 6;
+    const fileSizeMB = file.size / (1024 * 1024);
 
-    Swal.fire("Actualizado", "Activo modificado correctamente", "success");
-    handleSubmit(); // refrescar lista de activos
-  } catch (err) {
-    console.error(err);
-    Swal.fire("Error", "No se pudo actualizar el activo", "error");
-  }
-};
+    if (fileSizeMB >= maxSizeMB) {
+      Swal.fire(
+        "Archivo demasiado grande",
+        `El archivo pesa ${fileSizeMB.toFixed(2)} MB. El máximo permitido es 6 MB.`,
+        "warning"
+      );
+      return;
+    }
 
-const handleDeleteActivo = async (activoId, activoNombre) => {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}activos/${activo.id}/upload-image`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      Swal.fire("Actualizado", "Imagen subida correctamente", "success");
+      setActivos((prev) =>
+        prev.map((a) =>
+          a.id === activo.id
+            ? { ...a, images: [...(a.images || []), res.data] }
+            : a
+        )
+      );
+    } catch (error) {
+      console.error(error);
+      Swal.fire("Error", "No se pudo subir la imagen", "error");
+    }
+  };
+
+  const handleEditActivo = async (activo) => {
+    // Crear opciones de zona dinámicas
+    const zonasOptions = zonas
+      .map(
+        (z) =>
+          `<option value="${z}" ${activo.zona === z ? "selected" : ""}>${z}</option>`
+      )
+      .join("");
+
+    const { value: formValues } = await Swal.fire({
+      title: `Editar activo ${activo.nombre}`,
+      html: `
+        <div class="flex flex-col gap-4 text-left px-2" style="max-height: 60vh; overflow-y:auto;">
+          
+          <div class="flex flex-col gap-1">
+            <label for="nombre" class="text-xs font-semibold text-gray-600">Nombre del Activo</label>
+            <input id="nombre" class="w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Nombre" value="${activo.nombre || ""}">
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label for="valor" class="text-xs font-semibold text-gray-600">Placa</label>
+            <input id="valor" class="w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Placa" value="${activo.valor || ""}">
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label for="valor2" class="text-xs font-semibold text-gray-600">Descripción</label>
+            <input id="valor2" class="w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Descripción" value="${activo.valor2 || ""}">
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label for="marca" class="text-xs font-semibold text-gray-600">Marca</label>
+            <input id="marca" class="w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Marca" value="${activo.marca || ""}">
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label for="modelo" class="text-xs font-semibold text-gray-600">Modelo</label>
+            <input id="modelo" class="w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Modelo" value="${activo.modelo || ""}">
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label for="serie" class="text-xs font-semibold text-gray-600">Número de Serie</label>
+            <input id="serie" class="w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Serie" value="${activo.serie || ""}">
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label for="zona" class="text-xs font-semibold text-gray-600">Zona Requerida</label>
+            <select id="zona" class="w-full border rounded p-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500">
+              <option value="">Seleccionar zona</option>
+              ${zonasOptions}
+            </select>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label for="ubicacion" class="text-xs font-semibold text-gray-600">Ubicación Específica</label>
+            <input id="ubicacion" class="w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Ubicación" value="${activo.ubicacion || ""}">
+          </div>
+
+        </div>
+      `,
+      focusConfirm: false,
+      showCancelButton: true,
+      showCloseButton: true,
+      closeButtonHtml: "✕",
+      allowEscapeKey: true,
+      confirmButtonText: "Guardar cambios",
+      preConfirm: () => {
+        const zona = document.getElementById("zona").value;
+        if (!zona) {
+          Swal.showValidationMessage("Debe seleccionar una zona");
+          return false;
+        }
+        return {
+          nombre: document.getElementById("nombre").value,
+          valor: document.getElementById("valor").value,
+          valor2: document.getElementById("valor2").value,
+          marca: document.getElementById("marca").value,
+          modelo: document.getElementById("modelo").value,
+          serie: document.getElementById("serie").value,
+          zona,
+          ubicacion: document.getElementById("ubicacion").value,
+        };
+      },
+    });
+
+    if (!formValues) return;
+
+    try {
+      await axios.put(
+        `${process.env.REACT_APP_API_URL}activos/${activo.id}`,
+        { ...formValues, userId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      Swal.fire("Actualizado", "Activo modificado correctamente", "success");
+      handleSubmit(); // refrescar lista de activos
+    } catch (err) {
+      console.error(err);
+      Swal.fire("Error", "No se pudo actualizar el activo", "error");
+    }
+  };
+
+  const handleDeleteActivo = async (activoId, activoNombre) => {
     if (userId !== 1) { // Solo permite borrar al userId 1 (administrador)
       Swal.fire({
         icon: "error",
@@ -355,56 +359,57 @@ const handleDeleteActivo = async (activoId, activoNombre) => {
   };
 
   
-useEffect(() => {
-  const handleEsc = (e) => {
-    if (e.key === "Escape") {
-      setModalAddVisible(false);
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === "Escape") {
+        setModalAddVisible(false);
+      }
+    };
+
+    if (modalAddVisible) {
+      window.addEventListener("keydown", handleEsc);
     }
+
+    return () => {
+      window.removeEventListener("keydown", handleEsc);
+    };
+  }, [modalAddVisible]);
+
+  const galleryInputRef = useRef();
+  const cameraInputRef = useRef();
+  const galleryInputNewRef = useRef();
+  const cameraInputNewRef = useRef();
+  const handleSelectNewImage = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const maxSizeMB = 6;
+    const fileSizeMB = file.size / (1024 * 1024);
+
+    if (fileSizeMB >= maxSizeMB) {
+      Swal.fire(
+        "Archivo demasiado grande",
+        `El archivo pesa ${fileSizeMB.toFixed(2)} MB. El máximo permitido es 6 MB.`,
+        "warning"
+      );
+      e.target.value = "";
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setNewActivo((prev) => ({
+        ...prev,
+        image: file,
+        preview: event.target.result,
+      }));
+    };
+    reader.readAsDataURL(file);
   };
-
-  if (modalAddVisible) {
-    window.addEventListener("keydown", handleEsc);
-  }
-
-  return () => {
-    window.removeEventListener("keydown", handleEsc);
-  };
-}, [modalAddVisible]);
-
-const galleryInputRef = useRef();
-const cameraInputRef = useRef();
-const galleryInputNewRef = useRef();
-const cameraInputNewRef = useRef();
-const handleSelectNewImage = (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  const maxSizeMB = 6;
-  const fileSizeMB = file.size / (1024 * 1024);
-
-  if (fileSizeMB >= maxSizeMB) {
-    Swal.fire(
-      "Archivo demasiado grande",
-      `El archivo pesa ${fileSizeMB.toFixed(2)} MB. El máximo permitido es 6 MB.`,
-      "warning"
-    );
-    e.target.value = "";
-    return;
-  }
-
-  const reader = new FileReader();
-  reader.onload = (event) => {
-    setNewActivo((prev) => ({
-      ...prev,
-      image: file,
-      preview: event.target.result,
-    }));
-  };
-  reader.readAsDataURL(file);
-};
 
   // Lógica para filtrar activos mostrados en la tabla
-  const displayedActivos = showOperadorCreations
+  // 🔹 Usa filter.showOperadorCreations
+  const displayedActivos = filter.showOperadorCreations
     ? activos.filter(a => a.debeResaltarse)
     : activos;
 
@@ -413,7 +418,7 @@ const handleSelectNewImage = (e) => {
       <h1 className="text-2xl font-bold text-gray-800 mb-4">Gestión de Activos</h1>
 
       {/* === FILTROS === */}
-     <form onSubmit={handleSubmit} className="flex flex-wrap items-end gap-4 bg-gray-50 p-4 rounded-md shadow-md mb-6">
+      <form onSubmit={handleSubmit} className="flex flex-wrap items-end gap-4 bg-gray-50 p-4 rounded-md shadow-md mb-6">
         <div>
           <label className="block font-semibold text-gray-700 mb-2">Zona</label>
           <select
@@ -491,17 +496,14 @@ const handleSelectNewImage = (e) => {
           />
         </div>
 
-        <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition">
-          Filtrar
-        </button>
-
-        {/* Nuevo filtro de Operador */}
+        {/* 🔹 Filtro de Operador ANTES del botón Filtrar */}
         <div className="flex items-center mt-2 sm:mt-0">
           <input
             type="checkbox"
             id="showOperadorCreations"
-            checked={showOperadorCreations}
-            onChange={(e) => setShowOperadorCreations(e.target.checked)}
+            name="showOperadorCreations" // 🔹 Añadir el name para que handleFilterChange lo reconozca
+            checked={filter.showOperadorCreations} // 🔹 Usa filter.showOperadorCreations
+            onChange={handleFilterChange} // 🔹 Usa handleFilterChange
             className="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500"
           />
           <label htmlFor="showOperadorCreations" className="ml-2 block text-sm font-semibold text-gray-700">
@@ -509,6 +511,9 @@ const handleSelectNewImage = (e) => {
           </label>
         </div>
 
+        <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition">
+          Filtrar
+        </button>
       </form>
 
       {/* === BOTÓN NUEVO === */}
@@ -521,12 +526,13 @@ const handleSelectNewImage = (e) => {
         </button>
       </div>
 
-   {/* === TABLA === */}
+      {/* === TABLA === */}
       {loading ? (
         <p className="text-center">Cargando...</p>
       ) : (
         <div className="overflow-x-auto">
-          <div className="overflow-x-auto">
+          {/* 🔹 Condición para mostrar la tabla o el mensaje "No hay valores" */}
+          {displayedActivos.length > 0 ? (
             <div className="w-full overflow-x-auto md:overflow-visible">
               <table className="min-w-[950px] w-full border text-sm text-left">
                 <thead>
@@ -655,158 +661,159 @@ const handleSelectNewImage = (e) => {
                 </tbody>
               </table>
             </div>
-          </div>
+          ) : (
+            <p className="text-gray-600 text-center py-4">No hay valores a mostrar.</p>
+          )}
         </div>
       )}
 
       {/* === MODAL NUEVO === */}
+      {modalAddVisible && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full relative 
+            max-h-[90vh] overflow-y-auto">
 
-     {modalAddVisible && (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full relative 
-  max-h-[90vh] overflow-y-auto">
-
-      <button
-  className="
-    absolute top-3 right-3 
-    text-gray-700 
-    hover:text-red-600 
-    bg-white 
-    rounded-full 
-    shadow 
-    w-8 h-8 
-    flex items-center justify-center 
-    text-xl 
-    sm:text-lg
-    z-50
-  "
-  onClick={() => setModalAddVisible(false)}
->
-  ✕
-</button>
+            <button
+              className="
+                absolute top-3 right-3 
+                text-gray-700 
+                hover:text-red-600 
+                bg-white 
+                rounded-full 
+                shadow 
+                w-8 h-8 
+                flex items-center justify-center 
+                text-xl 
+                sm:text-lg
+                z-50
+              "
+              onClick={() => setModalAddVisible(false)}
+            >
+              ✕
+            </button>
 
 
-      <h2 className="text-lg font-semibold mb-4 text-center">➕ Nuevo Activo</h2>
+            <h2 className="text-lg font-semibold mb-4 text-center">➕ Nuevo Activo</h2>
 
-      <div className="flex flex-col gap-3">
-        {/* Campos básicos */}
-        {[
-          { name: "nombre", placeholder: "N° Activo" },
-          { name: "valor", placeholder: "Placa" },
-          { name: "valor2", placeholder: "Descripción" },
-          { name: "marca", placeholder: "Marca" },
-          { name: "modelo", placeholder: "Modelo" },
-          { name: "serie", placeholder: "Serie" },
-        ].map((field) => (
-          <input
-            key={field.name}
-            type="text"
-            placeholder={field.placeholder}
-            value={newActivo[field.name] || ""}
-            onChange={(e) =>
-              setNewActivo({ ...newActivo, [field.name]: e.target.value })
-            }
-            className="p-2 border rounded focus:ring focus:ring-green-200"
-          />
-        ))}
+            <div className="flex flex-col gap-3">
+              {/* Campos básicos */}
+              {[
+                { name: "nombre", placeholder: "N° Activo" },
+                { name: "valor", placeholder: "Placa" },
+                { name: "valor2", placeholder: "Descripción" },
+                { name: "marca", placeholder: "Marca" },
+                { name: "modelo", placeholder: "Modelo" },
+                { name: "serie", placeholder: "Serie" },
+              ].map((field) => (
+                <input
+                  key={field.name}
+                  type="text"
+                  placeholder={field.placeholder}
+                  value={newActivo[field.name] || ""}
+                  onChange={(e) =>
+                    setNewActivo({ ...newActivo, [field.name]: e.target.value })
+                  }
+                  className="p-2 border rounded focus:ring focus:ring-green-200"
+                />
+              ))}
 
-        {/* === SELECT ZONA === */}
-        <select
-          value={newActivo.zona || ""}
-          onChange={(e) => {
-            const selectedZona = e.target.value;
-            setNewActivo({
-              ...newActivo,
-              zona: selectedZona,
-              ubicacion: "", // Limpiar ubicación al cambiar zona
-            });
-          }}
-          className="p-2 border rounded focus:ring focus:ring-green-200"
-        >
-          <option value="">Seleccionar zona</option>
-          {zonas.map((z, i) => (
-            <option key={i} value={z}>
-              {z} {/* Zona es texto libre */}
-            </option>
-          ))}
-        </select>
+              {/* === SELECT ZONA === */}
+              <select
+                value={newActivo.zona || ""}
+                onChange={(e) => {
+                  const selectedZona = e.target.value;
+                  setNewActivo({
+                    ...newActivo,
+                    zona: selectedZona,
+                    ubicacion: "", // Limpiar ubicación al cambiar zona
+                  });
+                }}
+                className="p-2 border rounded focus:ring focus:ring-green-200"
+              >
+                <option value="">Seleccionar zona</option>
+                {zonas.map((z, i) => (
+                  <option key={i} value={z}>
+                    {z} {/* Zona es texto libre */}
+                  </option>
+                ))}
+              </select>
 
-       <input
-  type="text"
-  placeholder="Ubicación"
-  value={newActivo.ubicacion || ""}
-  onChange={(e) =>
-    setNewActivo({ ...newActivo, ubicacion: e.target.value })
-  }
-  className="p-2 border rounded focus:ring focus:ring-green-200"
-/>
+              <input
+                type="text"
+                placeholder="Ubicación"
+                value={newActivo.ubicacion || ""}
+                onChange={(e) =>
+                  setNewActivo({ ...newActivo, ubicacion: e.target.value })
+                }
+                className="p-2 border rounded focus:ring focus:ring-green-200"
+              />
 
-{/* Botón Subir Imagen */}
-<button
-  type="button"
-  className="bg-orange-600 text-white py-2 rounded hover:bg-orange-700"
-  onClick={() => {
-    Swal.fire({
-      title: "Seleccionar opción",
-      text: "¿Cómo deseas subir la imagen?",
-      showDenyButton: true,
-      showCancelButton: true,
-      confirmButtonText: "Tomar foto",
-      denyButtonText: "Desde galería",
-      cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        cameraInputNewRef.current.click();
-      } else if (result.isDenied) {
-        galleryInputNewRef.current.click();
-      }
-    });
-  }}
->
-  Subir Imagen
-</button>
+              {/* Botón Subir Imagen */}
+              <button
+                type="button"
+                className="bg-orange-600 text-white py-2 rounded hover:bg-orange-700"
+                onClick={() => {
+                  Swal.fire({
+                    title: "Seleccionar opción",
+                    text: "¿Cómo deseas subir la imagen?",
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "Tomar foto",
+                    denyButtonText: "Desde galería",
+                    cancelButtonText: "Cancelar",
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      cameraInputNewRef.current.click();
+                    } else if (result.isDenied) {
+                      galleryInputNewRef.current.click();
+                    }
+                  });
+                }}
+              >
+                Subir Imagen
+              </button>
 
-{/* INPUT GALERÍA OCULTO */}
-<input
-  type="file"
-  accept="image/*"
-  ref={galleryInputNewRef}
-  style={{ display: "none" }}
-  onChange={handleSelectNewImage}
-/>
+              {/* INPUT GALERÍA OCULTO */}
+              <input
+                type="file"
+                accept="image/*"
+                ref={galleryInputNewRef}
+                style={{ display: "none" }}
+                onChange={handleSelectNewImage}
+              />
 
-{/* INPUT CÁMARA OCULTO */}
-<input
-  type="file"
-  accept="image/*"
-  capture="environment"
-  ref={cameraInputNewRef}
-  style={{ display: "none" }}
-  onChange={handleSelectNewImage}
-/>
+              {/* INPUT CÁMARA OCULTO */}
+              <input
+                type="file"
+                accept="image/*"
+                capture="environment"
+                ref={cameraInputNewRef}
+                style={{ display: "none" }}
+                onChange={handleSelectNewImage}
+              />
 
-{/* VISTA PREVIA */}
-{newActivo.preview && (
-  <div className="mt-2 flex justify-center">
-    <img
-      src={newActivo.preview}
-      alt="Vista previa"
-      className="w-32 h-32 object-cover border rounded-md"
-    />
-  </div>
-)}
+              {/* VISTA PREVIA */}
+              {newActivo.preview && (
+                <div className="mt-2 flex justify-center">
+                  <img
+                    src={newActivo.preview}
+                    alt="Vista previa"
+                    className="w-32 h-32 object-cover border rounded-md"
+                  />
+                </div>
+              )}
 
-        {/* Botón Guardar */}
-        <button
-          onClick={handleSaveNew}
-          className="bg-green-600 text-white py-2 rounded hover:bg-green-700"
-        >
-          Guardar
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+              {/* Botón Guardar */}
+              <button
+                onClick={handleSaveNew}
+                className="bg-green-600 text-white py-2 rounded hover:bg-green-700"
+              >
+                Guardar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
 
       {/* === MODAL IMAGEN === */}
