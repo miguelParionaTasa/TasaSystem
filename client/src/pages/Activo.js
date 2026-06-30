@@ -279,6 +279,11 @@ const Activo = () => {
           Swal.showValidationMessage("Debe seleccionar una zona");
           return false;
         }
+
+        // 🛡️ BLOQUEO DE DOBLE CLIC AQUÍ
+        // Convierte el botón de confirmación en un spinner animado y deshabilita los clics
+        Swal.showLoading();
+
         return {
           nombre: document.getElementById("nombre").value,
           valor: document.getElementById("valor").value,
@@ -308,6 +313,7 @@ const Activo = () => {
       Swal.fire("Error", "No se pudo actualizar el activo", "error");
     }
   };
+
 
   const handleDeleteActivo = async (activoId, activoNombre) => {
     if (userId !== 1) { // Solo permite borrar al userId 1 (administrador)
@@ -779,12 +785,18 @@ const Activo = () => {
               )}
 
               {/* Botón Guardar */}
-              <button
-                onClick={handleSaveNew}
-                className="bg-green-600 text-white py-2 rounded hover:bg-green-700"
-              >
-                Guardar
-              </button>
+            <button
+  onClick={handleSaveNew}
+  disabled={isSaving}
+  className={`py-2 rounded text-white font-medium transition-colors ${
+    isSaving 
+      ? "bg-gray-400 cursor-not-allowed" 
+      : "bg-green-600 hover:bg-green-700"
+  }`}
+>
+  {isSaving ? "Enviando..." : "Guardar"}
+</button>
+
             </div>
           </div>
         </div>
