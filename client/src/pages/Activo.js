@@ -10,10 +10,9 @@ const Activo = () => {
   const [equipos, setEquipos] = useState([]);
   const [activos, setActivos] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); // Usado para el filtro principal
   const [ubicacionesModal, setUbicacionesModal] = useState([]);
-  // const [showOperadorCreations, setShowOperadorCreations] = useState(false); // ❌ Este estado ya no es necesario, se mueve a 'filter'
-
+  
   const [modalAddVisible, setModalAddVisible] = useState(false);
   const [newActivo, setNewActivo] = useState({
     nombre: "",
@@ -28,6 +27,10 @@ const Activo = () => {
   });
 
   const [modalImage, setModalImage] = useState(null);
+  // 🔹 NUEVOS ESTADOS para controlar la duplicidad
+  const [isSavingNewActivo, setIsSavingNewActivo] = useState(false); 
+  const [isEditingActivo, setIsEditingActivo] = useState(false); 
+  const [isDeletingActivo, setIsDeletingActivo] = useState(false); 
 
 
   const token = localStorage.getItem("token");
@@ -49,16 +52,14 @@ const Activo = () => {
     fetchZonas();
   }, []);
 
-
-
   // Función utilitaria
   const getZonaIdFromText = (zonaText) => {
     if (!zonaText) return null;
-    const match = zonaText.match(/^\d+/); // toma todos los dígitos al inicio
+    const match = zonaText.match(/^\d+/);
     return match ? Number(match[0]) : null;
   };
 
-  const newActivoZonaId = getZonaIdFromText(newActivo.zona);
+  const newActivoZonaId = getZonaIdFromText(newActivo.zona); 
   // === Cargar Ubicaciones según zona seleccionada ===
   useEffect(() => {
     if (!filter.zona) return setUbicaciones([]);
@@ -74,8 +75,6 @@ const Activo = () => {
       .catch((err) => console.error("Error cargando ubicaciones filtro:", err));
   }, [filter.zona]);
 
-
-
   // === Cargar Equipos ===
   useEffect(() => {
     if (!filter.ubicacion) return setEquipos([]);
@@ -89,11 +88,10 @@ const Activo = () => {
 
   // === Cambiar Filtro ===
   const handleFilterChange = (e) => {
-    const { name, value, type, checked } = e.target; // 🔹 Captura type y checked
+    const { name, value, type, checked } = e.target;
     setFilter((prev) => {
       if (name === "zona") return { zona: value, ubicacion: "", equipo: "", nombre: "", valor: "", showOperadorCreations: false };
       if (name === "ubicacion") return { ...prev, ubicacion: value, equipo: "", nombre: "", valor: "" };
-      // 🔹 Manejar el checkbox específicamente
       if (name === "showOperadorCreations") return { ...prev, [name]: checked };
       return { ...prev, [name]: value };
     });
@@ -102,7 +100,8 @@ const Activo = () => {
   // === Buscar Activos ===
   const handleSubmit = async (e) => {
     e?.preventDefault();
-    setLoading(true);
+    if (loading) return; // 🔹 Evitar doble clic si ya está cargando
+    setLoading(true); // 🔹 Activar estado de carga
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}activos/search`, {
         params: {
@@ -114,10 +113,8 @@ const Activo = () => {
         },
       });
       
-      // Mapeo preventivo en el frontend por si el endpoint /search no tiene la bandera aún
       const datosConBandera = (response.data || []).map(activo => ({
         ...activo,
-        // Si el backend ya trae 'debeResaltarse', usa ese. Si no, evalúa si el creador no eres tú (userId != 1)
         debeResaltarse: activo.debeResaltarse !== undefined 
           ? activo.debeResaltarse 
           : (activo.userId !== null && activo.userId !== 1)
@@ -126,13 +123,11 @@ const Activo = () => {
       setActivos(datosConBandera);
     } catch (error) {
       console.error(error);
-      setActivos([]); // Asegúrate de vaciar la tabla si hay un error
+      setActivos([]);
     } finally {
-      setLoading(false);
+      setLoading(false); // 🔹 Desactivar estado de carga
     }
   };
-
-
 
   // === Guardar nuevo activo ===
   const handleSaveNew = async () => {
@@ -140,13 +135,15 @@ const Activo = () => {
       Swal.fire("Error", "Falta ingresar el nombre del activo", "error");
       return;
     }
+    if (isSavingNewActivo) return; // 🔹 Evitar doble clic si ya está guardando
 
+    setIsSavingNewActivo(true); // 🔹 Activar estado de guardado
     const formData = new FormData();
 
     Object.entries(newActivo).forEach(([k, v]) => {
       if (!v) return;
-      if (k === "image") return;     // archivo aparte
-      if (k === "preview") return;   // NO ENVIAR BASE64
+      if (k === "image") return;
+      if (k === "preview") return;
       formData.append(k, v);
     });
 
@@ -171,6 +168,8 @@ const Activo = () => {
     } catch (err) {
       console.error(err);
       Swal.fire("Error", "No se pudo registrar el activo", "error");
+    } finally {
+      setIsSavingNewActivo(false); // 🔹 Desactivar estado de guardado
     }
   };
 
@@ -178,7 +177,9 @@ const Activo = () => {
   // === Subir imagen ===
   const handleUploadImage = async (activo, file) => {
     if (!file) return;
+    if (isUploading) return; // 🔹 Evitar doble clic si ya está subiendo
 
+    setIsUploading(true); // 🔹 Activar estado de subida
     const formData = new FormData();
     formData.append("image", file);
 
@@ -205,11 +206,15 @@ const Activo = () => {
     } catch (error) {
       console.error(error);
       Swal.fire("Error", "No se pudo subir la imagen", "error");
+    } finally {
+      setIsUploading(false); // 🔹 Desactivar estado de subida
     }
   };
 
   const handleEditActivo = async (activo) => {
-    // Crear opciones de zona dinámicas
+    if (isEditingActivo || isUploading || isDeletingActivo || loading) return; // 🔹 Evitar doble clic si otra acción crítica está activa
+    setIsEditingActivo(true); // 🔹 Activar estado de edición aquí
+
     const zonasOptions = zonas
       .map(
         (z) =>
@@ -223,7 +228,7 @@ const Activo = () => {
         <div class="flex flex-col gap-4 text-left px-2" style="max-height: 60vh; overflow-y:auto;">
           
           <div class="flex flex-col gap-1">
-            <label for="nombre" class="text-xs font-semibold text-gray-600">Nombre del Activo</label>
+            <label for="nombre" class="text-xs font-semibold text-gray-600">N° Activo</label>
             <input id="nombre" class="w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Nombre" value="${activo.nombre || ""}">
           </div>
 
@@ -272,7 +277,7 @@ const Activo = () => {
       showCloseButton: true,
       closeButtonHtml: "✕",
       allowEscapeKey: true,
-      confirmButtonText: "Guardar cambios",
+      confirmButtonText: isEditingActivo ? "Guardando..." : "Guardar cambios", // 🔹 Texto dinámico
       preConfirm: () => {
         const zona = document.getElementById("zona").value;
         if (!zona) {
@@ -280,9 +285,8 @@ const Activo = () => {
           return false;
         }
 
-        // 🛡️ BLOQUEO DE DOBLE CLIC AQUÍ
-        // Convierte el botón de confirmación en un spinner animado y deshabilita los clics
-        Swal.showLoading();
+        // 🛡️ BLOQUEO DE DOBLE CLIC DENTRO DEL SWAL PARA CONFIRMACIÓN
+        Swal.showLoading(); // Muestra el spinner de carga en el botón de confirmación
 
         return {
           nombre: document.getElementById("nombre").value,
@@ -295,10 +299,27 @@ const Activo = () => {
           ubicacion: document.getElementById("ubicacion").value,
         };
       },
+      didOpen: () => {
+        // Deshabilitar el botón de confirmación si isEditingActivo ya es true
+        const confirmButton = Swal.getConfirmButton();
+        if (confirmButton && isEditingActivo) { // Solo si ya está activo (ej. si se abrió y se volvió a intentar)
+          confirmButton.disabled = true;
+        }
+      },
+      didClose: () => {
+        // Asegúrate de desactivar el estado de edición si el Swal se cierra (cancelar, escape, etc.)
+        setIsEditingActivo(false);
+        Swal.hideLoading(); // Oculta cualquier spinner que se haya mostrado
+      }
     });
 
-    if (!formValues) return;
-
+    if (!formValues) {
+      // Si el usuario cancela o cierra el Swal, formValues será null/undefined.
+      // El didClose ya maneja setIsEditingActivo(false)
+      return;
+    }
+    
+    // Si formValues existe, procede con la edición. El estado isEditingActivo ya está activo.
     try {
       await axios.put(
         `${process.env.REACT_APP_API_URL}activos/${activo.id}`,
@@ -307,16 +328,20 @@ const Activo = () => {
       );
 
       Swal.fire("Actualizado", "Activo modificado correctamente", "success");
-      handleSubmit(); // refrescar lista de activos
+      handleSubmit();
     } catch (err) {
       console.error(err);
       Swal.fire("Error", "No se pudo actualizar el activo", "error");
+    } finally {
+      // El didClose del Swal ya manejará setIsEditingActivo(false) y Swal.hideLoading()
+      // No es necesario duplicar aquí, pero lo dejo por si el flujo cambia o no siempre pasa por didClose
+      setIsEditingActivo(false); 
+      Swal.hideLoading();
     }
   };
 
-
   const handleDeleteActivo = async (activoId, activoNombre) => {
-    if (userId !== 1) { // Solo permite borrar al userId 1 (administrador)
+    if (userId !== 1) {
       Swal.fire({
         icon: "error",
         title: "Permiso denegado",
@@ -324,7 +349,9 @@ const Activo = () => {
       });
       return;
     }
+    if (isDeletingActivo || isUploading || isEditingActivo || loading) return; // 🔹 Evitar doble clic si otra acción crítica está activa
 
+    setIsDeletingActivo(true); // 🔹 Activar estado de eliminación
     const result = await Swal.fire({
       title: `¿Estás seguro de eliminar el activo "${activoNombre}"?`,
       text: "¡Esta acción no se puede revertir!",
@@ -332,11 +359,23 @@ const Activo = () => {
       showCancelButton: true,
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
-      confirmButtonText: "Sí, eliminar",
+      confirmButtonText: isDeletingActivo ? "Eliminando..." : "Sí, eliminar", // 🔹 Texto dinámico
       cancelButtonText: "Cancelar",
+      didOpen: () => {
+        const confirmButton = Swal.getConfirmButton();
+        if (confirmButton && isDeletingActivo) {
+          confirmButton.disabled = true;
+        }
+      },
+      didClose: () => {
+        // Asegúrate de desactivar el estado si el Swal se cierra sin confirmar
+        setIsDeletingActivo(false);
+        Swal.hideLoading(); // Oculta cualquier spinner que se haya mostrado
+      }
     });
 
     if (result.isConfirmed) {
+      Swal.showLoading(); // Muestra el spinner de carga en el botón de confirmación
       try {
         await axios.delete(`${process.env.REACT_APP_API_URL}activos/${activoId}`, {
           headers: {
@@ -344,11 +383,15 @@ const Activo = () => {
           },
         });
         Swal.fire("Eliminado", "El activo ha sido eliminado correctamente.", "success");
-        handleSubmit(); // Refrescar la lista de activos después de eliminar
+        handleSubmit();
       } catch (err) {
         console.error("Error al eliminar el activo:", err);
         Swal.fire("Error", "No se pudo eliminar el activo.", "error");
+      } finally {
+        // El didClose del Swal ya manejará setIsDeletingActivo(false) y Swal.hideLoading()
       }
+    } else {
+      // Si no se confirma, didClose ya desactivó el estado y ocultó el spinner.
     }
   };
 
@@ -389,7 +432,6 @@ const Activo = () => {
   };
 
   // Lógica para filtrar activos mostrados en la tabla
-  // 🔹 Usa filter.showOperadorCreations
   const displayedActivos = filter.showOperadorCreations
     ? activos.filter(a => a.debeResaltarse)
     : activos;
@@ -407,6 +449,7 @@ const Activo = () => {
             value={filter.zona}
             onChange={handleFilterChange}
             className="p-2 border rounded"
+            disabled={loading} // 🔹 Deshabilitar mientras se filtra
           >
             <option value="">Todas</option>
             {zonas.map((z, i) => (
@@ -423,7 +466,7 @@ const Activo = () => {
             name="ubicacion"
             value={filter.ubicacion}
             onChange={handleFilterChange}
-            disabled={!filter.zona}
+            disabled={!filter.zona || loading} // 🔹 Deshabilitar mientras se filtra
             className="p-2 border rounded"
           >
             <option value="">Todas</option>
@@ -441,7 +484,7 @@ const Activo = () => {
             name="equipo"
             value={filter.equipo}
             onChange={handleFilterChange}
-            disabled={!filter.ubicacion}
+            disabled={!filter.ubicacion || loading} // 🔹 Deshabilitar mientras se filtra
             className="p-2 border rounded"
           >
             <option value="">Todos</option>
@@ -462,6 +505,7 @@ const Activo = () => {
             onChange={handleFilterChange}
             placeholder="Buscar por placa"
             className="w-[180px] p-2 border border-gray-300 rounded-md"
+            disabled={loading} // 🔹 Deshabilitar mientras se filtra
           />
         </div>
 
@@ -474,26 +518,31 @@ const Activo = () => {
             onChange={handleFilterChange}
             placeholder="Buscar por nombre"
             className="w-[180px] p-2 border border-gray-300 rounded-md"
+            disabled={loading} // 🔹 Deshabilitar mientras se filtra
           />
         </div>
 
-        {/* 🔹 Filtro de Operador ANTES del botón Filtrar */}
         <div className="flex items-center mt-2 sm:mt-0">
           <input
             type="checkbox"
             id="showOperadorCreations"
-            name="showOperadorCreations" // 🔹 Añadir el name para que handleFilterChange lo reconozca
-            checked={filter.showOperadorCreations} // 🔹 Usa filter.showOperadorCreations
-            onChange={handleFilterChange} // 🔹 Usa handleFilterChange
+            name="showOperadorCreations"
+            checked={filter.showOperadorCreations}
+            onChange={handleFilterChange}
             className="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500"
+            disabled={loading} // 🔹 Deshabilitar mientras se filtra
           />
           <label htmlFor="showOperadorCreations" className="ml-2 block text-sm font-semibold text-gray-700">
             Operador
           </label>
         </div>
 
-        <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition">
-          Filtrar
+        <button type="submit" disabled={loading} // 🔹 Deshabilitar botón Filtrar
+          className={`bg-blue-600 text-white px-6 py-2 rounded-md transition ${
+            loading ? "bg-blue-400 cursor-not-allowed" : "hover:bg-blue-700"
+          }`}
+        >
+          {loading ? "Filtrando..." : "Filtrar"} {/* 🔹 Texto dinámico */}
         </button>
       </form>
 
@@ -501,34 +550,42 @@ const Activo = () => {
       <div className="flex mb-4">
         <button
           onClick={() => setModalAddVisible(true)}
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          className={`bg-green-600 text-white px-4 py-2 rounded ${
+            loading || isUploading || isEditingActivo || isDeletingActivo ? "bg-green-400 cursor-not-allowed" : "hover:bg-green-700"
+          }`}
+          disabled={loading || isUploading || isEditingActivo || isDeletingActivo} // 🔹 Deshabilitar si otra acción crítica está activa
         >
           ➕ Nuevo Activo
         </button>
       </div>
 
-      {/* === TABLA === */}
+           {/* === TABLA === */}
       {loading ? (
         <p className="text-center">Cargando...</p>
       ) : (
-        <div className="overflow-x-auto">
-          {/* 🔹 Condición para mostrar la tabla o el mensaje "No hay valores" */}
+        <div className="overflow-x-auto"> {/* Este es el contenedor principal de desplazamiento */}
           {displayedActivos.length > 0 ? (
-            <div className="w-full overflow-x-auto md:overflow-visible">
-              <table className="min-w-[950px] w-full border text-sm text-left">
-                <thead>
-                  <tr className="bg-gray-300 border border-gray-400">
-                    <th className="px-2 min-w-[80px]  max-w-[120px] md:min-w-0">N° Activo</th>
-                    <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Placa</th>
-                    <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Descripción</th>
-                    <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Marca</th>
-                    <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Modelo</th>
-                    <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Serie</th>
-                    <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Zona</th>
-                    <th className="px-2 min-w-[80px] max-w-[120px] md:min-w-0">Ubicación</th>
-                    <th className="px-2 min-w-[120px] max-w-[180px] md:min-w-[120px]">Acción</th> {/* Aumenta el ancho de la columna Acción */}
-                  </tr>
-                </thead>
+            // ✅ CORRECCIÓN: Asegúrate de que el div contenedor esté presente para la tabla
+            // y que sea el único elemento retornado por esta rama del ternario.
+            // No había un problema en la estructura del ternario, sino en las clases
+            // y el doble anidamiento de overflow-x-auto que eliminamos antes.
+            // Esta estructura ya es correcta, el error venía de la combinación de min-w/max-w previos
+            // que ahora están mejor definidos con table-fixed.
+            <table className="w-full border text-sm text-left table-fixed"> {/* 🔹 table-fixed y w-full */}
+              <thead>
+                <tr className="bg-gray-300 border border-gray-400">
+                  {/* 🔹 Anchos fijos para cada columna */}
+                  <th className="px-2 py-1 w-[100px]">N° Activo</th>
+                  <th className="px-2 py-1 w-[80px]">Placa</th>
+                  <th className="px-2 py-1 w-[200px]">Descripción</th>
+                  <th className="px-2 py-1 w-[100px]">Marca</th>
+                  <th className="px-2 py-1 w-[100px]">Modelo</th>
+                  <th className="px-2 py-1 w-[100px]">Serie</th>
+                  <th className="px-2 py-1 w-[120px]">Zona</th>
+                  <th className="px-2 py-1 w-[150px]">Ubicación</th>
+                  <th className="px-2 py-1 w-[200px]">Acción</th> {/* Suficientemente ancho para los botones */}
+                </tr>
+              </thead>
 
                 <tbody>
                   {displayedActivos.map((a) => (
@@ -549,23 +606,27 @@ const Activo = () => {
                       <td className="px-2 break-words whitespace-normal">
                         {a.ubicacion || a.equipo?.ubicacion?.name || "-"}
                       </td>
-                      <td className="px-2 flex justify-center gap-2 py-1">
+                      {/* 🔹 Usar whitespace-nowrap para que los botones no se rompan */}
+                      <td className="px-2 flex justify-center gap-2 py-1 whitespace-nowrap">
                         {a.images?.[0]?.url ? (
                           <button
-                            className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+                            className={`bg-blue-600 text-white px-3 py-1 rounded ${
+                              isUploading || isEditingActivo || isDeletingActivo || loading ? "bg-blue-400 cursor-not-allowed" : "hover:bg-blue-700"
+                            }`}
                             onClick={() => setModalImage(a.images[0].url)}
+                            disabled={isUploading || isEditingActivo || isDeletingActivo || loading}
                           >
                             Ver
                           </button>
                         ) : (
                           <>
                             <button
-                              disabled={isUploading}
+                              disabled={isUploading || isEditingActivo || isDeletingActivo || loading}
                               className={`px-3 py-1 rounded text-white ${
-                                isUploading ? "bg-gray-400 cursor-not-allowed" : "bg-orange-600 hover:bg-orange-700"
+                                isUploading || isEditingActivo || isDeletingActivo || loading ? "bg-gray-400 cursor-not-allowed" : "bg-orange-600 hover:bg-orange-700"
                               }`}
                               onClick={() => {
-                                if (isUploading) return;
+                                if (isUploading || isEditingActivo || isDeletingActivo || loading) return;
 
                                 Swal.fire({
                                   title: "Seleccionar opción",
@@ -600,6 +661,7 @@ const Activo = () => {
                                   setIsUploading(false)
                                 );
                               }}
+                              disabled={isUploading || isEditingActivo || isDeletingActivo || loading}
                             />
 
                             {/* INPUT CÁMARA OCULTO */}
@@ -616,32 +678,39 @@ const Activo = () => {
                                   setIsUploading(false)
                                 );
                               }}
+                              disabled={isUploading || isEditingActivo || isDeletingActivo || loading}
                             />
                           </>
                         )}
 
                         <button
-                          className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
+                          className={`bg-green-600 text-white px-3 py-1 rounded ${
+                            isEditingActivo || isUploading || isDeletingActivo || loading ? "bg-green-400 cursor-not-allowed" : "hover:bg-green-700"
+                          }`}
                           onClick={() => handleEditActivo(a)}
+                          disabled={isEditingActivo || isUploading || isDeletingActivo || loading}
                         >
                           Editar
                         </button>
 
                         {/* Botón de Eliminar */}
                         <button
-                          className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
+                          className={`bg-red-600 text-white px-3 py-1 rounded ${
+                            isDeletingActivo || isUploading || isEditingActivo || loading ? "bg-red-400 cursor-not-allowed" : "hover:bg-red-700"
+                          }`}
                           onClick={() => handleDeleteActivo(a.id, a.nombre)}
-                          // Puedes deshabilitarlo visualmente si no es userId 1
-                          // disabled={userId !== 1} 
+                          disabled={isDeletingActivo || isUploading || isEditingActivo || loading}
                         >
-                          🗑️ {/* Ícono de tachito */}
+                          {isDeletingActivo ? "Eliminando..." : "🗑️"}
                         </button>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-            </div>
+            // ❌ El div con w-full overflow-x-auto md:overflow-visible que rodeaba la tabla ha sido eliminado,
+            // ya que el contenedor principal `div.overflow-x-auto` es suficiente
+            // y el `table-fixed` maneja el ancho de la tabla correctamente.
           ) : (
             <p className="text-gray-600 text-center py-4">No hay valores a mostrar.</p>
           )}
@@ -669,6 +738,7 @@ const Activo = () => {
                 z-50
               "
               onClick={() => setModalAddVisible(false)}
+              disabled={isSavingNewActivo}
             >
               ✕
             </button>
@@ -695,6 +765,7 @@ const Activo = () => {
                     setNewActivo({ ...newActivo, [field.name]: e.target.value })
                   }
                   className="p-2 border rounded focus:ring focus:ring-green-200"
+                  disabled={isSavingNewActivo}
                 />
               ))}
 
@@ -710,6 +781,7 @@ const Activo = () => {
                   });
                 }}
                 className="p-2 border rounded focus:ring focus:ring-green-200"
+                disabled={isSavingNewActivo}
               >
                 <option value="">Seleccionar zona</option>
                 {zonas.map((z, i) => (
@@ -727,13 +799,17 @@ const Activo = () => {
                   setNewActivo({ ...newActivo, ubicacion: e.target.value })
                 }
                 className="p-2 border rounded focus:ring focus:ring-green-200"
+                disabled={isSavingNewActivo}
               />
 
               {/* Botón Subir Imagen */}
               <button
                 type="button"
-                className="bg-orange-600 text-white py-2 rounded hover:bg-orange-700"
+                className={`bg-orange-600 text-white py-2 rounded ${
+                  isSavingNewActivo ? "bg-orange-400 cursor-not-allowed" : "hover:bg-orange-700"
+                }`}
                 onClick={() => {
+                  if (isSavingNewActivo) return;
                   Swal.fire({
                     title: "Seleccionar opción",
                     text: "¿Cómo deseas subir la imagen?",
@@ -750,6 +826,7 @@ const Activo = () => {
                     }
                   });
                 }}
+                disabled={isSavingNewActivo}
               >
                 Subir Imagen
               </button>
@@ -761,6 +838,7 @@ const Activo = () => {
                 ref={galleryInputNewRef}
                 style={{ display: "none" }}
                 onChange={handleSelectNewImage}
+                disabled={isSavingNewActivo}
               />
 
               {/* INPUT CÁMARA OCULTO */}
@@ -771,6 +849,7 @@ const Activo = () => {
                 ref={cameraInputNewRef}
                 style={{ display: "none" }}
                 onChange={handleSelectNewImage}
+                disabled={isSavingNewActivo}
               />
 
               {/* VISTA PREVIA */}
@@ -785,18 +864,15 @@ const Activo = () => {
               )}
 
               {/* Botón Guardar */}
-            <button
-  onClick={handleSaveNew}
-  disabled={isSaving}
-  className={`py-2 rounded text-white font-medium transition-colors ${
-    isSaving 
-      ? "bg-gray-400 cursor-not-allowed" 
-      : "bg-green-600 hover:bg-green-700"
-  }`}
->
-  {isSaving ? "Enviando..." : "Guardar"}
-</button>
-
+              <button
+                onClick={handleSaveNew}
+                className={`bg-green-600 text-white py-2 rounded ${
+                  isSavingNewActivo ? "bg-green-400 cursor-not-allowed" : "hover:bg-green-700"
+                }`}
+                disabled={isSavingNewActivo}
+              >
+                {isSavingNewActivo ? "Guardando..." : "Guardar"}
+              </button>
             </div>
           </div>
         </div>

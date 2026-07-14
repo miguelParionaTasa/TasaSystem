@@ -12,7 +12,8 @@ const Clinica = () => {
 
   const [zonas, setZonas] = useState([]);
   const [ubicaciones, setUbicaciones] = useState([]);
-  const [clinicas, setClinicas] = useState([]);
+  const [clinicas, setClinicas] = useState([]); // Inicialmente vacío
+  const [hasSearched, setHasSearched] = useState(false); // 🔹 NUEVO ESTADO: rastrea si ya se ha hecho una búsqueda
 
   const [modalImagesVisible, setModalImagesVisible] = useState(false);
   const [modalImage, setModalImage] = useState(null);
@@ -28,7 +29,7 @@ const Clinica = () => {
   });
 
   const [saving, setSaving] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); // Usado para el botón Filtrar
 
   const [editingId, setEditingId] = useState(null);
 
@@ -48,7 +49,7 @@ const Clinica = () => {
   // =========================
   // ORDENAR
   // =========================
-    const ordenarClinicas = (data) => {
+  const ordenarClinicas = (data) => {
     return [...data].sort((a, b) => {
       // 1️⃣ ORDENAR POR FECHA (Más reciente primero: b - a)
       const fechaA = a.fecha ? new Date(a.fecha).getTime() : 0;
@@ -81,35 +82,6 @@ const Clinica = () => {
       return nombreA.localeCompare(nombreB);
     });
   };
-
-  // =========================
-  // GET ALL
-  // =========================
-  const fetchClinicas = async () => {
-    try {
-      setLoading(true);
-
-      const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}clinicas`
-      );
-
-      setClinicas(ordenarClinicas(res.data || []));
-    } catch (error) {
-      console.error(error);
-
-      Swal.fire(
-        "Error",
-        "No se pudieron cargar los datos técnicos",
-        "error"
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchClinicas();
-  }, []);
 
   // =========================
   // CARGAR ZONAS
@@ -171,14 +143,15 @@ const Clinica = () => {
   };
 
   // =========================
-  // FILTRAR
+  // FILTRAR (y ahora única fuente de datos)
   // =========================
   const handleSubmit = async (e) => {
     e?.preventDefault();
+    if (loading) return; // Evitar doble clic
 
+    setLoading(true);
+    setHasSearched(true); // 🔹 Marcar que ya se realizó una búsqueda
     try {
-      setLoading(true);
-
       const res = await axios.get(
         `${process.env.REACT_APP_API_URL}clinicas/search`,
         {
@@ -192,7 +165,7 @@ const Clinica = () => {
       setClinicas(ordenarClinicas(res.data || []));
     } catch (error) {
       console.error(error);
-
+      setClinicas([]); // 🔹 Vaciar si hay error
       Swal.fire(
         "Error",
         "No se pudieron filtrar los datos",
@@ -233,11 +206,11 @@ const Clinica = () => {
 
     // NUEVA VALIDACIÓN: La fecha es obligatoria
     if (!newRow.fecha) {
-        return Swal.fire(
-            "Error",
-            "Debe ingresar una fecha",
-            "error"
-        );
+      return Swal.fire(
+        "Error",
+        "Debe ingresar una fecha",
+        "error"
+      );
     }
 
     if (saving) return;
@@ -289,7 +262,9 @@ const Clinica = () => {
         imagen: null,
       });
 
-      fetchClinicas();
+      if (hasSearched) { // 🔹 Refrescar solo si ya se había buscado
+        handleSubmit();
+      }
     } catch (error) {
       console.error(error);
 
@@ -307,6 +282,9 @@ const Clinica = () => {
   // EDITAR
   // =========================
   const handleSaveEdit = async (item) => {
+    if (saving) return; // Evitar doble clic si está guardando (el mismo estado 'saving' para editar)
+    setSaving(true); // Activar estado de guardado/edición
+
     try {
       const cambios = {};
 
@@ -327,10 +305,11 @@ const Clinica = () => {
       const originalDateString = item.fecha ? item.fecha.slice(0, 10) : ""; // Asegura formato YYYY-MM-DD
 
       if (newEditedDateString !== originalDateString) {
-          cambios.fecha = newEditedDateString; // Envía directamente la cadena YYYY-MM-DD
+        cambios.fecha = newEditedDateString; // Envía directamente la cadena YYYY-MM-DD
       }
 
       if (Object.keys(cambios).length === 0) {
+        setSaving(false); // Desactivar si no hay cambios
         return Swal.fire(
           "Sin cambios",
           "No se realizaron modificaciones",
@@ -358,8 +337,9 @@ const Clinica = () => {
       );
 
       setEditingId(null);
-
-      fetchClinicas();
+      if (hasSearched) { // 🔹 Refrescar solo si ya se había buscado
+        handleSubmit();
+      }
     } catch (error) {
       console.error(error);
 
@@ -368,6 +348,8 @@ const Clinica = () => {
         "No se pudo actualizar",
         "error"
       );
+    } finally {
+      setSaving(false); // Desactivar estado de guardado/edición
     }
   };
 
@@ -375,6 +357,8 @@ const Clinica = () => {
   // ELIMINAR
   // =========================
   const handleDelete = async (item) => {
+    if (uploading || saving || loading) return; // 🔹 Evitar si otra operación está activa
+
     if (userId !== item.userId) {
       return Swal.fire(
         "No permitido",
@@ -391,9 +375,29 @@ const Clinica = () => {
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar", // 🔹 Añadido el texto al botón Cancelar
+      didOpen: () => {
+        // Deshabilitar botones si ya estamos en otra operación (subiendo, guardando, cargando)
+        const confirmButton = Swal.getConfirmButton();
+        const cancelButton = Swal.getCancelButton();
+        if ((uploading || saving || loading) && confirmButton) {
+          confirmButton.disabled = true;
+          if (cancelButton) cancelButton.disabled = true;
+        }
+      }
     });
 
     if (!result.isConfirmed) return;
+
+    Swal.fire({ // 🔹 Mostrar spinner mientras se elimina
+      title: "Eliminando...",
+      text: "Por favor espera...",
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
 
     try {
       await axios.delete(
@@ -411,7 +415,12 @@ const Clinica = () => {
         "success"
       );
 
-      fetchClinicas();
+      if (hasSearched) { // 🔹 Refrescar solo si ya se había buscado
+        handleSubmit();
+      } else {
+        // Si no había búsqueda activa, simplemente removemos el item de la lista local
+        setClinicas(prev => prev.filter(c => c.id !== item.id));
+      }
     } catch (error) {
       console.error(error);
 
@@ -428,9 +437,9 @@ const Clinica = () => {
   // =========================
   const handleUploadImage = async (item, file) => {
     if (!file) return;
+    if (uploading || saving || loading) return; // 🔹 Evitar si otra operación está activa
 
     const maxSizeMB = 2;
-
     const fileSizeMB = file.size / (1024 * 1024);
 
     if (fileSizeMB > maxSizeMB) {
@@ -443,7 +452,7 @@ const Clinica = () => {
       );
     }
 
-    setUploading(true);
+    setUploading(true); // 🔹 Activar estado de subida
 
     Swal.fire({
       title: "Subiendo imagen...",
@@ -496,7 +505,7 @@ const Clinica = () => {
         "error"
       );
     } finally {
-      setUploading(false);
+      setUploading(false); // 🔹 Desactivar estado de subida
     }
   };
 
@@ -536,6 +545,7 @@ const Clinica = () => {
             value={filter.zona}
             onChange={handleFilterChange}
             className="p-2 border rounded"
+            disabled={loading} // 🔹 Deshabilitar mientras carga
           >
             <option value="">Todas</option>
 
@@ -561,7 +571,7 @@ const Clinica = () => {
             name="ubicacion"
             value={filter.ubicacion}
             onChange={handleFilterChange}
-            disabled={!filter.zona}
+            disabled={!filter.zona || loading} // 🔹 Deshabilitar mientras carga
             className="p-2 border rounded"
           >
             <option value="">Todas</option>
@@ -580,9 +590,12 @@ const Clinica = () => {
 
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          disabled={loading} // 🔹 Deshabilitar mientras carga
+          className={`px-4 py-2 rounded ${
+            loading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700 text-white"
+          }`}
         >
-          Filtrar
+          {loading ? "Filtrando..." : "Filtrar"} {/* 🔹 Texto dinámico */}
         </button>
 
       </form>
@@ -595,21 +608,26 @@ const Clinica = () => {
             if (!filter.ubicacion) {
               return Swal.fire(
                 "Seleccione ubicación",
-                "",
+                "Debe seleccionar una ubicación para añadir un dato técnico.",
                 "warning"
               );
             }
-
             setModalAddVisible(true);
           }}
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          disabled={loading || saving || uploading || editingId !== null} // 🔹 Deshabilitar si hay otra operación activa
+          className={`px-4 py-2 rounded ${
+            (loading || saving || uploading || editingId !== null) ? "bg-green-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700 text-white"
+          }`}
         >
           ➕ Añadir dato técnico
         </button>
 
         <button
           onClick={() => setModalImagesVisible(true)}
-          className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
+          disabled={loading || saving || uploading || editingId !== null} // 🔹 Deshabilitar si hay otra operación activa
+          className={`px-4 py-2 rounded ${
+            (loading || saving || uploading || editingId !== null) ? "bg-purple-400 cursor-not-allowed" : "bg-purple-600 hover:bg-purple-700 text-white"
+          }`}
         >
           🖼 Ver imágenes
         </button>
@@ -624,6 +642,7 @@ const Clinica = () => {
 
             <button
               onClick={() => setModalAddVisible(false)}
+              disabled={saving} // 🔹 Deshabilitar cerrar si está guardando
               className="absolute top-2 right-2 text-gray-700"
             >
               ✖
@@ -655,6 +674,7 @@ const Clinica = () => {
                   }))
                 }
                 className="p-2 border rounded"
+                disabled={saving} // 🔹 Deshabilitar inputs mientras guarda
               />
 
               <input
@@ -668,6 +688,7 @@ const Clinica = () => {
                   }))
                 }
                 className="p-2 border rounded"
+                disabled={saving} // 🔹 Deshabilitar inputs mientras guarda
               />
 
               <input
@@ -681,6 +702,7 @@ const Clinica = () => {
                   }))
                 }
                 className="p-2 border rounded"
+                disabled={saving} // 🔹 Deshabilitar inputs mientras guarda
               />
 
               <input
@@ -693,6 +715,7 @@ const Clinica = () => {
                   }))
                 }
                 className="p-2 border rounded"
+                disabled={saving} // 🔹 Deshabilitar inputs mientras guarda
               />
 
               <input
@@ -728,6 +751,7 @@ const Clinica = () => {
                   }));
                 }}
                 className="p-2 border rounded"
+                disabled={saving} // 🔹 Deshabilitar inputs mientras guarda
               />
 
               <button
@@ -735,7 +759,7 @@ const Clinica = () => {
                 disabled={saving}
                 className={`text-white px-4 py-2 rounded ${
                   saving
-                    ? "bg-gray-400"
+                    ? "bg-gray-400 cursor-not-allowed"
                     : "bg-green-600 hover:bg-green-700"
                 }`}
               >
@@ -749,249 +773,194 @@ const Clinica = () => {
         </div>
       )}
 
-      {/* TABLA */}
+      {/* TABLA O MENSAJES */}
       {loading ? (
         <p className="text-center mt-6">
-          Cargando...
+          Cargando datos...
         </p>
       ) : (
         <div className="overflow-x-auto shadow-md rounded-lg border border-gray-300">
+          {hasSearched && clinicas.length === 0 ? ( // 🔹 Mensaje para cuando no hay resultados después de una búsqueda
+            <p className="text-center mt-6 py-4">No se encontraron datos técnicos con los filtros aplicados.</p>
+          ) : !hasSearched && clinicas.length === 0 ? ( // 🔹 Mensaje para cuando no se ha buscado aún
+            <p className="text-center mt-6 py-4">Use los filtros para buscar datos técnicos.</p>
+          ) : (
+            // 🔹 Renderiza la tabla solo si hay datos y se ha buscado
+            <table className="min-w-full text-sm bg-white">
 
-          <table className="min-w-full text-sm bg-white">
+              <thead className="bg-gray-200 text-gray-700">
 
-            <thead className="bg-gray-200 text-gray-700">
+                <tr>
+                  <th className="border px-3 py-2 text-left">
+                    Zona
+                  </th>
 
-              <tr>
-                <th className="border px-3 py-2 text-left">
-                  Zona
-                </th>
+                  <th className="border px-3 py-2 text-left">
+                    Ubicación
+                  </th>
 
-                <th className="border px-3 py-2 text-left">
-                  Ubicación
-                </th>
+                  <th className="border px-3 py-2 text-left">
+                    Activo
+                  </th>
 
-                <th className="border px-3 py-2 text-left">
-                  Activo
-                </th>
+                  <th className="border px-3 py-2 text-left">
+                    Trabajo
+                  </th>
 
-                <th className="border px-3 py-2 text-left">
-                  Trabajo
-                </th>
+                  <th className="border px-3 py-2 text-left">
+                    OT
+                  </th> {/* Nueva columna para OT */}
 
-                <th className="border px-3 py-2 text-left">
-                  OT
-                </th> {/* Nueva columna para OT */}
+                  <th className="border px-3 py-2 text-left">
+                    Fecha
+                  </th>
 
-                <th className="border px-3 py-2 text-left">
-                  Fecha
-                </th>
+                  <th className="border px-3 py-2 text-center">
+                    Imágenes
+                  </th>
 
-                <th className="border px-3 py-2 text-center">
-                  Imágenes
-                </th>
+                  <th className="border px-3 py-2 text-center">
+                    Acciones
+                  </th>
+                </tr>
 
-                <th className="border px-3 py-2 text-center">
-                  Acciones
-                </th>
-              </tr>
+              </thead>
 
-            </thead>
+              <tbody>
 
-            <tbody>
+                {clinicas.map((item) => (
 
-              {clinicas.map((item) => (
+                  <tr
+                    key={item.id}
+                    // Añadimos una clase condicional: si el userId del item no es el ADMIN_USER_ID (Miguel), lo resalta en verde
+                    className={`hover:bg-gray-50 ${item.userId !== ADMIN_USER_ID ? 'bg-green-100' : ''}`}
+                  >
 
-                <tr
-                  key={item.id}
-                  // Añadimos una clase condicional: si el userId del item no es el ADMIN_USER_ID (Miguel), lo resalta en verde
-                  className={`hover:bg-gray-50 ${item.userId !== ADMIN_USER_ID ? 'bg-green-100' : ''}`}
-                >
+                    {/* ZONA */}
+                    <td className="border px-3 py-2">
+                      {item.ubicacion?.zona?.nombreMaximo ||
+                        "N/A"}
+                    </td>
 
-                  {/* ZONA */}
-                  <td className="border px-3 py-2">
-                    {item.ubicacion?.zona?.nombreMaximo ||
-                      "N/A"}
-                  </td>
+                    {/* UBICACION */}
+                    <td className="border px-3 py-2">
+                      {item.ubicacion?.name || "N/A"}
+                    </td>
 
-                  {/* UBICACION */}
-                  <td className="border px-3 py-2">
-                    {item.ubicacion?.name || "N/A"}
-                  </td>
+                    {/* NOMBRE (Activo) */}
+                    <td className="border px-3 py-2 font-semibold">
 
-                  {/* NOMBRE (Activo) */}
-                  <td className="border px-3 py-2 font-semibold">
-
-                    {editingId === item.id ? (
-                      <input
-                        type="text"
-                        value={editedData.nombre || ""}
-                        onChange={(e) =>
-                          setEditedData((prev) => ({
-                            ...prev,
-                            nombre: e.target.value,
-                          }))
-                        }
-                        className="border p-1 rounded w-full"
-                      />
-                    ) : (
-                      item.nombre
-                    )}
-
-                  </td>
-
-                  {/* VALOR (Título del trabajo) */}
-                  <td className="border px-3 py-2">
-
-                    {editingId === item.id ? (
-                      <textarea
-                        value={editedData.valor || ""}
-                        onChange={(e) =>
-                          setEditedData((prev) => ({
-                            ...prev,
-                            valor: e.target.value,
-                          }))
-                        }
-                        className="border p-1 rounded w-full"
-                      />
-                    ) : (
-                      item.valor
-                    )}
-
-                  </td>
-
-                  {/* OT */}
-                  <td className="border px-3 py-2">
-
-                    {editingId === item.id ? (
-                      <input
-                        type="text"
-                        value={editedData.ot || ""}
-                        onChange={(e) =>
-                          setEditedData((prev) => ({
-                            ...prev,
-                            ot: e.target.value,
-                          }))
-                        }
-                        className="border p-1 rounded w-full"
-                      />
-                    ) : (
-                      item.ot || "-" // Muestra "-" si no hay OT
-                    )}
-
-                  </td>
-
-
-                  {/* FECHA */}
-                  <td className="border px-3 py-2">
-
-                    {editingId === item.id ? (
-                      <input
-                        type="date"
-                        value={
-                          editedData.fecha
-                            ? editedData.fecha.slice(0, 10)
-                            : ""
-                        }
-                        onChange={(e) =>
-                          setEditedData((prev) => ({
-                            ...prev,
-                            fecha: e.target.value,
-                          }))
-                        }
-                        className="border p-1 rounded w-full"
-                      />
-                    ) : item.fecha ? (
-                      new Date(item.fecha)
-                        .toLocaleDateString("es-PE")
-                    ) : (
-                      "-"
-                    )}
-
-                  </td>
-
-                  {/* IMAGENES */}
-                  <td className="border px-3 py-2 text-center">
-
-                    {Array.isArray(item.images) &&
-                    item.images.length > 0 ? (
-                      <button
-                        onClick={() =>
-                          setModalImage(
-                            item.images[0]?.url
-                          )
-                        }
-                        className="bg-purple-600 text-white px-3 py-1 rounded hover:bg-purple-700"
-                      >
-                        Ver
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => {
-                          if (
-                            userId !== item.userId
-                          ) {
-                            return Swal.fire(
-                              "No permitido",
-                              "Solo el creador puede subir imagen",
-                              "error"
-                            );
+                      {editingId === item.id ? (
+                        <input
+                          type="text"
+                          value={editedData.nombre || ""}
+                          onChange={(e) =>
+                            setEditedData((prev) => ({
+                              ...prev,
+                              nombre: e.target.value,
+                            }))
                           }
+                          className="border p-1 rounded w-full"
+                          disabled={saving} // 🔹 Deshabilitar mientras guarda/edita
+                        />
+                      ) : (
+                        item.nombre
+                      )}
 
-                          Swal.fire({
-                            title: "Subir imagen",
-                            input: "file",
-                            inputAttributes: {
-                              accept: "image/*",
-                            },
-                            showCancelButton: true,
-                          }).then((result) => {
-                            if (result.value) {
-                              handleUploadImage(
-                                item,
-                                result.value
-                              );
-                            }
-                          });
-                        }}
-                        disabled={uploading}
-                        className="bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600"
-                      >
-                        Subir
-                      </button>
-                    )}
+                    </td>
 
-                  </td>
+                    {/* VALOR (Título del trabajo) */}
+                    <td className="border px-3 py-2">
 
-                  {/* ACCIONES */}
-                  <td className="border px-3 py-2 text-center">
+                      {editingId === item.id ? (
+                        <textarea
+                          value={editedData.valor || ""}
+                          onChange={(e) =>
+                            setEditedData((prev) => ({
+                              ...prev,
+                              valor: e.target.value,
+                            }))
+                          }
+                          className="border p-1 rounded w-full"
+                          disabled={saving} // 🔹 Deshabilitar mientras guarda/edita
+                        />
+                      ) : (
+                        item.valor
+                      )}
 
-                    {editingId === item.id ? (
-                      <div className="flex gap-2 justify-center">
+                    </td>
 
+                    {/* OT */}
+                    <td className="border px-3 py-2">
+
+                      {editingId === item.id ? (
+                        <input
+                          type="text"
+                          value={editedData.ot || ""}
+                          onChange={(e) =>
+                            setEditedData((prev) => ({
+                              ...prev,
+                              ot: e.target.value,
+                            }))
+                          }
+                          className="border p-1 rounded w-full"
+                          disabled={saving} // 🔹 Deshabilitar mientras guarda/edita
+                        />
+                      ) : (
+                        item.ot || "-" // Muestra "-" si no hay OT
+                      )}
+
+                    </td>
+
+
+                    {/* FECHA */}
+                    <td className="border px-3 py-2">
+
+                      {editingId === item.id ? (
+                        <input
+                          type="date"
+                          value={
+                            editedData.fecha
+                              ? editedData.fecha.slice(0, 10)
+                              : ""
+                          }
+                          onChange={(e) =>
+                            setEditedData((prev) => ({
+                              ...prev,
+                              fecha: e.target.value,
+                            }))
+                          }
+                          className="border p-1 rounded w-full"
+                          disabled={saving} // 🔹 Deshabilitar mientras guarda/edita
+                        />
+                      ) : item.fecha ? (
+                        new Date(item.fecha)
+                          .toLocaleDateString("es-PE")
+                      ) : (
+                        "-"
+                      )}
+
+                    </td>
+
+                    {/* IMAGENES */}
+                    <td className="border px-3 py-2 text-center">
+
+                      {Array.isArray(item.images) &&
+                      item.images.length > 0 ? (
                         <button
                           onClick={() =>
-                            handleSaveEdit(item)
+                            setModalImage(
+                              item.images[0]?.url
+                            )
                           }
-                          className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+                          disabled={loading || saving || uploading || editingId !== null} // 🔹 Deshabilitar si hay otra operación activa
+                          className={`bg-purple-600 text-white px-3 py-1 rounded ${
+                            (loading || saving || uploading || editingId !== null) ? "bg-purple-400 cursor-not-allowed" : "hover:bg-purple-700"
+                          }`}
                         >
-                          Guardar
+                          Ver
                         </button>
-
-                        <button
-                          onClick={() => {
-                            setEditingId(null);
-
-                            setEditedData({});
-                          }}
-                          className="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600"
-                        >
-                          Cancelar
-                        </button>
-
-                      </div>
-                    ) : (
-                      <div className="flex gap-2 justify-center">
-
+                      ) : (
                         <button
                           onClick={() => {
                             if (
@@ -999,56 +968,132 @@ const Clinica = () => {
                             ) {
                               return Swal.fire(
                                 "No permitido",
-                                "Solo el creador puede editar",
+                                "Solo el creador puede subir imagen",
                                 "error"
                               );
                             }
+                            if (uploading || saving || loading || editingId !== null) return; // 🔹 Evitar si otra operación activa
 
-                            setEditingId(item.id);
-
-                            setEditedData({
-                              nombre: item.nombre || "",
-                              valor: item.valor || "",
-                              ot: item.ot || "",
-                              // Formatea la fecha para el input type="date"
-                              fecha: item.fecha ? item.fecha.slice(0, 10) : "",
+                            Swal.fire({
+                              title: "Subir imagen",
+                              input: "file",
+                              inputAttributes: {
+                                accept: "image/*",
+                              },
+                              showCancelButton: true,
+                            }).then((result) => {
+                              if (result.value) {
+                                handleUploadImage(
+                                  item,
+                                  result.value
+                                );
+                              }
                             });
                           }}
-                          className="text-blue-600 hover:underline"
+                          disabled={uploading || saving || loading || editingId !== null} // 🔹 Deshabilitar si hay otra operación activa
+                          className={`bg-orange-500 text-white px-3 py-1 rounded ${
+                            (uploading || saving || loading || editingId !== null) ? "bg-orange-300 cursor-not-allowed" : "hover:bg-orange-600"
+                          }`}
                         >
-                          Editar
+                          {uploading ? "Subiendo..." : "Subir"} {/* 🔹 Texto dinámico */}
                         </button>
+                      )}
 
-                        <button
-                          onClick={() =>
-                            handleDelete(item)
-                          }
-                          className="text-red-600 hover:underline"
-                        >
-                          Eliminar
-                        </button>
+                    </td>
 
-                      </div>
-                    )}
+                    {/* ACCIONES */}
+                    <td className="border px-3 py-2 text-center whitespace-nowrap"> {/* 🔹 whitespace-nowrap para botones */}
 
-                  </td>
+                      {editingId === item.id ? (
+                        <div className="flex gap-2 justify-center">
 
-                </tr>
+                          <button
+                            onClick={() =>
+                              handleSaveEdit(item)
+                            }
+                            disabled={saving} // 🔹 Deshabilitar mientras guarda
+                            className={`bg-blue-600 text-white px-3 py-1 rounded ${
+                              saving ? "bg-blue-400 cursor-not-allowed" : "hover:bg-blue-700"
+                            }`}
+                          >
+                            {saving ? "Guardando..." : "Guardar"} {/* 🔹 Texto dinámico */}
+                          </button>
 
-              ))}
+                          <button
+                            onClick={() => {
+                              setEditingId(null);
+                              setEditedData({});
+                              setSaving(false); // 🔹 Asegurar que 'saving' se desactive al cancelar
+                            }}
+                            disabled={saving} // 🔹 Deshabilitar mientras guarda
+                            className={`bg-gray-500 text-white px-3 py-1 rounded ${
+                              saving ? "bg-gray-400 cursor-not-allowed" : "hover:bg-gray-600"
+                            }`}
+                          >
+                            Cancelar
+                          </button>
 
-            </tbody>
+                        </div>
+                      ) : (
+                        <div className="flex gap-2 justify-center">
 
-          </table>
+                          <button
+                            onClick={() => {
+                              if (
+                                userId !== item.userId
+                              ) {
+                                return Swal.fire(
+                                  "No permitido",
+                                  "Solo el creador puede editar",
+                                  "error"
+                                );
+                              }
+                              if (loading || saving || uploading || editingId !== null) return; // 🔹 Evitar si otra operación está activa
 
+                              setEditingId(item.id);
+
+                              setEditedData({
+                                nombre: item.nombre || "",
+                                valor: item.valor || "",
+                                ot: item.ot || "",
+                                // Formatea la fecha para el input type="date"
+                                fecha: item.fecha ? item.fecha.slice(0, 10) : "",
+                              });
+                            }}
+                            disabled={loading || saving || uploading || editingId !== null} // 🔹 Deshabilitar si otra operación está activa
+                            className={`text-blue-600 hover:underline ${
+                              (loading || saving || uploading || editingId !== null) ? "text-blue-300 cursor-not-allowed" : ""
+                            }`}
+                          >
+                            Editar
+                          </button>
+
+                          <button
+                            onClick={() =>
+                              handleDelete(item)
+                            }
+                            disabled={loading || saving || uploading || editingId !== null} // 🔹 Deshabilitar si otra operación está activa
+                            className={`text-red-600 hover:underline ${
+                              (loading || saving || uploading || editingId !== null) ? "text-red-300 cursor-not-allowed" : ""
+                            }`}
+                          >
+                            Eliminar
+                          </button>
+
+                        </div>
+                      )}
+
+                    </td>
+
+                  </tr>
+
+                ))}
+
+              </tbody>
+
+            </table>
+          )}
         </div>
-      )}
-
-      {/* VACIO */}
-      {!loading && clinicas.length === 0 && (
-        <p className="text-center mt-6">
-          No se encontraron datos técnicos
-        </p>
       )}
 
       {/* MODAL TODAS LAS IMAGENES */}
@@ -1113,7 +1158,10 @@ const Clinica = () => {
                     </div>
                   ))
                 )}
-
+              {/* 🔹 Mensaje si no hay imágenes en el modal de todas las imágenes */}
+              {clinicas.filter(c => Array.isArray(c.images) && c.images.length > 0).length === 0 && (
+                <p className="text-center w-full">No hay imágenes disponibles para mostrar.</p>
+              )}
             </div>
 
           </div>

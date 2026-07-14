@@ -1,88 +1,46 @@
 const fs = require('fs');
 const path = require('path');
-// Importamos la librería compatible que no da fallos de inicialización
-const pdfParse = require('pdf-parse-fork');
-const { Document, Packer, Paragraph, TextRun, HeadingLevel } = require('docx');
+const { PDFDocument } = require('pdf-lib');
 
 const CARPETA_TRABAJO = path.join(process.env.USERPROFILE, 'Downloads');
-const ARCHIVOS_PDF = [
-    { nombre: '1abc.pdf', ruta: path.join(CARPETA_TRABAJO, '1abc.pdf') },
-    { nombre: '2abc.pdf', ruta: path.join(CARPETA_TRABAJO, '2abc.pdf') }
-];
-const ARCHIVO_SALIDA_WORD = path.join(CARPETA_TRABAJO, 'Resultado_Items.docx');
+const ARCHIVO_ANVERSO = path.join(CARPETA_TRABAJO, 'Lup.pdf');
+const ARCHIVO_REVERSO = path.join(CARPETA_TRABAJO, 'lup pos.pdf');
 
-async function extraerTextosAWord() {
+async function procesarPDFsDirecto() {
     try {
-        const hijosDocumento = [];
+        console.log('Leyendo archivos PDF...');
+        const bytesAnverso = fs.readFileSync(ARCHIVO_ANVERSO);
+        const bytesReverso = fs.readFileSync(ARCHIVO_REVERSO);
 
-        // Título principal en el archivo Word
-        hijosDocumento.push(
-            new Paragraph({
-                text: "EXTRACCIÓN DE ÍTEMS DESDE ARCHIVOS PDF",
-                heading: HeadingLevel.TITLE,
-                spacing: { after: 300 }
-            })
-        );
+        const pdfAnverso = await PDFDocument.load(bytesAnverso);
+        const pdfReverso = await PDFDocument.load(bytesReverso);
 
-        for (const pdfInfo of ARCHIVOS_PDF) {
-            if (!fs.existsSync(pdfInfo.ruta)) {
-                console.log(`⚠️ El archivo no existe en descargas: ${pdfInfo.nombre}`);
-                continue;
-            }
+        const totalPaginas = pdfAnverso.getPageCount(); 
 
-            console.log(`Leyendo y procesando texto de: ${pdfInfo.nombre}...`);
-            const dataBuffer = fs.readFileSync(pdfInfo.ruta);
+        console.log(`Iniciando el proceso directo para ${totalPaginas} documentos...`);
+
+        for (let i = 0; i < totalPaginas; i++) {
+            const nuevoPdf = await PDFDocument.create();
+
+            // Toma la página 'i' de anverso (Comienza en 0 para la página 1)
+            const [paginaAnverso] = await nuevoPdf.copyPages(pdfAnverso, [i]);
+            nuevoPdf.addPage(paginaAnverso);
+
+            // Toma la misma página 'i' de reverso de forma directa
+            const [paginaReverso] = await nuevoPdf.copyPages(pdfReverso, [i]);
+            nuevoPdf.addPage(paginaReverso);
+
+            const bytesNuevoPdf = await nuevoPdf.save();
+            const nombreSalida = path.join(CARPETA_TRABAJO, `documento_final_${i + 1}.pdf`);
             
-            // Extracción nativa del texto
-            const datosPdf = await pdfParse(dataBuffer);
-            
-            // Separar el texto extraído línea por línea (ítem por ítem)
-            const lineas = datosPdf.text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-
-            // Encabezado de sección para identificar el archivo de origen
-            hijosDocumento.push(
-                new Paragraph({
-                    text: `Contenido de: ${pdfInfo.nombre}`,
-                    heading: HeadingLevel.HEADING_1,
-                    spacing: { before: 200, after: 150 }
-                })
-            );
-
-            if (lineas.length === 0) {
-                hijosDocumento.push(new Paragraph({ text: "*(No se detectó texto digital legible en este documento)*" }));
-            }
-
-            // Agregar cada línea como un ítem de lista estructurado
-            lineas.forEach((linea, index) => {
-                hijosDocumento.push(
-                    new Paragraph({
-                        children: [
-                            new TextRun({ text: `Ítem ${index + 1}: `, bold: true, color: "003366" }),
-                            new TextRun({ text: linea })
-                        ],
-                        spacing: { after: 100 }
-                    })
-                );
-            });
+            fs.writeFileSync(nombreSalida, bytesNuevoPdf);
+            console.log(`✅ Guardado: documento_final_${i + 1}.pdf (Anverso pág. ${i + 1} + Reverso pág. ${i + 1})`);
         }
 
-        // Estructurar y empaquetar el archivo definitivo de Word
-        const doc = new Document({
-            sections: [{
-                properties: {},
-                children: hijosDocumento
-            }]
-        });
-
-        const b64string = await Packer.toBase64String(doc);
-        fs.writeFileSync(ARCHIVO_SALIDA_WORD, Buffer.from(b64string, 'base64'));
-
-        console.log(`\n✅ ¡Proceso completado con éxito!`);
-        console.log(`📁 Archivo generado en: ${ARCHIVO_SALIDA_WORD}`);
-
+        console.log('¡Proceso terminado con éxito!');
     } catch (error) {
-        console.error('Ocurrió un error inesperado al procesar los documentos:', error);
+        console.error('Ocurrió un error durante el procesamiento:', error);
     }
 }
 
-extraerTextosAWord();
+procesarPDFsDirecto();
