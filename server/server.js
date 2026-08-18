@@ -134,10 +134,17 @@ app.patch("/configuracion", async (req, res) => {
   }
 });
 
-app.get('/ping', (req, res) => {
-  res.send('OK');
+app.get('/ping', async (req, res) => {
+  try {
+    // Consulta nativa ultra rápida que solo le pide un "1" a PostgreSQL
+    await prisma.$queryRaw`SELECT 1`; 
+    
+    res.status(200).send('OK');
+  } catch (error) {
+    console.error('Error en el ping a la base de datos:', error);
+    res.status(500).send('DB Error');
+  }
 });
-
 // Cierre de conexiones al detener el servidor
 process.on('SIGINT', async () => {
   console.log("Cerrando conexiones a la base de datos...");
