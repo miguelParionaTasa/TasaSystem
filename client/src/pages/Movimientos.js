@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { createMovement, createOT, createOTConsumible } from "../services/api"; // Asegúrate de tener estas funciones en tu API
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+import axios from "../axios";
 import Swal from "sweetalert2";
 import { FaTrash,FaPlus,FaUndo   } from "react-icons/fa";
 import BuscadorConsumible from "../components/BuscadorConsumible";
@@ -381,8 +381,7 @@ const handleSubmitOT = async (e) => {
       userId: localStorage.getItem("userId"),
     };
 
-    const token = localStorage.getItem("token");
-    const createdOT = await createOT(otData, token);
+    const createdOT = await createOT(otData);
 
     for (const consumible of selectedConsumibles) {
       const otConsumibleData = {
@@ -393,7 +392,7 @@ const handleSubmitOT = async (e) => {
         otId: createdOT.id,
         userId: localStorage.getItem("userId"),
       };
-      await createOTConsumible(otConsumibleData, token);
+      await createOTConsumible(otConsumibleData);
     }
 
     Swal.fire({

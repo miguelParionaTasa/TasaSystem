@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import axios from "axios";
+import axios from "../axios";
 import Swal from "sweetalert2";
 
 const Inventario = () => {
@@ -60,7 +60,7 @@ const [showEditModal, setShowEditModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
   const API_URL = `${process.env.REACT_APP_API_URL}inventario`;
-  const USER_URL = `${process.env.REACT_APP_API_URL}user`;
+  const USER_URL = `${process.env.REACT_APP_API_URL}useres`;
 
   // Helpers
   const formatDate = (iso) => {

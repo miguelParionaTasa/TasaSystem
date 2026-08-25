@@ -49,7 +49,11 @@ const createOT = async (req, res) => {
         equipo: equipoId ? { connect: { id: parseInt(equipoId, 10) } } : undefined, // Conectar el equipo si se proporciona
         ubicacion: ubicacionId ? { connect: { id: parseInt(ubicacionId, 10) } } : undefined, // Conectar la ubicación si se proporciona
         // Conectar con OTbasico usando el campo OTmaximo
-        OTbasico: ottId ? { connect: { OTmaximo: String(ottId) } } : undefined,
+        OTbasico: ottId ? {
+          connect: {
+            plantaId_OTmaximo: { plantaId: req.plantaId, OTmaximo: String(ottId) },
+          },
+        } : undefined,
       },
     });
 
@@ -68,7 +72,7 @@ const createOT = async (req, res) => {
     }
 
     // Respuesta genérica para otros errores
-    res.status(500).json({ message: "Error al crear OT", error: error.message });
+    res.status(500).json({ message: "Error al crear OT", requestId: req.requestId });
   }
 };
 // Obtener todas las OTs
@@ -169,12 +173,8 @@ const getAllOTs = async (req, res) => {
   }
 };
 const searchOts = async (req, res) => {
-  const { startDate, endDate, zona, ubicacion, ottId, scope, userId } = req.query;
-
-  // Validar parámetros de entrada
-  if (!userId || isNaN(Number(userId))) {
-    return res.status(400).json({ error: "El userId es requerido y debe ser un número." });
-  }
+  const { startDate, endDate, zona, ubicacion, ottId, scope } = req.query;
+  const userId = req.user.id;
 
   if (startDate && isNaN(new Date(startDate))) {
     return res.status(400).json({ error: "La fecha de inicio no es válida." });
@@ -298,7 +298,7 @@ const searchOts = async (req, res) => {
     console.error("Error al buscar órdenes de trabajo:", error);
     res.status(500).json({
       message: "Error al buscar órdenes de trabajo",
-      details: error.message,
+      requestId: req.requestId,
     });
   }
 };

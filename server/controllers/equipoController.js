@@ -1,7 +1,7 @@
 const prisma = require("./prisma");
 // Crear un nuevo equipo
 const createEquipo = async (req, res) => {
-  const { name, nombreMaximo, zonaId, ubicacionId, imageUrl } = req.body;
+  const { name, nombreMaximo, zonaId, ubicacionId, ubicacionSinId, imageUrl } = req.body;
 
   try {
     const equipo = await prisma.equipo.create({
@@ -64,7 +64,7 @@ const getEquipoById = async (req, res) => {
 // Actualizar un equipo
 const updateEquipo = async (req, res) => {
   const { id } = req.params;
-  const { name, nombreMaximo, zonaId, ubicacionId, imageUrl } = req.body;
+  const { name, nombreMaximo, zonaId, ubicacionId, ubicacionSinId, imageUrl } = req.body;
 
   try {
     const equipo = await prisma.equipo.update({
@@ -91,7 +91,7 @@ const deleteEquipo = async (req, res) => {
   const { id } = req.params;
   const user = req.user; // Asumiendo que el usuario está en req.user después de la autenticación
 
-  if (!user || !user.isAdmin) {
+  if (!user || !["SUPER_ADMIN", "ADMIN_PLANTA"].includes(user.rol)) {
     return res
       .status(403)
       .json({ message: "No tienes permiso para eliminar equipos" });

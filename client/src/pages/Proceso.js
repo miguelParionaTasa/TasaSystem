@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../axios";
 import Swal from "sweetalert2";
 
 const Proceso = () => {
@@ -27,7 +27,6 @@ const Proceso = () => {
   setModalAddVisible(true);
 };
 
-  const token = localStorage.getItem("token");
   const userId = parseInt(localStorage.getItem("userId"));
 
   // === Cargar procesos ===
@@ -153,7 +152,6 @@ const Proceso = () => {
       await axios.post(`${process.env.REACT_APP_API_URL}procesos`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -176,9 +174,7 @@ const Proceso = () => {
       if (proc.valor !== editedData.valor) cambios.valor = editedData.valor;
       cambios.userId = Number(userId);
 
-      await axios.put(`${process.env.REACT_APP_API_URL}procesos/${proc.id}`, cambios, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.put(`${process.env.REACT_APP_API_URL}procesos/${proc.id}`, cambios);
 
       Swal.fire("Éxito", "Proceso actualizado correctamente", "success");
       setEditingId(null);
@@ -208,9 +204,7 @@ const Proceso = () => {
     });
     if (result.isConfirmed) {
       try {
-        await axios.delete(`${process.env.REACT_APP_API_URL}procesos/${proc.id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await axios.delete(`${process.env.REACT_APP_API_URL}procesos/${proc.id}`);
         Swal.fire("Eliminado", "El proceso fue eliminado", "success");
         handleSubmit();
       } catch (error) {
@@ -233,7 +227,6 @@ const Proceso = () => {
         formData,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
           },
         }

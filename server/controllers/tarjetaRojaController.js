@@ -1,12 +1,20 @@
 const prisma = require("./prisma");
 const { uploadImage, cloudinary } = require("../config/cloudinary");
 
+const TARJETA_FIELDS = [
+  "reporta", "dniReporta", "fecha", "pet", "zona", "equipo", "componente",
+  "descripcion", "tipoDeteccion", "comentario1", "comentario2",
+];
+const pickTarjetaData = (body) => Object.fromEntries(
+  TARJETA_FIELDS.filter((field) => body[field] !== undefined).map((field) => [field, body[field]])
+);
+
 // --------------------------------------------
 // Crear Tarjeta Roja
 // --------------------------------------------
 const createTarjetaRoja = async (req, res) => {
   try {
-    const data = req.body;
+    const data = pickTarjetaData(req.body);
 
     if (!data.reporta || !data.fecha) {
       return res.status(400).json({ message: "Campos obligatorios faltantes" });
@@ -24,7 +32,7 @@ const createTarjetaRoja = async (req, res) => {
         ...data,
         fecha: new Date(data.fecha),
         ...(imagesData.length > 0 && { images: { create: imagesData } }),
-        userId: data.userId ? Number(data.userId) : null,
+        userId: req.user.id,
       },
       include: {
         user: true,
@@ -117,7 +125,9 @@ const uploadTarjetaRojaImage = async (req, res) => {
 const updateTarjetaRoja = async (req, res) => {
   try {
     const { id } = req.params;
-    const cambios = req.body;
+    const cambios = pickTarjetaData(req.body);
+    if (cambios.fecha !== undefined) cambios.fecha = new Date(cambios.fecha);
+    cambios.userId = req.user.id;
 
     const actual = await prisma.tarjetaRoja.findUnique({
       where: { id: Number(id) },
@@ -136,7 +146,7 @@ const updateTarjetaRoja = async (req, res) => {
     await prisma.tarjetaRojaHistorial.create({
       data: {
         tarjetaId: Number(id),
-        userId: Number(cambios.userId),
+        userId: req.user.id,
         campo: "actualización general",
         valorAnterior: JSON.stringify(actual),
         valorNuevo: JSON.stringify(actualizado),

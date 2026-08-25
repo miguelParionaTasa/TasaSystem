@@ -1,5 +1,5 @@
 import React, { useState, useEffect,useRef } from "react";
-import axios from "axios";
+import axios from "../axios";
 import Swal from "sweetalert2";
 
 const Activo = () => {
@@ -33,8 +33,8 @@ const Activo = () => {
   const [isDeletingActivo, setIsDeletingActivo] = useState(false); 
 
 
-  const token = localStorage.getItem("token");
   const userId = parseInt(localStorage.getItem("userId"));
+  const canAdmin = ["SUPER_ADMIN", "ADMIN_PLANTA"].includes(localStorage.getItem("userRole"));
 
   // === Cargar Zonas ===
   useEffect(() => {
@@ -117,7 +117,7 @@ const Activo = () => {
         ...activo,
         debeResaltarse: activo.debeResaltarse !== undefined 
           ? activo.debeResaltarse 
-          : (activo.userId !== null && activo.userId !== 1)
+          : false
       }));
 
       setActivos(datosConBandera);
@@ -157,7 +157,6 @@ const Activo = () => {
     try {
       await axios.post(`${process.env.REACT_APP_API_URL}activos`, formData, {
         headers: {
-          Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       });
@@ -189,7 +188,6 @@ const Activo = () => {
         formData,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
           },
         }
@@ -323,8 +321,7 @@ const Activo = () => {
     try {
       await axios.put(
         `${process.env.REACT_APP_API_URL}activos/${activo.id}`,
-        { ...formValues, userId },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { ...formValues, userId }
       );
 
       Swal.fire("Actualizado", "Activo modificado correctamente", "success");
@@ -341,11 +338,11 @@ const Activo = () => {
   };
 
   const handleDeleteActivo = async (activoId, activoNombre) => {
-    if (userId !== 1) {
+    if (!canAdmin) {
       Swal.fire({
         icon: "error",
         title: "Permiso denegado",
-        text: "Solo el administrador (ID 1) puede eliminar activos.",
+        text: "Solo un administrador de planta puede eliminar activos.",
       });
       return;
     }
@@ -377,11 +374,7 @@ const Activo = () => {
     if (result.isConfirmed) {
       Swal.showLoading(); // Muestra el spinner de carga en el botón de confirmación
       try {
-        await axios.delete(`${process.env.REACT_APP_API_URL}activos/${activoId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        await axios.delete(`${process.env.REACT_APP_API_URL}activos/${activoId}`);
         Swal.fire("Eliminado", "El activo ha sido eliminado correctamente.", "success");
         handleSubmit();
       } catch (err) {

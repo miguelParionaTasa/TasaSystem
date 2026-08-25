@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../axios";
 import Swal from "sweetalert2";
 
 const Clinica = () => {
@@ -40,11 +40,8 @@ const Clinica = () => {
     fecha: "",
   });
 
-  const token = localStorage.getItem("token");
   const userId = parseInt(localStorage.getItem("userId"));
 
-  // Define el ID del usuario "administrador" o el que NO quieres resaltar (Miguel Pariona)
-  const ADMIN_USER_ID = 1;
 
   // =========================
   // ORDENAR
@@ -240,7 +237,6 @@ const Clinica = () => {
         formData,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
           },
         }
@@ -323,11 +319,7 @@ const Clinica = () => {
           ...cambios,
           userId,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        {}
       );
 
       Swal.fire(
@@ -400,14 +392,7 @@ const Clinica = () => {
     });
 
     try {
-      await axios.delete(
-        `${process.env.REACT_APP_API_URL}clinicas/${item.id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await axios.delete(`${process.env.REACT_APP_API_URL}clinicas/${item.id}`);
 
       Swal.fire(
         "Eliminado",
@@ -474,7 +459,6 @@ const Clinica = () => {
         formData,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
           },
         }
@@ -832,8 +816,7 @@ const Clinica = () => {
 
                   <tr
                     key={item.id}
-                    // Añadimos una clase condicional: si el userId del item no es el ADMIN_USER_ID (Miguel), lo resalta en verde
-                    className={`hover:bg-gray-50 ${item.userId !== ADMIN_USER_ID ? 'bg-green-100' : ''}`}
+                    className={`hover:bg-gray-50 ${item.userId === userId ? 'bg-green-100' : ''}`}
                   >
 
                     {/* ZONA */}

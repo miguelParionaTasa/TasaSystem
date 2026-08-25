@@ -1,18 +1,9 @@
-// middleware/auth.js
-const authMiddleware = (req, res, next) => {
-    const user = req.user; // Asumiendo que el usuario está en req.user después de la autenticación
-  
-    if (!user) {
-      return res.status(401).json({ message: "No autenticado" });
-    }
-  
-    // Verificar si el usuario es administrador
-    if (!user.isAdmin) {
-      return res.status(403).json({ message: "No tienes permiso para realizar esta acción" });
-    }
-  
-    req.user = user; // Pasar el usuario a la siguiente función
-    next();
-  };
-  
-  module.exports = authMiddleware;
+const ADMIN_ROLES = new Set(["SUPER_ADMIN", "ADMIN_PLANTA"]);
+
+module.exports = (req, res, next) => {
+  if (!req.user) return res.status(401).json({ error: "Sesión requerida." });
+  if (!ADMIN_ROLES.has(req.user.rol)) {
+    return res.status(403).json({ error: "Acción reservada para administración." });
+  }
+  return next();
+};

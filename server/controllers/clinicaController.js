@@ -12,7 +12,7 @@ const uploadClinicaImage = async (req, res) => {
         if (err.code === "LIMIT_FILE_SIZE") {
           return res.status(400).json({ message: "El archivo excede el tamaño máximo permitido de 2 MB." });
         }
-        return res.status(500).json({ message: "Error al procesar el archivo.", error: err.message });
+        return res.status(500).json({ message: "Error al procesar el archivo.", requestId: req.requestId });
       }
 
       const { id } = req.params;
@@ -32,7 +32,7 @@ const uploadClinicaImage = async (req, res) => {
       res.status(201).json(newImage);
     } catch (error) {
       console.error("❌ Error al subir imagen de clínica:", error);
-      res.status(500).json({ message: "Error al subir imagen.", error: error.message });
+      res.status(500).json({ message: "Error al subir imagen.", requestId: req.requestId });
     }
   });
 };
@@ -86,7 +86,7 @@ const createClinica = async (req, res) => {
     res.status(201).json(clinica);
   } catch (error) {
     console.error("❌ Error al crear clínica con todos los atributos:", error);
-    res.status(500).json({ message: "Error al crear clínica", error: error.message });
+    res.status(500).json({ message: "Error al crear clínica", requestId: req.requestId });
   }
 };
 

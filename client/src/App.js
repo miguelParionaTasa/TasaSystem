@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -21,101 +21,47 @@ import Atributo from "./pages/Atributo";
 import Activo from "./pages/Activo";
 import Proceso from "./pages/Proceso";
 import Predictivo from "./pages/Predictivo";
-// 🔹 REINTEGRADO: Importación del hook de autenticación corregido
+import Administracion from "./pages/Administracion";
 import useAuth from "./hooks/useAuth";
 
-const PrivateRoute = ({ element, authenticated }) => {
-  return authenticated ? element : <Navigate to="/login" replace />;
+const PrivateRoute = ({ authenticated, loading, children, roles, user }) => {
+  if (loading) return <div className="min-h-[50vh] flex items-center justify-center">Verificando sesión…</div>;
+  if (!authenticated) return <Navigate to="/login" replace />;
+  if (roles && !roles.includes(user?.rol)) return <Navigate to="/movimientos" replace />;
+  return children;
 };
 
 const App = () => {
-  // Inicialización limpia: Consulta directa al almacenamiento local antes del renderizado
-  const [authenticated, setAuthenticated] = useState(() => {
-    const storedToken = localStorage.getItem("token");
-    const storedUserName = localStorage.getItem("userName");
-    return !!(storedToken && storedUserName);
-  });
+  const [authenticated, setAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+  useAuth(setAuthenticated, setUser, setLoading);
 
-  const [userName, setUserName] = useState(() => {
-    return localStorage.getItem("userName") || "";
-  });
-
-  // 🔹 REINTEGRADO: Activación segura de useAuth sin generar bucles en WebKit
-  useAuth(setAuthenticated);
-
-  useEffect(() => {
-    const storedUserName = localStorage.getItem("userName");
-    if (storedUserName && storedUserName !== userName) {
-      setUserName(storedUserName);
-    }
-  }, [userName]);
-
-  const protectedRoutes = [
-    { path: "/movimientos", element: <MovimientosPage /> },
-    { path: "/reporte", element: <Reportes /> },
-    { path: "/general", element: <General /> },
-    { path: "/historico", element: <Historico /> },
-    { path: "/activo", element: <Activo /> },
-    { path: "/clinica", element: <Clinica /> },
-    { path: "/tarjetaroja", element: <TarjetaRoja /> },
-    { path: "/inventario", element: <Inventario /> },
-    { path: "/importar", element: <Importar /> },
-    { path: "/lubricante", element: <Lubricante /> },
-    { path: "/materiales", element: <Materiales /> },
-    { path: "/atributo", element: <Atributo /> },
-    { path: "/proceso", element: <Proceso /> },
-    { path: "/predictivo", element: <Predictivo /> },
+  const routes = [
+    ["/movimientos", <MovimientosPage />], ["/reporte", <Reportes />], ["/general", <General />],
+    ["/historico", <Historico />], ["/activo", <Activo />], ["/clinica", <Clinica />],
+    ["/tarjetaroja", <TarjetaRoja />], ["/inventario", <Inventario />], ["/importar", <Importar />],
+    ["/lubricante", <Lubricante />], ["/materiales", <Materiales />], ["/atributo", <Atributo />],
+    ["/proceso", <Proceso />], ["/predictivo", <Predictivo />],
   ];
 
   return (
     <div>
-      <Header
-        setAuthenticated={setAuthenticated}
-        setUserName={setUserName}
-        userName={userName}
-      />
-
+      <Header user={user} setUser={setUser} setAuthenticated={setAuthenticated} />
       <Routes>
         <Route path="/" element={<Home />} />
-
-        <Route
-          path="/login"
-          element={
-            authenticated ? (
-              <Navigate to="/movimientos" replace />
-            ) : (
-              <Login
-                setAuthenticated={setAuthenticated}
-                setUserName={setUserName}
-              />
-            )
-          }
-        />
-
-        {protectedRoutes.map((route) => (
-          <Route
-            key={route.path}
-            path={route.path}
-            element={
-              <PrivateRoute
-                element={route.element}
-                authenticated={authenticated}
-              />
-            }
-          />
+        <Route path="/login" element={authenticated ? <Navigate to="/movimientos" replace /> : <Login setUser={setUser} setAuthenticated={setAuthenticated} />} />
+        {routes.map(([path, element]) => (
+          <Route key={path} path={path} element={<PrivateRoute authenticated={authenticated} loading={loading} user={user}>{element}</PrivateRoute>} />
         ))}
+        <Route path="/administracion" element={
+          <PrivateRoute authenticated={authenticated} loading={loading} user={user} roles={["SUPER_ADMIN", "ADMIN_PLANTA"]}>
+            <Administracion />
+          </PrivateRoute>
+        } />
       </Routes>
-
       <Footer />
-
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        newestOnTop
-        closeOnClick
-        pauseOnHover
-        draggable
-      />
+      <ToastContainer position="top-right" autoClose={3000} newestOnTop closeOnClick pauseOnHover draggable />
     </div>
   );
 };

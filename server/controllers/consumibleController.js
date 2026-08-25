@@ -79,7 +79,7 @@ const deleteConsumible = async (req, res) => {
   const { id } = req.params;
   const user = req.user; // Asumiendo que el usuario está en req.user después de la autenticación
 
-  if (!user || !user.isAdmin) {
+  if (!user || user.rol !== "SUPER_ADMIN") {
     return res.status(403).json({ message: "No tienes permiso para eliminar consumibles" });
   }
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../axios";
 
 const General = () => {
 const [filter, setFilter] = useState({
@@ -127,7 +127,7 @@ const [otsDisponibles, setOtsDisponibles] = useState([]);
     }
   };
 const handleSubmit = async (e) => {
-  e.preventDefault();
+  e?.preventDefault?.();
   setLoading(true);
 
   const userId = localStorage.getItem("userId");
@@ -146,6 +146,34 @@ const resolveZonaForSap = (zonas, selectedZona) => {
   const z = zonas.find(z => String(z.id) === String(selectedZona) || z.name === selectedZona);
   return z?.nombreMaximo?.trim() || undefined;
 };
+
+    // ===============================
+    // 🔹 PEDIDOS UNIFICADOS DE TELEGRAM
+    // ===============================
+    if (filter.scope === "telegram") {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}solicitudes-material`,
+        { params: { origen: "TELEGRAM", otNumero: filter.ottId || undefined } }
+      );
+      setOts(response.data.map((request) => ({
+        id: request.id,
+        ottId: request.otNumero,
+        OTbasico: { name: request.descripcionOT || `Solicitud ${request.codigo}` },
+        zona: { name: request.zona?.name || "Sin zona mapeada" },
+        ubicacion: request.ubicacion ? { name: request.ubicacion.name } : null,
+        descripcionEquipo: `Telegram · ${request.codigo} · ${request.estado} · ${request.solicitante?.firstName || ""} ${request.solicitante?.lastName || ""}`,
+        otConsumibles: request.detalles.map((item) => ({
+          ...item,
+          nombreConsumible: item.nombreMaterial,
+          consumibleSap: item.codigoMaterial,
+          reservaSap: item.reservaSap,
+          comentarios: item.comentario,
+          fechaCreacion: item.createdAt,
+          origen: "TELEGRAM",
+        })),
+      })));
+      return;
+    }
 
     // ===============================
     // 🔹 CASO SAP
@@ -243,6 +271,7 @@ const ubicacionSeleccionada = filter.ubicacion
 const DetallesConsumibles = ({ consumibles, userId }) => {
   const [editingConsumible, setEditingConsumible] = useState(null);
   const [updatedData, setUpdatedData] = useState({});
+  const canEdit = ["SUPER_ADMIN", "ADMIN_PLANTA", "SUPERVISOR", "ALMACEN"].includes(localStorage.getItem("userRole"));
 
   const handleEditClick = (consumible) => {
     setEditingConsumible(consumible);
@@ -303,7 +332,7 @@ const DetallesConsumibles = ({ consumibles, userId }) => {
             <td>{consumible.consumible?.unidadMedida || consumible.unidadMedida}</td>
             <td>{consumible.cantidad || 0}</td>
             <td>
-              {editingConsumible?.id === consumible.id && ["1", "2", "3"].includes(userId) ? (
+              {editingConsumible?.id === consumible.id && canEdit && consumible.origen !== "TELEGRAM" ? (
                 <input
                   type="text"
                   name="reservaSap"
@@ -316,7 +345,7 @@ const DetallesConsumibles = ({ consumibles, userId }) => {
               )}
             </td>
             <td>
-              {editingConsumible?.id === consumible.id ? (
+              {editingConsumible?.id === consumible.id && canEdit && consumible.origen !== "TELEGRAM" ? (
                 <input
                   type="text"
                   name="comentarios"
@@ -339,15 +368,15 @@ const DetallesConsumibles = ({ consumibles, userId }) => {
                 : 'N/A'}
             </td>
             <td>
-              {editingConsumible?.id === consumible.id ? (
+              {editingConsumible?.id === consumible.id && canEdit && consumible.origen !== "TELEGRAM" ? (
                 <button onClick={handleSave} className="text-green-600 hover:underline">
                   Guardar
                 </button>
-              ) : (
+              ) : canEdit && consumible.origen !== "TELEGRAM" ? (
                 <button onClick={() => handleEditClick(consumible)} className="text-blue-600 hover:underline">
                   Editar
                 </button>
-              )}
+              ) : <span className="text-gray-500">Solo lectura</span>}
             </td>
           </tr>
         ))}
@@ -402,7 +431,8 @@ const DetallesConsumibles = ({ consumibles, userId }) => {
   > 
     <option value="miGrupo">Mi grupo</option>
     <option value="misMovimientos">Mis movimientos</option>
-    <option value="sap">SAP</option> {/* NUEVA OPCIÓN */}
+    <option value="sap">SAP</option>
+    <option value="telegram">Telegram</option>
   </select>
 </div>
 
@@ -502,7 +532,7 @@ const DetallesConsumibles = ({ consumibles, userId }) => {
     <tr className="mb-10"> {/* Agregar margen inferior a la fila */}
       <td className="py-2 px-4 border-b text-center">{ot.ottId || 'N/A'}</td>
       <td className="py-2 px-4 border-b text-center">{ot.OTbasico?.name || ot.OT}</td>
-      <td className="py-2 px-4 border-b text-center">{ot.zona.name}</td>
+      <td className="py-2 px-4 border-b text-center">{ot.zona?.name || "Sin zona mapeada"}</td>
       <td className="py-2 px-4 border-b text-center">{ot.ubicacion ? ot.ubicacion.name : 'N/A'}</td>
       <td className="py-2 px-4 border-b text-center">{ot.descripcionEquipo || 'Sin comentarios'}</td> {/* NUEVA CELDA */}
       

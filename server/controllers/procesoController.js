@@ -114,7 +114,7 @@ const updateproceso = async (req, res) => {
     if (!procesoActual) return res.status(404).json({ message: "Proceso no encontrado" });
 
     // Registrar en historial
-    await prisma.procesoHistorial.create({
+    await prisma.procesosHistorial.create({
       data: {
         proceso: { connect: { id: procesoActual.id } },
         valorAnterior: procesoActual.valor ?? "",
@@ -173,7 +173,7 @@ const deleteproceso = async (req, res) => {
 
     // Eliminar registros en cascada
     await prisma.image.deleteMany({ where: { procesos: { some: { id: proceso.id } } } });
-    await prisma.procesoHistorial.deleteMany({ where: { procesoId: proceso.id } });
+    await prisma.procesosHistorial.deleteMany({ where: { procesoId: proceso.id } });
     await prisma.procesos.delete({ where: { id: proceso.id } });
 
     res.status(204).send();
@@ -190,7 +190,7 @@ const getprocesoHistorial = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const historial = await prisma.procesoHistorial.findMany({
+    const historial = await prisma.procesosHistorial.findMany({
       where: { procesoId: parseInt(id) },
       include: { user: true },
       orderBy: { fechaCambio: "desc" },

@@ -1,362 +1,97 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { FaUserCircle, FaBars, FaTimes } from "react-icons/fa";
-import { MdKeyboardArrowDown } from "react-icons/md";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { FaBars, FaTimes, FaUserCircle } from "react-icons/fa";
+import api from "../axios";
+import { logoutUser } from "../services/api";
 
-const Header = ({ setAuthenticated, setUserName, userName }) => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [utilitariosOpen, setUtilitariosOpen] = useState(false);
-  const utilitariosRef = useRef(null);
+const LINKS = [
+  ["Pedidos", "/movimientos"], ["Reportes", "/general"], ["Todas OT", "/reporte"],
+  ["Materiales", "/materiales"], ["Datos técnicos", "/atributo"], ["Procesos", "/proceso"],
+  ["Predictivo", "/predictivo"], ["Histórico", "/historico"], ["Activos", "/activo"],
+  ["Clínica", "/clinica"], ["Tarjeta roja", "/tarjetaroja"], ["Inventario", "/inventario"],
+];
+const ELEVATED = ["SUPER_ADMIN", "ADMIN_PLANTA", "SUPERVISOR"];
+const ADMINS = ["SUPER_ADMIN", "ADMIN_PLANTA"];
+
+const Header = ({ user, setUser, setAuthenticated }) => {
+  const [open, setOpen] = useState(false);
+  const [utilitiesOpen, setUtilitiesOpen] = useState(false);
+  const [plants, setPlants] = useState([]);
   const navigate = useNavigate();
-
-  const storedUserId = localStorage.getItem("userId");
-  const puedeDescargarBD = ["1", "2", "3"].includes(storedUserId);
-const puedeVerLubricante = storedUserId === "1";
-
-  useEffect(() => {
-    const name = localStorage.getItem("userName");
-    if (name) setUserName(name);
-  }, [setUserName]);
+  const location = useLocation();
+  const role = user?.rol;
+  const selectedPlantId = localStorage.getItem("selectedPlantId") || String(user?.plantaId || "");
 
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (utilitariosRef.current && !utilitariosRef.current.contains(e.target)) {
-        setUtilitariosOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+    if (!user || !ELEVATED.includes(role)) return;
+    api.get("/plantas").then(({ data }) => setPlants(data)).catch(() => setPlants([]));
+  }, [role, user]);
 
-  const closeAllMenus = () => {
-    setMenuOpen(false);
-    setUtilitariosOpen(false);
+  const go = (path) => {
+    setOpen(false);
+    setUtilitiesOpen(false);
+    navigate(path);
   };
-
-  const handleLogout = () => {
-    localStorage.clear();
+  const logout = async () => {
+    await logoutUser();
     setAuthenticated(false);
-    setUserName("");
-    navigate("/login");
-    closeAllMenus();
+    setUser(null);
+    go("/login");
+  };
+  const selectPlant = (event) => {
+    const id = event.target.value;
+    localStorage.setItem("selectedPlantId", id);
+    window.location.reload();
+  };
+  const download = async () => {
+    const response = await api.get("/export/exportar", { responseType: "blob" });
+    const url = URL.createObjectURL(response.data);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `TasaSystem_planta_${selectedPlantId}.xlsx`;
+    link.click();
+    URL.revokeObjectURL(url);
   };
 
-  const handleDescargarBD = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}export/exportar`);
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "base_datos.xlsx";
-      link.click();
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("❌ Error al descargar:", error);
-    }
-  };
-
-  const handleNavigate = (path) => {
-    setTimeout(() => {
-      navigate(path);
-    }, 10);
-    closeAllMenus();
-  };
-
+  if (location.pathname === "/login" && !user) return null;
   return (
-    <header className="bg-white shadow-md text-black p-4 relative z-50">
-      <div className="max-w-screen-xl mx-auto flex justify-between items-center">
-        <img
-          src="/assets/logo.png"
-          alt="Logo"
-          className="w-40 h-20 cursor-pointer"
-          onClick={() => handleNavigate("/")}
-        />
-
-        {/* Desktop nav */}
-        <nav className="hidden md:flex gap-8 items-center text-lg font-semibold">
-          <button onClick={() => handleNavigate("/movimientos")} className="hover:text-orange-500">
-            Pedidos
-          </button>
-          <button onClick={() => handleNavigate("/general")} className="hover:text-orange-500">
-            Reportes
-          </button>
-
-          <div className="relative" ref={utilitariosRef}>
-            <button
-              onClick={() => setUtilitariosOpen(!utilitariosOpen)}
-              className="flex items-center gap-1 hover:text-orange-500"
-            >
-              Utilitarios
-              <MdKeyboardArrowDown className={`transition-transform ${utilitariosOpen ? "rotate-180" : ""}`} />
-            </button>
-
-            {utilitariosOpen && (
-              <div className="absolute top-full left-0 bg-white shadow-md border mt-1 min-w-[180px] z-50">
-                <button
-                  onClick={() => handleNavigate("/reporte")}
-                  className="block w-full text-left px-4 py-2 hover:bg-blue-300"
-                >
-                  Todas OT
-                </button>
-                <button
-  onClick={() => handleNavigate("/materiales")}
-  className="block w-full text-left px-4 py-2 hover:bg-blue-300"
->
-  Materiales
-</button>
-
-        <button
-              onClick={() => handleNavigate("/atributo")}
-              className="block w-full text-left px-4 py-2 hover:bg-blue-300"
-            >
-              Datos técnicos
-            </button>
-              <button
-              onClick={() => handleNavigate("/proceso")}
-              className="block w-full text-left px-4 py-2 hover:bg-blue-300"
-            >
-              Procesos
-            </button>
-            <button
-              onClick={() => handleNavigate("/predictivo")}
-              className="block w-full text-left px-4 py-2 hover:bg-blue-300"
-            >
-              Predictivo
-            </button>
-                <button
-                  onClick={() => handleNavigate("/historico")}
-                  className="block w-full text-left px-4 py-2 hover:bg-blue-300"
-                >
-                  Histórico
-                </button>
-                <button
-                  onClick={() => handleNavigate("/activo")}
-                  className="block w-full text-left px-4 py-2 hover:bg-blue-300"
-                >
-                  Activos
-                </button>
-                  <button
-                  onClick={() => handleNavigate("/clinica")}
-                  className="block w-full text-left px-4 py-2 hover:bg-blue-300"
-                >
-                  Clínica
-                </button>
-                
-                <button
-                  onClick={() => handleNavigate("/tarjetaroja")}
-                  className="block w-full text-left px-4 py-2 hover:bg-blue-300"
-                >
-                  TarjetaRoja
-                </button>
-                 <button
-                  onClick={() => handleNavigate("/importar")}
-                  className="block w-full text-left px-4 py-2 hover:bg-blue-300"
-                >
-                  Importar
-                </button>
-                  <button
-                  onClick={() => handleNavigate("/inventario")}
-                  className="block w-full text-left px-4 py-2 hover:bg-blue-300"
-                >
-                  Inventario
-                </button>
-                {puedeVerLubricante && (
-  <button
-    onClick={() => handleNavigate("/lubricante")}
-    className="block w-full text-left px-4 py-2 hover:bg-blue-300"
-  >
-    Lubricante
-  </button>
-)}
-
-
-                {puedeDescargarBD && (
-                  <button
-                    onClick={() => {
-                      handleDescargarBD();
-                      closeAllMenus();
-                    }}
-                    className="w-full text-left px-4 py-2 bg-blue-100 font-semibold hover:bg-blue-700 hover:text-white transition"
-                  >
-                    📥 Descargar BD
-                  </button>
-                )}
-              </div>
-            )}
-          </div>
-        </nav>
-
-        {/* User controls (desktop) */}
-        <div className="hidden md:flex items-center space-x-4">
-          {userName ? (
-            <>
-              <span className="text-lg">{userName}</span>
-              <button
-                onClick={handleLogout}
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
-              >
-                Cerrar sesión
-              </button>
-            </>
-          ) : (
-            <button onClick={() => handleNavigate("/login")}>
-              <FaUserCircle className="text-3xl text-gray-700 hover:text-orange-500" />
-            </button>
-          )}
-        </div>
-{/* Nombre de usuario (solo mobile) */}
-<div className="md:hidden absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
-  {userName && (
-    <span className="text-lg font-semibold text-gray-800">
-      {userName}
-    </span>
-  )}
-</div>
-        {/* Hamburger (mobile) */}
-        <div className="md:hidden z-50">
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Abrir menú"
-            aria-expanded={menuOpen}
-          >
-            {menuOpen ? (
-              <FaTimes className="text-3xl text-gray-700 hover:text-orange-500" />
-            ) : (
-              <FaBars className="text-3xl text-gray-700 hover:text-orange-500" />
-            )}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile menu */}
-      {menuOpen && (
-        <div className="fixed inset-0 z-40">
-          <div className="absolute inset-0 bg-black bg-opacity-30" onClick={closeAllMenus} />
-
-          <nav className="absolute top-0 left-0 w-4/5 max-w-xs h-full bg-white shadow-xl p-4 space-y-4 overflow-y-auto">
-
-            <button
-              onClick={() => handleNavigate("/movimientos")}
-              className="block w-full text-left text-lg hover:bg-blue-300 px-2 py-1 rounded"
-            >
-              Pedidos
-            </button>
-            <button
-              onClick={() => handleNavigate("/general")}
-              className="block w-full text-left text-lg hover:bg-blue-300 px-2 py-1 rounded"
-            >
-              Reportes
-            </button>
-
-            {/* Mostrar directamente las opciones de utilitarios */}
-            <button
-              onClick={() => handleNavigate("/reporte")}
-              className="block w-full text-left text-lg hover:bg-blue-300 px-2 py-1 rounded"
-            >
-              Todas OT
-            </button>
-            <button
-  onClick={() => handleNavigate("/materiales")}
-  className="block w-full text-left text-lg hover:bg-blue-300 px-2 py-1 rounded"
->
-  Materiales
-</button>
-        <button
-              onClick={() => handleNavigate("/atributo")}
-              className="block w-full text-left text-lg hover:bg-blue-300 px-2 py-1 rounded"
-            >
-              Datos técnicos
-            </button>
-            <button
-              onClick={() => handleNavigate("/proceso")}
-              className="block w-full text-left text-lg hover:bg-blue-300 px-2 py-1 rounded"
-            >
-              Procesos
-            </button>
-            <button
-              onClick={() => handleNavigate("/predictivo")}
-              className="block w-full text-left text-lg hover:bg-blue-300 px-2 py-1 rounded"
-            >
-              Predictivo
-            </button>
-            <button
-              onClick={() => handleNavigate("/historico")}
-              className="block w-full text-left text-lg hover:bg-blue-300 px-2 py-1 rounded"
-            >
-              Histórico
-            </button>
-<button
-              onClick={() => handleNavigate("/activo")}
-              className="block w-full text-left text-lg hover:bg-blue-300 px-2 py-1 rounded"
-            >
-              Activos
-            </button>
-<button
-              onClick={() => handleNavigate("/clinica")}
-              className="block w-full text-left text-lg hover:bg-blue-300 px-2 py-1 rounded"
-            >
-              Clínica
-            </button>
-            <button
-              onClick={() => handleNavigate("/tarjetaroja")}
-              className="block w-full text-left text-lg hover:bg-blue-300 px-2 py-1 rounded"
-            >
-              TarjetaRoja
-            </button>
-            <button
-              onClick={() => handleNavigate("/importar")}
-              className="block w-full text-left text-lg hover:bg-blue-300 px-2 py-1 rounded"
-            >
-              Importar
-            </button>
-              <button
-              onClick={() => handleNavigate("/inventario")}
-              className="block w-full text-left text-lg hover:bg-blue-300 px-2 py-1 rounded"
-            >
-              Inventario
-            </button>
-            {puedeVerLubricante && (
-  <button
-    onClick={() => handleNavigate("/lubricante")}
-    className="block w-full text-left text-lg hover:bg-blue-300 px-2 py-1 rounded"
-  >
-    Lubricante
-  </button>
-)}
-            {puedeDescargarBD && (
-              <button
-                onClick={() => {
-                  handleDescargarBD();
-                  closeAllMenus();
-                }}
-                className="w-full flex items-center gap-2 px-4 py-2 bg-blue-100 text-black font-semibold rounded hover:bg-blue-200 transition"
-              >
-                📥 Descargar BD
-              </button>
-            )}
-
-            {/* Cerrar sesión o iniciar sesión */}
-            <div className="pt-4 border-t">
-              {userName ? (
-                <button
-                  onClick={handleLogout}
-                  className="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded"
-                >
-                  Cerrar sesión
-                </button>
-              ) : (
-                <button
-                  onClick={() => handleNavigate("/login")}
-                  className="w-full flex items-center gap-2 text-lg hover:text-orange-500"
-                >
-                  <FaUserCircle className="text-2xl" /> Iniciar sesión
-                </button>
-              )}
+    <header className="bg-white shadow-md p-3 relative z-50">
+      <div className="max-w-screen-xl mx-auto flex items-center justify-between gap-4">
+        <img src="/assets/logo.png" alt="TASA System" className="w-32 h-16 object-contain cursor-pointer" onClick={() => go("/")} />
+        {user && (
+          <nav className="hidden lg:flex items-center gap-5 font-semibold">
+            <button onClick={() => go("/movimientos")} className="hover:text-orange-500">Pedidos</button>
+            <button onClick={() => go("/general")} className="hover:text-orange-500">Reportes</button>
+            <div className="relative">
+              <button onClick={() => setUtilitiesOpen((value) => !value)} className="hover:text-orange-500">Utilitarios ▾</button>
+              {utilitiesOpen && <div className="absolute top-8 left-0 bg-white border shadow-lg min-w-52 max-h-[70vh] overflow-y-auto py-2">
+                {LINKS.slice(2).map(([label, path]) => <button key={path} onClick={() => go(path)} className="block w-full text-left px-4 py-2 hover:bg-blue-50">{label}</button>)}
+                {ADMINS.includes(role) && <button onClick={() => go("/importar")} className="block w-full text-left px-4 py-2 hover:bg-blue-50">Importaciones</button>}
+                {ADMINS.includes(role) && <button onClick={() => go("/administracion")} className="block w-full text-left px-4 py-2 hover:bg-blue-50">Administración</button>}
+                {ADMINS.includes(role) && <button onClick={download} className="block w-full text-left px-4 py-2 bg-blue-50 hover:bg-blue-100">Descargar datos de planta</button>}
+              </div>}
             </div>
           </nav>
+        )}
+        <div className="hidden md:flex items-center gap-3">
+          {user && ELEVATED.includes(role) && plants.length > 0 && (
+            <select aria-label="Planta seleccionada" value={selectedPlantId} onChange={selectPlant} className="border rounded px-2 py-2 text-sm">
+              {plants.map((plant) => <option key={plant.id} value={plant.id}>{plant.nombre}</option>)}
+            </select>
+          )}
+          {user ? <>
+            <div className="text-sm text-right"><div className="font-semibold">{user.firstName} {user.lastName}</div><div className="text-gray-500">{role?.replaceAll("_", " ")}</div></div>
+            <button onClick={logout} className="bg-red-600 text-white px-3 py-2 rounded">Salir</button>
+          </> : <button onClick={() => go("/login")}><FaUserCircle className="text-3xl" /></button>}
         </div>
-      )}
+        {user && <button onClick={() => setOpen((value) => !value)} className="lg:hidden" aria-label="Abrir menú">{open ? <FaTimes className="text-2xl" /> : <FaBars className="text-2xl" />}</button>}
+      </div>
+      {open && user && <nav className="lg:hidden border-t mt-3 pt-3 max-h-[75vh] overflow-y-auto">
+        {ELEVATED.includes(role) && plants.length > 0 && <select value={selectedPlantId} onChange={selectPlant} className="w-full border rounded p-2 mb-2">{plants.map((plant) => <option key={plant.id} value={plant.id}>{plant.nombre}</option>)}</select>}
+        {[...LINKS, ...(ADMINS.includes(role) ? [["Importaciones", "/importar"], ["Administración", "/administracion"]] : [])].map(([label, path]) => <button key={path} onClick={() => go(path)} className="block w-full text-left p-2 hover:bg-blue-50">{label}</button>)}
+        {ADMINS.includes(role) && <button onClick={download} className="block w-full text-left p-2 bg-blue-50">Descargar datos de planta</button>}
+        <button onClick={logout} className="block w-full text-left p-2 text-red-700">Cerrar sesión</button>
+      </nav>}
     </header>
   );
 };

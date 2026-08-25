@@ -49,15 +49,15 @@ router.post("/:id/upload-image", upload, async (req, res) => {
     const image = await prisma.image.create({
       data: {
         url: result.secure_url,
-        activo: { connect: { id: parseInt(id) } }, // ✅ debe ser "activo", no "activos"
+        activos: { connect: { id: parseInt(id) } },
       },
-      include: { activo: true },
+      include: { activos: true },
     });
 
     res.status(201).json(image);
   } catch (error) {
     console.error("❌ Error al subir imagen:", error);
-    res.status(500).json({ message: "Error al subir imagen", error });
+    res.status(500).json({ message: "Error al subir imagen", requestId: req.requestId });
   }
 });
 

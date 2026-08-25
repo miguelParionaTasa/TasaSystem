@@ -84,7 +84,7 @@ const createOTConsumible = async (req, res) => {
 
     res
       .status(500)
-      .json({ message: "Error al crear OTConsumible", error: error.message });
+      .json({ message: "Error al crear OTConsumible", requestId: req.requestId });
   }
 };
 

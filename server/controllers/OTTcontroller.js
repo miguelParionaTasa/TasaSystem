@@ -1,7 +1,7 @@
 const prisma = require("./prisma");
 // Crear una nueva OT
 const createOTT = async (req, res) => {
-  const { name, OTmaximo, estado } = req.body;
+  const { name, OTmaximo, estado, Temp, temporadaId } = req.body;
 
   try {
     // Verificar que los campos requeridos no sean nulos
@@ -9,11 +9,19 @@ const createOTT = async (req, res) => {
       return res.status(400).json({ message: "Faltan campos requeridos." });
     }
 
-    const ot = await prisma.oT.create({
+    const temporada = temporadaId
+      ? await prisma.temporada.findUnique({ where: { id: Number(temporadaId) } })
+      : await prisma.temporada.findFirst({ where: { activa: true } });
+    const codigoTemporada = temporada?.codigo || (Temp ? String(Temp).trim().toUpperCase().replaceAll(" ", "") : null);
+    if (!codigoTemporada) return res.status(400).json({ message: "Selecciona o activa una temporada." });
+
+    const ot = await prisma.oTbasico.create({
       data: {
         name,
         OTmaximo,
         estado,
+        Temp: codigoTemporada,
+        temporadaId: temporada?.id || null,
       },
     });
 
@@ -27,7 +35,7 @@ const createOTT = async (req, res) => {
     }
     res
       .status(500)
-      .json({ message: "Error al crear OT", error: error.message });
+      .json({ message: "Error al crear OT", requestId: req.requestId });
   }
 };
 
@@ -62,7 +70,7 @@ const getAllOTTs = async (req, res) => {
     res.status(200).json(ots);
   } catch (error) {
     console.error("Error al obtener OTs:", error);
-    res.status(500).json({ message: "Error al obtener OTs", error: error.message });
+    res.status(500).json({ message: "Error al obtener OTs", requestId: req.requestId });
   }
 };
 
@@ -71,7 +79,7 @@ const getOTTById = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const ot = await prisma.oT.findUnique({
+    const ot = await prisma.oTbasico.findUnique({
       where: { id: parseInt(id, 10) },
     });
 
@@ -84,7 +92,7 @@ const getOTTById = async (req, res) => {
     console.error("Error al obtener OT:", error);
     res
       .status(500)
-      .json({ message: "Error al obtener OT", error: error.message });
+      .json({ message: "Error al obtener OT", requestId: req.requestId });
   }
 };
 
@@ -94,7 +102,7 @@ const updateOTT = async (req, res) => {
   const { name, OTmaximo, estado } = req.body;
 
   try {
-    const ot = await prisma.oT.update({
+    const ot = await prisma.oTbasico.update({
       where: { id: parseInt(id, 10) },
       data: {
         name,
@@ -113,7 +121,7 @@ const updateOTT = async (req, res) => {
     }
     res
       .status(500)
-      .json({ message: "Error al actualizar OT", error: error.message });
+      .json({ message: "Error al actualizar OT", requestId: req.requestId });
   }
 };
 
@@ -122,7 +130,7 @@ const deleteOTT = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const ot = await prisma.oT.delete({
+    const ot = await prisma.oTbasico.delete({
       where: { id: parseInt(id, 10) },
     });
 
@@ -131,7 +139,7 @@ const deleteOTT = async (req, res) => {
     console.error("Error al eliminar OT:", error);
     res
       .status(500)
-      .json({ message: "Error al eliminar OT", error: error.message });
+      .json({ message: "Error al eliminar OT", requestId: req.requestId });
   }
 };
 const updateTecnicosOT = async (req, res) => {

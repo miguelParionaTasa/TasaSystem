@@ -1,159 +1,431 @@
-const ExcelJS = require('exceljs');
-const prisma = require('./prisma'); // Tu instancia única de Prisma
+const ExcelJS = require("exceljs");
+const prisma = require("./prisma");
+
+/**
+ * Evita problemas al exportar valores especiales a Excel.
+ * También protege frente a fórmulas inyectadas en cadenas.
+ */
+const safeCell = (value) => {
+  if (value === null || value === undefined) return "";
+
+  if (typeof value === "bigint") {
+    return value.toString();
+  }
+
+  if (value instanceof Date) {
+    if (Number.isNaN(value.getTime())) {
+      return "(Fecha inválida)";
+    }
+
+    const pad = (n) => String(n).padStart(2, "0");
+
+    return `${pad(value.getDate())}/${pad(
+      value.getMonth() + 1
+    )}/${value.getFullYear()} ${pad(value.getHours())}:${pad(
+      value.getMinutes()
+    )}:${pad(value.getSeconds())}`;
+  }
+
+  if (typeof value === "object") {
+    return JSON.stringify(
+      value,
+      (_, item) => (typeof item === "bigint" ? item.toString() : item)
+    );
+  }
+
+  /**
+   * Evita que Excel interprete texto proveniente de BD
+   * como fórmula.
+   */
+  if (
+    typeof value === "string" &&
+    /^[=+\-@]/.test(value)
+  ) {
+    return `'${value}`;
+  }
+
+  return value;
+};
 
 async function exportDatabase(req, res) {
   try {
-    // 1. Configuramos las cabeceras HTTP de inmediato para preparar la descarga por Streaming
-    res.setHeader(
-      'Content-Type',
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    );
-    res.setHeader('Content-Disposition', 'attachment; filename=base_datos_optimizada.xlsx');
+    const plantaId = req.plantaId || null;
 
-    // 2. Instanciamos el libro usando el modo STREAMING (Escribe directo al cliente y libera RAM)
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+
+    const nombreArchivo = plantaId
+      ? `TasaSystem_planta_${plantaId}.xlsx`
+      : "TasaSystem_base_datos.xlsx";
+
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="${nombreArchivo}"`
+    );
+
+    res.setHeader("Cache-Control", "no-store");
+
+    /**
+     * STREAMING:
+     * El Excel se escribe directamente en la respuesta HTTP.
+     * Así evitamos generar todo el archivo primero en memoria RAM.
+     */
     const workbook = new ExcelJS.stream.xlsx.WorkbookWriter({
-      stream: res, // Escribe directamente en la respuesta HTTP
+      stream: res,
       useStyles: true,
-      useSharedStrings: true
+      useSharedStrings: true,
     });
 
-    // Definición de todos los modelos a procesar uno a uno
+    workbook.creator = "TASA System";
+    workbook.created = new Date();
+
+    /**
+     * Unión de los modelos que existían en MAIN
+     * + modelos incorporados con temporadas/multiplanta.
+     */
     const modelKeys = [
-      { name: 'Users', delegate: prisma.user },
-      { name: 'Areas', delegate: prisma.area },
-      { name: 'Ots', delegate: prisma.ots },
-      { name: 'OTConsumibles', delegate: prisma.oTConsumible, includeImages: true },
-      { name: 'OTMovimientosSAP', delegate: prisma.oTMovimientoSAP },
-      { name: 'Consumibles', delegate: prisma.consumible },
-      { name: 'Zonas', delegate: prisma.zona },
-      { name: 'Ubicaciones', delegate: prisma.ubicacion },
-      { name: 'Lubricaciones', delegate: prisma.lubricacion, includeImages: true },
-      { name: 'Componentes', delegate: prisma.componente, includeImages: true },
-      { name: 'Atributos', delegate: prisma.atributo, includeImages: true },
-      { name: 'Clinicas', delegate: prisma.clinica, includeImages: true },
-      { name: 'ClinicaHistoriales', delegate: prisma.clinicaHistorial },
-      { name: 'Activos', delegate: prisma.activo, includeImages: true },
-      { name: 'ActivoHistoriales', delegate: prisma.activoHistorial },
-      { name: 'AtributoHistoriales', delegate: prisma.atributoHistorial },
-      { name: 'Repuestos', delegate: prisma.repuesto, includeImages: true },
-      { name: 'Equipos', delegate: prisma.equipo, includeImages: true },
-      { name: 'Images', delegate: prisma.image },
-      { name: 'OTbasicos', delegate: prisma.oTbasico },
-      { name: 'Historicos', delegate: prisma.historico },
-      { name: 'InventarioItems', delegate: prisma.inventarioItem },
-      { name: 'HistorialItems', delegate: prisma.historialItem },
-      { name: 'Configuraciones', delegate: prisma.configuracion },
-      { name: 'Predictivos', delegate: prisma.predictivo, includeImages: true },
-      { name: 'Procesos', delegate: prisma.procesos, includeImages: true },
-      { name: 'ProcesosHistoriales', delegate: prisma.procesosHistorial },
-      { name: 'TarjetasRojas', delegate: prisma.tarjetaRoja, includeImages: true },
-      { name: 'TarjetaRojaHistoriales', delegate: prisma.tarjetaRojaHistorial },
-      { name: 'TelegramUsers', delegate: prisma.telegramUser },
-      { name: 'OTBots', delegate: prisma.oTBot },
-      { name: 'OTConsumibleBots', delegate: prisma.oTConsumibleBot }
+      {
+        name: "Users",
+        delegate: prisma.user,
+      },
+      {
+        name: "Areas",
+        delegate: prisma.area,
+      },
+      {
+        name: "Ots",
+        delegate: prisma.ots,
+      },
+      {
+        name: "OTConsumibles",
+        delegate: prisma.oTConsumible,
+        includeImages: true,
+      },
+      {
+        name: "OTMovimientosSAP",
+        delegate: prisma.oTMovimientoSAP,
+      },
+      {
+        name: "Consumibles",
+        delegate: prisma.consumible,
+      },
+      {
+        name: "Zonas",
+        delegate: prisma.zona,
+      },
+      {
+        name: "Ubicaciones",
+        delegate: prisma.ubicacion,
+      },
+      {
+        name: "Lubricaciones",
+        delegate: prisma.lubricacion,
+        includeImages: true,
+      },
+      {
+        name: "Componentes",
+        delegate: prisma.componente,
+        includeImages: true,
+      },
+      {
+        name: "Atributos",
+        delegate: prisma.atributo,
+        includeImages: true,
+      },
+      {
+        name: "Clinicas",
+        delegate: prisma.clinica,
+        includeImages: true,
+      },
+      {
+        name: "ClinicaHistoriales",
+        delegate: prisma.clinicaHistorial,
+      },
+      {
+        name: "Activos",
+        delegate: prisma.activo,
+        includeImages: true,
+      },
+      {
+        name: "ActivoHistoriales",
+        delegate: prisma.activoHistorial,
+      },
+      {
+        name: "AtributoHistoriales",
+        delegate: prisma.atributoHistorial,
+      },
+      {
+        name: "Repuestos",
+        delegate: prisma.repuesto,
+        includeImages: true,
+      },
+      {
+        name: "Equipos",
+        delegate: prisma.equipo,
+        includeImages: true,
+      },
+      {
+        name: "Images",
+        delegate: prisma.image,
+      },
+      {
+        name: "OTbasicos",
+        delegate: prisma.oTbasico,
+      },
+      {
+        name: "Historicos",
+        delegate: prisma.historico,
+      },
+      {
+        name: "InventarioItems",
+        delegate: prisma.inventarioItem,
+      },
+      {
+        name: "HistorialItems",
+        delegate: prisma.historialItem,
+      },
+      {
+        name: "Configuraciones",
+        delegate: prisma.configuracion,
+      },
+      {
+        name: "Predictivos",
+        delegate: prisma.predictivo,
+        includeImages: true,
+      },
+      {
+        name: "Procesos",
+        delegate: prisma.procesos,
+        includeImages: true,
+      },
+      {
+        name: "ProcesosHistoriales",
+        delegate: prisma.procesosHistorial,
+      },
+      {
+        name: "TarjetasRojas",
+        delegate: prisma.tarjetaRoja,
+        includeImages: true,
+      },
+      {
+        name: "TarjetaRojaHistoriales",
+        delegate: prisma.tarjetaRojaHistorial,
+      },
+      {
+        name: "TelegramUsers",
+        delegate: prisma.telegramUser,
+      },
+      {
+        name: "OTBots",
+        delegate: prisma.oTBot,
+      },
+      {
+        name: "OTConsumibleBots",
+        delegate: prisma.oTConsumibleBot,
+      },
+
+      /**
+       * NUEVOS MODELOS
+       * incorporados en seguridad / multiplanta / temporadas.
+       */
+      {
+        name: "SolicitudesUnificadas",
+        delegate: prisma.solicitudMaterial,
+      },
+      {
+        name: "SolicitudDetalles",
+        delegate: prisma.solicitudMaterialDetalle,
+
+        /**
+         * Esta consulta ya venía filtrada por planta
+         * en tu versión multiplanta.
+         */
+        buildWhere: () => {
+          if (!plantaId) {
+            return undefined;
+          }
+
+          return {
+            solicitud: {
+              plantaId: plantaId,
+            },
+          };
+        },
+      },
+      {
+        name: "Temporadas",
+        delegate: prisma.temporada,
+      },
     ];
 
-    const CHUNK_SIZE = 5000; // Procesamos los registros en bloques de 5,000 para no saturar la RAM
+    /**
+     * Procesamos 5,000 registros por bloque.
+     * Reduce significativamente el consumo de memoria.
+     */
+    const CHUNK_SIZE = 5000;
 
-    // Helper interno para formatear fechas de manera eficiente
-    const pad = (n) => String(n).padStart(2, '0');
-    const formatDate = (val) => `${pad(val.getDate())}/${pad(val.getMonth() + 1)}/${val.getFullYear()} ${pad(val.getHours())}:${pad(val.getMinutes())}:${pad(val.getSeconds())}`;
-
-    // 3. Procesamiento secuencial por modelo
     for (const model of modelKeys) {
-      const worksheet = workbook.addWorksheet(model.name);
-      
+      /**
+       * Excel permite máximo 31 caracteres por nombre de hoja.
+       */
+      const worksheet = workbook.addWorksheet(
+        model.name.slice(0, 31),
+        {
+          views: [
+            {
+              state: "frozen",
+              ySplit: 1,
+            },
+          ],
+        }
+      );
+
       let skip = 0;
       let hasMore = true;
       let columnsSet = false;
 
-      // Bucle de paginación por bloques
       while (hasMore) {
         const queryOptions = {
-          skip: skip,
+          skip,
           take: CHUNK_SIZE,
-          orderBy: { id: 'asc' } // Asegura consistencia en la paginación secuencial
+          orderBy: {
+            id: "asc",
+          },
         };
 
+        /**
+         * Algunos modelos tienen imágenes relacionadas.
+         */
         if (model.includeImages) {
-          queryOptions.include = { images: true };
+          queryOptions.include = {
+            images: true,
+          };
         }
 
-        // Traemos únicamente un bloque controlado de registros
+        /**
+         * Permite consultas especiales,
+         * por ejemplo SolicitudDetalles por planta.
+         */
+        if (typeof model.buildWhere === "function") {
+          const where = model.buildWhere();
+
+          if (where) {
+            queryOptions.where = where;
+          }
+        }
+
         const rows = await model.delegate.findMany(queryOptions);
 
         if (rows.length === 0) {
           if (skip === 0) {
-            worksheet.addRow(['(Sin datos registrados en esta tabla)']).commit();
+            worksheet
+              .addRow([
+                plantaId
+                  ? "Sin datos para la planta seleccionada"
+                  : "Sin datos registrados en esta tabla",
+              ])
+              .commit();
           }
+
           hasMore = false;
           break;
         }
 
-        // Definimos las columnas solo una vez basándonos en el primer registro del primer bloque
+        /**
+         * Creamos las columnas a partir del primer registro.
+         */
         if (!columnsSet) {
-          worksheet.columns = Object.keys(rows[0])
-            .filter(key => typeof rows[0][key] !== 'object' || rows[0][key] instanceof Date || Array.isArray(rows[0][key]))
-            .map((key) => ({
-              header: key,
-              key: key,
-              width: 22,
-            }));
+          const keys = Object.keys(rows[0]);
+
+          worksheet.columns = keys.map((key) => ({
+            header: key,
+            key,
+            width: Math.min(
+              Math.max(key.length + 4, 14),
+              42
+            ),
+          }));
+
+          worksheet.autoFilter = {
+            from: {
+              row: 1,
+              column: 1,
+            },
+            to: {
+              row: 1,
+              column: keys.length,
+            },
+          };
+
           columnsSet = true;
         }
 
-        // Procesamos y limpiamos el bloque actual en memoria
         for (const row of rows) {
-          const newRow = { ...row };
+          const newRow = {};
 
-          // Aplanamiento rápido de arrays de imágenes adjuntas
-          if (newRow.images && Array.isArray(newRow.images)) {
-            newRow.images = newRow.images.length > 0 
-              ? newRow.images.map(img => img.url || JSON.stringify(img)).join(', ') 
-              : '(Sin imagen)';
+          for (const [key, originalValue] of Object.entries(row)) {
+            let value = originalValue;
+
+            /**
+             * Las imágenes relacionadas se convierten
+             * en una lista de URLs.
+             */
+            if (
+              key === "images" &&
+              Array.isArray(value)
+            ) {
+              value =
+                value.length > 0
+                  ? value
+                      .map((img) => {
+                        if (img && img.url) {
+                          return img.url;
+                        }
+
+                        return safeCell(img);
+                      })
+                      .join(", ")
+                  : "(Sin imagen)";
+            }
+
+            newRow[key] = safeCell(value);
           }
 
-          // Sanitización veloz de celdas individuales
-          Object.keys(newRow).forEach(key => {
-            const val = newRow[key];
-            if (val instanceof Date) {
-              newRow[key] = !isNaN(val.getTime()) ? formatDate(val) : '(Fecha inválida)';
-            } else if (typeof val === 'bigint') {
-              newRow[key] = val.toString();
-            } else if (typeof val === 'object' && val !== null && !(val instanceof Date)) {
-              newRow[key] = JSON.stringify(val, (k, v) => typeof v === 'bigint' ? v.toString() : v);
-            }
-          });
-
-          // Insertamos la fila en caliente
           worksheet.addRow(newRow).commit();
         }
 
-        // Si el bloque actual es menor al tamaño solicitado, terminamos la tabla
         if (rows.length < CHUNK_SIZE) {
           hasMore = false;
         } else {
-          skip += CHUNK_SIZE; // Avanzamos al siguiente bloque
+          skip += CHUNK_SIZE;
         }
       }
 
-      // Consolidamos y liberamos la hoja actual de la memoria del servidor
       worksheet.commit();
     }
 
-    // 4. Finalizamos la escritura del flujo general de streaming
     await workbook.commit();
-    res.end();
-
   } catch (error) {
-    console.error('❌ Error crítico en el streaming del exportador:', error);
-    // Si ocurre un error antes de enviar cabeceras mandamos un 500, de lo contrario cerramos la conexión
+    console.error(
+      "❌ Error crítico en el streaming del exportador:",
+      error
+    );
+
     if (!res.headersSent) {
-      res.status(500).json({ message: 'Error interno al procesar el gran volumen de datos' });
-    } else {
+      return res.status(500).json({
+        message:
+          "Error interno al procesar la exportación de datos",
+      });
+    }
+
+    if (!res.writableEnded) {
       res.end();
     }
   }
 }
 
-module.exports = { exportDatabase };
+module.exports = {
+  exportDatabase,
+};

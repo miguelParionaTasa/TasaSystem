@@ -47,7 +47,7 @@ router.post("/:id/upload-image", (req, res) => {
         }
         return res
           .status(500)
-          .json({ message: "Error al procesar el archivo.", error: err.message });
+          .json({ message: "Error al procesar el archivo.", requestId: req.requestId });
       }
 
       const { id } = req.params;
@@ -75,7 +75,7 @@ router.post("/:id/upload-image", (req, res) => {
       console.error("❌ Error al subir imagen:", error);
       res
         .status(500)
-        .json({ message: "Error al subir imagen", error: error.message });
+        .json({ message: "Error al subir imagen", requestId: req.requestId });
     }
   });
 });

@@ -60,7 +60,7 @@ const uploadActivoImage = async (req, res) => {
 // ➕ Crear un activo (con imagen opcional)
 const createActivo = async (req, res) => {
   try {
-    const { nombre, valor, valor2, marca, modelo, serie, zona, ubicacion, equipoId, userId } = req.body;
+    const { nombre, valor, valor2, marca, modelo, serie, zona, ubicacion, codigoActivo, zonaId, ubicacionId, equipoId, userId } = req.body;
 
     if (!nombre || !userId) {
       return res.status(400).json({ message: "Campos requeridos faltantes" });
@@ -80,8 +80,11 @@ const createActivo = async (req, res) => {
         marca: marca || null,
         modelo: modelo || null,
         serie: serie || null,
+        codigoActivo: codigoActivo || null,
         zona: zona || null,           // ✅ añadido
         ubicacion: ubicacion || null, // ✅ añadido
+        zonaId: zonaId ? Number(zonaId) : null,
+        ubicacionId: ubicacionId ? Number(ubicacionId) : null,
         userId: Number(userId),
         equipoId: equipoId ? Number(equipoId) : null,
         ...(imagesData.length > 0 && { images: { create: imagesData } }),
@@ -103,9 +106,9 @@ const createActivo = async (req, res) => {
 
 
 // 📋 Obtener todos los activos
-const getAllActivos = async (_, res) => {
+const getAllActivos = async (req, res) => {
   try {
-    const miUserId = 1; // Tu ID base referencial
+    const actorId = req.user.id;
 
     const activos = await prisma.activo.findMany({
       include: {
@@ -124,11 +127,11 @@ const getAllActivos = async (_, res) => {
     // Mapeamos para inyectar la bandera que leerá el frontend sin romper tus datos actuales
     const activosConResaltado = activos.map((activo) => {
       // Condición A: El activo fue creado por alguien diferente a tu ID (1)
-      const creadoPorOtros = activo.userId !== null && activo.userId !== miUserId;
+      const creadoPorOtros = activo.userId !== null && activo.userId !== actorId;
 
       // Condición B: El último cambio en el historial fue hecho por alguien diferente a tu ID (1)
       const ultimoHistorial = activo.activoHistorial?.[0]; // Tomamos el primer elemento del take: 1
-      const modificadoPorOtros = ultimoHistorial && ultimoHistorial.userId !== miUserId;
+      const modificadoPorOtros = ultimoHistorial && ultimoHistorial.userId !== actorId;
 
       return {
         ...activo,
@@ -175,7 +178,19 @@ const getActivoById = async (req, res) => {
 const updateActivo = async (req, res) => {
   try {
     const { id } = req.params;
-    const { userId, descripcionNueva, ...data } = req.body;
+    const allowedFields = [
+      "nombre", "valor", "valor2", "marca", "modelo", "serie", "zona", "ubicacion",
+      "codigoActivo", "zonaId", "ubicacionId", "equipoId", "historial",
+    ];
+    const data = Object.fromEntries(
+      allowedFields
+        .filter((field) => req.body[field] !== undefined)
+        .map((field) => [field, req.body[field]])
+    );
+    for (const field of ["zonaId", "ubicacionId", "equipoId"]) {
+      if (data[field] !== undefined) data[field] = data[field] ? Number(data[field]) : null;
+    }
+    data.userId = req.user.id;
 
     // 1️⃣ Buscar el activo actual antes de actualizar
     const activoAnterior = await prisma.activo.findUnique({
@@ -196,7 +211,7 @@ const updateActivo = async (req, res) => {
     await prisma.activoHistorial.create({
       data: {
         activoId: parseInt(id),
-        userId: parseInt(userId) || 1, // 🔹 Si no viene en el body, se le asigna tu ID (1) por seguridad
+        userId: req.user.id,
         valorAnterior: JSON.stringify(activoAnterior), // guarda snapshot previo
         valorNuevo: JSON.stringify(activoActualizado), // guarda snapshot nuevo
       },
@@ -205,7 +220,7 @@ const updateActivo = async (req, res) => {
     res.status(200).json({ message: "Activo actualizado correctamente", activoActualizado });
   } catch (error) {
     console.error("❌ Error al actualizar activo:", error);
-    res.status(500).json({ message: "Error al actualizar activo", error });
+    res.status(500).json({ message: "Error al actualizar activo", requestId: req.requestId });
   }
 };
 
@@ -274,7 +289,7 @@ const deleteActivo = async (req, res) => {
     res.status(204).send();
   } catch (error) {
     console.error("❌ Error al eliminar activo:", error);
-    res.status(500).json({ message: "Error al eliminar activo", error: error.message });
+    res.status(500).json({ message: "Error al eliminar activo", requestId: req.requestId });
   }
 };
 
@@ -399,15 +414,15 @@ const searchActivos = async (req, res) => {
     // =========================
     // 🔹 INYECTADO: Mapeo de Auditoría de usuarios para colorear
     // =========================
-    const miUserId = 1; // Tu ID referencial (Miguel Pariona)
+    const actorId = req.user.id;
 
     const activosConMarcado = activos.map((activo) => {
       // Condición A: Creado por un ID diferente a 1
-      const creadoPorOtros = activo.userId !== null && activo.userId !== miUserId;
+      const creadoPorOtros = activo.userId !== null && activo.userId !== actorId;
 
       // Condición B: Modificado por un ID diferente a 1 en el historial
       const ultimoHistorial = activo.activoHistorial?.[0]; // Tomamos el elemento del take: 1
-      const modificadoPorOtros = ultimoHistorial && ultimoHistorial.userId !== miUserId;
+      const modificadoPorOtros = ultimoHistorial && ultimoHistorial.userId !== actorId;
 
       return {
         ...activo,
@@ -422,7 +437,7 @@ const searchActivos = async (req, res) => {
     console.error("❌ Error al buscar activos:", error);
     res.status(500).json({
       message: "Error al buscar activos",
-      error: error.message,
+      requestId: req.requestId,
     });
   }
 };

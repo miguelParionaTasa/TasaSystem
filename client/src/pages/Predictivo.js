@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../axios";
 import Swal from "sweetalert2";
 
 const Predictivo = () => {
@@ -15,18 +15,13 @@ const [file, setFile] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const [editedData, setEditedData] = useState({ comentario: "", otRelacionada: "" });
 
-  const token = localStorage.getItem("token");
-
   const openImageModal = (predictivo) => {
     setModalData(predictivo);
     setModalOpen(true);
   };
 
-  // === Utilidad para axios con token ===
-  const axiosAuth = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
-    headers: { Authorization: `Bearer ${token}` },
-  });
+  // === Instancia de API; la sesión viaja en cookie HttpOnly ===
+  const axiosAuth = axios;
 
   // === Obtener zonas ===
   useEffect(() => {

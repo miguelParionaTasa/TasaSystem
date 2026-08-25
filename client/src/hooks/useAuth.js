@@ -1,61 +1,38 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import axiosInstance from "../axios";
+import { clearUserProfile, storeUserProfile } from "../services/api";
 
-const useAuth = (setAuthenticated) => {
-  const navigate = useNavigate();
-
+const useAuth = (setAuthenticated, setUser, setLoading) => {
   useEffect(() => {
-    const checkTokenExpiration = () => {
-      const token = localStorage.getItem("token");
-      const currentPath = window.location.pathname; 
-
-      if (!token) {
+    let active = true;
+    const markExpired = () => {
+      clearUserProfile();
+      if (active) {
         setAuthenticated(false);
-        // Evita re-redirecciones infinitas si ya está en login o en la raíz pública
-        if (currentPath !== "/" && currentPath !== "/login") {
-          navigate("/login", { replace: true });
-        }
-        return;
+        setUser(null);
       }
-
+    };
+    const verify = async () => {
       try {
-        const decoded = jwtDecode(token);
-        const expirationTime = decoded.exp * 1000;
-
-        if (expirationTime < Date.now()) {
-          // Limpieza profunda al expirar el token JWT
-          setAuthenticated(false);
-          localStorage.removeItem("isAdmin");
-          localStorage.removeItem("periodoFin");
-          localStorage.removeItem("userId");
-          localStorage.removeItem("token");
-          localStorage.removeItem("userName");
-
-          if (currentPath !== "/" && currentPath !== "/login") {
-            navigate("/login", { replace: true });
-          }
-        } else {
+        const { data } = await axiosInstance.get("/auth/me");
+        storeUserProfile(data.user);
+        if (active) {
+          setUser(data.user);
           setAuthenticated(true);
         }
       } catch {
-        setAuthenticated(false);
-        if (currentPath !== "/" && currentPath !== "/login") {
-          navigate("/login", { replace: true });
-        }
+        markExpired();
+      } finally {
+        if (active) setLoading(false);
       }
     };
-
-    // Ejecuta la validación inicial
-    checkTokenExpiration();
-
-    // Re-verifica pasivamente cada 30 minutos
-    const intervalId = setInterval(checkTokenExpiration, 30 * 60 * 1000);
-
-    return () => clearInterval(intervalId);
-    
-    // Al dejar solo [setAuthenticated], el efecto corre una sola vez al montar la App
-  }, [navigate, setAuthenticated]); 
+    window.addEventListener("tasa:session-expired", markExpired);
+    void verify();
+    return () => {
+      active = false;
+      window.removeEventListener("tasa:session-expired", markExpired);
+    };
+  }, [setAuthenticated, setLoading, setUser]);
 };
 
 export default useAuth;

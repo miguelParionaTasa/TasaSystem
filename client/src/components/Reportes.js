@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
-import axios from 'axios';
+import axios from '../axios';
 
 const Reportes = () => {
   const [editBuffer, setEditBuffer] = useState({});
@@ -24,9 +24,7 @@ const Reportes = () => {
   useEffect(() => {
     const fetchOts = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}ott/ots`);
-        if (!response.ok) throw new Error('Error en la respuesta de la red');
-        const data = await response.json();
+        const { data } = await axios.get(`${process.env.REACT_APP_API_URL}ott/ots`);
         setComponentes(data);
         setFilteredData(data);
       } catch (err) {

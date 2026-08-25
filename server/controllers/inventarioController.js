@@ -165,6 +165,10 @@ const salidaDeItem = async (req, res) => {
   try {
     const id = parseInt(inventarioId, 10);
     const cant = parseInt(cantidadUsada, 10);
+    const fecha = new Date(fechaUso);
+    if (!Number.isInteger(id) || id <= 0 || !Number.isInteger(cant) || cant <= 0 || Number.isNaN(fecha.getTime())) {
+      return res.status(400).json({ message: "Item, cantidad positiva y fecha válida son obligatorios." });
+    }
 
     const result = await prisma.$transaction(async (tx) => {
       const item = await tx.inventarioItem.findUnique({
@@ -183,7 +187,7 @@ const salidaDeItem = async (req, res) => {
       const historial = await tx.historialItem.create({
         data: {
           inventarioId: id,
-          fechaUso: new Date(fechaUso),
+          fechaUso: fecha,
           cantidadUsada: cant,
           descripcionUso,
           destino,
@@ -196,7 +200,7 @@ const salidaDeItem = async (req, res) => {
         where: { id },
         data: {
           cantidad: item.cantidad - cant,
-          fechaSalida: new Date(fechaUso),
+          fechaSalida: fecha,
           destino,
         },
       });
@@ -207,7 +211,11 @@ const salidaDeItem = async (req, res) => {
     return res.status(201).json(result);
   } catch (error) {
     console.error("Error en salidaDeItem:", error);
-    return res.status(400).json({ message: error.message || "Error en salida" });
+    const safeMessages = new Set(["Item no encontrado", "Cantidad mayor al stock disponible"]);
+    return res.status(400).json({
+      message: safeMessages.has(error.message) ? error.message : "No se pudo registrar la salida.",
+      requestId: req.requestId,
+    });
   }
 };
 

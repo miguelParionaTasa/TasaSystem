@@ -1,11 +1,10 @@
 // src/pages/TarjetaRoja.jsx
 import React, { useEffect, useState, useRef } from "react";
-import axios from "axios";
+import axios from "../axios";
 import Swal from "sweetalert2";
 
 const TarjetaRoja = () => {
   const API = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token");
   const userId = parseInt(localStorage.getItem("userId"));
 const [activeTarjeta, setActiveTarjeta] = useState(null);
 
@@ -39,9 +38,7 @@ const [activeTarjeta, setActiveTarjeta] = useState(null);
     const fetch = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(`${API}tarjeta-roja`, {
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
-        });
+        const res = await axios.get(`${API}tarjeta-roja`);
        const data = res.data || [];
 
 const ordenado = data.sort(
@@ -108,7 +105,6 @@ const handleClearFilters = () => {
       setIsUploading(true);
       const res = await axios.post(`${API}tarjeta-roja/${tarjeta.id}/upload-image`, formData, {
         headers: {
-          Authorization: token ? `Bearer ${token}` : undefined,
           "Content-Type": "multipart/form-data",
         },
       });
@@ -298,9 +294,7 @@ if (filter.status === "Cerrado") {
     // Guardar solo comentario2 y userId
     try {
       const payload = { comentario2: formValues.comentario2, userId };
-      await axios.put(`${API}tarjeta-roja/${tarjeta.id}`, payload, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
+      await axios.put(`${API}tarjeta-roja/${tarjeta.id}`, payload);
 
       Swal.fire("Guardado", "Comentario actualizado", "success");
 

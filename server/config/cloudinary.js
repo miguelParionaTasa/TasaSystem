@@ -11,6 +11,7 @@ cloudinary.config({
  * Subir imagen WebP optimizada
  */
 const uploadImage = async (fileBuffer, options = {}) => {
+  if (typeof options === "string") options = { folder: options };
   const { folder = "atributos", width = 1000, height = 1000, quality = "auto:best", public_id } = options;
 
   return new Promise((resolve, reject) => {
@@ -35,6 +36,7 @@ const uploadImage = async (fileBuffer, options = {}) => {
  * Subir PDF como imagen de alta calidad (PNG)
  */
 const uploadPdfAsImage = async (fileBuffer, options = {}) => {
+  if (typeof options === "string") options = { folder: options };
   const { folder = "atributos-pdf", width = 2000, height = 2000, quality = "auto:best", public_id } = options;
 
   return new Promise((resolve, reject) => {
@@ -66,4 +68,4 @@ const uploadFile = async (fileBuffer, mimetype, options = {}) => {
   }
 };
 
-module.exports = { cloudinary, uploadImage, uploadPdfAsImage, uploadFile };
+module.exports = { cloudinary, uploadImage, uploadPdfAsImage, uploadPdf: uploadPdfAsImage, uploadFile };

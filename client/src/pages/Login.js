@@ -1,119 +1,49 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser  } from "../services/api";
+import { loginUser } from "../services/api";
 
-const Login = ({ setAuthenticated, setUserName }) => {
+const Login = ({ setAuthenticated, setUser }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Verificación de si el usuario ya está autenticado al cargar la página
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const storedUserName = localStorage.getItem("userName");
-
-    if (token && storedUserName) {
-      navigate("/movimientos");
-    }
-  }, [navigate]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!username || !password) {
-      setError("Por favor, ingrese un nombre de usuario y una contraseña.");
-      return;
-    }
-
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setError("");
+    if (!username.trim() || !password) return setError("Ingresa usuario y contraseña.");
     setLoading(true);
     try {
-      // Llamada al backend para obtener el token, userId e isAdmin
-      console.log("Enviando datos de inicio de sesión:", { username, password });
-      
-      const response = await loginUser (username, password);
-      const { token, userId, isAdmin } = response;
-      console.log("Respuesta del servidor:", response);
-
-      if (!token) {
-        throw new Error("No se recibió un token válido.");
-      }
-
-      // Actualizamos el username y los demás datos en el localStorage
-      localStorage.setItem("userName", username);
-      localStorage.setItem("userId", userId);
-      localStorage.setItem("isAdmin", isAdmin); // Almacena si el usuario es administrador
-
-      // Actualizar el estado de autenticación
+      const user = await loginUser(username.trim(), password);
+      setUser(user);
       setAuthenticated(true);
-      setUserName(username); // Actualizar el nombre de usuario en el estado
-
-      // Redirigir al usuario a la página de movimientos
-      navigate("/movimientos");
-    } catch (err) {
-      // Mostrar un mensaje de error específico
-      setError(err.message || "Credenciales incorrectas. Intenta nuevamente.");
+      navigate("/movimientos", { replace: true });
+    } catch (loginError) {
+      setError(loginError.message);
     } finally {
+      setPassword("");
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">
-          Iniciar sesión
-        </h2>
-
-        {error && <div className="text-red-500 text-center mb-4">{error}</div>}
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label
-              htmlFor="username"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Nombre de usuario
-            </label>
-            <input
-              id="username"
-              type="text"
-              placeholder="Nombre de usuario"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="mt-2 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Contraseña
-            </label>
-            <input
-              id="password"
-              type="password"
-              placeholder="Contraseña"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-2 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-3 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 disabled:bg-gray-400"
-          >
-            {loading ? "Iniciando sesión..." : "In iciar sesión"}
-          </button>
-        </form>
-      </div>
+    <div className="min-h-screen flex justify-center items-center bg-gray-100 py-8 px-4">
+      <form onSubmit={handleSubmit} className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg space-y-6">
+        <h1 className="text-2xl font-semibold text-center text-gray-700">Iniciar sesión</h1>
+        {error && <div role="alert" className="rounded bg-red-50 p-3 text-red-700">{error}</div>}
+        <label className="block text-sm font-medium text-gray-700">Usuario
+          <input autoComplete="username" value={username} onChange={(e) => setUsername(e.target.value)} className="mt-2 w-full p-3 border rounded-lg focus:ring-2 focus:ring-orange-500" />
+        </label>
+        <label className="block text-sm font-medium text-gray-700">Contraseña
+          <input type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} className="mt-2 w-full p-3 border rounded-lg focus:ring-2 focus:ring-orange-500" />
+        </label>
+        <button type="submit" disabled={loading} className="w-full py-3 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 disabled:bg-gray-400">
+          {loading ? "Iniciando sesión…" : "Iniciar sesión"}
+        </button>
+      </form>
     </div>
   );
 };
 
-export default Login; 
+export default Login;

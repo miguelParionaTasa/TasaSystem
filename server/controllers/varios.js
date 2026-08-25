@@ -4,9 +4,8 @@ const prisma = require("./prisma");
 const getAllAreas = async (req, res) => {
   try {
     const areas = await prisma.area.findMany({
-      include: {
-        users: true, // Incluir la relación con usuarios si es necesario
-      },
+      select: { id: true, name: true },
+      orderBy: { name: "asc" },
     });
 
     res.status(200).json(areas);

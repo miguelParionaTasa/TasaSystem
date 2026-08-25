@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../axios";
 import Swal from "sweetalert2";
 
 const Atributo = () => {
@@ -17,7 +17,6 @@ const Atributo = () => {
 
   const [editingId, setEditingId] = useState(null);
   const [editedData, setEditedData] = useState({});
-  const token = localStorage.getItem("token");
   const userId = parseInt(localStorage.getItem("userId"));
 
   // === Cargar atributos ===
@@ -132,7 +131,6 @@ const Atributo = () => {
     await axios.post(`${process.env.REACT_APP_API_URL}atributos`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -168,8 +166,7 @@ const Atributo = () => {
 
       await axios.put(
         `${process.env.REACT_APP_API_URL}atributos/${atr.id}`,
-        cambios,
-        { headers: { Authorization: `Bearer ${token}` } }
+        cambios
       );
 
       Swal.fire("Éxito", "Atributo actualizado correctamente", "success");
@@ -199,9 +196,7 @@ const Atributo = () => {
     });
     if (result.isConfirmed) {
       try {
-        await axios.delete(`${process.env.REACT_APP_API_URL}atributos/${atr.id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await axios.delete(`${process.env.REACT_APP_API_URL}atributos/${atr.id}`);
         Swal.fire("Eliminado", "El atributo fue eliminado", "success");
         handleSubmit();
       } catch (error) {
@@ -236,7 +231,6 @@ const Atributo = () => {
       formData,
       {
         headers: {
-          Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       }

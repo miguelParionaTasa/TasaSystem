@@ -7,6 +7,103 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum RolUsuario {
+  SUPER_ADMIN
+  ADMIN_PLANTA
+  SUPERVISOR
+  TECNICO_OPERADOR
+  ALMACEN
+  CONSULTA
+  AUDITOR
+}
+
+enum OrigenSolicitud {
+  WEB
+  TELEGRAM
+}
+
+enum EstadoSolicitudMaterial {
+  PENDIENTE
+  REVISADO
+  RESERVADO
+  ENTREGADO
+  RECHAZADO
+  CANCELADO
+}
+
+enum EstadoImportacion {
+  PROCESANDO
+  COMPLETADA
+  COMPLETADA_CON_ERRORES
+  FALLIDA
+}
+
+model Planta {
+  id                  Int                    @id @default(autoincrement())
+  codigo              String                 @unique
+  nombre              String
+  activa              Boolean                @default(true)
+  createdAt           DateTime               @default(now())
+  updatedAt           DateTime               @updatedAt
+  usuarios            User[]
+  zonas               Zona[]
+  temporadas          Temporada[]
+  ubicaciones         Ubicacion[]
+  equipos             Equipo[]
+  ots                 Ots[]
+  otConsumibles       OTConsumible[]
+  movimientosSap      OTMovimientoSAP[]
+  otBasicas           OTbasico[]
+  historicos          Historico[]
+  inventarioItems     InventarioItem[]
+  lubricaciones       Lubricacion[]
+  activos             Activo[]
+  predictivos         Predictivo[]
+  procesos            Procesos[]
+  tarjetasRojas       TarjetaRoja[]
+  otsBot              OTBot[]
+  solicitudesMaterial SolicitudMaterial[]
+  telegramAccesos     TelegramAcceso[]
+  auditorias          Auditoria[]
+  importaciones       Importacion[]
+  configuraciones     Configuracion[]
+  componentes         Componente[]
+  atributos           Atributo[]
+  clinicas            Clinica[]
+  repuestos           Repuesto[]
+  activoHistoriales   ActivoHistorial[]
+  atributoHistoriales AtributoHistorial[]
+  clinicaHistoriales  ClinicaHistorial[]
+  historialItems      HistorialItem[]
+  procesosHistoriales ProcesosHistorial[]
+  tarjetaHistoriales  TarjetaRojaHistorial[]
+  consumiblesBot      OTConsumibleBot[]
+}
+
+model Temporada {
+  id                  Int                    @id @default(autoincrement())
+  plantaId            Int
+  tipo                String                 @default("CHIV")
+  numero              Int
+  anio                Int
+  codigo              String
+  activa              Boolean                @default(false)
+  fechaInicio         DateTime?
+  fechaFin            DateTime?
+  createdAt           DateTime               @default(now())
+  updatedAt           DateTime               @updatedAt
+  planta              Planta                 @relation(fields: [plantaId], references: [id])
+  ots                 Ots[]
+  otBasicas           OTbasico[]
+  movimientosSap      OTMovimientoSAP[]
+  otsBot              OTBot[]
+  solicitudesMaterial SolicitudMaterial[]
+
+  @@unique([plantaId, codigo])
+  @@unique([plantaId, tipo, numero, anio])
+  @@index([plantaId, activa])
+}
+
 model User {
   id                     Int                    @id @default(autoincrement())
   firstName              String
@@ -16,6 +113,13 @@ model User {
   username               String                 @unique
   isAdmin                Boolean                @default(false)
   isDeleted              Boolean                @default(false)
+  rol                    RolUsuario             @default(TECNICO_OPERADOR)
+  plantaId               Int
+  tokenVersion           Int                    @default(0)
+  passwordChangedAt      DateTime?
+  ultimoAcceso           DateTime?
+  createdAt              DateTime               @default(now())
+  updatedAt              DateTime               @updatedAt
   activo                 Activo[]
   activoHistorial        ActivoHistorial[]
   Atributo               Atributo[]
@@ -32,7 +136,16 @@ model User {
   tarjetasRojas          TarjetaRoja[]
   tarjetasRojasHistorial TarjetaRojaHistorial[]
   area                   Area                   @relation(fields: [areaId], references: [id])
+  planta                 Planta                 @relation(fields: [plantaId], references: [id])
   zonas                  Zona[]                 @relation("UserToZona")
+  telegramAcceso         TelegramAcceso?
+  telegramAprobaciones   TelegramAcceso[]      @relation("AprobadorTelegram")
+  solicitudesMaterial    SolicitudMaterial[]    @relation("SolicitanteSolicitud")
+  solicitudesAtendidas   SolicitudMaterial[]    @relation("AtiendeSolicitud")
+  auditorias             Auditoria[]
+  importaciones          Importacion[]
+
+  @@index([plantaId, rol, isDeleted])
 }
 
 model Area {
@@ -51,12 +164,19 @@ model Ots {
   userId            Int
   ubicacionSinId    String?
   ottId             String?
+  plantaId          Int
+  temporadaId       Int?
   otConsumibles     OTConsumible[]
   equipo            Equipo?        @relation(fields: [equipoId], references: [id])
-  OTbasico          OTbasico?      @relation(fields: [ottId], references: [OTmaximo])
+  OTbasico          OTbasico?      @relation(fields: [plantaId, ottId], references: [plantaId, OTmaximo], onDelete: NoAction)
   ubicacion         Ubicacion?     @relation(fields: [ubicacionId], references: [id])
   user              User           @relation(fields: [userId], references: [id])
   zona              Zona           @relation(fields: [zonaId], references: [id])
+  planta            Planta         @relation(fields: [plantaId], references: [id])
+  temporada         Temporada?     @relation(fields: [temporadaId], references: [id])
+
+  @@index([plantaId, temporadaId])
+  @@index([plantaId, ottId])
 }
 
 model OTConsumible {
@@ -73,10 +193,14 @@ model OTConsumible {
   reservaSap       String?
   fechaCreacion    DateTime    @default(now())
   consumibleSap    String?
+  plantaId         Int
   consumible       Consumible? @relation(fields: [consumibleId], references: [id])
   ot               Ots         @relation(fields: [otId], references: [id])
   user             User        @relation(fields: [userId], references: [id])
   images           Image[]     @relation("ConsumibleImage")
+  planta           Planta      @relation(fields: [plantaId], references: [id])
+
+  @@index([plantaId, fechaCreacion])
 }
 
 model OTMovimientoSAP {
@@ -93,6 +217,15 @@ model OTMovimientoSAP {
   reservaSAP     String?
   comentario     String?
   fechaPedido    DateTime?
+  plantaId       Int
+  temporadaId   Int?
+  claveOrigen   String
+  planta        Planta     @relation(fields: [plantaId], references: [id])
+  temporada     Temporada? @relation(fields: [temporadaId], references: [id])
+
+  @@unique([plantaId, claveOrigen])
+  @@index([plantaId, temporadaId, otNumero])
+  @@index([codigoMaterial])
 }
 
 model Consumible {
@@ -105,12 +238,14 @@ model Consumible {
   historico       Historico[]
   otConsumibles   OTConsumible[]
   OTConsumibleBot OTConsumibleBot[]
+  solicitudesDetalle SolicitudMaterialDetalle[]
 }
 
 model Zona {
   id           Int          @id @default(autoincrement())
   name         String
   nombreMaximo String
+  plantaId     Int
   equipos      Equipo[]
   historico    Historico[]
   OTbasico     OTbasico[]
@@ -118,6 +253,11 @@ model Zona {
   predictivos  Predictivo[]
   ubicaciones  Ubicacion[]
   usuarios     User[]       @relation("UserToZona")
+  activos      Activo[]
+  planta       Planta       @relation(fields: [plantaId], references: [id])
+  solicitudesMaterial SolicitudMaterial[]
+
+  @@index([plantaId, name])
 }
 
 model Ubicacion {
@@ -125,6 +265,7 @@ model Ubicacion {
   name          String
   nombreMaximo  String
   zonaId        Int
+  plantaId      Int
   clinicas      Clinica[]
   equipos       Equipo[]
   historico     Historico[]
@@ -134,6 +275,11 @@ model Ubicacion {
   predictivos   Predictivo[]
   procesos      Procesos[]
   zona          Zona          @relation(fields: [zonaId], references: [id])
+  activos        Activo[]
+  planta        Planta        @relation(fields: [plantaId], references: [id])
+  solicitudesMaterial SolicitudMaterial[]
+
+  @@index([plantaId, zonaId, name])
 }
 
 model Lubricacion {
@@ -151,8 +297,12 @@ model Lubricacion {
   ubicacionId    Int?
   createdAt      DateTime   @default(now())
   updatedAt      DateTime   @updatedAt
+  plantaId       Int
   ubicacion      Ubicacion? @relation(fields: [ubicacionId], references: [id])
   images         Image[]    @relation("LubricacionImage")
+  planta         Planta     @relation(fields: [plantaId], references: [id])
+
+  @@index([plantaId, zona])
 }
 
 model Componente {
@@ -161,10 +311,14 @@ model Componente {
   parteEquipo String
   imageUrl    String?
   userId      Int
+  plantaId    Int
   equipo      Equipo     @relation(fields: [equipoId], references: [id])
   user        User       @relation(fields: [userId], references: [id])
   repuestos   Repuesto[]
   images      Image[]    @relation("ComponenteImage")
+  planta      Planta     @relation(fields: [plantaId], references: [id])
+
+  @@index([plantaId, equipoId])
 }
 
 model Atributo {
@@ -173,10 +327,14 @@ model Atributo {
   valor             String?
   userId            Int?
   equipoId          Int
+  plantaId          Int
   equipo            Equipo              @relation(fields: [equipoId], references: [id])
   user              User?               @relation(fields: [userId], references: [id])
   AtributoHistorial AtributoHistorial[]
   images            Image[]             @relation("AtributoImage")
+  planta            Planta              @relation(fields: [plantaId], references: [id])
+
+  @@index([plantaId, equipoId])
 }
 
 model Clinica {
@@ -185,12 +343,16 @@ model Clinica {
   valor            String?
   userId           Int?
   ubicacionId      Int
+  plantaId        Int
   ot    String?   
   fecha DateTime  @default(now())
   ubicacion        Ubicacion          @relation(fields: [ubicacionId], references: [id])
   user             User?              @relation(fields: [userId], references: [id])
   ClinicaHistorial ClinicaHistorial[]
   images           Image[]            @relation("ClinicaImage")
+  planta           Planta             @relation(fields: [plantaId], references: [id])
+
+  @@index([plantaId, ubicacionId])
 }
 
 model ClinicaHistorial {
@@ -199,9 +361,13 @@ model ClinicaHistorial {
   valorAnterior String?
   valorNuevo    String?
   userId        Int
+  plantaId      Int
   fechaCambio   DateTime @default(now())
   clinica       Clinica  @relation(fields: [clinicaId], references: [id])
   user          User     @relation(fields: [userId], references: [id])
+  planta        Planta   @relation(fields: [plantaId], references: [id])
+
+  @@index([plantaId, clinicaId])
 }
 
 model Activo {
@@ -217,10 +383,21 @@ model Activo {
   valor2          String?
   zona            String?
   historial       String?
+  codigoActivo    String?
+  plantaId        Int
+  zonaId          Int?
+  ubicacionId     Int?
   equipo          Equipo?           @relation(fields: [equipoId], references: [id])
   user            User?             @relation(fields: [userId], references: [id])
   activoHistorial ActivoHistorial[]
   images          Image[]           @relation("ActivoImage")
+  planta          Planta            @relation(fields: [plantaId], references: [id])
+  zonaRef         Zona?             @relation(fields: [zonaId], references: [id])
+  ubicacionRef    Ubicacion?        @relation(fields: [ubicacionId], references: [id])
+  solicitudesMaterial SolicitudMaterial[]
+
+  @@unique([plantaId, codigoActivo])
+  @@index([plantaId, zonaId, ubicacionId])
 }
 
 model ActivoHistorial {
@@ -229,9 +406,13 @@ model ActivoHistorial {
   valorAnterior String?
   valorNuevo    String?
   userId        Int
+  plantaId      Int
   fechaCambio   DateTime @default(now())
   activo        Activo   @relation(fields: [activoId], references: [id])
   user          User     @relation(fields: [userId], references: [id])
+  planta        Planta   @relation(fields: [plantaId], references: [id])
+
+  @@index([plantaId, activoId])
 }
 
 model AtributoHistorial {
@@ -240,9 +421,13 @@ model AtributoHistorial {
   valorAnterior String?
   valorNuevo    String?
   userId        Int
+  plantaId      Int
   fechaCambio   DateTime @default(now())
   atributo      Atributo @relation(fields: [atributoId], references: [id])
   user          User     @relation(fields: [userId], references: [id])
+  planta        Planta   @relation(fields: [plantaId], references: [id])
+
+  @@index([plantaId, atributoId])
 }
 
 model Repuesto {
@@ -252,9 +437,13 @@ model Repuesto {
   descripcion  String?
   imageUrl     String?
   userId       Int
+  plantaId     Int
   componente   Componente @relation(fields: [componenteId], references: [id])
   user         User       @relation(fields: [userId], references: [id])
   images       Image[]    @relation("RepuestoImage")
+  planta       Planta     @relation(fields: [plantaId], references: [id])
+
+  @@index([plantaId, componenteId])
 }
 
 model Equipo {
@@ -265,6 +454,7 @@ model Equipo {
   ubicacionId    Int
   imageUrl       String?
   ubicacionSinId String?
+  plantaId       Int
   activo         Activo[]
   atributos      Atributo[]
   componentes    Componente[]
@@ -274,6 +464,10 @@ model Equipo {
   ots            Ots[]
   predictivos    Predictivo[]
   images         Image[]      @relation("EquipoImage")
+  planta         Planta       @relation(fields: [plantaId], references: [id])
+
+  @@index([plantaId, nombreMaximo])
+  @@index([plantaId, zonaId, ubicacionId])
 }
 
 model Image {
@@ -281,7 +475,8 @@ model Image {
   url           String
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
-  activo        Activo[]       @relation("ActivoImage")
+  tipo          String?
+  activos       Activo[]       @relation("ActivoImage")
   atributos     Atributo[]     @relation("AtributoImage")
   clinica       Clinica[]      @relation("ClinicaImage")
   componentess  Componente[]   @relation("ComponenteImage")
@@ -298,17 +493,24 @@ model OTbasico {
   id          Int        @id @default(autoincrement())
   name        String
   Temp        String
-  OTmaximo    String     @unique
+  OTmaximo    String
   estado      String
   zonaId      Int?
   ubicacionId Int?
   equipoId    Int?
   tecnico1    String?
   tecnico2    String?
+  plantaId    Int
+  temporadaId Int?
   Equipo      Equipo?    @relation(fields: [equipoId], references: [id])
   Ubicacion   Ubicacion? @relation(fields: [ubicacionId], references: [id])
   Zona        Zona?      @relation(fields: [zonaId], references: [id])
   Ots         Ots[]
+  planta      Planta     @relation(fields: [plantaId], references: [id])
+  temporada   Temporada? @relation(fields: [temporadaId], references: [id])
+
+  @@unique([plantaId, OTmaximo])
+  @@index([plantaId, temporadaId, estado])
 }
 
 model Historico {
@@ -320,9 +522,13 @@ model Historico {
   fecha        DateTime
   ot           String
   cantidad     Float
+  plantaId     Int
   consumible   Consumible @relation(fields: [consumibleId], references: [id])
   ubicacion    Ubicacion  @relation(fields: [ubicacionId], references: [id])
   zona         Zona       @relation(fields: [zonaId], references: [id])
+  planta       Planta     @relation(fields: [plantaId], references: [id])
+
+  @@index([plantaId, zonaId, fecha])
 }
 
 model InventarioItem {
@@ -339,8 +545,12 @@ model InventarioItem {
   updatedAt     DateTime        @updatedAt
   responsableId Int
   imageUrl      String?
+  plantaId      Int
   historial     HistorialItem[]
   responsable   User            @relation("ResponsableInventario", fields: [responsableId], references: [id])
+  planta         Planta          @relation(fields: [plantaId], references: [id])
+
+  @@index([plantaId, estado])
 }
 
 model HistorialItem {
@@ -351,12 +561,18 @@ model HistorialItem {
   descripcionUso String
   destino        String
   responsable    String
+  plantaId       Int
   inventario     InventarioItem @relation(fields: [inventarioId], references: [id])
+  planta         Planta         @relation(fields: [plantaId], references: [id])
+
+  @@index([plantaId, inventarioId])
 }
 
 model Configuracion {
-  id         Int     @id @default(1)
+  id         Int     @id @default(autoincrement())
+  plantaId   Int     @unique
   fechaCorte String?
+  planta     Planta  @relation(fields: [plantaId], references: [id])
 }
 
 model Predictivo {
@@ -371,10 +587,14 @@ model Predictivo {
   otGenerado              String?
   comentario              String?
   otRelacionada           String?
+  plantaId                Int
   equipo                  Equipo    @relation(fields: [equipoId], references: [id])
   ubicacion               Ubicacion @relation(fields: [ubicacionId], references: [id])
   zona                    Zona      @relation(fields: [zonaId], references: [id])
   images                  Image[]   @relation("PredictivoImage")
+  planta                  Planta    @relation(fields: [plantaId], references: [id])
+
+  @@index([plantaId, zonaId, fecha])
 }
 
 model Procesos {
@@ -383,10 +603,14 @@ model Procesos {
   valor             String?
   userId            Int?
   ubicacionId       Int?
+  plantaId          Int
   ubicacion         Ubicacion?          @relation(fields: [ubicacionId], references: [id])
   user              User?               @relation(fields: [userId], references: [id])
   ProcesosHistorial ProcesosHistorial[]
   images            Image[]             @relation("ProcesosImage")
+  planta            Planta              @relation(fields: [plantaId], references: [id])
+
+  @@index([plantaId, ubicacionId])
 }
 
 model ProcesosHistorial {
@@ -395,9 +619,13 @@ model ProcesosHistorial {
   valorAnterior String?
   valorNuevo    String?
   userId        Int
+  plantaId      Int
   fechaCambio   DateTime @default(now())
   proceso       Procesos @relation(fields: [procesoId], references: [id])
   user          User     @relation(fields: [userId], references: [id])
+  planta        Planta   @relation(fields: [plantaId], references: [id])
+
+  @@index([plantaId, procesoId])
 }
 
 model TarjetaRoja {
@@ -416,9 +644,13 @@ model TarjetaRoja {
   userId        Int?
   createdAt     DateTime               @default(now())
   updatedAt     DateTime               @updatedAt
+  plantaId      Int
   user          User?                  @relation(fields: [userId], references: [id])
   historial     TarjetaRojaHistorial[]
   images        Image[]                @relation("TarjetaRojaImage")
+  planta        Planta                 @relation(fields: [plantaId], references: [id])
+
+  @@index([plantaId, fecha])
 }
 
 model TarjetaRojaHistorial {
@@ -428,13 +660,17 @@ model TarjetaRojaHistorial {
   valorAnterior String?
   valorNuevo    String?
   userId        Int
+  plantaId      Int
   fechaCambio   DateTime    @default(now())
   tarjeta       TarjetaRoja @relation(fields: [tarjetaId], references: [id])
   user          User        @relation(fields: [userId], references: [id])
+  planta        Planta      @relation(fields: [plantaId], references: [id])
+
+  @@index([plantaId, tarjetaId])
 }
 
 model TelegramUser {
-  id            BigInt   @id
+  id            BigInt   @id @default(autoincrement())
   telegramId    String   @unique
   nombre        String?
   username      String?
@@ -445,7 +681,7 @@ model TelegramUser {
 
 model OTBot {
   id             Int               @id @default(autoincrement())
-  otNumero       String            @unique
+  otNumero       String
   descripcionOT  String?
   zona           String?
   ubicacion      String?
@@ -455,8 +691,15 @@ model OTBot {
   telegramUserId BigInt?
   fechaCreacion  DateTime          @default(now())
   fechaActualiza DateTime          @updatedAt
+  plantaId       Int
+  temporadaId    Int?
   telegramUser   TelegramUser?     @relation(fields: [telegramUserId], references: [id])
   consumibles    OTConsumibleBot[]
+  planta         Planta            @relation(fields: [plantaId], references: [id])
+  temporada      Temporada?        @relation(fields: [temporadaId], references: [id])
+
+  @@unique([plantaId, otNumero])
+  @@index([plantaId, temporadaId, estado])
 }
 
 model OTConsumibleBot {
@@ -471,6 +714,137 @@ model OTConsumibleBot {
   estado           String?
   reservaSap       String?
   fechaCreacion    DateTime    @default(now())
+  plantaId         Int
   consumible       Consumible? @relation(fields: [consumibleId], references: [id])
   otBot            OTBot       @relation(fields: [otBotId], references: [id])
+  planta            Planta      @relation(fields: [plantaId], references: [id])
+
+  @@index([plantaId, otBotId, fechaCreacion])
+}
+
+model TelegramAcceso {
+  id                  Int       @id @default(autoincrement())
+  userId              Int?      @unique
+  plantaId            Int
+  telegramIdHash      String    @unique
+  telegramIdEncrypted String
+  telegramIdUltimos4  String
+  nombreTelegram      String?
+  usernameTelegram    String?
+  activo              Boolean   @default(false)
+  aprobadoPorId       Int?
+  aprobadoEn          DateTime?
+  ultimoUso           DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  user                User?     @relation(fields: [userId], references: [id])
+  aprobadoPor         User?     @relation("AprobadorTelegram", fields: [aprobadoPorId], references: [id])
+  planta              Planta    @relation(fields: [plantaId], references: [id])
+  solicitudes         SolicitudMaterial[]
+
+  @@index([plantaId, activo])
+}
+
+model SolicitudMaterial {
+  id                 Int                     @id @default(autoincrement())
+  codigo             String                  @unique
+  plantaId           Int
+  temporadaId        Int?
+  otNumero           String
+  descripcionOT      String?
+  zonaId             Int?
+  ubicacionId        Int?
+  activoId           Int?
+  solicitanteId      Int
+  atendidoPorId      Int?
+  telegramAccesoId   Int?
+  origen             OrigenSolicitud
+  estado             EstadoSolicitudMaterial @default(PENDIENTE)
+  observacion         String?
+  fechaCreacion      DateTime                @default(now())
+  fechaActualizacion DateTime                @updatedAt
+  planta             Planta                  @relation(fields: [plantaId], references: [id])
+  temporada          Temporada?              @relation(fields: [temporadaId], references: [id])
+  zona               Zona?                   @relation(fields: [zonaId], references: [id])
+  ubicacion          Ubicacion?               @relation(fields: [ubicacionId], references: [id])
+  activo             Activo?                 @relation(fields: [activoId], references: [id])
+  solicitante        User                    @relation("SolicitanteSolicitud", fields: [solicitanteId], references: [id])
+  atendidoPor        User?                   @relation("AtiendeSolicitud", fields: [atendidoPorId], references: [id])
+  telegramAcceso     TelegramAcceso?          @relation(fields: [telegramAccesoId], references: [id])
+  detalles           SolicitudMaterialDetalle[]
+
+  @@index([plantaId, origen, estado, fechaCreacion])
+  @@index([plantaId, otNumero])
+}
+
+model SolicitudMaterialDetalle {
+  id             Int                     @id @default(autoincrement())
+  solicitudId    Int
+  consumibleId   Int?
+  codigoMaterial String?
+  nombreMaterial String
+  unidadMedida   String?
+  cantidad       Float
+  reservaSap     String?
+  estado         EstadoSolicitudMaterial @default(PENDIENTE)
+  comentario     String?
+  createdAt      DateTime                @default(now())
+  updatedAt      DateTime                @updatedAt
+  solicitud      SolicitudMaterial       @relation(fields: [solicitudId], references: [id], onDelete: Cascade)
+  consumible     Consumible?             @relation(fields: [consumibleId], references: [id])
+
+  @@index([solicitudId])
+  @@index([codigoMaterial])
+}
+
+model Auditoria {
+  id           BigInt   @id @default(autoincrement())
+  requestId    String
+  usuarioId    Int?
+  plantaId     Int?
+  rol          String?
+  origen       String
+  accion       String
+  metodo       String?
+  ruta         String?
+  entidad      String?
+  entidadId    String?
+  estadoHttp   Int?
+  exitoso      Boolean
+  ip           String?
+  userAgent    String?
+  datosAntes   Json?
+  datosDespues Json?
+  detalle      Json?
+  error        String?
+  createdAt    DateTime @default(now())
+  usuario      User?    @relation(fields: [usuarioId], references: [id])
+  planta       Planta?  @relation(fields: [plantaId], references: [id])
+
+  @@index([plantaId, createdAt])
+  @@index([usuarioId, createdAt])
+  @@index([accion, createdAt])
+  @@index([requestId])
+}
+
+model Importacion {
+  id                    Int               @id @default(autoincrement())
+  plantaId              Int
+  usuarioId             Int
+  tipo                  String
+  nombreArchivo         String
+  checksum              String?
+  estado                EstadoImportacion @default(PROCESANDO)
+  registrosLeidos       Int               @default(0)
+  registrosCreados      Int               @default(0)
+  registrosActualizados Int               @default(0)
+  registrosOmitidos     Int               @default(0)
+  registrosError        Int               @default(0)
+  errores               Json?
+  createdAt             DateTime          @default(now())
+  completedAt           DateTime?
+  planta                Planta            @relation(fields: [plantaId], references: [id])
+  usuario               User              @relation(fields: [usuarioId], references: [id])
+
+  @@index([plantaId, tipo, createdAt])
 }
